@@ -1,4 +1,4 @@
  *.pyc
  flask/
- app.db
+ *.db
  *.log
