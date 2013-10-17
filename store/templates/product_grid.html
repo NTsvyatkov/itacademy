@@ -1,0 +1,216 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+   <link href="static/styles/style.css" rel="stylesheet" type="text/css" />
+   <script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+  </head>
+
+
+  <body>
+
+  <div id="products_block">
+      <div id="products_filter">
+          <span>Filter List</span>
+        <div class="product_filter_in">
+         <form class='grid'>
+
+             <div class="field">
+                  <lable>Name: </lable>
+                  <select id="name_options">
+                    <option></option>
+                    <option>start with</option>
+                    <option>contains</option>
+                    <option>equal to</option>
+                   </select>
+                    <input type="text" id="name_input">
+             </div>
+
+             <div class="field">
+                 <lable>Description: </lable>
+                 <select id="description_options">
+                    <option></option>
+                    <option>start with</option>
+                    <option>contains</option>
+                    <option>equal to</option>
+                  </select>
+                    <input type="text" id="description_input">
+             </div>
+
+             <div class="field">
+                 <lable>Price: </lable>
+                 <select id="description_options">
+                    <option></option>
+                    <option>less than</option>
+                    <option>more than</option>
+                    <option>equal to</option>
+                 </select>
+                 <input type="text" id="description_input">
+             </div>
+
+             <div class="field">
+                  <lable>Filter Name Test: </lable>
+                  <select id="product_name">
+                    <option>Apple</option>
+                    <option>Orange</option>
+                    <option>Pineapple</option>
+                    <option>Banana</option>
+                   </select>
+             </div>
+
+
+
+         </form>
+
+       </div>
+           <div style="margin-left:80%;">
+             <input type="button" value="Apply" id='apply_button'>
+             <input type="button" value="clear" id='clr'>
+            </div>
+      </div>
+      <div id="products_table">
+       <table id='grid' class="grid">
+           <tr>
+               <th>
+                   id
+               </th>
+               <th>
+                   product name
+               </th>
+               <th>
+                   description
+               </th>
+               <th>
+                   price
+               </th>
+               <th>
+                   dimension
+               </th>
+               <th>
+                   edit
+               </th>
+               <th>
+                   delete
+               </th>
+
+           </tr>
+       </table>
+      </div>
+
+
+
+
+  </div>
+  <script type="text/javascript">
+
+   var table_grid = document.getElementById('grid');
+   var count_tr=23;
+   var tr = [];
+
+   /* Creating table of products */
+    for (var i=1; i<=count_tr;i++ )
+    {
+        tr[i] = document.createElement('TR');
+        table_grid.appendChild(tr[i]);
+        tr[i].id=i;
+        if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+        for (var j=0; j<=6; j++)
+         {
+          tr[i].appendChild(document.createElement('TD'));
+         }
+    }
+    /*End of creating products table*/
+
+
+
+
+
+  function clearing_tr(i)
+  {
+      for (var j=0; j<=6; j++)
+      {
+          tr[i].cells[j].innerHTML='';
+      }
+  }
+
+
+  function clearing_grid()
+  {
+    for (var n=1 ; n<=count_tr; n++)
+    {
+      clearing_tr(n);
+    }
+  }
+
+    var k=0;
+
+    $('#apply_button').click(function(){
+      $.ajax({
+        dataType: "json",
+        url: '/products',
+        type: 'POST',
+        data: { id : $('#name_form').val(), name : $('#product_name').val() },
+        success: function(json)
+        {
+           clearing_grid()
+
+           /*Create table with new products list */
+            for (var product_k in json.products)
+                {
+                 k++;
+                 if (k>count_tr) break;
+                 tr[k].cells[0].innerHTML = json.products[product_k].id;
+                 tr[k].cells[1].innerHTML = json.products[product_k].name;
+                 tr[k].cells[2].innerHTML = json.products[product_k].description;
+                 tr[k].cells[3].innerHTML = json.products[product_k].price;
+                 tr[k].cells[4].innerHTML = json.products[product_k].dimension;
+                 tr[k].cells[5].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[6].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[5].abbr=k;
+                 tr[k].cells[6].abbr=k;
+                }
+                k=0;
+            /*End creating table*/
+
+         }
+      })
+    });
+
+
+
+
+ /* Event onclick by images Edit and Delete records */
+
+    var rows = table_grid.getElementsByTagName("tr");
+    for (i = 0; i < rows.length; i++) {
+        var currentRow = table_grid.rows[i];
+        this.link = currentRow.cells[1];
+
+        currentRow.cells[5].onclick = function edit_tr()
+                                      {
+                                       alert ('Edit '+tr[this.abbr].cells[2].innerHTML+'');
+                                      }
+
+        currentRow.cells[6].onclick = function delete_tr()
+                                      {
+                                        var str = tr[this.abbr].cells[2].innerHTML
+                                        if (confirm('Are you sure you want to delete product '+ str +''))
+                                        {
+                                          clearing_tr(this.abbr);
+                                          alert('The product has been successfully deleted');
+                                        }
+                                       }
+
+         }
+ /* End Event onclick ...*/
+
+
+
+
+   $('#clr').click(clearing_grid);
+
+   </script>
+
+
+  </body>
+
+</html>
