@@ -30,12 +30,12 @@ class Product(db.Model):
         return Product.query.filter_by(name=name).all()
 
     @staticmethod
-    def get(id):
+    def get_product(id):
         return Product.query.get(id)
 
     @staticmethod
-    def update_product(id, new_name, new_description, new_price, new_dimension):
-        entry = Product.get(id)
+    def upd_product(id, new_name, new_description, new_price, new_dimension):
+        entry = Product.get_product(id)
         entry.name = new_name
         entry.description = new_description
         entry.price = new_price
@@ -55,7 +55,7 @@ class Dimension(db.Model):
         return self.name
 
     @staticmethod
-    def get(id):
+    def get_dimension(id):
         return Dimension.query.get(id)
 
     @staticmethod

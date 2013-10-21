@@ -1,0 +1,1 @@
+from models.product_dao import Product, Dimension
