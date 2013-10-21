@@ -42,6 +42,7 @@ def create_product(name, description, price, id):
 	product_dao.Product.add_product(name, description, price, dimension)
 
 def update_product(id, new_name, new_description, new_price, dim_id):
+	validate_product_id(id)
 	validate_name(new_name)
 	validate_price(new_price)
 	validate_dimension_id(dim_id)
