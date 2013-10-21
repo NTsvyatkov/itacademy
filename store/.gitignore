@@ -2,3 +2,4 @@
  flask/
  *.db
  *.log
+ .idea/
