@@ -1,0 +1,50 @@
+
+        #product_table{
+        border:0px solid grey;
+        }
+
+        #products_block{
+        width:900px;
+        margin:0px auto;
+        padding:10px;
+        border:1px solid grey;
+        }
+
+        #products_filter{
+        width:800px;
+        margin:20px auto;
+        padding:10px;
+        border:1px solid grey;
+
+        }
+
+        .grid{
+        margin:0px auto;
+        border-collapse: collapse;
+        }
+
+       .grid td, th{
+          border:1px solid grey;
+          text-align:center;
+          height:20px;
+        }
+
+        .grid  th {
+        background:#c1c1c0;
+        }
+
+       .grid img {
+        width:20px;
+        }
+        .product_filter_in
+        {
+        width:400px;
+        margin-top:10px;
+        }
+        .field {
+         clear:both;
+         text-align:right;
+         }
+         .field label {
+         float:left;
+         }

@@ -1,8 +1,182 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
-   <link href="static/style.css" rel="stylesheet" type="text/css" />
-   <script type="text/javascript" src="static/jquery-1.7.2.js"></script>
+ <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" type="text/css" />
+   <script type="text/javascript"  src="{{url_for('static', filename='jquery-1.7.2.js')}}" ></script>
+
+ <script type="text/javascript">
+
+
+   var count_tr=23;
+   var tr = [];
+
+   /* Creating table of products */
+  $(document).ready(function() {
+    var table_grid = document.getElementById('grid');
+    function creat_grid(count)
+    {
+        for (var i=1; i<=count;i++ )
+        {
+            tr[i] = document.createElement('TR');
+            table_grid.appendChild(tr[i]);
+            tr[i].id=i;
+            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            for (var j=0; j<=6; j++)
+             {
+              tr[i].appendChild(document.createElement('TD'));
+             }
+        }
+    }
+    creat_grid(23);
+
+    /*End of creating products table*/
+
+         /* Event onclick by images Edit and Delete records */
+
+  //*  var rows = table_grid.getElementsByTagName("tr");
+   /* for (i = 0; i < table_grid.rows.length; i++) {
+        var currentRow = table_grid.rows[i];
+        this.link = currentRow.cells[1];
+
+        currentRow.cells[5].onclick = function edit_tr()
+                                      {
+                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                      }
+
+        currentRow.cells[6].onclick = function delete_tr()
+                                      {
+                                        var str = tr[this.abbr].cells[1].innerHTML
+                                        if (confirm('Are you sure you want to delete product '+ str +''))
+                                        {
+                                          clearing_tr(this.abbr);
+                                          alert('The product has been successfully deleted');
+
+                                        }
+                                       }
+
+         }*/
+ /* End Event onclick ...*/
+
+
+
+
+
+  function clearing_tr(i)
+  {
+      for (var j=0; j<=6; j++)
+      {
+          tr[i].cells[j].innerHTML='';
+      }
+  }
+
+
+  function clearing_grid()
+  {
+    for (var n=2 ; n<=count_tr; n++)
+    {
+      clearing_tr(n);
+    }
+  }
+ function deleting_grid()
+ {
+    for (var n=table_grid.rows.length ; n>=2; n--)
+      {
+       table_grid.removeChild(table_grid.childNodes[n]);
+      }
+
+ }
+
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+    json_value = JSON.stringify(form_value);
+    $('#apply_button').click(function(){
+      $.ajax({
+       dataType: "json",
+        url: '/product',
+        type: 'GET',
+        data: json_value,
+        contentType: "application/json",
+        success: function(json)
+        {
+           //clearing_grid()
+
+
+           deleting_grid()
+           creat_grid(json.products.length)
+           /*Create table with new products list */
+            for (var product_k in json.products)
+                {
+                 k++;
+                 if (k>count_tr) break;
+                 tr[k].cells[0].innerHTML = json.products[product_k].id;
+                 tr[k].cells[1].innerHTML = json.products[product_k].name;
+                 tr[k].cells[2].innerHTML = json.products[product_k].description;
+                 tr[k].cells[3].innerHTML = json.products[product_k].price;
+                 tr[k].cells[4].innerHTML = json.products[product_k].dimension;
+                 tr[k].cells[5].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[6].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[5].abbr=k;
+                 tr[k].cells[6].abbr=k;
+                 tr[k].cells[5].onclick = function edit_tr2()
+                                      {
+                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                      }
+                 tr[k].cells[6].onclick= function delete_tr2()
+                                      {
+                                        var str = tr[this.abbr].cells[1].innerHTML
+                                        var id_tr = tr[this.abbr].cells[0].innerHTML
+                                        if (confirm('Are you sure you want to delete product '+ str +''+id_tr+''))
+                                        {
+                                          delete_id(id_tr,this.abbr)
+                                        }
+                                       }
+                }
+                k=0;
+            /*End creating table*/
+
+         }
+      })
+    });
+
+  function delete_id(id,tr_id)
+  {
+   form_value = {id : id}
+   json_value = JSON.stringify(form_value);
+   $.ajax({
+       dataType: "json",
+        url: '/product',
+        type: 'DELETE',
+        data: json_value,
+        contentType: "application/json",
+        success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The product has been successfully deleted');
+                          clearing_tr(tr_id);
+                         }
+                        else
+                         alert (json.message)
+                    },
+
+        error: function(json)
+                    {
+
+                    }
+
+  })
+ }
+
+
+
+
+
+
+   $('#clr').click(deleting_grid);
+ });
+
+   </script>
+
   </head>
 
 
@@ -55,17 +229,14 @@
                     <option>Pineapple</option>
                     <option>Banana</option>
                    </select>
-             </div>
-
-
-
+          </div>
          </form>
 
-       </div>
-           <div style="margin-left:80%;">
+        </div>
+        <div style="margin-left:80%;">
              <input type="button" value="Apply" id='apply_button'>
              <input type="button" value="clear" id='clr'>
-            </div>
+        </div>
       </div>
       <div id="products_table">
        <table id='grid' class="grid">
@@ -100,117 +271,7 @@
 
 
   </div>
-  <script type="text/javascript">
 
-   var table_grid = document.getElementById('grid');
-   var count_tr=23;
-   var tr = [];
-
-   /* Creating table of products */
-    for (var i=1; i<=count_tr;i++ )
-    {
-        tr[i] = document.createElement('TR');
-        table_grid.appendChild(tr[i]);
-        tr[i].id=i;
-        if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
-        for (var j=0; j<=6; j++)
-         {
-          tr[i].appendChild(document.createElement('TD'));
-         }
-    }
-    /*End of creating products table*/
-
-
-
-
-
-  function clearing_tr(i)
-  {
-      for (var j=0; j<=6; j++)
-      {
-          tr[i].cells[j].innerHTML='';
-      }
-  }
-
-
-  function clearing_grid()
-  {
-    for (var n=1 ; n<=count_tr; n++)
-    {
-      clearing_tr(n);
-    }
-  }
-
-    var k=0;
-    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
-    json_value = JSON.stringify(form_value);
-    $('#apply_button').click(function(){
-      $.ajax({
-        dataType: "json",
-        url: '/products',
-        type: 'POST',
-        data: json_value,
-        contentType: "application/json",
-        success: function(json)
-        {
-           clearing_grid()
-
-           /*Create table with new products list */
-            for (var product_k in json.products)
-                {
-                 k++;
-                 if (k>count_tr) break;
-                 tr[k].cells[0].innerHTML = json.products[product_k].id;
-                 tr[k].cells[1].innerHTML = json.products[product_k].name;
-                 tr[k].cells[2].innerHTML = json.products[product_k].description;
-                 tr[k].cells[3].innerHTML = json.products[product_k].price;
-                 tr[k].cells[4].innerHTML = json.products[product_k].dimension;
-                 tr[k].cells[5].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[6].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
-                 tr[k].cells[5].abbr=k;
-                 tr[k].cells[6].abbr=k;
-                }
-                k=0;
-            /*End creating table*/
-
-         }
-      })
-    });
-
-
-
-
- /* Event onclick by images Edit and Delete records */
-
-    var rows = table_grid.getElementsByTagName("tr");
-    for (i = 0; i < rows.length; i++) {
-        var currentRow = table_grid.rows[i];
-        this.link = currentRow.cells[1];
-
-        currentRow.cells[5].onclick = function edit_tr()
-                                      {
-                                       alert ('Edit '+tr[this.abbr].cells[2].innerHTML+'');
-                                      }
-
-        currentRow.cells[6].onclick = function delete_tr()
-                                      {
-                                        var str = tr[this.abbr].cells[2].innerHTML
-                                        if (confirm('Are you sure you want to delete product '+ str +''))
-                                        {
-                                          clearing_tr(this.abbr);
-                                          alert('The product has been successfully deleted');
-                                        }
-                                       }
-
-         }
- /* End Event onclick ...*/
-
-
-
-
-   $('#clr').click(clearing_grid);
-
-   </script>
 
 
   </body>

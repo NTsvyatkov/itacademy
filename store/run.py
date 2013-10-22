@@ -1,3 +1,4 @@
 #!flask/bin/python
-from views import views
+from views1 import app
 app.run(debug = True)
+

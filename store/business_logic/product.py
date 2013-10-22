@@ -59,3 +59,9 @@ def delete_product(id):
 def list_dimensions():
 	d_list = product_dao.Dimension.query.all()
 	return d_list
+
+#products_list = list_products()
+#products_arr=[]
+#for i in products_list:
+#        products_arr.append({'id':i.id,'name':i.name, 'description':i.description,'dimension':i.description})
+#print  products_arr[1]
