@@ -1,2 +1,6 @@
 *.pyc
 *~
+flask/
+*.db
+*.log
+.idea/
