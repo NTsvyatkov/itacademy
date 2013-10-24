@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from flask import Flask, make_response, jsonify, request
-from business_logic.role_manager import getlistRole, getRoleByID, createNewRole,deleteRole, updateRole
+from business_logic.role_manager import getlistRole, getRoleByID, createNewRole, deleteRole, updateRole, validationRoleName
 from business_logic.validation import ValidationException
 
 
@@ -19,7 +19,7 @@ def rolesList():
 @app.route('/roles/<id>', methods=['GET'])
 def rolesByID():
     js = request.get_json()
-    role_id = getRoleByID(js['id'])  # if not RoleDao.getRoleByID(js['id'])
+    role_id = getRoleByID(js['id'])
     roles = {role_id.role_id, role_id.name}
     if roles is not None:
         response = make_response(jsonify(roles=roles), 200)
@@ -31,7 +31,8 @@ def rolesByID():
 @app.route('/roles', methods=['POST'])
 def createRole():
     js = request.get_json()
-    if createNewRole(js['id'], js['name']):
+    if validationRoleName(js('name')):
+        createNewRole(js['id'], js['name'])
         response = make_response(201)
     else:
         response = make_response(400)
@@ -51,7 +52,7 @@ def deleteRole():
 @app.route('/roles/<id>', methods=['PUT'])
 def updateRole():
     js = request.get_json()
-    if not updateRole(id):
+    if not getRoleByID(id):
         response = make_response(404)
     elif updateRole(js['id'], js['name']):
         response = make_response(200)

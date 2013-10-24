@@ -11,7 +11,7 @@ def validationActionPointToRoleID(ap_to_role_id):
         return True
 
 
-def validationRoleName(ap_to_role_name):
+def validationActionPointToRoleName(ap_to_role_name):
     if ap_to_role_name is None:
         raise ValidationException("The role action point name is required field")
     elif len(ap_to_role_name) > 50:
@@ -25,13 +25,13 @@ def getlistActionPointToRole():
 
 
 def createActionPointToRole(ap_to_role_id, name):
-    validationRoleName(name)
+    validationActionPointToRoleName(name)
     ActionPointToRoleDao.createNewActionPointToRole()
 
 
 def updateActionPointToRole(ap_to_role_id, name):
     validationActionPointToRoleID(ap_to_role_id)
-    validationRoleName(name)
+    validationActionPointToRoleName(name)
     ActionPointToRoleDao.createNewActionPointToRole()
 
 
