@@ -6,11 +6,11 @@
 
  <script type="text/javascript">
 
-
    var count_tr=23;
    var tr = [];
 
    /* Creating table of products */
+
   $(document).ready(function() {
     var table_grid = document.getElementById('grid');
     function creat_grid(count)
@@ -27,39 +27,9 @@
              }
         }
     }
-    creat_grid(23);
 
-    /*End of creating products table*/
-
-         /* Event onclick by images Edit and Delete records */
-
-  //*  var rows = table_grid.getElementsByTagName("tr");
-   /* for (i = 0; i < table_grid.rows.length; i++) {
-        var currentRow = table_grid.rows[i];
-        this.link = currentRow.cells[1];
-
-        currentRow.cells[5].onclick = function edit_tr()
-                                      {
-                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
-                                      }
-
-        currentRow.cells[6].onclick = function delete_tr()
-                                      {
-                                        var str = tr[this.abbr].cells[1].innerHTML
-                                        if (confirm('Are you sure you want to delete product '+ str +''))
-                                        {
-                                          clearing_tr(this.abbr);
-                                          alert('The product has been successfully deleted');
-
-                                        }
-                                       }
-
-         }*/
- /* End Event onclick ...*/
-
-
-
-
+    creat_grid(count_tr);
+  /*End of creating table*/
 
   function clearing_tr(i)
   {
@@ -77,6 +47,7 @@
       clearing_tr(n);
     }
   }
+
  function deleting_grid()
  {
     for (var n=table_grid.rows.length ; n>=2; n--)
@@ -125,7 +96,7 @@
                                       {
                                         var str = tr[this.abbr].cells[1].innerHTML
                                         var id_tr = tr[this.abbr].cells[0].innerHTML
-                                        if (confirm('Are you sure you want to delete product '+ str +''+id_tr+''))
+                                        if (confirm('Are you sure you want to delete product '+ str +' '+id_tr+'?'))
                                         {
                                           delete_id(id_tr,this.abbr)
                                         }
@@ -138,15 +109,17 @@
       })
     });
 
+
   function delete_id(id,tr_id)
   {
+  if (id=='') id=0;
    form_value = {id : id}
    json_value = JSON.stringify(form_value);
    $.ajax({
        dataType: "json",
-        url: '/product',
+        url: '/product/'+id,
         type: 'DELETE',
-        data: json_value,
+        /*data: {id:id}*/
         contentType: "application/json",
         success: function(json)
                     {
@@ -156,21 +129,17 @@
                           clearing_tr(tr_id);
                          }
                         else
-                         alert (json.message)
+                         alert (json.message);
                     },
 
-        error: function(json)
+        error: function(e)
                     {
-
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
                     }
 
   })
  }
-
-
-
-
-
 
    $('#clr').click(deleting_grid);
  });
@@ -244,7 +213,7 @@
                <th>
                    id
                </th>
-               <th>
+                <th>
                    product name
                </th>
                <th>
@@ -262,7 +231,6 @@
                <th>
                    delete
                </th>
-
            </tr>
        </table>
       </div>

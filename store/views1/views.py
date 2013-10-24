@@ -1,8 +1,6 @@
 from copy import name
 from flask import Flask, jsonify, render_template, flash, redirect, request, make_response, send_from_directory
 from views1 import app
-#app = Flask(__name__)
-#from app import app
 #zfrom forms import LoginForm
 from wtforms import form
 from business_logic.product import list_products, create_product,delete_product,update_product
@@ -32,22 +30,21 @@ def products():
     products_list = list_products()
     products_arr=[]
     for i in products_list:
-        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimensioni':i.description})
+        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.description})
 
     return make_response(jsonify(products=products_arr),200)
 list_products()
-@app.route('/product/<id>', methods = ['GET'])
-def products_id():
-    js = request.get_json()
-    product_id = get_product_id(js['id'])
-    product ={'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimensioni':i.description}
+
+@app.route('/product/<int:id>', methods = ['GET'])
+def products_id(id):
+    i=get_product_id(request.get['id'])
+    product ={'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.description}
     resp = make_response(jsonify(products=product),200)
     return resp
 
-@app.route('/product', methods = ['DELETE'])
-def products_id_delete():
-    js = request.get_json()
-    delete_product(js['id'])
+@app.route('/product/<int:id>', methods=['DELETE'])
+def products_id_delete(id):
+    delete_product(id)
     resp = make_response(jsonify({'message':'success'}),200)
     return resp
 
