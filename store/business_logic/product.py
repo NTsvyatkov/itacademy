@@ -33,6 +33,11 @@ def list_products():
 	p_list = product_dao.Product.query.all()
 	return p_list
 
+def get_product_by_id(id):
+	validate_product_id(id)
+	product_by_id = product_dao.Product.get_product(id)
+	return product_by_id
+
 def create_product(name, description, price, id):
 	validate_name(name)
 	validate_price(price)
