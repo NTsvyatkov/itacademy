@@ -3,13 +3,11 @@ from flask import Flask, jsonify, render_template, flash, redirect, request, mak
 from views1 import app
 #zfrom forms import LoginForm
 from wtforms import form
-from business_logic.product import list_products, create_product,delete_product,update_product
+from business_logic.product import list_products, create_product,delete_product,update_product,get_product_by_id
 from business_logic.validation import ValidationException
 
 @app.route('/login')
 
-def get_product_id():
-    return 1
 @app.route('/login', methods = ['GET', 'POST'])
 def login():
     form = LoginForm()
@@ -30,14 +28,14 @@ def products():
     products_list = list_products()
     products_arr=[]
     for i in products_list:
-        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.description})
+        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
 
     return make_response(jsonify(products=products_arr),200)
-list_products()
+
 
 @app.route('/product/<int:id>', methods = ['GET'])
 def products_id(id):
-    i=get_product_id(request.get['id'])
+    i=get_product_by_id(request.get['id'])
     product ={'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.description}
     resp = make_response(jsonify(products=product),200)
     return resp
