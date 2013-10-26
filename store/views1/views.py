@@ -78,5 +78,5 @@ def send_file(filename):
 @app.route('/productgrid')
 @app.route('/productgrid/<int:page>')
 def productgrid(page=1):
-    products = Product.query.order_by(Product.name.asc()).paginate(page, 1, False)
+    products = Product.query.order_by(Product.name.asc()).paginate(page, 2, False)
     return render_template('product_grid.html', products = products)

@@ -235,7 +235,12 @@
        </table>
       </div>
 
-<div>
+<div style="text-align: center">
+{% for product in products.items %}
+<p>
+  Product: <b>{{product.name}}</b>
+</p>
+{% endfor %}
 
 {% if products.has_prev %}<a href="{{ url_for('productgrid', page = 1) }}"> First </a>{% else %} First{% endif %} |
 {% if products.has_prev %}<a href="{{ url_for('productgrid', page = products.prev_num) }}"> Prev</a>{% else %} Prev{% endif %} |
