@@ -52,7 +52,7 @@ def deleteRole():
 @app.route('/roles/<id>', methods=['PUT'])
 def updateRole():
     js = request.get_json()
-    if not getRoleByID(id):
+    if not getRoleByID(js['id']):
         response = make_response(404)
     elif updateRole(js['id'], js['name']):
         response = make_response(200)
