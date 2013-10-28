@@ -10,15 +10,14 @@ def actionPointList():
     action_point = getListActionPoint()
     action_point_list = []
     for i in action_point:
-        action_point_list.append({i.action_point_id, i.action_point_name})
+        action_point_list.append({"id": i.action_point_id, "name": i.action_point_name})
     return make_response(jsonify(action_point_list=action_point_list), 200)
 
 
-@app.route('/action_point/<id>', methods=['GET'])
-def actionPointByID():
-    js = request.get_json()
-    ap_id = getActionPointByID(js['id'])
-    action_point = {ap_id.action_point_id, ap_id.action_point_name}
+@app.route('/action_point/<int:id>', methods=['GET'])
+def actionPointByID(id):
+    ap_id = getActionPointByID(request.get['id'])
+    action_point = {"id": ap_id.action_point_id, "name": ap_id.action_point_name}
     if action_point is not None:
         response = make_response(jsonify(action_point=action_point), 200)
     else:
@@ -37,10 +36,9 @@ def createActionPoint():
     return response
 
 
-@app.route('/action_point/<id>', methods=['POST'])
-def deleteActionPoint():
-    js = request.get_json()
-    if deleteActionPoint(js['id']):          #deleteActionPoint(js['id']) == True
+@app.route('/action_point/<int:id>', methods=['POST'])
+def deleteActionPoint(id):
+    if deleteActionPoint(id):          #deleteActionPoint(js['id']) == True
         response = make_response(200)
     else:
         response = make_response(404)
