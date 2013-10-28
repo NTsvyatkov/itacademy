@@ -21,8 +21,8 @@ class User(Base):
     role_id = Column(Integer, ForeignKey(Role.role_id))
     region_id = Column(Integer, ForeignKey(Region.region_id))
 
-    #role = relationship(Role, backref=backref(Role, lazy='dynamic'))
-    #region = relationship(Region, backref=backref(Region, lazy='dynamic'))
+    role = relationship(Role, backref=backref('User', lazy='dynamic'))
+    region = relationship(Region, backref=backref('User', lazy='dynamic'))
 
     def __init__(self, id, login, password, first_name, last_name, email, role_id, region_id):
         self.id = id
