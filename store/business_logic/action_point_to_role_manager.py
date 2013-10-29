@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+from business_logic.action_point_manager import validationActionPointID
+from business_logic.role_manager import validationRoleID
 
 from models.action_point_to_role_dao import ActionPointToRoleDao
 from validation import ValidationException
@@ -11,27 +13,22 @@ def validationActionPointToRoleID(ap_to_role_id):
         return True
 
 
-def validationActionPointToRoleName(ap_to_role_name):
-    if ap_to_role_name is None:
-        raise ValidationException("The role action point name is required field")
-    elif len(ap_to_role_name) > 50:
-        raise ValidationException("Name length should be no more than 50 characters")
-    else:
-        return True
-
 
 def getlistActionPointToRole():
     return ActionPointToRoleDao.getAllActionPointsToRole()
 
 
-def createActionPointToRole(ap_to_role_id, name):
-    validationActionPointToRoleName(name)
+def createActionPointToRole(ap_to_role_id, role_id, action_point):
+    validationActionPointToRoleID(ap_to_role_id)
+    validationRoleID(role_id)
+    validationActionPointID(action_point)
     ActionPointToRoleDao.createNewActionPointToRole()
 
 
-def updateActionPointToRole(ap_to_role_id, name):
+def updateActionPointToRole(ap_to_role_id, role_id, action_point):
     validationActionPointToRoleID(ap_to_role_id)
-    validationActionPointToRoleName(name)
+    validationRoleID(role_id)
+    validationActionPointID(action_point)
     ActionPointToRoleDao.createNewActionPointToRole()
 
 

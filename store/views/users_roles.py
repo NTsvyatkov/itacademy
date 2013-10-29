@@ -12,15 +12,14 @@ def rolesList():
     roles = getlistRole()
     roles_list = []
     for i in roles:
-        roles_list.append({i.role_id, i.name})
+        roles_list.append({"id": i.role_id, "name": i.name})
     return make_response(jsonify(roles=roles_list), 200)
 
 
-@app.route('/roles/<id>', methods=['GET'])
-def rolesByID():
-    js = request.get_json()
-    role_id = getRoleByID(js['id'])
-    roles = {role_id.role_id, role_id.name}
+@app.route('/roles/<int:id>', methods=['GET'])
+def rolesByID(id):
+    role = getRoleByID(request.get['id'])
+    roles = {"id": role.role_id, "name": role.name}
     if roles is not None:
         response = make_response(jsonify(roles=roles), 200)
     else:
@@ -39,10 +38,9 @@ def createRole():
     return response
 
 
-@app.route('/roles/<id>', methods=['POST'])
-def deleteRole():
-    js = request.get_json()
-    if deleteRole(js['id']):
+@app.route('/roles/<int:id>', methods=['POST'])
+def deleteRole(id):
+    if deleteRole(id):
         response = make_response(200)
     else:
         response = make_response(404)
@@ -52,7 +50,7 @@ def deleteRole():
 @app.route('/roles/<id>', methods=['PUT'])
 def updateRole():
     js = request.get_json()
-    if not getRoleByID(id):
+    if not getRoleByID(js['id']):
         response = make_response(404)
     elif updateRole(js['id'], js['name']):
         response = make_response(200)

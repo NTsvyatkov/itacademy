@@ -16,7 +16,7 @@ class Action_point(Base):
     action_point_id = Column(Integer, primary_key=True)
     action_point_name = Column(String)
 
-    #action_point = relationship(Action_point_to_role, backref=backref(Action_point_to_role, lazy='dynamic'))
+    #action_point = relationship(Action_point_to_role, backref=backref('Action_point', lazy='dynamic'))
 
     def __init__(self, action_point_id, action_point_name):
         self.action_point_id = action_point_id

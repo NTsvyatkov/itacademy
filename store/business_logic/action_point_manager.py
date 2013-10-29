@@ -20,7 +20,7 @@ def validationActionPointName(ap_name):
         return True
 
 
-def getlistActionPoint():
+def getListActionPoint():
     return ActionPointDao.getAllActionPoints()
 
 

@@ -16,7 +16,7 @@ class Role(Base):
     role_id = Column(Integer, primary_key=True)
     name = Column(String(50))
 
-    #role = relationship(Action_point_to_role, backref=backref(Action_point_to_role, lazy='dynamic'))
+    #role = relationship(Action_point_to_role, backref=backref('Role', lazy='dynamic'))
 
     def __init__(self, role_id, name):
         self.role_id = role_id
