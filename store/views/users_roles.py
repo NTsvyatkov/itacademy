@@ -20,43 +20,26 @@ def rolesList():
 def rolesByID(id):
     role = getRoleByID(request.get['id'])
     roles = {"id": role.role_id, "name": role.name}
-    if roles is not None:
-        response = make_response(jsonify(roles=roles), 200)
-    else:
-        response = make_response(404)
-    return response
+    return make_response(jsonify(roles=roles), 200)
 
 
 @app.route('/roles', methods=['POST'])
 def createRole():
-    js = request.get_json()
-    if validationRoleName(js('name')):
-        createNewRole(js['id'], js['name'])
-        response = make_response(201)
-    else:
-        response = make_response(400)
-    return response
+    createNewRole(request.get_json(['id']), request.get_json(['name']))
+    return make_response(201)
 
 
-@app.route('/roles/<int:id>', methods=['POST'])
+@app.route('/roles/<int:id>', methods=['DELETE'])
 def deleteRole(id):
-    if deleteRole(id):
-        response = make_response(200)
-    else:
-        response = make_response(404)
-    return response
+    deleteRole(id)
+    return make_response(jsonify({'message':'success'}), 200)
 
 
-@app.route('/roles/<id>', methods=['PUT'])
+@app.route('/roles', methods=['PUT'])
 def updateRole():
-    js = request.get_json()
-    if not getRoleByID(js['id']):
-        response = make_response(404)
-    elif updateRole(js['id'], js['name']):
-        response = make_response(200)
-    else:
-        response = make_response(400)
-    return response
+    updateRole(request.get_json(['id']), request.get_json(['name']))
+    return make_response(200)
+
 
 
 @app.errorhandler(ValidationException)

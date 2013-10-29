@@ -26,13 +26,13 @@ def getListActionPoint():
 
 def createActionPoint(ap_id, name):
     validationActionPointName(name)
-    ActionPointDao.createNewActionPoint()
+    ActionPointDao.createNewActionPoint(ap_id, name)
 
 
-def updateActionPoint(ap_id, ap_name):
+def updateActionPoint(ap_id, name):
     validationActionPointID(ap_id)
-    validationActionPointName(ap_name)
-    ActionPointDao.updateActionPoint() #!!
+    validationActionPointName(name)
+    ActionPointDao.updateActionPoint(ap_id, name)
 
 
 def deleteActionPoint(ap_id):

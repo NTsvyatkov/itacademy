@@ -18,43 +18,27 @@ def actionPointList():
 def actionPointByID(id):
     ap_id = getActionPointByID(request.get['id'])
     action_point = {"id": ap_id.action_point_id, "name": ap_id.action_point_name}
-    if action_point is not None:
-        response = make_response(jsonify(action_point=action_point), 200)
-    else:
-        response = make_response(404)
-    return response
+    return make_response(jsonify(action_point=action_point), 200)
 
 
 @app.route('/action_point', methods=['POST'])
 def createActionPoint():
     js = request.get_json()
-    if validationActionPointName(js('name')):
-        createActionPoint(js['id'], js['name'])
-        response = make_response(201)
-    else:
-        response = make_response(400)
-    return response
+    createActionPoint(js['id'], js['name'])
+    return make_response(201)
 
 
 @app.route('/action_point/<int:id>', methods=['POST'])
 def deleteActionPoint(id):
-    if deleteActionPoint(id):          #deleteActionPoint(js['id']) == True
-        response = make_response(200)
-    else:
-        response = make_response(404)
-    return response
+    deleteActionPoint(id)
+    return make_response(jsonify({'message':'success'}),200)
 
 
-@app.route('/action_point/<id>', methods=['PUT'])
+@app.route('/action_point', methods=['PUT'])
 def updateActionPoint():
     js = request.get_json()
-    if not getActionPointByID(js['id']):
-        response = make_response(404)
-    elif updateActionPoint(js['id'], js['name']):
-        response = make_response(200)
-    else:
-        response = make_response(400)
-    return response
+    updateActionPoint(js['id'], js['name'])
+    return make_response(200)
 
 
 @app.errorhandler(ValidationException)

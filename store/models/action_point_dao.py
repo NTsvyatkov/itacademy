@@ -3,20 +3,20 @@ __author__ = 'andrey'
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, String
-from action_point_to_role_dao import Action_point_to_role
+from action_point_to_role_dao import ActionPointToRoleDao
 from flask import session
 from sqlalchemy.orm import relationship, backref
 from models import Base
 
 
-class Action_point(Base):
+class ActionPointDao(Base):
     __tablename__ = "action_point"
 
-    #action_point_id = Column(Integer, primary_key=True, foreign_key=ForeignKey(Action_point_to_role.action_point_id))
-    action_point_id = Column(Integer, primary_key=True)
+    action_point_id = Column(Integer, ForeignKey(ActionPointToRoleDao.action_point_id), primary_key=True)
     action_point_name = Column(String)
 
-    #action_point = relationship(Action_point_to_role, backref=backref('Action_point', lazy='dynamic'))
+    action_point = relationship(ActionPointToRoleDao, backref=backref('action_point', lazy='dynamic'))
+
 
     def __init__(self, action_point_id, action_point_name):
         self.action_point_id = action_point_id
@@ -27,28 +27,28 @@ class Action_point(Base):
         return "CData '%s, %s'" % (self.action_point_id, self.action_point_name)
 
 
-class ActionPointDao(object):
-
-    def __init__(self, action_point_id, action_point_name):
-        self.action_point_id = action_point_id
-        self.action_point_name = action_point_name
-
     @staticmethod
     def getActionPointByID(ap_id):
-        return session.query(Action_point).get(ap_id)
+        return session.query(ActionPointToRoleDao).get(ap_id)
 
     @staticmethod
     def getAllActionPoints():
-        return session.query(Action_point).order_by(Action_point.action_point_id)
+        return session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.action_point_id)
 
-    def createNewActionPoint(self):
-        session.add(self)
+    @staticmethod
+    def createNewActionPoint(id, name):
+        ap = ActionPointDao(id, name)
+        session.add(ap)
+        session.commit()
 
-    def updateActionPoint(self):
+    @staticmethod
+    def updateActionPoint(id, new_name):
+        entry = ActionPointDao.get(id)
+        entry.name = new_name
         session.commit()
 
     @staticmethod
     def deleteActionPoint(apId):
-        remove_role = session.query(Action_point).get(apId)
+        remove_role = session.query(ActionPointToRoleDao).get(apId)
         session.delete(remove_role)
         session.commit()

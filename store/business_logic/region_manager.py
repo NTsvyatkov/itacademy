@@ -1,14 +1,9 @@
 #!/usr/bin/env python
 
+
+from business_logic.user_manager import validationRegionID
 from models.region_dao import RegionDao
 from validation import ValidationException
-
-
-def validationRegionID(region_id):
-    if not RegionDao.getRegionByID(region_id):
-        raise ValidationException("Unable to find region with given id")
-    else:
-        return True
 
 
 def validationRegionName(region_name):
@@ -16,8 +11,6 @@ def validationRegionName(region_name):
         raise ValidationException("The region name is required field")
     elif len(region_name) > 50:
         raise ValidationException("Name length should be no more than 50 characters")
-    else:
-        return True
 
 
 def getlistRegion():
@@ -26,13 +19,13 @@ def getlistRegion():
 
 def createRegion(region_id, name):
     validationRegionName(name)
-    RegionDao.createNewRegion()
+    RegionDao.createNewRegion(region_id, name)
 
 
 def updateRegion(region_id, name):
     validationRegionID(region_id)
     validationRegionName(name)
-    RegionDao.updateRegion()
+    RegionDao.updateRegion(region_id, name)
 
 
 def deleteRegion(region_id):

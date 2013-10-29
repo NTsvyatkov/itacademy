@@ -1,15 +1,14 @@
 #!/usr/bin/env python
-__author__ = 'andrey'
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, String
-from role_dao import Role
-from region_dao import Region
+from role_dao import RoleDao
+from region_dao import RegionDao
 from flask import session
-from models import Base, db_engine
-from sqlalchemy.orm import relationship, backref, sessionmaker
+from models import Base
+from sqlalchemy.orm import relationship, backref
 
-class User(Base):
+class UserDao(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True)
@@ -18,11 +17,11 @@ class User(Base):
     first_name = Column(String(50))
     last_name = Column(String(50))
     email = Column(String(100))
-    role_id = Column(Integer, ForeignKey(Role.role_id))
-    region_id = Column(Integer, ForeignKey(Region.region_id))
+    role_id = Column(Integer, ForeignKey(RoleDao.role_id))
+    region_id = Column(Integer, ForeignKey(RegionDao.region_id))
 
-    role = relationship(Role, backref=backref('User', lazy='dynamic'))
-    region = relationship(Region, backref=backref('User', lazy='dynamic'))
+    role = relationship(RoleDao, backref=backref('user', lazy='dynamic'))
+    region = relationship(RegionDao, backref=backref('user', lazy='dynamic'))
 
     def __init__(self, id, login, password, first_name, last_name, email, role_id, region_id):
         self.id = id
@@ -38,48 +37,35 @@ class User(Base):
         return "CData '%s, %s, %s, %s, %s, %s, %s, %s, '" % (self.id,
         self.login, self.first_name, self.last_name, self.password, self.email, self.region_id, self.role_id)
 
-Base.metadata.create_all(db_engine)
-
-
-class UserDao(object):
-
-    def __init__(self, id, login, password, first_name, last_name, email, role_id, region_id):
-        self.id = id
-        self.login = login
-        self.password = password
-        self.first_name = first_name
-        self.last_name = last_name
-        self.email = email
-        self.role_id = role_id
-        self.region_id = region_id
+    #Base.metadata.create_all(db_engine)
 
     @staticmethod
     def  getUserByID(user_id):
-        return session.query(User).get(user_id)
+        return session.query(UserDao).get(user_id)
 
     @staticmethod
     def getAllUsers():
-        return session.query(User).order_by(User.id)
+        return session.query(UserDao).order_by(UserDao.id)
 
     @staticmethod
     def getUsersByFirstName(first_name):
-        return session.query(User).get(first_name)
+        return session.query(UserDao).get(first_name)
 
     @staticmethod
     def getUsersByLastName(last_name):
-        return session.query(User).get(last_name)
+        return session.query(UserDao).get(last_name)
 
     @staticmethod
     def getUsersByEmail(email):
-        return session.query(User).get(email)
+        return session.query(UserDao).get(email)
 
     @staticmethod
     def getUsersByRole(role_id):
-        return session.query(User).get(role_id)
+        return session.query(UserDao).get(role_id)
 
     @staticmethod
     def getUsersByRegion(region_id):
-        return session.query(User).get(region_id)
+        return session.query(UserDao).get(region_id)
 
     def createNewUser(self):
         session.add(self)
@@ -90,26 +76,26 @@ class UserDao(object):
 
     @staticmethod
     def updatePassword(userId, password):
-        pst = session.query(User).filter(User.id == userId).first()
+        pst = session.query(UserDao).filter(UserDao.id == userId).first()
         pst.password = password
         session.commit()
 
     @staticmethod
     def deleteRecord(userId):
-        remove_user = session.query(User).get(userId)
+        remove_user = session.query(UserDao).get(userId)
         session.delete(remove_user)
         session.commit()
 
     @staticmethod
     def getUserByLogin(userLogin):
-        posts = session.query(User).all
+        posts = session.query(UserDao).all
         for instance in posts:
             if instance.login == userLogin:   #and instance.password == userPassword
                 return instance              # instance.password   instance.getLogin / getPassword
 
     @staticmethod
     def isUserExists(userLogin):
-        user = User.getUserByLogin(userLogin)
+        user = UserDao.getUserByLogin(userLogin)
         result = False
         if user!= None:
             result = True

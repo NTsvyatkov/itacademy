@@ -6,7 +6,7 @@ from flask import session
 from models import Base
 
 
-class Region(Base):
+class RegionDao(Base):
     __tablename__ = "region"
 
     region_id = Column(Integer, primary_key=True)
@@ -20,28 +20,28 @@ class Region(Base):
         return "CData '%s, %s'" % (self.region_id, self.name)
 
 
-class RegionDao(object):
-
-    def __init__(self, region_id, name):
-        self.region_id = region_id
-        self.name = name
-
     @staticmethod
     def getRegionByID(region_id):
-        return session.query(Region).get(region_id)
+        return session.query(RegionDao).get(region_id)
 
     @staticmethod
     def getAllRegions():
-        return session.query(Region).order_by(Region.region_id)
+        return session.query(RegionDao).order_by(RegionDao.region_id)
 
-    def createNewRegion(self):
-        session.add(self)
+    @staticmethod
+    def createNewRegion(id, name):
+        region = RegionDao(id, name)
+        session.add(region)
+        session.commit()
 
-    def updateRegion(self):
+    @staticmethod
+    def updateRegion(id, new_name):
+        entry = RegionDao.get(id)
+        entry.name = new_name
         session.commit()
 
     @staticmethod
     def deleteRecord(regionId):
-        remove_region = session.query(Region).get(regionId)
+        remove_region = session.query(RegionDao).get(regionId)
         session.delete(remove_region)
         session.commit()

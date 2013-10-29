@@ -4,19 +4,18 @@ __author__ = 'andrey'
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, Text, String
-from action_point_to_role_dao import Action_point_to_role
+from action_point_to_role_dao import ActionPointToRoleDao
 from flask import session
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from models import Base, db_engine
+from sqlalchemy.orm import relationship, backref
+from models import Base
 
-class Role(Base):
+class RoleDao(Base):
     __tablename__ = "role"
 
-    #role_id = Column(Integer, primary_key=True, foreign_key=ForeignKey(Action_point_to_role.role_id))
-    role_id = Column(Integer, primary_key=True)
+    role_id = Column(Integer, ForeignKey(ActionPointToRoleDao.role_id), primary_key=True)
     name = Column(String(50))
 
-    #role = relationship(Action_point_to_role, backref=backref('Role', lazy='dynamic'))
+    role = relationship(ActionPointToRoleDao, backref=backref('role', lazy='dynamic'))
 
     def __init__(self, role_id, name):
         self.role_id = role_id
@@ -26,29 +25,29 @@ class Role(Base):
         return "CData '%s, %s'" % (self.role_id, self.name)
 
 
-class RoleDao(object):
-
-    def __init__(self, role_id, name):
-        self.role_id = role_id
-        self.name = name
-
     @staticmethod
     def getRoleByID(role_id):
-        return session.query(Role).get(role_id)
+        return session.query(RoleDao).get(role_id)
 
     @staticmethod
     def getAllRoles():
-        return session.query(Role).order_by(Role.role_id)
+        return session.query(RoleDao).order_by(RoleDao.role_id)
 
-    def createNewRole(self):
-        session.add(self)
+    @staticmethod
+    def createNewRole(id, name):
+        role = RoleDao(id, name)
+        session.add(role)
+        session.commit()
 
-    def updateRole(self):
+    @staticmethod
+    def updateRole(id, new_name):
+        entry = RoleDao.get(id)
+        entry.name = new_name
         session.commit()
 
     @staticmethod
     def deleteRecord(roleId):
-        remove_role = session.query(Role).get(roleId)
+        remove_role = session.query(RoleDao).get(roleId)
         session.delete(remove_role)
         session.commit()
 

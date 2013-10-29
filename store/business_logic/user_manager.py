@@ -15,8 +15,6 @@ def validationLogin(login):
         raise ValidationException("Login length should be no more than 50 characters")
     elif not re.match("^[a-zA-Z0-9]*_?[a-zA-Z0-9]*$", str(login)):
         raise ValidationException("Login should contain only alphanumerical characters.")
-    else:
-        return True
 
 
 def validationFirstName(first_name):
@@ -24,8 +22,6 @@ def validationFirstName(first_name):
         raise ValidationException("First Name is required field")
     elif len(first_name) > 50:
         raise ValidationException("First Name length should be no more than 50 characters")
-    else:
-        return True
 
 
 def validationLastName(last_name):
@@ -33,8 +29,6 @@ def validationLastName(last_name):
         raise ValidationException("Last Name is required field")
     elif len(last_name) > 50:
         raise ValidationException("Last Name length should be no more than 50 characters")
-    else:
-        return True
 
 
 def validationPassword(password):
@@ -42,8 +36,6 @@ def validationPassword(password):
         raise ValidationException("Password is required field")
     elif len(password) > 20:
         raise ValidationException("Password length should be no more than 50 characters")
-    else:
-        return True
 
 
 def validationEmail(email):
@@ -53,8 +45,7 @@ def validationEmail(email):
         raise ValidationException("Email length should be no more than 50 characters")
     elif not re.match("[\w\.\-]*@[\w\.\-]*\.\w+", str(email)):
         raise ValidationException("Invalid email field")
-    else:
-        return True
+
 
 
 def validationRoleID(role_id):
@@ -64,8 +55,6 @@ def validationRoleID(role_id):
         raise ValidationException("Role has invalid integer value")
     elif not RoleDao.getRoleByID(role_id):
         raise ValidationException("Unable to find user role with given id")
-    else:
-        return True
 
 
 def validationRegionID(region_id):
@@ -75,15 +64,11 @@ def validationRegionID(region_id):
         raise ValidationException("Role has invalid integer value")
     elif not RegionDao.getRegionByID(region_id):
         raise ValidationException("Unable to find a region with given id")
-    else:
-        return True
 
 
 def validationUserID(user_id):
     if not UserDao.getUserByID(user_id):
         raise ValidationException("Unable to find  user with given id")
-    else:
-        return True
 
 
 def getListUser():

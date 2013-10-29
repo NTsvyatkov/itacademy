@@ -1,7 +1,7 @@
 #!/usr/bin/env python
+
 from business_logic.action_point_manager import validationActionPointID
 from business_logic.role_manager import validationRoleID
-
 from models.action_point_to_role_dao import ActionPointToRoleDao
 from validation import ValidationException
 
@@ -19,17 +19,16 @@ def getlistActionPointToRole():
 
 
 def createActionPointToRole(ap_to_role_id, role_id, action_point):
-    validationActionPointToRoleID(ap_to_role_id)
     validationRoleID(role_id)
     validationActionPointID(action_point)
-    ActionPointToRoleDao.createNewActionPointToRole()
+    ActionPointToRoleDao.createNewActionPointToRole(ap_to_role_id, role_id, action_point)
 
 
 def updateActionPointToRole(ap_to_role_id, role_id, action_point):
     validationActionPointToRoleID(ap_to_role_id)
     validationRoleID(role_id)
     validationActionPointID(action_point)
-    ActionPointToRoleDao.createNewActionPointToRole()
+    ActionPointToRoleDao.createNewActionPointToRole(ap_to_role_id, role_id, action_point)
 
 
 def deleteActionPointToRole(ap_to_role_id):
