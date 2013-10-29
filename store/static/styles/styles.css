@@ -1,0 +1,60 @@
+.form{
+
+background: lightskyblue;;
+   position:absolute;
+    width: 700px;
+    height: 420px;
+    z-index:997;
+    top:50%;
+    left:50%;
+    margin-left:-350px;
+    margin-top:-210px;
+
+
+
+
+}
+.errorList
+{
+    color:red;
+    border:2px solid red;
+
+}
+#hover{
+   display:none;
+   position:absolute ;
+   width:100% ;
+   height:100%;
+   background:#00CCFF;
+   top:0;
+   left:0;
+   z-index:998;
+
+
+}
+#popub{
+    display:none;
+    background:#ffffff ;
+position:absolute;
+    width: 300px;
+    height: 100px;
+    z-index:999;
+    top:50%;
+    left:50%;
+    margin-left:-150px;
+    margin-top:-50px;
+}
+
+
+#refresh{
+
+   position:absolute;
+    width: 200px;
+    height: 100px;
+    top:50%;
+    left:50%;
+    margin-left:-100px;
+    margin-top:-50px;
+
+
+}

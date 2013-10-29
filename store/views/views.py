@@ -1,5 +1,5 @@
 from copy import name
-from flask import Flask, jsonify, render_template, flash, redirect, request, make_response
+from flask import Flask, jsonify, render_template, flash, redirect, request, make_response, json
 app = Flask(__name__)
 #from app import app
 #from forms import LoginForm
@@ -108,3 +108,23 @@ def err_han(e):
 app.route('/productgrid')
 def productgrid():
     return render_template('product_grid.html')
+
+@app.route('/create_user', methods=('GET', 'POST'))
+def create_user():
+
+        if request.method == 'POST':
+          try:
+                 data = request.json
+                 name= json.loads(data['name'])
+                 first_name =json.loads(data['user_name'])
+                 last_name = json.loads(data['last_name'])
+                 password =json.loads(data['password_name'])
+                 email = json.loads(data['email'])
+                 region_id = json.loads(data['region_id'])
+                 role_id= json.loads(data['role_id'])
+
+          except (ValueError, KeyError, TypeError):
+            resp = make_response({"JSON Format Error."}, status=400, mimetype='application/json')
+            return resp
+
+        return render_template('create_user.html')
