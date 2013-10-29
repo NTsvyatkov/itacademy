@@ -1,0 +1,204 @@
+<html>
+  <head>
+   <link href="static/style.css" rel="stylesheet" type="text/css" />
+   <script type="text/javascript" src="static/jquery-1.7.2.js"></script>
+
+ <script type="text/javascript">
+
+
+   var count_tr=25;
+   var tr = [];
+
+   /* Creating table of user */
+  $(document).ready (function() {
+      var table_grid = document.getElementById('grid');
+    function creat_grid(count)
+    {
+        for (var i=1; i<=count;i++ )
+        {
+            tr[i] = document.createElement('TR');
+            table_grid.appendChild(tr[i]);
+            tr[i].id=i;
+            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            for (var j=0; j<=7; j++)
+             {
+              tr[i].appendChild(document.createElement('TD'));
+             }
+        }
+    }
+    creat_grid(25);
+
+                    
+  function clearing_tr(i)
+  {
+      for (var j=0; j<=7; j++)
+      {
+          tr[i].cells[j].innerHTML='';
+      }
+  }
+
+
+  function clearing_grid()
+  {
+    for (var n=2 ; n<=count_tr; n++)
+    {
+      clearing_tr(n);
+    }
+  }
+ function deleting_grid()
+ {
+    for (var n=table_grid.rows.length ; n>=2; n--)
+      {
+       table_grid.removeChild(table_grid.childNodes[n]);
+      }
+
+ }
+    var k=0;
+
+    $('#search_button').click(function(){
+      $.ajax({
+        dataType: "json",
+        url: '/user',
+        type: 'POST',
+        data: { id : $('#name_form').val(), name : $('#user_name').val() },
+        success: function(json)
+        {
+           //clearing_grid()
+
+
+           deleting_grid()
+           creat_grid(json.user.length)
+           /*Create table with new user list */
+            for (var user_k in json.user)
+                {
+                 k++;
+                 tr[k].cells[0].innerHTML = json.products[product_k].User_Name;
+                 tr[k].cells[1].innerHTML = json.products[product_k].First_Name;
+                 tr[k].cells[2].innerHTML = json.products[product_k].Last_Name;
+                 tr[k].cells[3].innerHTML = json.products[product_k].Role;
+                 tr[k].cells[4].innerHTML = json.products[product_k].Email;
+		         tr[k].cells[5].innerHTML = json.products[product_k].Region;
+                 tr[k].cells[7].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[8].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[7].abbr=k;
+                 tr[k].cells[8].abbr=k;
+                 tr[k].cells[7].onclick = function edit_tr2()
+                                      {
+                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                      }
+                 tr[k].cells[8].onclick= function delete_tr2()
+                                      {
+                                        var str = tr[this.abbr].cells[1].innerHTML
+                                        if (confirm('Are you sure you want to delete user '+ str +''))
+                                        {
+                                          clearing_tr(this.abbr);
+                                          alert('The user has been successfully deleted');
+                                        }
+                                       }
+                }
+                k=0;
+            /*End creating table*/
+
+         }
+      })
+    });
+
+
+
+
+
+
+
+
+
+   $('#clr').click(deleting_grid);
+ });
+
+   </script>
+
+  </head>
+
+
+  <body>
+
+  <div id="user_block">
+This page is appointed for creating new and managing existing users
+	<li><a href="#" ONCLICK="NewWindow()"> Create New User</a></li>
+	<script>
+function NewWindow()
+{window.open("index.php","","height=450,width=600,status=no,location=no,toolbar=no,directories=no,menubar=no");}
+   </script>
+	Number of Found User <a href="#">#</a>
+      <div id="user_filter">
+          <span>Search user</span>
+        <div class="user_filter_in">
+         <form class='grid'>
+		 
+		 <div class="search">
+         <select id="SelectId_user"  style="width:100px">
+			<option value="str0">  </option>
+			<option value="str1"> first name </option>
+			<option value="str2"> last name </option>
+			<option value="str2"> email </option>
+			 </select>
+			</div>
+	
+		<div class="search">
+		 <select id="SelectId_key"  style="width:100px">
+			<option value="str0">  </option>
+			<option value="str1"> start with </option>
+			<option value="str2"> contains </option>
+			<option value="str3"> equal to </option>
+		 </select>
+		</div>
+  
+  		<input type="text" style="width:280px" />
+		<input type="button" value="search" id='search_button'>
+         </form>
+		 </div>
+          </div>
+          <div style="margin-left:80%;">
+		 <a href="#">show 25 items</a>
+		 </div>
+              <div id="user_table">
+       <table id='grid' class="grid">
+           <tr>
+               <th>
+                   User Name
+               </th>
+               <th>
+                   First Name
+               </th>
+               <th>
+                   Last Name
+               </th>
+               <th>
+                   Role
+               </th>
+               <th>
+                   Email
+               </th>
+			   <th>
+                   Region
+               </th>
+               <th>
+                   edit
+               </th>
+               <th>
+                   delete
+               </th>
+
+           </tr>
+       </table>
+      </div>
+
+
+
+
+  </div>
+
+
+
+  </body>
+
+</html>
