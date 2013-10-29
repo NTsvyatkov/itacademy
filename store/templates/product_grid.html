@@ -1,8 +1,8 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
   <head>
- <link href="{{url_for('static', filename='style.css')}}" rel="stylesheet" type="text/css" />
-   <script type="text/javascript"  src="{{url_for('static', filename='jquery-1.7.2.js')}}" ></script>
+ <link href="{{url_for('static', filename='styles/style.css')}}" rel="stylesheet" type="text/css" />
+   <script type="text/javascript"  src="{{url_for('static', filename='js/jquery-1.7.2.js')}}" ></script>
 
  <script type="text/javascript">
 
@@ -84,8 +84,8 @@
                  tr[k].cells[2].innerHTML = json.products[product_k].description;
                  tr[k].cells[3].innerHTML = json.products[product_k].price;
                  tr[k].cells[4].innerHTML = json.products[product_k].dimension;
-                 tr[k].cells[5].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[6].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr[k].cells[5].abbr=k;
                  tr[k].cells[6].abbr=k;
                  tr[k].cells[5].onclick = function edit_tr2()
