@@ -80,3 +80,24 @@ def send_file(filename):
 def productgrid(page=1):
     products = Product.query.order_by(Product.name.asc()).paginate(page, 2, False)
     return render_template('product_grid.html', products = products)
+
+@app.route('/create_user', methods=('GET', 'POST'))
+def create_user():
+
+        return render_template('create_user.html',)
+
+@app.route('/create_user_data', methods=['POST'])
+def create_user_data():
+
+    if request.method == 'POST':
+
+        user_data = request.json
+        name= user_data['name']
+        first_name = user_data['first_name']
+        last_name = user_data['last_name']
+        password = user_data['password']
+        email = user_data['email']
+        region_id = user_data['region_id']
+        role_id = user_data['role_id']
+
+        return jsonify(result = name + first_name+last_name + password+email+ region_id + role_id)
