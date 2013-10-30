@@ -74,7 +74,7 @@ def validationUserID(user_id):
 def getListUser():
     return UserDao.getAllUsers()
 
-def createUser(user_id, login, first_name, last_name, password, email, region_id, role_id):
+def createUser(user_id, login, first_name, last_name, password, email, role_id, region_id):
     validationLogin(login)
     validationFirstName(first_name)
     validationLastName(last_name)
@@ -82,10 +82,10 @@ def createUser(user_id, login, first_name, last_name, password, email, region_id
     validationEmail(email)
     validationRegionID(region_id)
     validationRoleID(role_id)
-    UserDao.createNewUser()
+    UserDao.createNewUser(user_id, login, first_name, last_name, password, email,role_id, region_id )
 
 
-def updateUser(user_id, login, first_name, last_name, password, email, region_id, role_id):
+def updateUser(user_id, login, first_name, last_name, password, email, role_id, region_id):
     validationUserID(user_id)
     validationLogin(login)
     validationFirstName(first_name)
@@ -94,8 +94,7 @@ def updateUser(user_id, login, first_name, last_name, password, email, region_id
     validationEmail(email)
     validationRegionID(region_id)
     validationRoleID(role_id)
-
-    UserDao.updateUser()
+    UserDao.updateUser(user_id, login, first_name, last_name, password, email, role_id, region_id)
 
 
 def deleteUser(user_id):

@@ -67,11 +67,14 @@ class UserDao(Base):
     def getUsersByRegion(region_id):
         return session.query(UserDao).get(region_id)
 
-    def createNewUser(self):
-        session.add(self)
+    @staticmethod
+    def createNewUser(id, login, password, first_name, last_name, email, role_id, region_id):
+        user = UserDao(id,login,password,first_name,last_name,email,role_id,region_id)
+        session.add(user)
         session.commit()
 
-    def updateUser(self):
+    @staticmethod
+    def updateUser(id, login, password, first_name, last_name, email, role_id, region_id):
         session.commit()
 
     @staticmethod
