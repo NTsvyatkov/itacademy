@@ -110,6 +110,12 @@ def productgrid():
     return render_template('product_grid.html')
 
 @app.route('/create_user_data', methods=['POST'])
+
+@app.route('/create_user', methods=('GET', 'POST'))
+def create_user():
+
+        return render_template('create_user.html',)
+
 def create_user_data():
 
     if request.method == 'POST':
