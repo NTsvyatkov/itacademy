@@ -153,7 +153,7 @@ var region =   document.form.region.value;
     $.ajax({
         dataType: 'json',
         type: "POST",
-        url: "/create_user",
+        url: "/create_user_data",
         data:JSON.stringify({
                 name:$('input[name="name"]').val(),
                 first_name: $('input[name="first_name"]').val(),
@@ -168,9 +168,13 @@ var region =   document.form.region.value;
 
         success: function(data){
 
-         console.log(data.user_name);
+      var view =   $("#result").text(data.result);
+      var view = data.length,
+        element = null;
+            for (var i = 0; i < view; i++) {
+        element = arr[i];
 
-
+}
 
 
                                 }

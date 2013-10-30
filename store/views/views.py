@@ -109,22 +109,18 @@ app.route('/productgrid')
 def productgrid():
     return render_template('product_grid.html')
 
-@app.route('/create_user', methods=('GET', 'POST'))
-def create_user():
+@app.route('/create_user_data', methods=['POST'])
+def create_user_data():
 
-        if request.method == 'POST':
-          try:
-                 data = request.json
-                 name= json.loads(data['name'])
-                 first_name =json.loads(data['user_name'])
-                 last_name = json.loads(data['last_name'])
-                 password =json.loads(data['password_name'])
-                 email = json.loads(data['email'])
-                 region_id = json.loads(data['region_id'])
-                 role_id= json.loads(data['role_id'])
+    if request.method == 'POST':
 
-          except (ValueError, KeyError, TypeError):
-            resp = make_response({"JSON Format Error."}, status=400, mimetype='application/json')
-            return resp
+        user_data = request.json
+        name= user_data['name']
+        first_name = user_data['first_name']
+        last_name = user_data['last_name']
+        password = user_data['password']
+        email = user_data['email']
+        region_id = user_data['region_id']
+        role_id = user_data['role_id']
 
-        return render_template('create_user.html')
+        return jsonify(result = name + first_name+last_name + password+email+ region_id + role_id)
