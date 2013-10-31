@@ -75,7 +75,7 @@ class UserDao(Base):
 
     @staticmethod
     def updateUser(id, login, password, first_name, last_name, email, role_id, region_id):
-        entry = UserDao.get_product(id)
+        entry = UserDao.getUserByID(id)
         entry.login = login
         entry.password = password
         entry.first_name = first_name
