@@ -11,18 +11,18 @@
 
    /* Creating table of user */
   $(document).ready (function() {
-      var table_grid = document.getElementById('grid');
+      var table_grid = document.getUserById('grid');
     function creat_grid(count)
     {
         for (var i=1; i<=count;i++ )
         {
-            tr[i] = document.createElement('TR');
+            tr[i] = document.createUser('TR');
             table_grid.appendChild(tr[i]);
             tr[i].id=i;
             if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
             for (var j=0; j<=7; j++)
              {
-              tr[i].appendChild(document.createElement('TD'));
+              tr[i].appendChild(document.createUser('TD'));
              }
         }
     }
