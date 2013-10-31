@@ -1,0 +1,85 @@
+#menu{
+	width:100%;
+	height:60px;
+	background:url(../images/menu_bg.png) repeat-x;
+}
+#menu ul{
+	list-style:none;
+	margin:0 auto;
+	width:100%;
+}
+#menu li{
+	list-style:none;
+	display:block;
+	float:left;
+	height:60px;
+	line-height:60px;
+}
+#menu li a{
+	display:block;
+	float:left;
+	color:#a7a7a7;
+	text-transform:uppercase;
+	font-size:11px;
+	font-weight:bold;
+	line-height:60px;
+	text-decoration:none;
+	padding:0 25px;
+}
+#menu li a:hover, #menu li a.current{
+	color:#fff;
+	background:url(../images/menu_h.png) no-repeat bottom;}
+
+body                       {background-image:url(../images/one.jpg) }
+form                       { width:480px;padding:0 90px 20px;margin:auto;background:#ecf2f6; }
+
+label                      { cursor:pointer;display:block; }
+input[type="text"]         { width:300px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
+input[type="text"]:focus   { border-color:#777; }
+input[name="zip"]          { width:150px; }
+
+
+
+/* submit button */
+input[type="submit"]       { cursor:pointer;border:1px solid #999;padding:5px;-moz-border-radius:4px;background:#eee; }
+input[type="submit"]:hover,
+input[type="submit"]:focus { border-color:#333;background:#ddd; }
+input[type="submit"]:active{ margin-top:1px; }
+
+input[type="reset"]       { cursor:pointer;border:1px solid #999;padding:5px;-moz-border-radius:4px;background:#eee; }
+input[type="reset"]:hover,
+input[type="reset"]:focus { border-color:#333;background:#ddd; }
+input[type="reset"]:active{ margin-top:1px; }
+
+input[type="button"]       { cursor:pointer;border:1px solid #999;padding:5px;-moz-border-radius:4px;background:#eee; }
+input[type="button"]:hover,
+input[type="button"]:focus { border-color:#333;background:#ddd; }
+input[type="button"]:active{ margin-top:1px; }
+
+
+
+
+
+
+
+.grid {width:980px; border-left:1px solid #c6d5e1; border-top:1px solid #c6d5e1; border-bottom:none; margin:0 auto 15px}
+.grid th {background:url(../images/header-bg.gif); text-align:left; color:#cfdce7; border:1px solid #fff; border-right:none}
+.grid th h3 {font-size:14px; padding:6px 8px 8px}
+.grid td {padding:4px 6px 6px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1}
+.grid .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
+.grid .desc, .sortable .asc {background:url(../images/header-selected-bg.gif)}
+.grid .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
+.grid .asc h3 {background:url(../images/asc.gif) 7px  center no-repeat; cursor:pointer; padding-left:18px}
+.grid .head:hover, .sortable .desc:hover, .sortable .asc:hover {color:#fff}
+.grid .evenrow td {background:#fff}
+.grid .oddrow td {background:#ecf2f6}
+.grid td.evenselected {background:#ecf2f6}
+.grid td.oddselected {background:#dce6ee}
+
+#controls {width:980px; margin:0 auto; height:20px}
+#perpage {float:left; width:200px}
+#perpage select {float:left; font-size:11px}
+#perpage span {float:left; margin:2px 0 0 5px}
+#navigation {float:left; width:580px; text-align:center}
+#navigation img {cursor:pointer}
+#text {float:left; width:200px; text-align:right; margin-top:2px}
