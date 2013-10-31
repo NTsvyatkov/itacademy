@@ -1,0 +1,51 @@
+{% extends "layout.html" %}
+{% block body %}
+    <script src="{{ url_for('static', filename='js/jquery-1.5.2.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/jquery.validate.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/myscripts.js') }}"></script>
+<style type="text/css">
+div { clear:both;position:relative;margin:0 0 10px; }
+.error{
+  color: red;
+</style>
+
+    <form id="info" class="CreatePro" action="{{ url_for('product12') }}" method="Post">
+	</br><h1>Create Product</h1></br>
+    <div  id="name-wrap" class="slider">
+        <label for="name">Name*</label>
+        <input type="text" id="name" name="name">
+    </div>
+
+    <div id="description-wrap"  class="slider">
+        <label for="description">Description</label>
+        <textarea type="text" rows="6" cols="36" name="description" id="description"></textarea>
+    </div>
+
+    <div id="price-wrap"  class="slider">
+        <label for="price">Price*</label>
+        <input type="text" id="price" name="price">
+    </div>
+
+    <h2>Dimension*</h2>
+
+    <select id="id" name="id">
+    <option value="">Select value</option>
+    <option value="1">1</option>
+    <option value="2">2</option>
+    <option value="3">3</option>
+    </select></br></br></br></br></br></br>
+
+    <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
+    <input type="button" name="cancel" value="Cancel">
+     <input type="submit" id="btn" name="btn" value="Create">
+    <script type="text/javascript">
+         function confirmDelete() {
+    if (confirm("All fields will be cleared. Do you want to continue?")) {
+        return true;
+    } else {
+        return false;
+    }};
+    </script>
+    </form>
+
+{% endblock body  %}

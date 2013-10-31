@@ -1,0 +1,237 @@
+
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title> </title>
+
+
+
+
+
+<script type="text/javascript" src="/static/js/jquery.js"></script>
+<script type="text/javascript" src="/static/js/JQuery_validate_and_ajax_to_create_user.js"></script>
+
+ <link rel="stylesheet" type="text/css" href="/static/styles/styles.css">
+
+
+
+
+</head>
+<body>
+
+
+
+
+
+<div class=" form">
+<form   name="form" id ="form" method ="POST"  >
+
+    <table>
+      <!-- Логин пользователя-->
+        <tr>
+          <td>
+             <label for="name">User_name</label>
+          </td>
+
+          <td>
+            <div class ="user_name">  <input id="name" name="name" type="text" value="" maxlength="50"></div>
+          </td>
+          <td>
+              <div class = "error_user_name"></div>
+          </td>
+        </tr>
+
+               <!--Имя пользователя-->
+        <tr>
+            <td>
+               <label for="first_name"> First_name</label>
+             </td>
+
+             <td>
+                <div class ="first_name">  <input id="first_name" name="first_name" type="text" value="" maxlength="50"></div>
+             </td>
+            <td>
+              <div class = "error_first_name"></div>
+          </td>
+        </tr>
+                <!--Фамилия пользователя-->
+        <tr>
+            <td>
+                <label for="last_name"> Last_name</label>
+            </td>
+
+            <td>
+
+                <div class ="last_name">  <input id="last_name" name="last_name" type="text" value="" maxlength="50"></div>
+            </td>
+             <td>
+              <div class = "error_last_name"></div>
+            </td>
+        </tr>
+                <!--Пароль пользователя -->
+        <tr>
+            <td>
+                 <label for="password">Password</label>
+            </td>
+            <td>
+                 <div class ="password">  <input id="password" name="password" type="password" value="" maxlength="20"></div>
+            </td>
+            <td>
+              <div class = "error_password"></div>
+            </td>
+        </tr>
+                <!--Проверка пароля-->
+        <tr>
+            <td>
+         <label for="confirm">Confirm Password</label>
+            </td>
+            <td>
+               <div class ="confirm">  <input id="confirm" name="confirm" type="password" value="" maxlength="20"></div>
+            </td>
+            <td>
+              <div class = "error_confirm"></div>
+            </td>
+        </tr>
+                <!--Проверка адреса почты-->
+        <tr>
+            <td>
+                <label for="email">Email</label>
+            </td>
+            <td>
+               <div class ="email">  <input id="email" name="email" type="text" value="" maxlength="100"></div>
+            </td>
+            <td>
+              <div class = "error_email"></div>
+            </td>
+        </tr>
+                <!--Выбор региона-->
+        <tr>
+            <td>
+                <label for="region">Region</label>
+            </td>
+            <td>
+                 <div class ="region">  <select id="region" name="region_id" type ="checkbox">
+                     <option value ="0" > Select from the list</option>
+                     <option value="North">North</option>
+                     <option value="South">South</option>
+                     <option value="West">West</option>
+                     <option value="East">East</option>
+                 </select><td><div class = "error_region"> </div></td>
+                 </div>
+            </td>
+
+        </tr>
+   </table>
+                <!--Выбор роли-->
+    <div style ="width: 500px " >
+    <fieldset>
+            <legend >Role</legend>
+    <div class ="role" style ="width: 200px ">
+      <table>
+          <tr>
+              <td>
+             <input id="role-1" name="role_id" type="radio" value="Administrator"> <label for="role-1">Administrator</label>
+              </td>
+          </tr>
+          <tr>
+               <td>
+                <input id="role-3" name="role_id" type="radio" value="Merchandizer"> <label for="role-3">Merchandizer</label>
+               <td>
+          </tr>
+          <tr>
+              <td>
+               <input id="role-2" name="role_id" type="radio" value="Supervizor"> <label for="role-2">Supervizor</label>
+              </td>
+          </tr>
+          <tr>
+              <td>
+               <input id="role-0" name="role_id" type="radio" value="Customer" checked="checked"> <label for="role-0">Customer</label>
+              </td>
+          </tr>
+
+
+
+      </table>
+    </div> <div class = "error_role"></div></br>
+
+     </fieldset>
+     </div>
+
+
+
+                <!--Создание кнопок-->
+        <tr>
+            <td><input type="button" value ="Create" class="button" onclick="return validate_form ( );" id ="post_form"   /></td>
+            <td><input type="button" value ="Cancel"     /></td>
+            <td><input  type ="button" value ="Refresh"   id ="warning"  /></td>
+        </tr>
+
+
+
+
+
+
+</form>
+
+            </br></br>
+    <h1>data checking</h1>
+ <p>
+   <span id=result>?</span>
+
+</p>
+            </br></br>
+
+
+</div>
+<div id ="popub">
+                 <div id ="refresh"   >
+                     <p style ="text-align: center;" > Do you want to continue?</p>
+                 <p style = "text-align:center;">
+                     <input  type ="button"  value = "clear"   />
+                     <input  type ="submit"  value = "close"  id ="close"/>
+                 </div>
+                  </p>
+</div>
+
+<div id ="hover"></div>
+
+
+    <script type ="text/javascript">
+$(document).ready(function(){
+$('#warning').click(function(){
+  $('#popub').show(200);
+  $('#hover').show(200);
+                     });
+
+$('#close').click(function (){
+  $('#popub').hide();
+  $('#hover').hide();
+       return false;
+});
+
+  $('#refresh').click(function (){
+  $('#popub').hide();
+  $('#hover').hide();
+  $(':input','#form')
+ .not(':button, :submit, :reset, :hidden')
+ .val('')
+ /*.removeAttr('checked')
+ .removeAttr('selected');*/
+
+       return false;
+});
+
+
+
+
+
+
+
+});
+
+
+    </script>
+</body>
+</html>
+
