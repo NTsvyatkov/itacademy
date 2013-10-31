@@ -89,7 +89,7 @@ def user_id_delete():
 @app.route('/user', methods = ['POST'])
 def user_post():
     js = request.get_json()
-    createUser(js['name'],js['description'],js['price'],js['id'])
+    createUser(js['user_id'],js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
     resp = make_response(0,201)
     return resp
 
