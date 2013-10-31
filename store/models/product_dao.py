@@ -40,14 +40,14 @@ class Product(db.Model):
         entry.description = new_description
         entry.price = new_price
         entry.dimension = Dimension.query.filter_by(name=new_dimension).first()
-        db.session.commit() 
+        db.session.commit()
 
 
 class Dimension(db.Model):
     __tablename__ = 'dimensions'
     id = db.Column(db.Integer, primary_key = True)
     name = db.Column(db.String(10))
-    
+
     def __init__(self, name):
         self.name = name
 
