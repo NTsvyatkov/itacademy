@@ -75,6 +75,14 @@ class UserDao(Base):
 
     @staticmethod
     def updateUser(id, login, password, first_name, last_name, email, role_id, region_id):
+        entry = UserDao.get_product(id)
+        entry.login = login
+        entry.password = password
+        entry.first_name = first_name
+        entry.last_name = last_name
+        entry.email = email
+        entry.role_id = role_id
+        entry.region_id = region_id
         session.commit()
 
     @staticmethod

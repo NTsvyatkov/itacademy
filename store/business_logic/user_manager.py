@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-__author__ = 'andrey'
 
 import re
 from validation import ValidationException
