@@ -69,15 +69,15 @@
            deleting_grid()
            creat_grid(json.user.length)
            /*Create table with new user list */
-            for (var user_k in json.user)
+            for (var userl in json.user)
                 {
                  k++;
-                 tr[k].cells[0].innerHTML = json.products[product_k].User_Name;
-                 tr[k].cells[1].innerHTML = json.products[product_k].First_Name;
-                 tr[k].cells[2].innerHTML = json.products[product_k].Last_Name;
-                 tr[k].cells[3].innerHTML = json.products[product_k].Role;
-                 tr[k].cells[4].innerHTML = json.products[product_k].Email;
-		         tr[k].cells[5].innerHTML = json.products[product_k].Region;
+                 tr[k].cells[0].innerHTML = json.user[user_k].User_Name;
+                 tr[k].cells[1].innerHTML = json.user[user_k].First_Name;
+                 tr[k].cells[2].innerHTML = json.user[user_k].Last_Name;
+                 tr[k].cells[3].innerHTML = json.user[user_k].Role;
+                 tr[k].cells[4].innerHTML = json.user[user_k].Email;
+		         tr[k].cells[5].innerHTML = json.user[userl].Region;
                  tr[k].cells[7].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
                  tr[k].cells[8].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
                  tr[k].cells[7].abbr=k;
