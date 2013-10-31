@@ -1,13 +1,11 @@
 #!/usr/bin/env python
 __author__ = 'andrey'
-
-from sqlalchemy import ForeignKey
-from sqlalchemy import Column, Integer, String
 from role_dao import Role
 from region_dao import Region
-from flask import session
-from models import Base, db_engine
-from sqlalchemy.orm import relationship, backref, sessionmaker
+from models import Base, session,engine
+from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
+from sqlalchemy.orm import relationship, backref
+
 
 class User(Base):
     __tablename__ = "user"
@@ -38,7 +36,6 @@ class User(Base):
         return "CData '%s, %s, %s, %s, %s, %s, %s, %s, '" % (self.id,
         self.login, self.first_name, self.last_name, self.password, self.email, self.region_id, self.role_id)
 
-Base.metadata.create_all(db_engine)
 
 
 class UserDao(object):

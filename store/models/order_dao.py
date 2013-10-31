@@ -1,14 +1,6 @@
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, DATE
-from sqlalchemy.ext.declarative import declarative_base
+from models import Base, session, engine
+from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm import sessionmaker
-
-engine = create_engine('sqlite:///', echo=True)
-Base = declarative_base()
-
-Session = sessionmaker(bind=engine)
-session = Session()
 
 class User(Base):
     __tablename__ = "user"
@@ -45,10 +37,10 @@ class Order(Base):
 
 	@staticmethod
 	def get_order_userid(user_id,date):
-        if date != '':
-		  return session.query(Order).filter(user_id==user_id).filter(date==date).all()
-        else:
-            return session.query(Order).filter(user_id==user_id).all()
+            if date != '':
+		        return session.query(Order).filter(user_id==user_id).filter(date==date).all()
+            else:
+                return session.query(Order).filter(user_id==user_id).all()
         
     @staticmethod
     def add_order(user_id,date,status_id,delivery_id):
@@ -176,9 +168,7 @@ class Order_Product(Base):
             session.delete(dele)
             session.commit()
 
-            
 
-Base.metadata.create_all(engine)
 
 #Delivery_Type.add_delivery('Fast delivery')
 #Delivery_Type.add_delivery('Slow delivery')

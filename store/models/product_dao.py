@@ -1,14 +1,16 @@
-from models import db
+from models import Base, session, engine
+from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
+from sqlalchemy.orm import relationship, backref
 
-class Product(db.Model):
+class Product(Base):
     __tablename__ = 'products'
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(100))
-    description = db.Column(db.Text)
-    price = db.Column(db.Float)
+    id = Column(Integer, primary_key = True)
+    name = Column(String(100))
+    description = Column(Text)
+    price = Column(Float)
 
-    dimension_id = db.Column(db.Integer, db.ForeignKey('dimensions.id'))
-    dimension = db.relationship('Dimension', backref=db.backref('products', lazy='dynamic'))
+    dimension_id = Column(Integer, ForeignKey('dimensions.id'))
+    dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
 
     def __init__(self, name, description, price, dimension):
         self.name = name
@@ -22,8 +24,8 @@ class Product(db.Model):
     @staticmethod
     def add_product(name, description, price, dimension):
         p = Product(name, description, price, Dimension.query.filter_by(name=dimension).first())
-        db.session.add(p)
-        db.session.commit()
+        session.add(p)
+        session.commit()
 
     @staticmethod
     def search_product(name):
@@ -40,13 +42,13 @@ class Product(db.Model):
         entry.description = new_description
         entry.price = new_price
         entry.dimension = Dimension.query.filter_by(name=new_dimension).first()
-        db.session.commit() 
+        session.commit() 
 
 
-class Dimension(db.Model):
+class Dimension(Base):
     __tablename__ = 'dimensions'
-    id = db.Column(db.Integer, primary_key = True)
-    name = db.Column(db.String(10))
+    id = Column(Integer, primary_key = True)
+    name = Column(String(10))
     
     def __init__(self, name):
         self.name = name
@@ -61,11 +63,11 @@ class Dimension(db.Model):
     @staticmethod
     def add_dimension(name):
         d = Dimension(name)
-        db.session.add(d)
-        db.session.commit()
+        session.add(d)
+        session.commit()
 
     @staticmethod
     def update_dimension(id, new_name,):
         entry = Dimension.get(id)
         entry.name = new_name
-        db.session.commit()
+        session.commit()
