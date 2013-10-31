@@ -66,7 +66,7 @@ def user():
     userlist = getListUser()
     user_arr=[]
     for i in userlist:
-        products_arr.append({'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'role_id':i.role_id,'region_id':i.region_id})
+        user_arr.append({'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'role_id':i.role_id,'region_id':i.region_id})
     return make_response(jsonify(user=user_arr),200)
 listUser()
 
