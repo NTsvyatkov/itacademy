@@ -41,7 +41,7 @@ def products():
 
     return make_response(jsonify(products=products_arr),200)
 
-@app.route('/product/<id>', methods = ['GET'])
+@app.route('/product//<int:id>', methods = ['GET'])
 def products_id():
     js = request.get_json()
     product_id = get_product_id(js['id'])
@@ -70,7 +70,7 @@ def userl():
     return make_response(jsonify(user=user_arr),200)
 listUser()
 
-@app.route('/user/<id>', methods = ['GET'])
+@app.route('/user/<int:id>', methods = ['GET'])
 def userid():
     js = request.get_json()
     user_id = getUserByID(js['id'])
@@ -78,7 +78,7 @@ def userid():
     resp = make_response(jsonify(user=user),200)
     return resp
 
-@app.route('/user', methods = ['DELETE'])
+@app.route('/user/<int:id>', methods = ['DELETE'])
 def user_id_delete():
     js = request.get_json()
     deleteUser(js['id'])
