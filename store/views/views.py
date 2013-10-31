@@ -62,7 +62,7 @@ def err_han(e):
     return make_response(jsonify(error_dict), 404)
 
 @app.route('/user', methods = ['GET'])
-def userl():
+def user():
     userlist = getListUser()
     user_arr=[]
     for i in userlist:
