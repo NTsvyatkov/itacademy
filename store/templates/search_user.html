@@ -59,8 +59,8 @@
       $.ajax({
         dataType: "json",
         url: '/user',
-        type: 'POST',
-        data: { id : $('#name_form').val(), name : $('#user_name').val() },
+        type: 'GET', 
+        }
         success: function(json)
         {
            //clearing_grid()
@@ -103,7 +103,36 @@
       })
     });
 
+function delete_id(id,tr_id)
+  {
+  if (id=='') id=0;
+   form_value = {id : id}
+   json_value = JSON.stringify(form_value);
+   $.ajax({
+       dataType: "json",
+        url: '/user/'+id,
+        type: 'DELETE',
+        /*data: {id:id}*/
+        contentType: "application/json",
+        success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The user has been successfully deleted');
+                          clearing_tr(tr_id);
+                         }
+                        else
+                         alert (json.message);
+                    },
 
+        error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+
+  })
+ }
 
 
 
