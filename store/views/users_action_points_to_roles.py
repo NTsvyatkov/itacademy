@@ -17,44 +17,30 @@ def actionPointToRoleList():
 @app.route('/action_point_to_role/<int:id>', methods=['GET'])
 def actionPointToRoleByID(id):
     ap_to_role = getActionPointToRoleByID(request.get['id'])
-    action_point_to_role = {"id":ap_to_role.ap_to_role_id,"id_role": ap_to_role.role_id, "id_ap": ap_to_role.action_point_id}
-    if action_point_to_role is not None:
-        response = make_response(jsonify(action_point_to_role=action_point_to_role), 200)
-    else:
-        response = make_response(404)
-    return response
+    action_point_to_role = {"id":ap_to_role.ap_to_role_id,"role_id": ap_to_role.role_id,
+                            "action_point_id": ap_to_role.action_point_id}
+    return make_response(jsonify(action_point_to_role=action_point_to_role), 200)
+
 
 
 @app.route('/action_point_to_role', methods=['POST'])
 def createActionPointToRole():
-    js = request.get_json()
-    if not validationActionPointToRoleID(js('id')): #
-        createActionPointToRole(js['role_id'], js['action_point_id'])
-        response = make_response(201)
-    else:
-        response = make_response(400)
-    return response
+    createActionPointToRole(request.get_json(['ap_to_role_id']),request.get_json(['role_id']),
+                            request.get_json(['action_point_id']))
+    return make_response(201)
 
 
 @app.route('/action_point_to_role/<int:id>', methods=['POST'])
 def deleteActionPointToRole(id):
-    if deleteActionPointToRole(request.get['id']):          #deleteActionPointToRole(js['id']) == True
-        response = make_response(200)
-    else:
-        response = make_response(404)
-    return response
+    deleteActionPointToRole(id)
+    return make_response(jsonify({'message':'success'}),200)
 
 
-@app.route('/action_point_to_role/<id>', methods=['PUT'])
+@app.route('/action_point_to_role', methods=['PUT'])
 def updateActionPointToRole():
-    js = request.get_json()
-    if not getActionPointToRoleByID(js['id']):
-        response = make_response(404)
-    elif updateActionPointToRole(js['role_id'], js['action_point_id']):
-        response = make_response(200)
-    else:
-        response = make_response(400)
-    return response
+    updateActionPointToRole(request.get_json(['ap_to_role_id']), request.get_json(['role_id']),
+                            request.get_json(['action_point_id']))
+    return make_response(200)
 
 
 @app.errorhandler(ValidationException)
