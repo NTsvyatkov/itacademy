@@ -1,28 +1,28 @@
 from copy import name
 from flask import Flask, jsonify, render_template, flash, redirect, request, make_response, send_from_directory
 from views1 import app
-#zfrom forms import LoginForm
+#from forms import LoginForm
 from wtforms import form
 from business_logic.product import list_products, create_product,delete_product,update_product,get_product_by_id
 from business_logic.validation import ValidationException
-from models import Product
+from models.product_dao import Product
 
 @app.route('/login')
 
-@app.route('/login', methods = ['GET', 'POST'])
-def login():
-    form = LoginForm()
-    login1 = ('12345')
-    password1 = ('12345')
-    if form.validate_on_submit():
-        if form.login == login1 and form.password == password1:
-
-            redirect('/index')
-        else:
-
-            return  ('The username or password you entered is incorrect.')
-
-    return  render_template('login.html', form=form)
+#@app.route('/login', methods = ['GET', 'POST'])
+#def login():
+#    form = LoginForm()
+#    login1 = ('12345')
+#    password1 = ('12345')
+#    if form.validate_on_submit():
+#        if form.login == login1 and form.password == password1:
+#
+#            redirect('/index')
+#        else:
+#
+#            return  ('The username or password you entered is incorrect.')
+#
+#    return  render_template('login.html', form=form)
   
 @app.route('/product', methods = ['GET'])
 def products():
@@ -71,12 +71,12 @@ def err_han(e):
 def send_file(filename):
     return send_from_directory(app.static_folder, filename)
 
-#@app.route('/productgrid')
-#def productgrid():
-#    return render_template('product_grid.html')
-
 @app.route('/productgrid')
-@app.route('/productgrid/<int:page>')
-def productgrid(page=1):
-    products = Product.query.order_by(Product.name.asc()).paginate(page, 2, False)
-    return render_template('product_grid.html', products = products)
+def productgrid():
+   return render_template('product_grid.html')
+
+#@app.route('/productgrid')
+#@app.route('/productgrid/<int:page>')
+#def productgrid(page=1):
+#    products = Product.query.order_by(Product.name.asc()).paginate(page, 2, False)
+#    return render_template('product_grid.html', products = products)

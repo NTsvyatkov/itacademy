@@ -245,20 +245,6 @@
        </table>
       </div>
 
-<div style="text-align: center">
-{% for product in products.items %}
-<p>
-  Product: <b>{{product}}</b>
-</p>
-{% endfor %}
-
-{% if products.has_prev %}<a href="{{ url_for('productgrid', page = 1) }}"> First </a>{% else %} First{% endif %} |
-{% if products.has_prev %}<a href="{{ url_for('productgrid', page = products.prev_num) }}"> Prev</a>{% else %} Prev{% endif %} |
-Page #{{products.page}} of {{products.pages}} |
-{% if products.has_next %}<a href="{{ url_for('productgrid', page = products.next_num) }}">Next </a>{% else %}Next {% endif %} |
-{% if products.has_next %}<a href="{{ url_for('productgrid', page = products.pages) }}">Last </a>{% else %}Last {% endif %}
-
-</div>
 
 
   </div>

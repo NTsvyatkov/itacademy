@@ -10,9 +10,9 @@ from sqlalchemy.orm import relationship, backref
 class User(Base):
     __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,autoincrement=True)
     login = Column(String(50))
-    password = Column(String)
+    password = Column(String(20))
     first_name = Column(String(50))
     last_name = Column(String(50))
     email = Column(String(100))

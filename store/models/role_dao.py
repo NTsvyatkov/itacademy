@@ -1,19 +1,15 @@
 #!/usr/bin/env python
 __author__ = 'andrey'
 
-
-from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, Text, String
-from action_point_to_role_dao import Action_point_to_role
 from flask import session
-from sqlalchemy.orm import relationship, backref, sessionmaker
-from models import Base, db_engine
+from models import Base
 
 class Role(Base):
     __tablename__ = "role"
 
     #role_id = Column(Integer, primary_key=True, foreign_key=ForeignKey(Action_point_to_role.role_id))
-    role_id = Column(Integer, primary_key=True)
+    role_id = Column(Integer, primary_key=True,autoincrement=True)
     name = Column(String(50))
 
     #role = relationship(Action_point_to_role, backref=backref('Role', lazy='dynamic'))

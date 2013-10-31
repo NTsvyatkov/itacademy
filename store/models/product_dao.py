@@ -4,7 +4,7 @@ from sqlalchemy.orm import relationship, backref
 
 class Product(Base):
     __tablename__ = 'products'
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key = True,autoincrement=True)
     name = Column(String(100))
     description = Column(Text)
     price = Column(Float)
@@ -23,17 +23,17 @@ class Product(Base):
 
     @staticmethod
     def add_product(name, description, price, dimension):
-        p = Product(name, description, price, Dimension.query.filter_by(name=dimension).first())
+        p = Product(name, description, price, session.query( Dimension).filter_by(name=dimension).first())
         session.add(p)
         session.commit()
 
     @staticmethod
     def search_product(name):
-        return Product.query.filter_by(name=name).all()
+        return session.query(Product).filter_by(name=name).all()
 
     @staticmethod
     def get_product(id):
-        return Product.query.get(id)
+        return session.query(Product).get(id)
 
     @staticmethod
     def upd_product(id, new_name, new_description, new_price, new_dimension):
@@ -41,13 +41,13 @@ class Product(Base):
         entry.name = new_name
         entry.description = new_description
         entry.price = new_price
-        entry.dimension = Dimension.query.filter_by(name=new_dimension).first()
+        entry.dimension = session.query( Dimension).filter_by(name=new_dimension).first()
         session.commit() 
 
 
 class Dimension(Base):
     __tablename__ = 'dimensions'
-    id = Column(Integer, primary_key = True)
+    id = Column(Integer, primary_key = True,autoincrement=True)
     name = Column(String(10))
     
     def __init__(self, name):
@@ -58,7 +58,7 @@ class Dimension(Base):
 
     @staticmethod
     def get_dimension(id):
-        return Dimension.query.get(id)
+        return session.query( Dimension).get(id)
 
     @staticmethod
     def add_dimension(name):
@@ -68,6 +68,6 @@ class Dimension(Base):
 
     @staticmethod
     def update_dimension(id, new_name,):
-        entry = Dimension.get(id)
+        entry = session.query( Dimension).get(id)
         entry.name = new_name
         session.commit()
