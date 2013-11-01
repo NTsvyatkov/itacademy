@@ -71,3 +71,5 @@ def list_dimensions():
 #for i in products_list:
 #        products_arr.append({'id':i.id,'name':i.name, 'description':i.description,'dimension':i.dimension.id})
 #print  products_arr[1]
+
+#Product.add_product('apple','red apple' , 50, 1)
