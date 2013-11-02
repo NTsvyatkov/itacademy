@@ -1,34 +1,14 @@
 
-
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-<title> </title>
+{% extends "layout.html" %}
 
 
 
-
-
-<script type="text/javascript" src="/static/js/jquery.js"></script>
-<script type="text/javascript" src="/static/js/JQuery_validate_and_ajax_to_create_user.js"></script>
-
- <link rel="stylesheet" type="text/css" href="/static/styles/styles.css">
-
-
-
-
-</head>
-<body>
-
-
-
-
-
+{% block create_user%}
 <div class=" form">
 <form   name="form" id ="form" method ="POST"  >
 
     <table>
-      <!-- Логин пользователя-->
+      <!-- user login-->
         <tr>
           <td>
              <label for="name">User_name</label>
@@ -42,7 +22,7 @@
           </td>
         </tr>
 
-               <!--Имя пользователя-->
+               <!--user name-->
         <tr>
             <td>
                <label for="first_name"> First_name</label>
@@ -55,7 +35,7 @@
               <div class = "error_first_name"></div>
           </td>
         </tr>
-                <!--Фамилия пользователя-->
+                <!--user lastname-->
         <tr>
             <td>
                 <label for="last_name"> Last_name</label>
@@ -69,7 +49,7 @@
               <div class = "error_last_name"></div>
             </td>
         </tr>
-                <!--Пароль пользователя -->
+                <!--user password -->
         <tr>
             <td>
                  <label for="password">Password</label>
@@ -81,7 +61,7 @@
               <div class = "error_password"></div>
             </td>
         </tr>
-                <!--Проверка пароля-->
+                <!--confirm-->
         <tr>
             <td>
          <label for="confirm">Confirm Password</label>
@@ -93,7 +73,7 @@
               <div class = "error_confirm"></div>
             </td>
         </tr>
-                <!--Проверка адреса почты-->
+                <!--email-->
         <tr>
             <td>
                 <label for="email">Email</label>
@@ -105,14 +85,14 @@
               <div class = "error_email"></div>
             </td>
         </tr>
-                <!--Выбор региона-->
+                <!--Select Region-->
         <tr>
             <td>
                 <label for="region">Region</label>
             </td>
             <td>
                  <div class ="region">  <select id="region" name="region_id" type ="checkbox">
-                     <option value ="0" > Select from the list</option>
+                     <option value ="" > Select from the list</option>
                      <option value="North">North</option>
                      <option value="South">South</option>
                      <option value="West">West</option>
@@ -123,7 +103,7 @@
 
         </tr>
    </table>
-                <!--Выбор роли-->
+                <!--Choice of a role-->
     <div style ="width: 500px " >
     <fieldset>
             <legend >Role</legend>
@@ -160,7 +140,7 @@
 
 
 
-                <!--Создание кнопок-->
+                <!--Creating ButtonsС-->
         <tr>
             <td><input type="button" value ="Create" class="button" onclick="return validate_form ( );" id ="post_form"   /></td>
             <td><input type="button" value ="Cancel"     /></td>
@@ -186,7 +166,7 @@
 </div>
 <div id ="popub">
                  <div id ="refresh"   >
-                     <p style ="text-align: center;" > Do you want to continue?</p>
+                     <p style ="text-align: center;" > 'All fields will be cleared. Do you want to continue?'</p>
                  <p style = "text-align:center;">
                      <input  type ="button"  value = "clear"   />
                      <input  type ="submit"  value = "close"  id ="close"/>
@@ -232,6 +212,5 @@ $('#close').click(function (){
 
 
     </script>
-</body>
-</html>
+{% endblock%}
 
