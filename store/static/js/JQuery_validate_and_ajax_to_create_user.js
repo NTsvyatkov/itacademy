@@ -25,7 +25,7 @@ var user_name =   document.form.name.value;
 
         }
         else {
-var regV_user_name = /^[A-Za-z0-9]/;
+var regV_user_name = /^[0-9a-zA-Zа-яА-Я]+$/;
 var result_user_name = user_name.match(regV_user_name);
         if(!result_user_name){
         $(".error_user_name").html("'User Name should contain only alphanumerical characters'").css({'color':'red'});
@@ -104,7 +104,7 @@ var confirm =   document.form.confirm.value;
         }
 
 var email =   document.form.email.value;
-var regV_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,4})+$/;
+var regV_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
 var result_email = email.match(regV_email);
         if (email == ""){
         $(".error_email").html("'Email is required field.'").css({'color':'red'});
@@ -153,7 +153,7 @@ var region =   document.form.region.value;
     $.ajax({
         dataType: 'json',
         type: "POST",
-        url: "/create_user_data",
+        url: "/user",
         data:JSON.stringify({
                 name:$('input[name="name"]').val(),
                 first_name: $('input[name="first_name"]').val(),
