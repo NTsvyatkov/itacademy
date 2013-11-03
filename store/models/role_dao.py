@@ -12,7 +12,7 @@ from models import Base
 class RoleDao(Base):
     __tablename__ = "role"
 
-    role_id = Column(Integer, ForeignKey('action_point_to_role.ap_to_role_id'), primary_key=True) #fix foreignkey property
+    role_id = Column(Integer, ForeignKey('action_point_to_role.role_id'), primary_key=True, autoincrement=True) #fix foreignkey property
     name = Column(String(50))
 
     role = relationship(ActionPointToRoleDao, backref=backref('role', lazy='dynamic'))

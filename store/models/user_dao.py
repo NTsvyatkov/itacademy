@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship, backref
 class UserDao(Base):
     __tablename__ = "user"
 
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True,autoincrement=True)
     login = Column(String(50))
     password = Column(String(50))  # fix maxleng
     first_name = Column(String(50))

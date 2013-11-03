@@ -9,7 +9,7 @@ from models import Base
 class ActionPointToRoleDao(Base):
     __tablename__ = "action_point_to_role"
 
-    ap_to_role_id = Column(Integer, primary_key=True)
+    ap_to_role_id = Column(Integer, primary_key=True, autoincrement=True)
     role_id = Column(Integer)
     action_point_id = Column(Integer)
 

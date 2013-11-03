@@ -9,7 +9,7 @@ from models import Base
 class RegionDao(Base):
     __tablename__ = "region"
 
-    region_id = Column(Integer, primary_key=True)
+    region_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50))
 
     def __init__(self, region_id, name):
