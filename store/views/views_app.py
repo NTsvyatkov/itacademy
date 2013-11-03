@@ -1,9 +1,9 @@
 from copy import name
-from flask import Flask, jsonify, render_template, flash, redirect, request, make_response, send_from_directory
-from views import app
+from flask import jsonify, render_template, flash, redirect, request, make_response, send_from_directory
+from flask_bootstrap import app
 #from forms import LoginForm
 from wtforms import form
-from business_logic.product import list_products, create_product,delete_product,update_product,get_product_by_id
+from business_logic.product_manager import list_products, create_product,delete_product,update_product,get_product_by_id
 from business_logic.validation import ValidationException
 from models.product_dao import Product
 

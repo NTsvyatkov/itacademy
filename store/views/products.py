@@ -1,7 +1,8 @@
 __author__ = 'alex'
 from flask import jsonify, render_template, request, make_response
-from views import app
-from business_logic.product import list_products, create_product, delete_product, update_product, get_product_by_id
+
+from flask_bootstrap import app
+from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
 from business_logic.validation import ValidationException
 
 @app.route('/product', methods = ['GET'])
