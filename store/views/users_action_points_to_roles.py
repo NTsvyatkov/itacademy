@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-from flask import Flask, make_response, jsonify, request
+from flask import make_response, jsonify, request
 from business_logic.action_point_to_role_manager import *
 from business_logic.validation import ValidationException
 
-app = Flask(__name__)
+from flask_bootstrap import app
 
 @app.route('/action_point_to_role', methods=['GET'])
 def actionPointToRoleList():
