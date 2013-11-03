@@ -2,8 +2,7 @@
 __author__ = 'andrey'
 
 from sqlalchemy import Column, Integer
-from flask import session
-from models import Base
+from models import Base, session
 
 
 class ActionPointToRoleDao(Base):

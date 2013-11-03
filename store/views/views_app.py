@@ -7,7 +7,7 @@ from business_logic.product import list_products, create_product,delete_product,
 from business_logic.validation import ValidationException
 from models.product_dao import Product
 
-@app.route('/login')
+#@app.route('/login')
 
 #@app.route('/login', methods = ['GET', 'POST'])
 #def login():
