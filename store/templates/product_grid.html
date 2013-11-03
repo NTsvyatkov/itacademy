@@ -4,7 +4,7 @@
  <link href="{{url_for('static', filename='styles/style.css')}}" rel="stylesheet" type="text/css" />
    <script type="text/javascript"  src="{{url_for('static', filename='js/jquery-1.7.2.js')}}" ></script>
 
- <script type="text/javascript">
+<script type="text/javascript">
 
    var count_tr=23;
    var tr = [];
@@ -30,6 +30,7 @@
 
     creat_grid(count_tr);
   /*End of creating table*/
+
 
   function clearing_tr(i)
   {
@@ -57,11 +58,9 @@
 
  }
 
-    var k=0;
-    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
-    json_value = JSON.stringify(form_value);
-    $('#apply_button').click(function(){
-      $.ajax({
+
+ function create_entity(){
+       $.ajax({
        dataType: "json",
         url: '/product',
         type: 'GET',
@@ -107,6 +106,16 @@
 
          }
       })
+ }
+
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+    json_value = JSON.stringify(form_value);
+
+    create_entity();
+
+    $('#apply_button').click(function(){
+    create_entity();
     });
 
 
@@ -127,6 +136,7 @@
                          {
                           alert('The product has been successfully deleted');
                           clearing_tr(tr_id);
+                          create_entity();
                          }
                         else
                          alert (json.message);

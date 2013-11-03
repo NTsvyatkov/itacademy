@@ -1,30 +1,13 @@
-from sqlalchemy import create_engine, ForeignKey
-from sqlalchemy import Column, Date, Integer, String, DATE
-from sqlalchemy.ext.declarative import declarative_base
+from models import Base, session, engine
+from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy.orm import sessionmaker
-
-engine = create_engine('sqlite:///', echo=True)
-Base = declarative_base()
-
-Session = sessionmaker(bind=engine)
-session = Session()
-
-class User(Base):
-    __tablename__ = "user"
-    id = Column(Integer, primary_key=True)
-    name = Column (String(50))
-
-class Product(Base):
-    __tablename__ = "product"
-    id = Column(Integer, primary_key=True)
-    name = Column(String(50))
-    price = Column(Integer)
+from models.product_dao import Product
+from models.user_dao import UserDao
 
 class Order(Base):
     
     __tablename__ = "order"
-    id = Column(Integer, primary_key=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('User', backref=backref('order', lazy='dynamic'))
     date = Column(DATE)
@@ -45,10 +28,10 @@ class Order(Base):
 
 	@staticmethod
 	def get_order_userid(user_id,date):
-        if date != '':
-		  return session.query(Order).filter(user_id==user_id).filter(date==date).all()
-        else:
-            return session.query(Order).filter(user_id==user_id).all()
+            if date != '':
+		        return session.query(Order).filter(user_id==user_id).filter(date==date).all()
+            else:
+                return session.query(Order).filter(user_id==user_id).all()
         
     @staticmethod
     def add_order(user_id,date,status_id,delivery_id):
@@ -69,7 +52,7 @@ class Order(Base):
 class Order_Status(Base):
 
       __tablename__ = "order_status"
-      id = Column(Integer, primary_key=True)
+      id = Column(Integer, primary_key=True, autoincrement=True)
       name = Column(String(50))
 
       def __init__(self, name):
@@ -105,7 +88,7 @@ class Order_Status(Base):
 class Delivery_Type(Base):
 
         __tablename__ = "delivery_type"
-        id = Column(Integer, primary_key=True)
+        id = Column(Integer, primary_key=True, autoincrement=True)
         name = Column(String(50))
 
         def __init__(self, name):
@@ -143,9 +126,9 @@ class Delivery_Type(Base):
 class Order_Product(Base):
 
         __tablename__ = "order_product"
-        order_id = Column(Integer, ForeignKey('order.id'), primary_key=True)
+        order_id = Column(Integer, ForeignKey('order.id'), primary_key=True ,autoincrement=True)
         order = relationship('Order', backref=backref('order_product', lazy='dynamic'))
-        product_id = Column(Integer, ForeignKey('product.id'), primary_key=True)
+        product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
         product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
         quantity = Column(Integer)
 
@@ -176,9 +159,7 @@ class Order_Product(Base):
             session.delete(dele)
             session.commit()
 
-            
 
-Base.metadata.create_all(engine)
 
 #Delivery_Type.add_delivery('Fast delivery')
 #Delivery_Type.add_delivery('Slow delivery')
