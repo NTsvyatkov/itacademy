@@ -4,8 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, String
 from role_dao import RoleDao
 from region_dao import RegionDao
-from flask import session
-from models import Base
+from models import Base, session
 from sqlalchemy.orm import relationship, backref
 
 class UserDao(Base):
@@ -98,16 +97,16 @@ class UserDao(Base):
         session.commit()
 
     @staticmethod
-    def getUserByLogin(userLogin):
-        posts = session.query(UserDao).all
+    def getUserByLogin(userLogin, userPassword):
+        posts = session.query(UserDao).order_by(UserDao.id)
         for instance in posts:
-            if instance.login == userLogin:   #and instance.password == userPassword
-                return instance              # instance.password   instance.getLogin / getPassword
+            if instance.login == userLogin and instance.password == userPassword:
+                return UserDao.getUserByID(instance.login)
 
     @staticmethod
-    def isUserExists(userLogin):
-        user = UserDao.getUserByLogin(userLogin)
+    def isUserExists(userLogin, userPassword):
+        user = UserDao.getUserByLogin(userLogin, userPassword)
         result = False
-        if user!= None:
+        if user is not None:
             result = True
         return result

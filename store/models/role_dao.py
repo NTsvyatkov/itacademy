@@ -5,9 +5,8 @@ __author__ = 'andrey'
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, Text, String
 from action_point_to_role_dao import ActionPointToRoleDao
-from flask import session
 from sqlalchemy.orm import relationship, backref
-from models import Base
+from models import Base, session
 
 class RoleDao(Base):
     __tablename__ = "role"

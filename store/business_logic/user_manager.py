@@ -33,7 +33,7 @@ def validationLastName(last_name):
 def validationPassword(password):
     if password is None:
         raise ValidationException("Password is required field")
-    elif len(password) > 20:
+    elif len(password) > 50:
         raise ValidationException("Password length should be no more than 50 characters")
 
 
