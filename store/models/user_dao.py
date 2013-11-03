@@ -13,7 +13,7 @@ class UserDao(Base):
 
     id = Column(Integer, primary_key=True)
     login = Column(String(50))
-    password = Column(String)
+    password = Column(String(50))  # fix maxleng
     first_name = Column(String(50))
     last_name = Column(String(50))
     email = Column(String(100))

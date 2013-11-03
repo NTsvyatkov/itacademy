@@ -1,12 +1,11 @@
 #!/usr/bin/env python
 __author__ = 'andrey'
-
 from sqlalchemy import ForeignKey
-from sqlalchemy import Column, Integer, String
 from action_point_to_role_dao import ActionPointToRoleDao
-from flask import session
+from models import Base, session, engine
+from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
-from models import Base
+
 
 
 class ActionPointDao(Base):
