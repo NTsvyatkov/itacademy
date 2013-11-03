@@ -36,7 +36,6 @@ class UserDao(Base):
         return "CData '%s, %s, %s, %s, %s, %s, %s, %s, '" % (self.id,
         self.login, self.first_name, self.last_name, self.password, self.email, self.region_id, self.role_id)
 
-    #Base.metadata.create_all(db_engine)
 
     @staticmethod
     def  getUserByID(user_id):
@@ -44,27 +43,27 @@ class UserDao(Base):
 
     @staticmethod
     def getAllUsers():
-        return session.query(UserDao).order_by(UserDao.id)
+        return session.query(UserDao).order_by(UserDao.id).all()
 
     @staticmethod
-    def getUsersByFirstName(first_name):
-        return session.query(UserDao).get(first_name)
+    def filterUsersByFirstName():
+        return session.query(UserDao).order_by(UserDao.first_name)
 
     @staticmethod
-    def getUsersByLastName(last_name):
-        return session.query(UserDao).get(last_name)
+    def filterUsersByLastName():
+        return session.query(UserDao).order_by(UserDao.last_name)
 
     @staticmethod
-    def getUsersByEmail(email):
-        return session.query(UserDao).get(email)
+    def filterUsersByEmail():
+        return session.query(UserDao).order_by(UserDao.email)
 
     @staticmethod
-    def getUsersByRole(role_id):
-        return session.query(UserDao).get(role_id)
+    def filterUsersByRole():
+        return session.query(UserDao).order_by(UserDao.role_id)
 
     @staticmethod
-    def getUsersByRegion(region_id):
-        return session.query(UserDao).get(region_id)
+    def filterUsersByRegion():
+        return session.query(UserDao).order_by(UserDao.region_id)
 
     @staticmethod
     def createNewUser(id, login, password, first_name, last_name, email, role_id, region_id):
