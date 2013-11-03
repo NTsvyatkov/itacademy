@@ -11,7 +11,7 @@ from sqlalchemy.orm import relationship, backref
 class ActionPointDao(Base):
     __tablename__ = "action_point"
 
-    action_point_id = Column(Integer, ForeignKey('action_point_to_role.action_point_id'), primary_key=True ,
+    action_point_id = Column(Integer, ForeignKey('action_point_to_role.ap_to_role_id'), primary_key=True ,
                              autoincrement=True)
     action_point_name = Column(String)
 
