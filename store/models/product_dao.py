@@ -1,10 +1,11 @@
-from models import Base, session, engine
-from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
+from models import Base, session
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
+
 
 class Product(Base):
     __tablename__ = 'products'
-    id = Column(Integer, primary_key = True,autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100))
     description = Column(Text)
     price = Column(Float)
@@ -23,7 +24,7 @@ class Product(Base):
 
     @staticmethod
     def add_product(name, description, price, dimension):
-        p = Product(name, description, price, session.query( Dimension).filter_by(name=dimension).first())
+        p = Product(name, description, price, session.query(Dimension).filter_by(name=dimension).first())
         session.add(p)
         session.commit()
 
@@ -41,13 +42,13 @@ class Product(Base):
         entry.name = new_name
         entry.description = new_description
         entry.price = new_price
-        entry.dimension = session.query( Dimension).filter_by(name=new_dimension).first()
+        entry.dimension = session.query(Dimension).filter_by(name=new_dimension).first()
         session.commit() 
 
 
 class Dimension(Base):
     __tablename__ = 'dimensions'
-    id = Column(Integer, primary_key = True,autoincrement=True)
+    id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(10))
     
     def __init__(self, name):
@@ -58,7 +59,7 @@ class Dimension(Base):
 
     @staticmethod
     def get_dimension(id):
-        return session.query( Dimension).get(id)
+        return session.query(Dimension).get(id)
 
     @staticmethod
     def add_dimension(name):
@@ -68,6 +69,6 @@ class Dimension(Base):
 
     @staticmethod
     def update_dimension(id, new_name,):
-        entry = session.query( Dimension).get(id)
+        entry = session.query(Dimension).get(id)
         entry.name = new_name
         session.commit()
