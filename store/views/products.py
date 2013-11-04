@@ -1,5 +1,5 @@
 __author__ = 'alex'
-from flask import jsonify, render_template, request, make_response
+from flask import jsonify, render_template, request, make_response,session
 
 from flask_bootstrap import app
 from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
@@ -50,3 +50,12 @@ def err_han(e):
 @app.route('/productgrid')
 def productgrid():
    return render_template('product_grid.html')
+
+
+#@app.route('/productgrid')
+#def productgrid():
+#    if 'username' in session:
+#        return render_template('product_grid.html')
+#    else:
+#        error = 'You are not logged in'
+#        return render_template('login(2).html', error=error)
