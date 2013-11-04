@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 import re
-from validation import ValidationException
+from validation import ValidationException, NotFoundException
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
@@ -53,7 +53,7 @@ def validationRoleID(role_id):
     elif not isinstance(role_id, int):
         raise ValidationException("Role has invalid integer value")
     elif not RoleDao.getRoleByID(role_id):
-        raise ValidationException("Unable to find user role with given id")
+        raise NotFoundException("Unable to find user role with given id")
 
 
 def validationRegionID(region_id):
@@ -62,12 +62,12 @@ def validationRegionID(region_id):
     elif not isinstance(region_id, int):
         raise ValidationException("Role has invalid integer value")
     elif not RegionDao.getRegionByID(region_id):
-        raise ValidationException("Unable to find a region with given id")
+        raise NotFoundException("Unable to find a region with given id")
 
 
 def validationUserID(user_id):
     if not UserDao.getUserByID(user_id):
-        raise ValidationException("Unable to find  user with given id")
+        raise NotFoundException("Unable to find  user with given id")
 
 
 def getListUser():

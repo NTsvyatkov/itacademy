@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask import make_response, jsonify, request
 from business_logic.role_manager import getlistRole, getRoleByID, createNewRole, deleteRole, updateRole, validationRoleName
-from business_logic.validation import ValidationException
+from business_logic.validation import ValidationException, NotFoundException
 
 
 from flask_bootstrap import app
@@ -45,4 +45,10 @@ def updateRole():
 @app.errorhandler(ValidationException)
 def error_handler(ex):
     error_dict = {'message': ex.message}
+    return make_response(jsonify(error_dict), 400)
+
+@app.errorhandler(NotFoundException)
+def error_handler(ex):
+    error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
+

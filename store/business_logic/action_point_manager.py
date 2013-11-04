@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 
 from models.action_point_dao import ActionPointDao
-from validation import ValidationException
+from validation import ValidationException, NotFoundException
 
 
 def validationActionPointID(ap_id):
     if not ActionPointDao.getActionPointByID(ap_id):
-        raise ValidationException("Unable to find action point with given id")
+        raise NotFoundException("Unable to find action point with given id")
     else:
         return True
 
