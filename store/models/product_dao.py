@@ -23,8 +23,8 @@ class Product(Base):
         return '%s, %s, %s, %s' % (self.name, self.description, self.price, self.dimension)
 
     @staticmethod
-    def add_product(name, description, price, dimension):
-        p = Product(name, description, price, session.query(Dimension).filter_by(name=dimension).first())
+    def add_product(name, description, price, id):
+        p = Product(name, description, price, session.query(Dimension).get(id))
         session.add(p)
         session.commit()
 
@@ -42,8 +42,12 @@ class Product(Base):
         entry.name = new_name
         entry.description = new_description
         entry.price = new_price
-        entry.dimension = session.query(Dimension).filter_by(name=new_dimension).first()
-        session.commit() 
+        entry.dimension = session.query(Dimension).get(new_dimension)
+        session.commit()
+
+    @staticmethod
+    def get_all_products():
+        return session.query(Product).all()
 
 
 class Dimension(Base):
@@ -72,3 +76,14 @@ class Dimension(Base):
         entry = session.query(Dimension).get(id)
         entry.name = new_name
         session.commit()
+
+    @staticmethod
+    def get_all_dimensions():
+        return session.query(Dimension).all()
+
+#Dimension.add_dimension("item")
+#Dimension.add_dimension("box")
+#Dimension.add_dimension("package")
+#print Dimension.get_dimension(1)
+#print Dimension.get_dimension(2)
+#print Dimension.get_dimension(3)
