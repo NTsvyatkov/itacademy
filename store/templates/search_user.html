@@ -19,7 +19,7 @@
             tr[i] = document.createElement('TR');
             table_grid.appendChild(tr[i]);
             tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; 
             for (var j=0; j<=7; j++)
              {
               tr[i].appendChild(document.createElement('TD'));
@@ -62,12 +62,12 @@
         type: 'GET',
         success: function(json)
         {
-           //clearing_grid()
+          
 
 
            deleting_grid()
            creat_grid(json.user.length)
-           /*Create table with new user list */
+          
             for (var user_k in json.user)
                 {
                  k++;
@@ -96,7 +96,7 @@
                                        }
                 }
                 k=0;
-            /*End creating table*/
+            
 
          }
       })
