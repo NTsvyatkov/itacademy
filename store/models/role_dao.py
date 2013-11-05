@@ -6,7 +6,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, Text, String
 from action_point_to_role_dao import ActionPointToRoleDao
 from sqlalchemy.orm import relationship, backref
-from models import Base, session
+from models import Base, db_session
 
 class RoleDao(Base):
     __tablename__ = "role"
@@ -26,28 +26,28 @@ class RoleDao(Base):
 
     @staticmethod
     def getRoleByID(role_id):
-        return session.query(RoleDao).get(role_id)
+        return db_session.query(RoleDao).get(role_id)
 
     @staticmethod
     def getAllRoles():
-        return session.query(RoleDao).order_by(RoleDao.role_id)
+        return db_session.query(RoleDao).order_by(RoleDao.role_id)
 
     @staticmethod
     def createNewRole(id, name):
         role = RoleDao(id, name)
-        session.add(role)
-        session.commit()
+        db_session.add(role)
+        db_session.commit()
 
     @staticmethod
     def updateRole(id, new_name):
         entry = RoleDao.get(id)
         entry.name = new_name
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def deleteRecord(roleId):
-        remove_role = session.query(RoleDao).get(roleId)
-        session.delete(remove_role)
-        session.commit()
+        remove_role = db_session.query(RoleDao).get(roleId)
+        db_session.delete(remove_role)
+        db_session.commit()
 
 

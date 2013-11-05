@@ -1,4 +1,4 @@
-from models import Base, session
+from models import Base, db_session
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
 
@@ -24,17 +24,23 @@ class Product(Base):
 
     @staticmethod
     def add_product(name, description, price, id):
-        p = Product(name, description, price, session.query(Dimension).get(id))
-        session.add(p)
-        session.commit()
+        p = Product(name, description, price, db_session.query(Dimension).get(id))
+        db_session.add(p)
+        db_session.commit()
+
+    @staticmethod
+    def del_product(id):
+        entry = Product.get_product(id)
+        db_session.delete(entry)
+        db_session.commit()
 
     @staticmethod
     def search_product(name):
-        return session.query(Product).filter_by(name=name).all()
+        return db_session.query(Product).filter_by(name=name).all()
 
     @staticmethod
     def get_product(id):
-        return session.query(Product).get(id)
+        return db_session.query(Product).get(id)
 
     @staticmethod
     def upd_product(id, new_name, new_description, new_price, new_dimension):
@@ -42,12 +48,12 @@ class Product(Base):
         entry.name = new_name
         entry.description = new_description
         entry.price = new_price
-        entry.dimension = session.query(Dimension).get(new_dimension)
-        session.commit()
+        entry.dimension = db_session.query(Dimension).get(new_dimension)
+        db_session.commit()
 
     @staticmethod
     def get_all_products():
-        return session.query(Product).all()
+        return db_session.query(Product).all()
 
 
 class Dimension(Base):
@@ -63,23 +69,23 @@ class Dimension(Base):
 
     @staticmethod
     def get_dimension(id):
-        return session.query(Dimension).get(id)
+        return db_session.query(Dimension).get(id)
 
     @staticmethod
     def add_dimension(name):
         d = Dimension(name)
-        session.add(d)
-        session.commit()
+        db_session.add(d)
+        db_session.commit()
 
     @staticmethod
     def update_dimension(id, new_name,):
-        entry = session.query(Dimension).get(id)
+        entry = db_session.query(Dimension).get(id)
         entry.name = new_name
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def get_all_dimensions():
-        return session.query(Dimension).all()
+        return db_session.query(Dimension).all()
 
 #Dimension.add_dimension("item")
 #Dimension.add_dimension("box")

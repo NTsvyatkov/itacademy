@@ -2,7 +2,7 @@
 __author__ = 'andrey'
 from sqlalchemy import ForeignKey
 from action_point_to_role_dao import ActionPointToRoleDao
-from models import Base, session, engine
+from models import Base, db_session, engine
 from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
 
@@ -29,26 +29,26 @@ class ActionPointDao(Base):
 
     @staticmethod
     def getActionPointByID(ap_id):
-        return session.query(ActionPointToRoleDao).get(ap_id)
+        return db_session.query(ActionPointToRoleDao).get(ap_id)
 
     @staticmethod
     def getAllActionPoints():
-        return session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.action_point_id)
+        return db_session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.action_point_id)
 
     @staticmethod
     def createNewActionPoint(id, name):
         ap = ActionPointDao(id, name)
-        session.add(ap)
-        session.commit()
+        db_session.add(ap)
+        db_session.commit()
 
     @staticmethod
     def updateActionPoint(id, new_name):
         entry = ActionPointDao.get(id)
         entry.name = new_name
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def deleteActionPoint(apId):
-        remove_role = session.query(ActionPointToRoleDao).get(apId)
-        session.delete(remove_role)
-        session.commit()
+        remove_role = db_session.query(ActionPointToRoleDao).get(apId)
+        db_session.delete(remove_role)
+        db_session.commit()

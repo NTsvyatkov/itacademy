@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer, String
 from role_dao import RoleDao
 from region_dao import RegionDao
-from models import Base, session
+from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 
 class UserDao(Base):
@@ -39,37 +39,37 @@ class UserDao(Base):
 
     @staticmethod
     def  getUserByID(user_id):
-        return session.query(UserDao).get(user_id)
+        return db_session.query(UserDao).get(user_id)
 
     @staticmethod
     def getAllUsers():
-        return session.query(UserDao).order_by(UserDao.id).all()
+        return db_session.query(UserDao).order_by(UserDao.id).all()
 
     @staticmethod
     def filterUsersByFirstName():
-        return session.query(UserDao).order_by(UserDao.first_name)
+        return db_session.query(UserDao).order_by(UserDao.first_name)
 
     @staticmethod
     def filterUsersByLastName():
-        return session.query(UserDao).order_by(UserDao.last_name)
+        return db_session.query(UserDao).order_by(UserDao.last_name)
 
     @staticmethod
     def filterUsersByEmail():
-        return session.query(UserDao).order_by(UserDao.email)
+        return db_session.query(UserDao).order_by(UserDao.email)
 
     @staticmethod
     def filterUsersByRole():
-        return session.query(UserDao).order_by(UserDao.role_id)
+        return db_session.query(UserDao).order_by(UserDao.role_id)
 
     @staticmethod
     def filterUsersByRegion():
-        return session.query(UserDao).order_by(UserDao.region_id)
+        return db_session.query(UserDao).order_by(UserDao.region_id)
 
     @staticmethod
     def createNewUser(id, login, password, first_name, last_name, email, role_id, region_id):
         user = UserDao(id,login,password,first_name,last_name,email,role_id,region_id)
-        session.add(user)
-        session.commit()
+        db_session.add(user)
+        db_session.commit()
 
     @staticmethod
     def updateUser(id, login, password, first_name, last_name, email, role_id, region_id):
@@ -81,23 +81,23 @@ class UserDao(Base):
         entry.email = email
         entry.role_id = role_id
         entry.region_id = region_id
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def updatePassword(userId, password):
-        pst = session.query(UserDao).filter(UserDao.id == userId).first()
+        pst = db_session.query(UserDao).filter(UserDao.id == userId).first()
         pst.password = password
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def deleteRecord(userId):
-        remove_user = session.query(UserDao).get(userId)
-        session.delete(remove_user)
-        session.commit()
+        remove_user = db_session.query(UserDao).get(userId)
+        db_session.delete(remove_user)
+        db_session.commit()
 
     @staticmethod
     def getUserByLogin(userLogin, userPassword):
-        posts = session.query(UserDao).order_by(UserDao.id)
+        posts = db_session.query(UserDao).order_by(UserDao.id)
         for instance in posts:
             if instance.login == userLogin and instance.password == userPassword:
                 return UserDao.getUserByID(instance.login)

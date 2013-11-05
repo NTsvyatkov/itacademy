@@ -2,7 +2,7 @@
 __author__ = 'andrey'
 
 from sqlalchemy import Column, Integer, String
-from models import Base, session
+from models import Base, db_session
 
 
 class RegionDao(Base):
@@ -21,26 +21,26 @@ class RegionDao(Base):
 
     @staticmethod
     def getRegionByID(region_id):
-        return session.query(RegionDao).get(region_id)
+        return db_session.query(RegionDao).get(region_id)
 
     @staticmethod
     def getAllRegions():
-        return session.query(RegionDao).order_by(RegionDao.region_id)
+        return db_session.query(RegionDao).order_by(RegionDao.region_id)
 
     @staticmethod
     def createNewRegion(id, name):
         region = RegionDao(id, name)
-        session.add(region)
-        session.commit()
+        db_session.add(region)
+        db_session.commit()
 
     @staticmethod
     def updateRegion(id, new_name):
         entry = RegionDao.get(id)
         entry.name = new_name
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def deleteRecord(regionId):
-        remove_region = session.query(RegionDao).get(regionId)
-        session.delete(remove_region)
-        session.commit()
+        remove_region = db_session.query(RegionDao).get(regionId)
+        db_session.delete(remove_region)
+        db_session.commit()

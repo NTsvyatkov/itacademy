@@ -2,7 +2,7 @@
 __author__ = 'andrey'
 
 from sqlalchemy import Column, Integer
-from models import Base, session
+from models import Base, db_session
 
 
 class ActionPointToRoleDao(Base):
@@ -24,27 +24,27 @@ class ActionPointToRoleDao(Base):
 
     @staticmethod
     def getActionPointToRoleByID(apToRole_id):
-        return [session.query(ActionPointToRoleDao).get(apToRole_id).first()]
+        return [db_session.query(ActionPointToRoleDao).get(apToRole_id).first()]
 
     @staticmethod
     def getAllActionPointsToRole():
-        return session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.ap_to_role_id)
+        return db_session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.ap_to_role_id)
 
     @staticmethod
     def createNewActionPointToRole(ap_to_role_id, role_id, action_point_id):
         ap_to_role = ActionPointToRoleDao(ap_to_role_id, role_id, action_point_id)
-        session.add(ap_to_role)
-        session.commit()
+        db_session.add(ap_to_role)
+        db_session.commit()
 
     @staticmethod
     def updateActionPointToRole(ap_to_role_id, new_role_id, new_action_point_id):
         entry = ActionPointToRoleDao.get(ap_to_role_id)
         entry.role_id = new_role_id
         entry.action_point = new_action_point_id
-        session.commit()
+        db_session.commit()
 
     @staticmethod
     def deleteActionPointToRole(apToRoleId):
-        remove_apToRole = session.query(ActionPointToRoleDao).get(apToRoleId)
-        session.delete(remove_apToRole)
-        session.commit()
+        remove_apToRole = db_session.query(ActionPointToRoleDao).get(apToRoleId)
+        db_session.delete(remove_apToRole)
+        db_session.commit()

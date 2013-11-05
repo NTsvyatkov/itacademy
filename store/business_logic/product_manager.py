@@ -1,4 +1,3 @@
-from models import session
 from models.product_dao import Product, Dimension
 from validation import ValidationException, NotFoundException
 
@@ -54,9 +53,7 @@ def update_product(id, new_name, new_description, new_price, new_dimension):
 
 def delete_product(id):
         validate_product_id(id)
-        entry = Product.get_product(id)
-        session.delete(entry)
-        session.commit()
+        Product.del_product(id)
 
 
 def list_dimensions():
