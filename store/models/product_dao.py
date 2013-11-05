@@ -9,7 +9,6 @@ class Product(Base):
     name = Column(String(100))
     description = Column(Text)
     price = Column(Float)
-
     dimension_id = Column(Integer, ForeignKey('dimensions.id'))
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
 
@@ -78,7 +77,7 @@ class Dimension(Base):
         db_session.commit()
 
     @staticmethod
-    def update_dimension(id, new_name,):
+    def update_dimension(id, new_name):
         entry = db_session.query(Dimension).get(id)
         entry.name = new_name
         db_session.commit()
@@ -90,6 +89,6 @@ class Dimension(Base):
 #Dimension.add_dimension("item")
 #Dimension.add_dimension("box")
 #Dimension.add_dimension("package")
-#print Dimension.get_dimension(1)
+#print Product.get_product(1)
 #print Dimension.get_dimension(2)
 #print Dimension.get_dimension(3)

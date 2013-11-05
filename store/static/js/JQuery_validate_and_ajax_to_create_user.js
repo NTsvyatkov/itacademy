@@ -25,7 +25,7 @@ var user_name =   document.form.name.value;
 
         }
         else {
-var regV_user_name = /^[0-9a-zA-Zа-яА-Я]+$/;
+var regV_user_name = /^[0-9a-zA-Z]+$/;
 var result_user_name = user_name.match(regV_user_name);
         if(!result_user_name){
         $(".error_user_name").html("'User Name should contain only alphanumerical characters'").css({'color':'red'});

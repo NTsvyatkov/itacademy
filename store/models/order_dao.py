@@ -129,7 +129,7 @@ class Delivery_Type(Base):
         db_session.commit()
 
 
-class Order_Product(Base):
+class OrderProduct(Base):
     __tablename__ = "order_product"
     order_id = Column(Integer, ForeignKey('order.id'), primary_key=True, autoincrement=True)
     order = relationship('Order', backref=backref('order_product', lazy='dynamic'))
@@ -143,35 +143,32 @@ class Order_Product(Base):
         self.product_id = product_id
 
     @staticmethod
-    def get_order_product(product_id=None, order_id=None):
-        if product_id != None:
-            return db_session.query(Order_Product).get(product_id)
-        elif order_id != None:
-            return db_session.query(Order_Product).get(order_id)
+    def get_order_product(product_id, order_id):
+            return OrderProduct.query.get(order_id,product_id)
 
     @staticmethod
     def get_by_order(product_id):
-        return db_session.query(Order_Product).filter(product_id == product_id).all()
+        return db_session.query(OrderProduct).filter(product_id == product_id).all()
 
     @staticmethod
     def get_by_product(order_id):
-        return db_session.query(Order_Product).filter(order_id == order_id).all()
+        return db_session.query(OrderProduct).filter(order_id == order_id).all()
 
     @staticmethod
-    def add_order_product(quantity):  # ??????
-        op = Order_Product(quantity)
+    def add_order_product(product_id, order_id,quantity):  # TODO:
+        op = OrderProduct(product_id, order_id,quantity)
         db_session.add(op)
         db_session.commit()
 
     @staticmethod
-    def update_order_product(id, new_quantity):
-        op_up = Order_Product.get_order_product(id)
+    def update_order_product(product_id, order_id, new_quantity):
+        op_up = OrderProduct.get_order_product(id)
         op_up.quantity = new_quantity
         db_session.commit()
 
     @staticmethod
     def delete_order_product(id):
-        dele = Order_Product.get_order_product(id)
+        dele = OrderProduct.get_order_product(id)
         db_session.delete(dele)
         db_session.commit()
 

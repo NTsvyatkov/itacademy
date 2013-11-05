@@ -1,6 +1,6 @@
 
 from views import app
-from flask import Flask, render_template
+from flask import render_template
 
 @app.route('/create_user.html', methods=('GET', 'POST'))
 def create_user():
