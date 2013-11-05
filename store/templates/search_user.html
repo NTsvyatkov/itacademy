@@ -1,7 +1,7 @@
 <html>
   <head>
-   <link href="static/style.css" rel="stylesheet" type="text/css" />
-   <script type="text/javascript" src="static/jquery-1.7.2.js"></script>
+   <link href="static/styles/style.css" rel="stylesheet" type="text/css" />
+   <script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
 
  <script type="text/javascript">
 
@@ -11,18 +11,18 @@
 
    /* Creating table of user */
   $(document).ready (function() {
-      var table_grid = document.getUserById('grid');
+      var table_grid = document.getElementById('grid');
     function creat_grid(count)
     {
         for (var i=1; i<=count;i++ )
         {
-            tr[i] = document.createUser('TR');
+            tr[i] = document.createElement('TR');
             table_grid.appendChild(tr[i]);
             tr[i].id=i;
             if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
             for (var j=0; j<=7; j++)
              {
-              tr[i].appendChild(document.createUser('TD'));
+              tr[i].appendChild(document.createElement('TD'));
              }
         }
     }
@@ -59,8 +59,7 @@
       $.ajax({
         dataType: "json",
         url: '/user',
-        type: 'GET', 
-        }
+        type: 'GET',
         success: function(json)
         {
            //clearing_grid()
@@ -69,17 +68,17 @@
            deleting_grid()
            creat_grid(json.user.length)
            /*Create table with new user list */
-            for (var userl in json.user)
+            for (var user_k in json.user)
                 {
                  k++;
-                 tr[k].cells[0].innerHTML = json.user[user_k].User_Name;
-                 tr[k].cells[1].innerHTML = json.user[user_k].First_Name;
-                 tr[k].cells[2].innerHTML = json.user[user_k].Last_Name;
-                 tr[k].cells[3].innerHTML = json.user[user_k].Role;
-                 tr[k].cells[4].innerHTML = json.user[user_k].Email;
-		         tr[k].cells[5].innerHTML = json.user[userl].Region;
-                 tr[k].cells[7].innerHTML = "<img src='static/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[8].innerHTML = "<img src='static/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[0].innerHTML = json.products[product_k].User_Name;
+                 tr[k].cells[1].innerHTML = json.products[product_k].First_Name;
+                 tr[k].cells[2].innerHTML = json.products[product_k].Last_Name;
+                 tr[k].cells[3].innerHTML = json.products[product_k].Role;
+                 tr[k].cells[4].innerHTML = json.products[product_k].Email;
+		         tr[k].cells[5].innerHTML = json.products[product_k].Region;
+                 tr[k].cells[7].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr[k].cells[7].abbr=k;
                  tr[k].cells[8].abbr=k;
                  tr[k].cells[7].onclick = function edit_tr2()
@@ -102,6 +101,7 @@
          }
       })
     });
+
 
 function delete_id(id,tr_id)
   {
@@ -133,7 +133,6 @@ function delete_id(id,tr_id)
 
   })
  }
-
 
 
 
