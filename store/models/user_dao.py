@@ -97,7 +97,7 @@ class UserDao(Base):
 
     @staticmethod
     def getUserByLogin(userLogin, userPassword):
-        posts = db_session.query(UserDao).order_by(UserDao.id)
+        posts = UserDao.getAllUsers()
         for instance in posts:
             if instance.login == userLogin and instance.password == userPassword:
                 return UserDao.getUserByID(instance.id)
@@ -105,7 +105,6 @@ class UserDao(Base):
     @staticmethod
     def isUserExists(userLogin, userPassword):
         user = UserDao.getUserByLogin(userLogin, userPassword)
-        print(user)
         result = False
         if user is not None:
             result = True
