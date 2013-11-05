@@ -7,12 +7,13 @@ from region_dao import RegionDao
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 
+
 class UserDao(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True,autoincrement=True)
     login = Column(String(50))
-    password = Column(String(50))  # fix maxleng
+    password = Column(String(50))
     first_name = Column(String(50))
     last_name = Column(String(50))
     email = Column(String(100))
@@ -22,8 +23,7 @@ class UserDao(Base):
     role = relationship(RoleDao, backref=backref('user', lazy='dynamic'))
     region = relationship(RegionDao, backref=backref('user', lazy='dynamic'))
 
-    def __init__(self, id, login, password, first_name, last_name, email, role_id, region_id):
-        self.id = id
+    def __init__(self,login, password, first_name, last_name, email, role_id, region_id):
         self.password = password
         self.login = login
         self.first_name = first_name
@@ -33,41 +33,41 @@ class UserDao(Base):
         self.region_id = region_id
 
     def __str__(self):
-        return "CData '%s, %s, %s, %s, %s, %s, %s, %s, '" % (self.id,
-        self.login, self.first_name, self.last_name, self.password, self.email, self.region_id, self.role_id)
+        return "CData  '%s, %s, %s, %s, %s, %s, %s, '" % (self.login,
+        self.first_name, self.last_name, self.password, self.email, self.region_id, self.role_id)
 
 
     @staticmethod
     def  getUserByID(user_id):
-        return db_session.query(UserDao).get(user_id)
+        return UserDao.query.get(user_id)
 
     @staticmethod
     def getAllUsers():
-        return db_session.query(UserDao).order_by(UserDao.id).all()
+        return UserDao.query.order_by(UserDao.id).all()
 
     @staticmethod
     def filterUsersByFirstName():
-        return db_session.query(UserDao).order_by(UserDao.first_name)
+        return UserDao.query.filter_by(UserDao.first_name)
 
     @staticmethod
     def filterUsersByLastName():
-        return db_session.query(UserDao).order_by(UserDao.last_name)
+        return UserDao.query.filter_by(UserDao.last_name)
 
     @staticmethod
     def filterUsersByEmail():
-        return db_session.query(UserDao).order_by(UserDao.email)
+        return UserDao.query.filter_by(UserDao.email)
 
     @staticmethod
     def filterUsersByRole():
-        return db_session.query(UserDao).order_by(UserDao.role_id)
+        return UserDao.query.filter_by(UserDao.role_id)
 
     @staticmethod
     def filterUsersByRegion():
-        return db_session.query(UserDao).order_by(UserDao.region_id)
+        return UserDao.query.filter_by(UserDao.region_id)
 
     @staticmethod
-    def createNewUser(id, login, password, first_name, last_name, email, role_id, region_id):
-        user = UserDao(id,login,password,first_name,last_name,email,role_id,region_id)
+    def createNewUser(login, password, first_name, last_name, email, role_id, region_id):
+        user = UserDao(login,password,first_name,last_name,email,role_id,region_id)
         db_session.add(user)
         db_session.commit()
 
@@ -100,12 +100,25 @@ class UserDao(Base):
         posts = db_session.query(UserDao).order_by(UserDao.id)
         for instance in posts:
             if instance.login == userLogin and instance.password == userPassword:
-                return UserDao.getUserByID(instance.login)
+                return UserDao.getUserByID(instance.id)
 
     @staticmethod
     def isUserExists(userLogin, userPassword):
         user = UserDao.getUserByLogin(userLogin, userPassword)
+        print(user)
         result = False
         if user is not None:
             result = True
         return result
+
+
+#
+#RoleDao.createNewRole("Admin")
+#RegionDao.createNewRegion("Crimea")
+#UserDao.createNewUser('Login', 'Password','FirstName','LastName', 'Email', 1,1)
+
+#UserDao.deleteRecord(3)
+
+#for instance in UserDao.getAllUsers():
+#    print(instance.id,instance.login,instance.password,instance.first_name, instance.last_name, instance.email,
+#          RoleDao.getRoleByID(instance.role_id).name, RegionDao.getRegionByID(instance.region_id).name)
