@@ -8,5 +8,5 @@ import views.user
 from flask_bootstrap import app
 from views import views_app
 from views import products
-from models import session
+from models import db_session
 from views import authenticate
