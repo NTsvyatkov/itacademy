@@ -48,23 +48,23 @@ class UserDao(Base):
 
     @staticmethod
     def filterUsersByFirstName():
-        return UserDao.query.filter(UserDao.first_name)
+        return UserDao.query.order_by(UserDao.first_name)
 
     @staticmethod
     def filterUsersByLastName():
-        return UserDao.query.filter(UserDao.last_name)
+        return UserDao.query.order_by(UserDao.last_name)
 
     @staticmethod
     def filterUsersByEmail():
-        return UserDao.query.filter(UserDao.email)
+        return UserDao.query.order_by(UserDao.email)
 
     @staticmethod
     def filterUsersByRole():
-        return UserDao.query.filter(UserDao.role_id)
+        return UserDao.query.order_by(UserDao.role_id)
 
     @staticmethod
     def filterUsersByRegion():
-        return UserDao.query.filter(UserDao.region_id)
+        return UserDao.query.order_by(UserDao.region_id)
 
     @staticmethod
     def createNewUser(login, password, first_name, last_name, email, role_id, region_id):
@@ -113,6 +113,9 @@ class UserDao(Base):
         return result
 
 
+
+
+# ---Fill test data for user and related entities----
 
 #RoleDao.createNewRole("Admin")
 #RegionDao.createNewRegion("Crimea")
