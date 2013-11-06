@@ -3,22 +3,21 @@ from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Fl
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
+from datetime import date
 
-
-Base.query = db_session.query_property()
 class Order(Base):
     
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
     user = relationship('UserDao', backref=backref('order', lazy='dynamic'))
-    date = Column(DATE)
+    date = Column(DATE, default=date.today())
     status_id = Column(Integer,ForeignKey('order_status.id'))
-    status = relationship('Order_Status', backref=backref('order', lazy='dynamic'))
+    status = relationship('OrderStatus', backref=backref('order', lazy='dynamic'))
     delivery_id = Column(Integer,ForeignKey('delivery_type.id'))
-    delivery = relationship('Delivery_Type', backref=backref('order', lazy='dynamic'))
+    delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
 	
-    def __init__(self,  user_id,date,status_id,delivery_id):  # ??????
+    def __init__(self,  user_id,date,status_id,delivery_id):
         self.user_id=user_id
         self.date=date
         self.status_id=status_id
@@ -26,18 +25,18 @@ class Order(Base):
         
     @staticmethod
     def get_order(id):
-        return db_session.query(Order).get(id)
+        return Order.query.get(id)
 
     @staticmethod
     def get_order_user_id_date(user_id=None, date=None):
         if (date != None) and (user_id != None):
-            return db_session.query(Order).filter(user_id==user_id).filter(date==date).all()
+            return Order.query.filter(user_id==user_id).filter(date==date).all()
         elif user_id != None:
-            return db_session.query(Order).filter(user_id==user_id).all()
+            return Order.query.filter(user_id==user_id).all()
         elif date != None:
-            return db_session.query(Order).filter(date==date).all()
+            return Order.query.filter(date==date).all()
         else:
-            return db_session.query(Order).all()
+            return Order.query.all()
 
         
     @staticmethod
@@ -48,15 +47,15 @@ class Order(Base):
 
     @staticmethod
     def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id):
-        ordup = Order.get_order(id)
-        ordup.user_id = new_user_id
-        ordup.date = new_date
-        ordup.status_id = new_status_id
-        ordup.delivery_id = new_delivery_id
+        ord_up = Order.get_order(id)
+        ord_up.user_id = new_user_id
+        ord_up.date = new_date
+        ord_up.status_id = new_status_id
+        ord_up.delivery_id = new_delivery_id
         db_session.commit()
         
 
-class Order_Status(Base):
+class OrderStatus(Base):
 
     __tablename__ = "order_status"
 
@@ -68,32 +67,33 @@ class Order_Status(Base):
       
     @staticmethod
     def get_status_all():
-        return db_session.query(Order_Status).order_by(id).all()
+        return OrderStatus.query.order_by(id).all()
 
     @staticmethod
     def get_status(id):
-        return db_session.query(Order_Status).get(id)
+        return OrderStatus.query.get(id)
 
     @staticmethod
     def add_status(name):
-        p = Order_Status(name)
+        p = OrderStatus(name)
         db_session.add(p)
         db_session.commit()
 
     @staticmethod
     def update_status(id, new_name):
-        entry = Order_Status.get_status(id)
+        entry = OrderStatus.get_status(id)
         entry.name = new_name
         db_session.commit()
 
     @staticmethod
     def delete_status(id):
-        dele = Order_Status.get_status(id)
+        dele = OrderStatus.get_status(id)
         db_session.delete(dele)
         db_session.commit()
 
 
-class Delivery_Type(Base):
+class DeliveryType(Base):
+
     __tablename__ = "delivery_type"
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50))
@@ -106,32 +106,32 @@ class Delivery_Type(Base):
 
     @staticmethod
     def get_delivery(id):
-        return Delivery_Type.query.get(id)
+        return DeliveryType.query.get(id)
 
     @staticmethod
     def get_delivery_all():
-        return Delivery_Type.query.all()
+        return DeliveryType.query.all()
 
     @staticmethod
     def add_delivery(name):
-        d = Delivery_Type(name)
+        d = DeliveryType(name)
         db_session.add(d)
         db_session.commit()
 
     @staticmethod
     def update_delivery(id, new_name):
-        entry = Delivery_Type.get_delivery(id)
+        entry = DeliveryType.get_delivery(id)
         entry.name = new_name
         db_session.commit()
 
     @staticmethod
     def delete_delivery(id):
-        dele = Delivery_Type.get_delivery(id)
-        db_session.delete(dele)
+        del_delivery = DeliveryType.get_delivery(id)
+        db_session.delete(del_delivery)
         db_session.commit()
 
 
-class Order_Product(Base):
+class OrderProduct(Base):
     __tablename__ = "order_product"
     order_id = Column(Integer, ForeignKey('order.id'), primary_key=True, autoincrement=True)
     order = relationship('Order', backref=backref('order_product', lazy='dynamic'))
@@ -139,55 +139,54 @@ class Order_Product(Base):
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
     quantity = Column(Integer)
 
-    def __init__(self, order_id, product_id, quantity):   # ??????
+    def __init__(self, order_id, product_id, quantity):
         self.quantity = quantity
         self.order_id = order_id
         self.product_id = product_id
 
     @staticmethod
-    def get_order_product(product_id=None, order_id=None):
-        if product_id != None:
-            return db_session.query(Order_Product).get(product_id)
-        elif order_id != None:
-            return db_session.query(Order_Product).get(order_id)
+    def get_order_product(product_id, order_id):
+            return OrderProduct.query.get(order_id, product_id)
 
     @staticmethod
     def get_by_order(product_id):
-        return db_session.query(Order_Product).filter(product_id == product_id).all()
+        return db_session.query(OrderProduct).filter(product_id == product_id).all()
 
     @staticmethod
     def get_by_product(order_id):
-        return db_session.query(Order_Product).filter(order_id == order_id).all()
+        return db_session.query(OrderProduct).filter(order_id == order_id).all()
 
     @staticmethod
-    def add_order_product(quantity):  # ??????
-        op = Order_Product(quantity)
-        db_session.add(op)
+    def add_order_product(order_id, product_id, quantity):
+        order_product = OrderProduct(order_id, product_id, quantity)
+        db_session.add(order_product)
         db_session.commit()
 
     @staticmethod
-    def update_order_product(id, new_quantity):
-        op_up = Order_Product.get_order_product(id)
-        op_up.quantity = new_quantity
+    def update_order_product(order_id, product_id,new_quantity):
+        order_product_up = OrderProduct.get_order_product(order_id, product_id)
+        order_product_up.quantity = new_quantity
         db_session.commit()
 
     @staticmethod
-    def delete_order_product(id):
-        dele = Order_Product.get_order_product(id)
-        db_session.delete(dele)
+    def delete_order_product(order_id, product_id):
+        del_order_product = OrderProduct.get_order_product(order_id, product_id)
+        db_session.delete(del_order_product)
         db_session.commit()
 
 
 
-#Delivery_Type.add_delivery('Fast delivery')
-#Delivery_Type.add_delivery('Slow delivery')
+#DeliveryType.add_delivery('Fast delivery')
+#DeliveryType.add_delivery('Slow delivery')
 
-b = Delivery_Type.get_delivery_all()
+#b = DeliveryType.get_delivery_all()
 
-for i in b:
-    print i
+#OrderProduct.add_order_product(1,4,5)
 
+#Order.add_order(1,date.today(),2,1)
 
-
-
-print (Delivery_Type.get_delivery(2))
+#for i in b:
+#    print i
+#
+#print (DeliveryType.get_delivery(2))
+#print date.today()
