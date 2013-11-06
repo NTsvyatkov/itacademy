@@ -181,13 +181,13 @@ class Order_Product(Base):
 
 #Delivery_Type.add_delivery('Fast delivery')
 #Delivery_Type.add_delivery('Slow delivery')
-
-b = Delivery_Type.get_delivery_all()
-
-for i in b:
-    print i
-
-
-
-
-print (Delivery_Type.get_delivery(2))
+#
+#b = Delivery_Type.get_delivery_all()
+#
+#for i in b:
+#    print i
+#
+#
+#
+#
+#print (Delivery_Type.get_delivery(2))
