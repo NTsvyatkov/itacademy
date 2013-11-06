@@ -5,6 +5,7 @@ from models import db_session
 from flask_bootstrap import app
 from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
 from business_logic.validation import ValidationException
+from math import ceil
 
 @app.route('/product', methods = ['GET'])
 def products():
@@ -55,8 +56,17 @@ def err_han(e):
 @app.route('/productgrid')
 @app.route('/productgrid/<int:page>')
 def productgrid(page=1):
-    products = db_session.query(Product).order_by(Product.name).slice(start=1, stop=2).all()
-    return render_template('product_grid.html', products = products)
+    start = 0
+    stop = 5
+    page = 1
+    products = db_session.query(Product).order_by(Product.name).slice(start, stop)
+    return render_template('product_grid.html', products=products)
+
+def count_pages(all_records, per_page):
+    return int(ceil(all_records/float(per_page)))
+
+def has_prev(page):
+    pass
 
 #@app.route('/productgrid')
 #def productgrid():
