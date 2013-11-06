@@ -10,15 +10,20 @@ from business_logic.validation import ValidationException
 
 @app.route('/create_user.html', methods=('GET', 'POST'))
 def create_user():
-
         return render_template('create_user.html',)
-        
+
+@app.route('/usergrid')
+def usergrid():
+        return render_template('search_user.html',)
+
+
 @app.route('/user', methods = ['GET'])
 def users():
     user_list = getListUser()
     users_arr=[]
     for i in user_list:
-        users_arr.append({'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':i.role_id})
+        users_arr.append({'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,
+                          'email':i.email, 'role_id':i.role_id, 'region_id':i.region_id})
     return make_response(jsonify(users=users_arr),200)
 
 

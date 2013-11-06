@@ -26,7 +26,7 @@
              }
         }
     }
-    creat_grid(25);
+    creat_grid();
 
                     
   function clearing_tr(i)
@@ -53,54 +53,62 @@
       }
 
  }
-    var k=0;
 
-    $('#search_button').click(function(){
-      $.ajax({
-        dataType: "json",
+ function create_entity(){
+       $.ajax({
+       dataType: "json",
         url: '/user',
         type: 'GET',
+        data: json_value,
+        contentType: "application/json",
         success: function(json)
         {
-          
+           //clearing_grid()
 
 
            deleting_grid()
-           creat_grid(json.user.length)
-          
-            for (var user_k in json.user)
+           creat_grid(json.users.length)
+           /*Create table with new products list */
+            for (var product_k in json.users)
                 {
                  k++;
-                 tr[k].cells[0].innerHTML = json.products[product_k].User_Name;
-                 tr[k].cells[1].innerHTML = json.products[product_k].First_Name;
-                 tr[k].cells[2].innerHTML = json.products[product_k].Last_Name;
-                 tr[k].cells[3].innerHTML = json.products[product_k].Role;
-                 tr[k].cells[4].innerHTML = json.products[product_k].Email;
-		         tr[k].cells[5].innerHTML = json.products[product_k].Region;
-                 tr[k].cells[7].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 if (k>count_tr) break;
+                 tr[k].cells[0].innerHTML = json.users[product_k].login;
+                 tr[k].cells[1].innerHTML = json.users[product_k].first_name;
+                 tr[k].cells[2].innerHTML = json.users[product_k].last_name;
+                 tr[k].cells[3].innerHTML = json.users[product_k].role_id;
+                 tr[k].cells[4].innerHTML = json.users[product_k].email;
+                 tr[k].cells[5].innerHTML = json.users[product_k].region_id;
+                 tr[k].cells[6].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[7].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[6].abbr=k;
                  tr[k].cells[7].abbr=k;
-                 tr[k].cells[8].abbr=k;
-                 tr[k].cells[7].onclick = function edit_tr2()
+                 tr[k].cells[6].onclick = function edit_tr2()
                                       {
                                        alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
                                       }
-                 tr[k].cells[8].onclick= function delete_tr2()
+                 tr[k].cells[6].onclick= function delete_tr2()
                                       {
                                         var str = tr[this.abbr].cells[1].innerHTML
-                                        if (confirm('Are you sure you want to delete user '+ str +''))
+                                        var id_tr = tr[this.abbr].cells[0].innerHTML
+                                        if (confirm('Are you sure you want to delete product '+ str +' '+id_tr+'?'))
                                         {
-                                          clearing_tr(this.abbr);
-                                          alert('The user has been successfully deleted');
+                                          delete_id(id_tr,this.abbr)
                                         }
                                        }
                 }
                 k=0;
-            
+            /*End creating table*/
 
          }
       })
-    });
+ }
+
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+    json_value = JSON.stringify(form_value);
+
+    create_entity();
 
 
 function delete_id(id,tr_id)
