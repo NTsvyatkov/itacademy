@@ -13,6 +13,7 @@ class Product(Base):
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
 
     def __init__(self, name, description, price, dimension):
+        super(Product, self).__init__()
         self.name = name
         self.description = description
         self.price = price
@@ -61,6 +62,7 @@ class Dimension(Base):
     name = Column(String(10))
     
     def __init__(self, name):
+        super(Dimension, self).__init__()
         self.name = name
 
     def __str__(self):
