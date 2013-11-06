@@ -1,8 +1,8 @@
 __author__ = 'alex'
 from flask import jsonify, render_template, request, make_response
 from models.product_dao import Product
-from models import db_session
 from flask_bootstrap import app
+from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
 from business_logic.validation import ValidationException
 
@@ -15,10 +15,10 @@ def products():
     return make_response(jsonify(products=products_arr),200)
 
 
-@app.route('/product/<int:id>', methods = ['GET'])
+@app.route('/product/<int:id>', methods=['GET'])
 def products_id(id):
     i=get_product_by_id(request.get['id'])
-    product ={'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.description}
+    product ={'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description, 'dimension': i.description}
     resp = make_response(jsonify(products=product),200)
     return resp
 
@@ -55,8 +55,11 @@ def err_han(e):
 @app.route('/productgrid')
 @app.route('/productgrid/<int:page>')
 def productgrid(page=1):
-    products = db_session.query(Product).order_by(Product.name).slice(start=1, stop=2).all()
-    return render_template('product_grid.html', products = products)
+    all_rec = Product.get_all_products()
+    pagination = Pagination(5, all_rec, page)
+    products = pagination.pager()
+    return render_template('product_grid.html', products=products, pagination=pagination)
+
 
 #@app.route('/productgrid')
 #def productgrid():

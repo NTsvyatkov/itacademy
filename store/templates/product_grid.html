@@ -248,17 +248,17 @@
       </div>
 
 <div style="text-align: center">
-{% for product in products.items %}
+{% for product in products %}
 <p>
   Product: <b>{{product}}</b>
 </p>
 {% endfor %}
 
-{% if products.has_prev %}<a href="{{ url_for('productgrid', page = 1) }}"> First </a>{% else %} First{% endif %} |
-{% if products.has_prev %}<a href="{{ url_for('productgrid', page = products.prev_num) }}"> Prev</a>{% else %} Prev{% endif %} |
-Page #{{products.page}} of {{products.pages}} |
-{% if products.has_next %}<a href="{{ url_for('productgrid', page = products.next_num) }}">Next </a>{% else %}Next {% endif %} |
-{% if products.has_next %}<a href="{{ url_for('productgrid', page = products.pages) }}">Last </a>{% else %}Last {% endif %}
+{% if pagination.has_prev %}<a href="{{ url_for('productgrid', page = 1) }}"> First </a>{% else %} First{% endif %} |
+{% if pagination.has_prev %}<a href="{{ url_for('productgrid', page = pagination.prev_num) }}"> Prev</a>{% else %} Prev{% endif %} |
+Page #{{pagination.page}} of {{pagination.pages}} |
+{% if pagination.has_next %}<a href="{{ url_for('productgrid', page = pagination.next_num) }}">Next </a>{% else %}Next {% endif %} |
+{% if pagination.has_next %}<a href="{{ url_for('productgrid', page = pagination.pages) }}">Last </a>{% else %}Last {% endif %}
 
 </div>
 

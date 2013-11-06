@@ -176,6 +176,7 @@ class OrderProduct(Base):
 
 
 
+<<<<<<< HEAD
 #DeliveryType.add_delivery('Fast delivery')
 #DeliveryType.add_delivery('Slow delivery')
 
@@ -190,3 +191,17 @@ class OrderProduct(Base):
 #
 #print (DeliveryType.get_delivery(2))
 #print date.today()
+=======
+#Delivery_Type.add_delivery('Fast delivery')
+#Delivery_Type.add_delivery('Slow delivery')
+#
+#b = Delivery_Type.get_delivery_all()
+#
+#for i in b:
+#    print i
+#
+#
+#
+#
+#print (Delivery_Type.get_delivery(2))
+>>>>>>> 493f95f1ccbe5918891bc0410ab963fb9d522019
