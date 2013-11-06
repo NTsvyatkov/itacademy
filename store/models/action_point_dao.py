@@ -1,43 +1,42 @@
 #!/usr/bin/env python
-__author__ = 'andrey'
-from sqlalchemy import ForeignKey
+
 from action_point_to_role_dao import ActionPointToRoleDao
 from models import Base, db_session, engine
 from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
 
 
-
 class ActionPointDao(Base):
     __tablename__ = "action_point"
 
-    action_point_id = Column(Integer, ForeignKey('action_point_to_role.ap_to_role_id'), primary_key=True ,
-                             autoincrement=True)
+    #action_point_id = Column(Integer, ForeignKey('action_point_to_role.ap_to_role_id'), primary_key=True ,
+    #                         autoincrement=True)
+    action_point_id = Column(Integer, primary_key=True, autoincrement=True)
     action_point_name = Column(String)
 
-    action_point = relationship(ActionPointToRoleDao, backref=backref('action_point', lazy='dynamic'))
+    #action_point = relationship(ActionPointToRoleDao, backref=backref('action_point', lazy='dynamic'))
 
 
-    def __init__(self, action_point_id, action_point_name):
-        self.action_point_id = action_point_id
+    def __init__(self, action_point_name):
+        super(ActionPointDao, self).__init__()
         self.action_point_name = action_point_name
 
 
     def __str__(self):
-        return "CData '%s, %s'" % (self.action_point_id, self.action_point_name)
+        return "CData '%s'" % (self.action_point_name)
 
 
     @staticmethod
     def getActionPointByID(ap_id):
-        return db_session.query(ActionPointToRoleDao).get(ap_id)
+        return ActionPointDao.query.get(ap_id)
 
     @staticmethod
     def getAllActionPoints():
-        return db_session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.action_point_id)
+        return ActionPointDao.query.order_by(ActionPointToRoleDao.action_point_id)
 
     @staticmethod
-    def createNewActionPoint(id, name):
-        ap = ActionPointDao(id, name)
+    def createNewActionPoint(name):
+        ap = ActionPointDao(name)
         db_session.add(ap)
         db_session.commit()
 

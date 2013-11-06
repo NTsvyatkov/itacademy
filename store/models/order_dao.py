@@ -4,12 +4,14 @@ from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
 
+
+Base.query = db_session.query_property()
 class Order(Base):
     
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('User', backref=backref('order', lazy='dynamic'))
+    user = relationship('UserDao', backref=backref('order', lazy='dynamic'))
     date = Column(DATE)
     status_id = Column(Integer,ForeignKey('order_status.id'))
     status = relationship('Order_Status', backref=backref('order', lazy='dynamic'))
@@ -104,11 +106,11 @@ class Delivery_Type(Base):
 
     @staticmethod
     def get_delivery(id):
-        return db_session.query(Delivery_Type).get(id)
+        return Delivery_Type.query.get(id)
 
     @staticmethod
     def get_delivery_all():
-        return db_session.query(Delivery_Type).all()
+        return Delivery_Type.query.all()
 
     @staticmethod
     def add_delivery(name):
@@ -180,13 +182,12 @@ class Order_Product(Base):
 #Delivery_Type.add_delivery('Fast delivery')
 #Delivery_Type.add_delivery('Slow delivery')
 
-#b = Delivery_Type.get_delivery_all()
+b = Delivery_Type.get_delivery_all()
 
-#for i in b:
-#    print i
+for i in b:
+    print i
 
 
 
-#Delivery_Type.delete_delivery(1)
 
-#print (Delivery_Type.get_delivery(2))
+print (Delivery_Type.get_delivery(2))

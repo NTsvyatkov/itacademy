@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-__author__ = 'andrey'
 
 from sqlalchemy import Column, Integer, String
 from models import Base, db_session
@@ -11,25 +10,25 @@ class RegionDao(Base):
     region_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50))
 
-    def __init__(self, region_id, name):
-        self.region_id = region_id
+    def __init__(self, name):
+        super(RegionDao, self).__init__()
         self.name = name
 
     def __str__(self):
-        return "CData '%s, %s'" % (self.region_id, self.name)
+        return "CData '%s'" % (self.name)
 
 
     @staticmethod
     def getRegionByID(region_id):
-        return db_session.query(RegionDao).get(region_id)
+        return RegionDao.query.get(region_id)
 
     @staticmethod
     def getAllRegions():
-        return db_session.query(RegionDao).order_by(RegionDao.region_id)
+        return RegionDao.query.order_by(RegionDao.region_id)
 
     @staticmethod
-    def createNewRegion(id, name):
-        region = RegionDao(id, name)
+    def createNewRegion(name):
+        region = RegionDao(name)
         db_session.add(region)
         db_session.commit()
 

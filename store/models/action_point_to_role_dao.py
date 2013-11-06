@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-__author__ = 'andrey'
 
 from sqlalchemy import Column, Integer
 from models import Base, db_session
@@ -12,23 +11,23 @@ class ActionPointToRoleDao(Base):
     role_id = Column(Integer)
     action_point_id = Column(Integer)
 
-    def __init__(self, ap_to_role_id, role_id, action_point_id):
-        self.ap_to_role_id = ap_to_role_id
+    def __init__(self, role_id, action_point_id):
+        super(ActionPointToRoleDao, self).__init__()
         self.role_id = role_id
         self.action_point_id = action_point_id
 
 
     def __str__(self):
-        return "CData '%s, %s, %s'" % (self.ap_to_role_id, self.role_id, self.action_point_id)
+        return "CData '%s, %s'" % (self.role_id, self.action_point_id)
 
 
     @staticmethod
     def getActionPointToRoleByID(apToRole_id):
-        return [db_session.query(ActionPointToRoleDao).get(apToRole_id).first()]
+        return ActionPointToRoleDao.query.get(apToRole_id).first()
 
     @staticmethod
     def getAllActionPointsToRole():
-        return db_session.query(ActionPointToRoleDao).order_by(ActionPointToRoleDao.ap_to_role_id)
+        return ActionPointToRoleDao.query.order_by(ActionPointToRoleDao.ap_to_role_id)
 
     @staticmethod
     def createNewActionPointToRole(ap_to_role_id, role_id, action_point_id):
