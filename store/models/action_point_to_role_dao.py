@@ -12,6 +12,7 @@ class ActionPointToRoleDao(Base):
     action_point_id = Column(Integer)
 
     def __init__(self, role_id, action_point_id):
+        super(ActionPointToRoleDao, self).__init__()
         self.role_id = role_id
         self.action_point_id = action_point_id
 

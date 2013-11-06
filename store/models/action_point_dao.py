@@ -18,6 +18,7 @@ class ActionPointDao(Base):
 
 
     def __init__(self, action_point_name):
+        super(ActionPointDao, self).__init__()
         self.action_point_name = action_point_name
 
 

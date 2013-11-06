@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, and_
 from sqlalchemy import Column, Integer, String
 from role_dao import RoleDao
 from region_dao import RegionDao
@@ -24,6 +24,7 @@ class UserDao(Base):
     region = relationship(RegionDao, backref=backref('user', lazy='dynamic'))
 
     def __init__(self,login, password, first_name, last_name, email, role_id, region_id):
+        super(UserDao, self).__init__()
         self.password = password
         self.login = login
         self.first_name = first_name
@@ -47,27 +48,27 @@ class UserDao(Base):
 
     @staticmethod
     def filterUsersByFirstName():
-        return UserDao.query.filter_by(UserDao.first_name)
+        return UserDao.query.filter(UserDao.first_name)
 
     @staticmethod
     def filterUsersByLastName():
-        return UserDao.query.filter_by(UserDao.last_name)
+        return UserDao.query.filter(UserDao.last_name)
 
     @staticmethod
     def filterUsersByEmail():
-        return UserDao.query.filter_by(UserDao.email)
+        return UserDao.query.filter(UserDao.email)
 
     @staticmethod
     def filterUsersByRole():
-        return UserDao.query.filter_by(UserDao.role_id)
+        return UserDao.query.filter(UserDao.role_id)
 
     @staticmethod
     def filterUsersByRegion():
-        return UserDao.query.filter_by(UserDao.region_id)
+        return UserDao.query.filter(UserDao.region_id)
 
     @staticmethod
     def createNewUser(login, password, first_name, last_name, email, role_id, region_id):
-        user = UserDao(login,password,first_name,last_name,email,role_id,region_id)
+        user = UserDao(login, password, first_name,last_name,email,role_id,region_id)
         db_session.add(user)
         db_session.commit()
 
@@ -85,13 +86,13 @@ class UserDao(Base):
 
     @staticmethod
     def updatePassword(userId, password):
-        pst = db_session.query(UserDao).filter(UserDao.id == userId).first()
+        pst = UserDao.getUserByID(userId)
         pst.password = password
         db_session.commit()
 
     @staticmethod
     def deleteRecord(userId):
-        remove_user = db_session.query(UserDao).get(userId)
+        remove_user = UserDao.getUserByID(userId)
         db_session.delete(remove_user)
         db_session.commit()
 
@@ -100,6 +101,7 @@ class UserDao(Base):
         posts = UserDao.getAllUsers()
         for instance in posts:
             if instance.login == userLogin and instance.password == userPassword:
+            #if  UserDao.query.filter(and_(instance.login == userLogin, instance.password == userPassword)) is not None:
                 return UserDao.getUserByID(instance.id)
 
     @staticmethod
@@ -111,13 +113,11 @@ class UserDao(Base):
         return result
 
 
-#
-#RoleDao.createNewRole("Admin")
-#RegionDao.createNewRegion("Crimea")
-#UserDao.createNewUser('Login', 'Password','FirstName','LastName', 'Email', 1,1)
 
-#UserDao.deleteRecord(3)
+RoleDao.createNewRole("Admin")
+RegionDao.createNewRegion("Crimea")
+UserDao.createNewUser('Login', 'Password','FirstName','LastName', 'Email', 1,1)
 
-#for instance in UserDao.getAllUsers():
-#    print(instance.id,instance.login,instance.password,instance.first_name, instance.last_name, instance.email,
-#          RoleDao.getRoleByID(instance.role_id).name, RegionDao.getRegionByID(instance.region_id).name)
+for instance in UserDao.getAllUsers():
+    print(instance.id,instance.login,instance.password,instance.first_name, instance.last_name, instance.email,
+          RoleDao.getRoleByID(instance.role_id).name, RegionDao.getRegionByID(instance.region_id).name)

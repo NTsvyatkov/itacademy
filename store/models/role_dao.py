@@ -16,6 +16,7 @@ class RoleDao(Base):
     #role = relationship(ActionPointToRoleDao, backref=backref('role', lazy='dynamic'))
 
     def __init__(self,name):
+        super(RoleDao, self).__init__()
         self.name = name
 
     def __str__(self):

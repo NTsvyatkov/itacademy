@@ -11,6 +11,7 @@ class RegionDao(Base):
     name = Column(String(50))
 
     def __init__(self, name):
+        super(RegionDao, self).__init__()
         self.name = name
 
     def __str__(self):
