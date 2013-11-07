@@ -1,6 +1,4 @@
-#!/bin/python
-from store.maintenance.pager import Pagination
-from store.models.product_dao import Product
+
 from flask import render_template
 from views import app
 
