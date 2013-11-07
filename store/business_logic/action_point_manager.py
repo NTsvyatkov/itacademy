@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from models.action_point_dao import ActionPointDao
+from store.models.action_point_dao import ActionPointDao
 from validation import ValidationException, NotFoundException
 
 

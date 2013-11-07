@@ -1,10 +1,10 @@
 #!/usr/bin/env python
 from flask import make_response, jsonify, request
-from business_logic.role_manager import getlistRole, getRoleByID, createNewRole, deleteRole, updateRole, validationRoleName
-from business_logic.validation import ValidationException, NotFoundException
+from store.business_logic.role_manager import getlistRole, getRoleByID, createNewRole, deleteRole, updateRole, validationRoleName
+from store.business_logic.validation import ValidationException, NotFoundException
 
 
-from flask_bootstrap import app
+from store.flask_bootstrap import app
 
 
 @app.route('/roles', methods=['GET'])

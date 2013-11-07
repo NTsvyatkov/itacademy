@@ -1,11 +1,11 @@
 from views import app
-
+from store.maintenance.pager import Pagination
 from flask import Flask, jsonify, render_template, request, make_response
-from models.user_dao import UserDao
-from models import db_session
-from flask_bootstrap import app
-from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
-from business_logic.validation import ValidationException
+from store.models.user_dao import UserDao
+from store.models import db_session
+from store.flask_bootstrap import app
+from store.business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
+from store.business_logic.validation import ValidationException
 
 
 @app.route('/create_user.html', methods=('GET', 'POST'))
@@ -59,3 +59,11 @@ def users_update():
 def err_han(e):
     error_dict = {'message': e.message}
     return make_response(jsonify(error_dict), 404)
+
+@app.route('/user_grid')
+@app.route('/user_grid/<int:page>')
+def user_grid(page=1):
+    all_rec = UserDao.get_all_products()
+    pagination = Pagination(5, all_rec, page)
+    user = pagination.pager()
+    return render_template('layout.html', user=user, pagination=pagination)

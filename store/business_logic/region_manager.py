@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 
-from business_logic.user_manager import validationRegionID
-from models.region_dao import RegionDao
+from store.business_logic.user_manager import validationRegionID
+from store.models.region_dao import RegionDao
 from validation import ValidationException
 
 

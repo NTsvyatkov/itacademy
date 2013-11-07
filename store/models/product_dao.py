@@ -1,4 +1,4 @@
-from models import Base, db_session
+from store.models import Base, db_session
 from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
 

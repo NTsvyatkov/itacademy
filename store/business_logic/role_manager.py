@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
 
-from business_logic.user_manager import validationRoleID
-from models.role_dao import RoleDao
+from store.business_logic.user_manager import validationRoleID
+from store.models.role_dao import RoleDao
 from validation import ValidationException
 
 

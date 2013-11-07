@@ -1,13 +1,12 @@
-from models import Base, db_session, engine
+from store.models import Base, db_session, engine
 from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
-from models.product_dao import Product
-from models.user_dao import UserDao
+from store.models.product_dao import Product
+from store.models.user_dao import UserDao
 
 
 Base.query = db_session.query_property()
 class Order(Base):
-    
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))

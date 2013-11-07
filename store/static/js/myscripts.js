@@ -10,7 +10,8 @@ $(document).ready(function(){
             },
             
             price:{
-                required: true
+                required: true,
+                number: true
 
             },
             id:{

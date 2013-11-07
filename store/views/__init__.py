@@ -5,9 +5,6 @@ import views.user
 
 
 
-from flask_bootstrap import app
-from views import views_app
-from views import products
-from models import db_session
-from views import authenticate
+from store.flask_bootstrap import app
+from store.models import db_session
 from views import  products_buy

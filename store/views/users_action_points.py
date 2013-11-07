@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 from flask import make_response, jsonify, request
-from business_logic.action_point_manager import *
-from business_logic.validation import ValidationException
+from store.business_logic.action_point_manager import *
+from store.business_logic.validation import ValidationException
 
-from flask_bootstrap import app
+from store.flask_bootstrap import app
 
 @app.route('/action_point', methods=['GET'])
 def actionPointList():

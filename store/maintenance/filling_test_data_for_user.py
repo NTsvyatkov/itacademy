@@ -2,9 +2,11 @@
 
 
 # ---Fill test data for user and related entities----
-from models.region_dao import RegionDao
-from models.role_dao import RoleDao
-from models.user_dao import UserDao
+from store.models.region_dao import RegionDao
+from store.models.role_dao import RoleDao
+from store.models.region_dao import RegionDao
+from store.models.role_dao import RoleDao
+from store.models.user_dao import UserDao
 
 RoleDao.createNewRole("Admin")
 RegionDao.createNewRegion("Crimea")

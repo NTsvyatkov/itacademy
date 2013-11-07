@@ -11,7 +11,7 @@
         }
 
         #products_filter{
-        width:80%px;
+        width:80%;
         margin:20px auto;
         padding:10px;
         border:1px solid grey;
@@ -27,7 +27,7 @@
 
         .product_filter_in
         {
-        width:40%px;
+        width:40%;
         margin-top:10px;
         }
         .field {

@@ -1,15 +1,12 @@
 {% extends "layout.html" %}
 {% block body %}
-    <script src="{{ url_for('static', filename='js/jquery-1.5.2.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.validate.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/myscripts.js') }}"></script>
 <style type="text/css">
 div { clear:both;position:relative;margin:0 0 10px; }
 .error{
-  color: red;
+  color: red;}
 </style>
 
-    <form id="info" class="CreatePro" action="{{ url_for('product12') }}" method="Post">
+    <form id="info"  method="Post">
 	</br><h1>Create Product</h1></br>
     <div  id="name-wrap" class="slider">
         <label for="name">Name*</label>
@@ -48,4 +45,4 @@ div { clear:both;position:relative;margin:0 0 10px; }
     </script>
     </form>
 
-{% endblock body  %}
+{% endblock body %}
