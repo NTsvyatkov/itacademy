@@ -1,5 +1,5 @@
-from models import Base, db_session, engine
-from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
+from models import Base, db_session
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
@@ -156,11 +156,11 @@ class OrderProduct(Base):
 
     @staticmethod
     def get_by_order(product_id):
-        return db_session.query(OrderProduct).filter(product_id == product_id).all()
+        return OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
 
     @staticmethod
     def get_by_product(order_id):
-        return db_session.query(OrderProduct).filter(order_id == order_id).all()
+        return OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
 
     @staticmethod
     def add_order_product(order_id, product_id, quantity):
@@ -200,7 +200,8 @@ class OrderProduct(Base):
 #Order.update_order(1,4,date.today(),1,1)
 #print Order.get_order(1).date
 #d=date.today()
-#order1 = Order.get_order_user_id_date()
+#order1 = OrderProduct.get_by_order(3)
 #
 #for i in order1:
-#    print i.user_id
+#    print i.quantity
+
