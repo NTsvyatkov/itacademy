@@ -1,6 +1,6 @@
 __author__ = 'alex'
 from sqlalchemy import create_engine
-mysql_config='mysql+mysqldb://root:080388@localhost/'
+mysql_config='mysql+mysqldb://root:111@localhost/'
 engine = create_engine(mysql_config)
 engine.execute("CREATE DATABASE IF NOT EXISTS store_DB ")
 engine.execute("USE store_DB")
