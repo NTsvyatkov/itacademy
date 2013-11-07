@@ -1,12 +1,13 @@
 #!/usr/bin/env python
 from flask import render_template, request, make_response, jsonify
 from business_logic.product_manager import list_products
+from maintenance.pager import Pagination
 from views import app
 
 
-@app.route('/buygrid')
-def buy_product():
-    return render_template('products_buy.html')
+#@app.route('/buygrid')
+#def buy_product():
+#    return render_template('products_buy.html')
 
 
 @app.route('/buy', methods = ['GET'])
@@ -24,3 +25,11 @@ def buy():
 #    for i in list:
 #        array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
 #    return make_response(jsonify(products=array),200)
+
+@app.route('/buygrid')
+@app.route('/buygrid/<int:page>')
+def buyProducts(page=1):
+    all_rec = list_products()
+    pagination = Pagination(5, all_rec, page)
+    products = pagination.pager()
+    return render_template('products_buy.html', products=products, pagination=pagination)
