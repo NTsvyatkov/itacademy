@@ -23,7 +23,7 @@
                                 }
                         }
                 }
-            creat_grid(25);
+            creat_grid();
 
             function clearing_tr(i)
                 {
@@ -116,11 +116,11 @@
             <div class="">
                 <div class=" ">
                     <span>Filter</span>
-                    <form class='grid'>
-                        <span>Keyword <input type="text" style="width:150px" /></span>
-                        <span>Prise <input type="text" style="width:50px" /> - </span>
-                        <span><input type="text" style="width:50px" /> </span>
-                        <span><input type="button" value="search" id='search_button'></span>
+                    <form class='grid' action="" method="post">
+                        <span>Keyword <input type="text" name = 'name' style="width:150px" /></span>
+                        <span>Prise <input type="text" name = 'start_prise' style="width:50px" /> - </span>
+                        <span><input type="text" name = 'end_prise' style="width:50px" /> </span>
+                        <span><input type="submit" value="search" id='search_button'></span>
                     </form>
                 </div>
             </div>
@@ -144,6 +144,15 @@
                         </th>
                     </tr>
                 </table>
+
+                <div style="text-align: center">
+                    {% if pagination.has_prev %}<a href="{{ url_for('buygrid', page = 1) }}"> First </a>{% else %} First{% endif %} |
+                    {% if pagination.has_prev %}<a href="{{ url_for('buygrid', page = pagination.prev_num) }}"> Prev</a>{% else %} Prev{% endif %} |
+                    Page #{{pagination.page}} of {{pagination.pages}} |
+                    {% if pagination.has_next %}<a href="{{ url_for('productgrid', page = pagination.next_num) }}">Next </a>{% else %}Next {% endif %} |
+                    {% if pagination.has_next %}<a href="{{ url_for('productgrid', page = pagination.pages) }}">Last </a>{% else %}Last {% endif %}
+
+                </div>
 
             </div>
         </div>

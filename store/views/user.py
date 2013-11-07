@@ -58,6 +58,12 @@ def users_update():
 @app.errorhandler(ValidationException)
 def err_han(e):
     error_dict = {'message': e.message}
+    return make_response(jsonify(error_dict), 400)
+    
+    
+@app.errorhandler(NotFoundException)
+def err_han(ex):
+    error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
 
 @app.route('/user_grid')

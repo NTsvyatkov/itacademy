@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask import render_template, request, session, escape, make_response, jsonify
-from store.business_logic.product_manager import list_products
-from store.models.user_dao import UserDao
+from business_logic.product_manager import list_products
+from models.user_dao import UserDao
 from views import app
 
 
