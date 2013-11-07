@@ -58,4 +58,10 @@ def users_update():
 @app.errorhandler(ValidationException)
 def err_han(e):
     error_dict = {'message': e.message}
+    return make_response(jsonify(error_dict), 400)
+    
+    
+@app.errorhandler(NotFoundException)
+def error_handler(ex):
+    error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
