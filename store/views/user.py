@@ -62,6 +62,6 @@ def err_han(e):
     
     
 @app.errorhandler(NotFoundException)
-def error_handler(ex):
+def err_han(ex):
     error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
