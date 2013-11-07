@@ -3,7 +3,7 @@
 from sqlalchemy import Column, Integer, Text, String, ForeignKey
 from action_point_to_role_dao import ActionPointToRoleDao
 from sqlalchemy.orm import relationship, backref
-from store.models import Base, db_session
+from models import Base, db_session
 
 
 class RoleDao(Base):

@@ -1,4 +1,4 @@
-from store.models.product_dao import Product
+from models.product_dao import Product
 from math import ceil
 
 class Pagination(object):

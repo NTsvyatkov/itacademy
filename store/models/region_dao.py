@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from sqlalchemy import Column, Integer, String
-from store.models import Base, db_session
+from models import Base, db_session
 
 
 class RegionDao(Base):

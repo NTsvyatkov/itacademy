@@ -2,9 +2,9 @@
 
 import re
 from validation import ValidationException, NotFoundException
-from store.models.region_dao import RegionDao
-from store.models.role_dao import RoleDao
-from store.models.user_dao import UserDao
+from models.region_dao import RegionDao
+from models.role_dao import RoleDao
+from models.user_dao import UserDao
 
 
 def validationLogin(login):

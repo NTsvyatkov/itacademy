@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from action_point_to_role_dao import ActionPointToRoleDao
-from store.models import Base, db_session, engine
+from models import Base, db_session, engine
 from sqlalchemy import Column, Date, Integer, String, DATE, ForeignKey, Text, Float
 from sqlalchemy.orm import relationship, backref
 

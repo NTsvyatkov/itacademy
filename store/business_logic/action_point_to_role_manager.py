@@ -1,8 +1,8 @@
 #!/usr/bin/env python
 
-from store.business_logic.action_point_manager import validationActionPointID
-from store.business_logic.role_manager import validationRoleID
-from store.models.action_point_to_role_dao import ActionPointToRoleDao
+from business_logic.action_point_manager import validationActionPointID
+from business_logic.role_manager import validationRoleID
+from models.action_point_to_role_dao import ActionPointToRoleDao
 from validation import ValidationException, NotFoundException
 
 

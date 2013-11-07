@@ -4,7 +4,7 @@ from sqlalchemy import ForeignKey, and_
 from sqlalchemy import Column, Integer, String
 from role_dao import RoleDao
 from region_dao import RegionDao
-from store.models import Base, db_session
+from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 
 

@@ -1,4 +1,4 @@
-from store.models.product_dao import Product, Dimension
+from models.product_dao import Product, Dimension
 
 Dimension.add_dimension("item")
 Dimension.add_dimension("box")
