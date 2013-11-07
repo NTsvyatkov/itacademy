@@ -5,7 +5,6 @@ from flask_bootstrap import app
 from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
 from business_logic.validation import ValidationException
-from business_logic.product_manager import list_dimensions
 
 @app.route('/product', methods = ['GET'])
 def products():
@@ -49,7 +48,6 @@ def err_han(e):
     error_dict = {'message': e.message}
     return make_response(jsonify(error_dict), 404)
 
-
 #@app.route('/productgrid')
 #def productgrid():
 #   return render_template('product_grid.html')
@@ -69,7 +67,7 @@ def productgrid(page=1):
 #        return render_template('product_grid.html')
 #    else:
 #        error = 'You are not logged in'
-#        return render_template('login_2_.html', error=error)
+#        return render_template('login(2).html', error=error)
 
 #p=db_session.query(Product).order_by(Product.name).slice(start=0, stop=4).all()
 #for i in p:

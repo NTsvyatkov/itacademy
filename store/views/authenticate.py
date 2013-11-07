@@ -11,7 +11,7 @@ def login():
         return 'Logged in as %s' % escape(session['username'])
     else:
         error = 'You are not logged in'
-        return render_template('login_2_.html', error=error)
+        return render_template('login(2).html', error=error)
 
 
 @app.route('/', methods=['POST', 'GET'])
@@ -23,11 +23,11 @@ def login_authenticate():
             return render_template('index.html')
         else:
             error = 'Invalid username/password'
-            return render_template('login_2_.html', error=error)
+            return render_template('login(2).html', error=error)
 
 
 @app.route('/logout')
 def logout():
     # remove the username from the session if it's there
     session.pop('username', None)
-    return render_template('login_2_.html')
+    return render_template('login(2).html')

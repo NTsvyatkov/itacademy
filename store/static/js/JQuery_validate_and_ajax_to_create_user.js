@@ -166,10 +166,10 @@ var region =   document.form.region.value;
         contentType: 'application/json;',
 
 
-        success: function(Base){
+        success: function(data){
 
-      var view =   $("#result").text(Base.result);
-      var view = Base.length,
+      var view =   $("#result").text(data.result);
+      var view = data.length,
         element = null;
             for (var i = 0; i < view; i++) {
         element = arr[i];

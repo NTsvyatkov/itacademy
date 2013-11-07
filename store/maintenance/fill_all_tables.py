@@ -2,8 +2,8 @@ from models.product_dao import Product, Dimension
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
-from models.order_dao import Order, Order_Product, Order_Status,Delivery_Type
-from models.datetime import Date
+from models.order_dao import Order, OrderProduct, OrderStatus,DeliveryType
+from datetime import date
 
 # This file can fill you DB store_db
 # just run this file
@@ -38,9 +38,9 @@ UserDao.createNewUser('Andrew', '111','Andrew','Petrov', 'andrew@mail.ru', 1,1)
 UserDao.createNewUser('Katya', '111','Ekaterina','Ivanova', 'ekaterina@rambler.com', 1,1)
 
 
-Delivery_Type.add_delivery('Courier')
-Delivery_Type.add_delivery('Express-mail')
-Delivery_Type.add_delivery('Himself')
+DeliveryType.add_delivery('Courier')
+DeliveryType.add_delivery('Express-mail')
+DeliveryType.add_delivery('Himself')
 
 OrderStatus.add_status('In Stock')
 OrderStatus.add_status('Delivery process')

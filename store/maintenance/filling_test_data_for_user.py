@@ -4,8 +4,6 @@
 # ---Fill test data for user and related entities----
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
-from models.region_dao import RegionDao
-from models.role_dao import RoleDao
 from models.user_dao import UserDao
 
 RoleDao.createNewRole("Admin")
