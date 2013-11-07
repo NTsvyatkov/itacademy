@@ -1,7 +1,6 @@
 #!/usr/bin/env python
-from flask import render_template, request, session, escape, make_response, jsonify
+from flask import render_template, request, make_response, jsonify
 from business_logic.product_manager import list_products
-from models.user_dao import UserDao
 from views import app
 
 
@@ -17,3 +16,11 @@ def buy():
     for i in list:
         array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
     return make_response(jsonify(products=array),200)
+
+#
+#@app.route('/buy', methods = ['POST'])
+#def filterBuyProduct():
+#    list = Product.query.filter_by(and_(name == request.form['name'], prise between request.form['start_prise'] and request.form['end_prise']))
+#    for i in list:
+#        array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
+#    return make_response(jsonify(products=array),200)
