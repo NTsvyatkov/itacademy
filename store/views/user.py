@@ -5,7 +5,7 @@ from models.user_dao import UserDao
 from models import db_session
 from flask_bootstrap import app
 from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
-from business_logic.validation import ValidationException
+from business_logic.validation import ValidationException, NotFoundException
 
 
 @app.route('/create_user.html', methods=('GET', 'POST'))
@@ -24,6 +24,7 @@ def users():
     for i in user_list:
         users_arr.append({'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,
                           'email':i.email, 'role_id':i.role_id, 'region_id':i.region_id})
+
     return make_response(jsonify(users=users_arr),200)
 
 
