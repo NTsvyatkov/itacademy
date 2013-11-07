@@ -1,11 +1,12 @@
 __author__ = 'alex'
 from flask import jsonify, render_template, request, make_response
-from store.models.product_dao import Product
-from store.flask_bootstrap import app
-from store.maintenance.pager import Pagination
-from store.business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
-from store.business_logic.validation import ValidationException
-from store.business_logic.product_manager import list_dimensions
+from models.product_dao import Product
+from flask_bootstrap import app
+from maintenance.pager import Pagination
+from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
+from business_logic.validation import ValidationException
+from business_logic.product_manager import list_dimensions
+
 @app.route('/product', methods = ['GET'])
 def products():
     products_list = list_products()

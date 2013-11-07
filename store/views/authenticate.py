@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from flask import render_template, request, session, escape
-from store.models.user_dao import UserDao
+from models.user_dao import UserDao
 from views import app
 
 
