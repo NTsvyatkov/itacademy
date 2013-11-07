@@ -101,12 +101,14 @@ class UserDao(Base):
         posts = UserDao.getAllUsers()
         for instance in posts:
             if instance.login == userLogin and instance.password == userPassword:
-            #if  UserDao.query.filter(and_(instance.login == userLogin, instance.password == userPassword)) is not None:
                 return UserDao.getUserByID(instance.id)
+        #return UserDao.query.filter(and_(UserDao.login == userLogin, UserDao.password == userPassword))
+
 
     @staticmethod
     def isUserExists(userLogin, userPassword):
         user = UserDao.getUserByLogin(userLogin, userPassword)
+        print(user)
         result = False
         if user is not None:
             result = True
