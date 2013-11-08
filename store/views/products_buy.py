@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+from sqlalchemy import and_
 from flask import render_template, request, make_response, jsonify
 from business_logic.product_manager import list_products
 from maintenance.pager import Pagination
 from views import app
+from models.product_dao import Product
 
 
 #@app.route('/buygrid')
@@ -18,13 +20,26 @@ def buy():
         array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
     return make_response(jsonify(products=array),200)
 
-#
-#@app.route('/buy', methods = ['POST'])
-#def filterBuyProduct():
-#    list = Product.query.filter_by(and_(name == request.form['name'], prise between request.form['start_prise'] and request.form['end_prise']))
-#    for i in list:
-#        array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
-#    return make_response(jsonify(products=array),200)
+
+@app.route('/buygrid', methods = ['POST'])
+def filterBuyProduct():
+    if request.form['name'] and request.form['start_prise'] and request.form['end_prise']:
+        list = Product.query.filter(and_(Product.price.between(request.form['start_prise'],request.form['end_prise'])),
+                                    Product.name == request.form['name'])
+    elif request.form['name']:
+        list = Product.query.filter(Product.name == request.form['name'])
+    elif request.form['start_prise']:
+        list = Product.query.filter(Product.price.between(request.form['start_prise'],'1000000'))
+    elif request.form['end_prise']:
+        list = Product.query.filter(Product.price.between('0',request.form['end_prise']))
+    else:
+        list = list_products()
+    array = []
+    for i in list:
+        array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
+    return make_response(jsonify(products=array),200)
+
+
 
 @app.route('/buygrid')
 @app.route('/buygrid/<int:page>')

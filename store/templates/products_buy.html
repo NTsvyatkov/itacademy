@@ -61,8 +61,8 @@
                 contentType: "application/json",
                 success: function(json)
                     {
-                        //clearing_grid(
-                        // )
+                        //clearing_grid()
+
                         deleting_grid()
                         creat_grid(json.products.length)
                         /*Create table */
@@ -76,8 +76,8 @@
 //                          tr[k].cells[3].innerHTML = json.products[product_k].role_id;
 //                          tr[k].cells[4].innerHTML = json.products[product_k].email;
 //                          tr[k].cells[5].innerHTML = json.products[product_k].region_id;"
-                            tr[k].cells[3].innerHTML = "<input type='text' style='width:50px' value = 1 alt=" + k + ">";
-                            tr[k].cells[4].innerHTML = "<input type='button' value='Add to Card' id='search_button'  alt=" + k + ">";
+                            tr[k].cells[3].innerHTML = "<input type='text' style='width:50px' value = 1 name=" + k + ">";
+                            tr[k].cells[4].innerHTML = "<input type='submit' value='Add to Card' id='search_button'  alt=" + k + ">";
                             tr[k].cells[3].abbr=k;
                             tr[k].cells[4].abbr=k;
 //                          tr[k].cells[3].onclick = function edit_tr2()
@@ -100,12 +100,33 @@
                 })
             }
 
+
+
+
+
+            function create_entity_filter(){
+                $.ajax({
+                dataType: "json",
+                url: '/buygrid',
+                type: 'POST',
+                data: json_value,
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        create_entity()
+                    }
+                })
+            }
+
+
+
             var k=0;
             form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
             json_value = JSON.stringify(form_value);
 
             create_entity();
 
+            //create_entity_filter()
 
 
             $('#clr').click(deleting_grid);
@@ -118,7 +139,7 @@
             <div class="">
                 <div class=" ">
                     <span>Filter</span>
-                    <form class='grid' action="" method="post">
+                    <form class='grid' action="" method="POST">
                         <span>Keyword <input type="text" name = 'name' style="width:150px" /></span>
                         <span>Prise <input type="text" name = 'start_prise' style="width:50px" /> - </span>
                         <span><input type="text" name = 'end_prise' style="width:50px" /> </span>
