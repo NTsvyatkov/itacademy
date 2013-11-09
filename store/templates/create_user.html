@@ -3,105 +3,136 @@
 
 
 
-{% block create_user%}
-<div class=" form">
-<form   name="form" id ="form" method ="POST"  >
+{% block body%}
+<style type="text/css">
+div { clear:both;position:relative; }
 
+</style>
+<form id="info"  name="form"  class = "form" method ="POST"  >
+        <div style = "height: 10px;"></div>
     <table>
       <!-- user login-->
         <tr>
-          <td>
-             <label for="name">User_name</label>
-          </td>
 
-          <td>
-            <div class ="user_name">  <input id="name" name="name" type="text" value="" maxlength="50"></div>
-          </td>
-          <td>
-              <div class = "error_user_name"></div>
-          </td>
+	   <td>
+		 <div class ="user_name"> <div id="name-wrap" class="slider">
+	           <label for="name">User_name</label>
+
+              <input id="name" name="name" type="text" value="" maxlength="50">
+       </div>
+       </div>
+           <div style = "height: 10px;"></div>
+       </td>
+
         </tr>
-
+        <tr>
+              <div class = "error_user_name"></div>
+        </tr>
                <!--user name-->
         <tr>
             <td>
+                <div class ="first_name">
+		            <div id="first_name-wrap" class="slider">
                <label for="first_name"> First_name</label>
-             </td>
 
-             <td>
-                <div class ="first_name">  <input id="first_name" name="first_name" type="text" value="" maxlength="50"></div>
-             </td>
-            <td>
-              <div class = "error_first_name"></div>
-          </td>
+                  <input id="first_name" name="first_name" type="text" value="" maxlength="50">
+                    </div>
+             </div>
+                <div style = "height: 10px;"></div>
+            </td>
+
         </tr>
-                <!--user lastname-->
+        <tr>
+              <div class = "error_first_name"></div>
+         </tr>
+                <!--user last name-->
         <tr>
             <td>
+                <div class ="last_name">
+		            <div id="last_name-wrap" class="slider">
                 <label for="last_name"> Last_name</label>
+                <input id="last_name" name="last_name" type="text" value="" maxlength="50">
+                    </div>
+                </div>
+                <div style = "height: 10px;"></div>
             </td>
 
-            <td>
-
-                <div class ="last_name">  <input id="last_name" name="last_name" type="text" value="" maxlength="50"></div>
-            </td>
-             <td>
+        </tr>
+        <tr>
               <div class = "error_last_name"></div>
-            </td>
         </tr>
                 <!--user password -->
         <tr>
             <td>
+                 <div class ="password">
+                    <div id="password-wrap" class="slider">
                  <label for="password">Password</label>
+
+                  <input id="password" name="password" type="password" value="" maxlength="20">
+                    </div>
+                </div>
+                <div style = "height: 10px;"></div>
             </td>
-            <td>
-                 <div class ="password">  <input id="password" name="password" type="password" value="" maxlength="20"></div>
-            </td>
-            <td>
+
+        </tr>
+        <tr>
               <div class = "error_password"></div>
-            </td>
         </tr>
                 <!--confirm-->
         <tr>
             <td>
+                <div class ="confirm">
+                     <div id="confirm-wrap" class="slider">
          <label for="confirm">Confirm Password</label>
+
+                <input id="confirm" name="confirm" type="password" value="" maxlength="20">
+                     </div>
+                </div>
+                <div style = "height: 10px;"></div>
             </td>
-            <td>
-               <div class ="confirm">  <input id="confirm" name="confirm" type="password" value="" maxlength="20"></div>
-            </td>
-            <td>
+
+        </tr>
+        <tr>
               <div class = "error_confirm"></div>
-            </td>
         </tr>
                 <!--email-->
         <tr>
             <td>
+                <div class ="email">
+                    <div id="email-wrap" class="slider">
                 <label for="email">Email</label>
+
+                <input id="email" name="email" type="text" value="" maxlength="100">
+                    </div>
+                </div>
+                <div style = "height: 10px;"></div>
             </td>
-            <td>
-               <div class ="email">  <input id="email" name="email" type="text" value="" maxlength="100"></div>
-            </td>
-            <td>
+
+        </tr>
+        <tr>
               <div class = "error_email"></div>
-            </td>
         </tr>
                 <!--Select Region-->
         <tr>
             <td>
                 <label for="region">Region</label>
-            </td>
-            <td>
-                 <div class ="region">  <select id="region" name="region_id" type ="checkbox">
+
+                 <div class ="region">
+
+
+                     <select id="region" name="region_id" type ="checkbox">
                      <option value ="" > Select from the list</option>
                      <option value="North">North</option>
                      <option value="South">South</option>
                      <option value="West">West</option>
                      <option value="East">East</option>
-                 </select><td><div class = "error_region"> </div></td>
+                 </select>
                  </div>
+                <div style = "height: 10px;"></div>
             </td>
 
         </tr>
+        <tr><div class = "error_region"> </div>
    </table>
                 <!--Choice of a role-->
     <div style ="width: 500px " >
@@ -133,11 +164,12 @@
 
 
       </table>
-    </div> <div class = "error_role"></div></br>
+
+    </div>
 
      </fieldset>
      </div>
-
+    <div style = "height: 10px;"></div>
 
 
                 <!--Creating ButtonsС-->
@@ -154,22 +186,14 @@
 
 </form>
 
-            </br></br>
-    <h1>data checking</h1>
- <p>
-   <span id=result>?</span>
-
-</p>
-            </br></br>
 
 
-</div>
 <div id ="popub">
                  <div id ="refresh"   >
                      <p style ="text-align: center;" > 'All fields will be cleared. Do you want to continue?'</p>
                  <p style = "text-align:center;">
-                     <input  type ="button"  value = "clear"   />
-                     <input  type ="submit"  value = "close"  id ="close"/>
+                     <input  type ="button"  value = "    Yes   "   />
+                     <input  type ="submit"  value = "Cancel"  id ="close"/>
                  </div>
                   </p>
 </div>
@@ -193,7 +217,7 @@ $('#close').click(function (){
   $('#refresh').click(function (){
   $('#popub').hide();
   $('#hover').hide();
-  $(':input','#form')
+  $(':input','.form')
  .not(':button, :submit, :reset, :hidden')
  .val('')
  /*.removeAttr('checked')
@@ -213,4 +237,3 @@ $('#close').click(function (){
 
     </script>
 {% endblock%}
-
