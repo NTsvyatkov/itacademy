@@ -134,7 +134,7 @@ var result_email = email.match(regV_email);
     }
 var region =   document.form.region.value;
 
-        if (region == "0"){
+        if (region == ""){
         $(".error_region").html("'You must select a region'").css({'color':'red'});
                 $(".region").toggleClass("errorList");
                 $(".region").click(function(){

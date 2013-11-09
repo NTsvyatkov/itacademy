@@ -124,3 +124,50 @@ input[type="button"]:active{ margin-top:1px; }
 #navigation {float:left; width:580px; text-align:center}
 #navigation img {cursor:pointer}
 #text {float:left; width:200px; text-align:right; margin-top:2px}
+
+
+/*  Validation and refresh style for create_user page*/
+.errorList
+{
+    color:red;
+    border:2px solid red;
+
+}
+#hover{
+   display:none;
+   position:absolute ;
+   width:100% ;
+   height:100%;
+   background:RGBA(0,255,255,0.1);
+   top:0;
+   left:0;
+   z-index:998;
+
+
+}
+#popub{
+    display:none;
+    background:#ffffff ;
+    position:absolute;
+    width: 300px;
+    height: 200px;
+    z-index:999;
+    top:50%;
+    left:50%;
+    margin-left:-150px;
+    margin-top:-100px;
+}
+
+
+#refresh{
+
+   position:absolute;
+    width: 200px;
+    height: 100px;
+    top:50%;
+    left:50%;
+    margin-left:-100px;
+    margin-top:-50px;
+
+
+}
