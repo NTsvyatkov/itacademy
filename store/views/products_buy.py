@@ -38,6 +38,7 @@ def filterBuyProduct():
     for i in list:
         array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
     return make_response(jsonify(products=array),200)
+    #return make_response(render_template('products_buy.html'),jsonify(products=array),200)
 
 
 
@@ -48,3 +49,4 @@ def buyProducts(page=1):
     pagination = Pagination(5, all_rec, page)
     products = pagination.pager()
     return render_template('products_buy.html', products=products, pagination=pagination)
+    #return render_template('products_buy.html')
