@@ -14,37 +14,37 @@ def regions():
     regions_arr=[]
     for i in regions_list:
         regions_arr.append({'region_id':i.region_id,'name':i.name})
-    return make_response(jsonify(regions=regions_arr),200)
+    return make_response(jsonify(regions=regions_arr), 200)
 
 
 @app.route('/api/regions/<int:id>', methods=['GET'])
 def regions_id(id):
     i=getRegionByID(request.get['id'])
     region ={'region_id': i.region_id, 'name': i.name}
-    resp = make_response(jsonify(regions=region),200)
+    resp = make_response(jsonify(regions=region), 200)
     return resp
 
 
 @app.route('/api/regions', methods = ['POST'])
 def regions_post():
-    js = request.json()
+    js = request.json
     createRegion(js['region_id'],js['name'])
-    resp = make_response(0,201)
+    resp = make_response(0, 201)
     return resp
 
 
 @app.route('/api/regions/<int:id>', methods=['DELETE'])
 def regions_id_delete(id):
     deleteRegion(id)
-    resp = make_response(jsonify({'message':'success'}),200)
+    resp = make_response(jsonify({'message':'success'}), 200)
     return resp
 
 
 @app.route('/api/regions', methods = ['PUT'])
 def regions_update():
-    js = request.get_json()
+    js = request.json
     updateRegion(js['region_id'],js['name'])
-    resp = make_response(0,200)
+    resp = make_response(0, 200)
     return resp
 
 
