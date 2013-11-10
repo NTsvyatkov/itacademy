@@ -171,3 +171,8 @@ input[type="button"]:active{ margin-top:1px; }
 
 
 }
+.by_form{
+    width:180px;
+    padding:10px;
+    margin:auto;
+}

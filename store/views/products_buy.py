@@ -7,11 +7,6 @@ from views import app
 from models.product_dao import Product
 
 
-#@app.route('/buygrid')
-#def buy_product():
-#    return render_template('products_buy.html')
-
-
 @app.route('/buy', methods = ['GET'])
 def buy():
     list = list_products()
@@ -19,6 +14,13 @@ def buy():
     for i in list:
         array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
     return make_response(jsonify(products=array),200)
+
+
+@app.route('/buygrid', methods = ['POST'])
+def buyPost():
+    print(request.form)
+    return render_template('product_buy.html')
+
 
 
 @app.route('/buygrid', methods = ['POST'])
@@ -38,15 +40,16 @@ def filterBuyProduct():
     for i in list:
         array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
     return make_response(jsonify(products=array),200)
-    #return make_response(render_template('products_buy.html'),jsonify(products=array),200)
+    #return make_response(render_template('product_buy.html'),jsonify(products=array),200)
+
 
 
 
 @app.route('/buygrid')
-@app.route('/buygrid/<int:page>')
+#@app.route('/buygrid/<int:page>')
 def buyProducts(page=1):
-    all_rec = list_products()
-    pagination = Pagination(5, all_rec, page)
-    products = pagination.pager()
-    return render_template('products_buy.html', products=products, pagination=pagination)
-    #return render_template('products_buy.html')
+    #all_rec = list_products()
+    #pagination = Pagination(5, all_rec, page)
+    #products = pagination.pager()
+    #return render_template('product_buy.html', products=products, pagination=pagination)
+    return render_template('product_buy.html')
