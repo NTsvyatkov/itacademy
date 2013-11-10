@@ -8,7 +8,7 @@ from business_logic.validation import ValidationException
 def create_user():
         return render_template('region.html',)
 
-@app.route('/region', methods = ['GET'])
+@app.route('/api/regions', methods = ['GET'])
 def regions():
     regions_list = getlistRegion()
     regions_arr=[]
@@ -17,7 +17,7 @@ def regions():
     return make_response(jsonify(regions=regions_arr),200)
 
 
-@app.route('/region/<int:id>', methods=['GET'])
+@app.route('/api/regions/<int:id>', methods=['GET'])
 def regions_id(id):
     i=getRegionByID(request.get['id'])
     region ={'region_id': i.region_id, 'name': i.name}
@@ -25,7 +25,7 @@ def regions_id(id):
     return resp
 
 
-@app.route('/region', methods = ['POST'])
+@app.route('/api/regions', methods = ['POST'])
 def regions_post():
     js = request.json()
     createRegion(js['region_id'],js['name'])
@@ -33,14 +33,14 @@ def regions_post():
     return resp
 
 
-@app.route('/region/<int:id>', methods=['DELETE'])
+@app.route('/api/regions/<int:id>', methods=['DELETE'])
 def regions_id_delete(id):
     deleteRegion(id)
     resp = make_response(jsonify({'message':'success'}),200)
     return resp
 
 
-@app.route('/region', methods = ['PUT'])
+@app.route('/api/regions', methods = ['PUT'])
 def regions_update():
     js = request.get_json()
     updateRegion(js['region_id'],js['name'])
