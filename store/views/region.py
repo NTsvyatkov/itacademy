@@ -5,7 +5,7 @@ from business_logic.region_manager import getlistRegion, createRegion, updateReg
 from business_logic.validation import ValidationException
 
 @app.route('/region.html', methods=('GET', 'POST'))
-def create_user():
+def region():
         return render_template('region.html',)
 
 @app.route('/api/regions', methods = ['GET'])

@@ -1,4 +1,4 @@
-from views import app
+
 
 from flask import Flask, jsonify, render_template, request, make_response
 from models.user_dao import UserDao
