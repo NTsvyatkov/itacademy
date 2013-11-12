@@ -8,21 +8,21 @@
         } else {
         return false;
     }};
-    function create_select(){
+    //function create_select(){
         $.ajax({
             dataType: "json",
             url: '/product',
             type: 'GET',
-            data: json_value,
             contentType: "application/json",
-            success:function(json)
-                $.each(json.products, function(json){
-                $('#id').append('<option value="' + json.products[i].dimension + '"></option>');
-        })
-    });
-    };
+            success:function(json) {
+                $.each(json.products, function(i, pr){
+                    $('#dimension').append('<option value="' + pr.dimension + '">' + pr.dimension + '</option>');
+                })
+            }
+        });
+    //};
 
-    $.ajax({
+   /* $.ajax({
         dataType: 'json',
         type: "POST",
         url: "/product",
@@ -37,7 +37,7 @@
 
         success: function(json){
         }
-    });
+    });*/
 </script>
 
 <style type="text/css">
@@ -75,7 +75,7 @@
 
     <h2>Dimension*</h2>
 
-    <select id="id" name="dimension">
+    <select id="dimension" name="dimension">
     <option></option>
 
 </select>

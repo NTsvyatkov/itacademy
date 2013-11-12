@@ -74,7 +74,7 @@ body {font: 18px Arial, Helvetica, sans-serif; background: #9b9b9b;
 
 
 
-form                       { width:480px;padding:0 90px 20px;margin:auto;background:#ecf2f6; }
+form                       { width:580px;padding:0 170px 20px;margin:auto;background:#ecf2f6; }
 
 label                      { cursor:pointer;display:block; }
 input[type="text"]         { width:300px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
