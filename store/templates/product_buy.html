@@ -189,11 +189,6 @@
 
                 <div style="text-align: center">
 
-                    {% if pagination.has_prev %}<a href="{{ url_for('buygrid', page = 1) }}"> First </a>{% else %} First{% endif %} |
-                    {% if pagination.has_prev %}<a href="{{ url_for('buygrid', page = pagination.prev_num) }}"> Prev</a>{% else %} Prev{% endif %} |
-                    Page #{{pagination.page}} of {{pagination.pages}} |
-                    {% if pagination.has_next %}<a href="{{ url_for('productgrid', page = pagination.next_num) }}">Next </a>{% else %}Next {% endif %} |
-                    {% if pagination.has_next %}<a href="{{ url_for('productgrid', page = pagination.pages) }}">Last </a>{% else %}Last {% endif %}
 
                 </div>
 
