@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 from flask import render_template, request, session, escape
 from models.user_dao import UserDao
-from views import app
+from flask_bootstrap import app
 
 
 @app.route('/')

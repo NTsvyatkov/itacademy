@@ -60,6 +60,11 @@ def err_han(e):
     error_dict = {'message': e.message}
     return make_response(jsonify(error_dict), 404)
 
+@app.errorhandler(BaseException)
+def err_han2(e):
+    error_dict = {'message': e.message}
+    return make_response(jsonify(error_dict), 500)
+
 #@app.route('/productgrid')
 #def productgrid():
 #   return render_template('product_grid.html')
