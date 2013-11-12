@@ -3,7 +3,7 @@ from flask import jsonify, render_template, request, make_response
 from models.product_dao import Product
 from flask_bootstrap import app
 from maintenance.pager import Pagination
-from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
+from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product, update_product, get_product_by_id
 from business_logic.validation import ValidationException
 
 @app.route('/CreateProduct.html', methods=('GET', 'POST'))
@@ -25,6 +25,14 @@ def products():
     for i in products_list:
         products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
     return make_response(jsonify(products=products_arr),200)
+
+@app.route('/dimension', methods = ['GET'])
+def dimensions():
+    dimensions_list = list_dimensions()
+    dimensions_arr=[]
+    for i in dimensions_list:
+        dimensions_arr.append({'id':i.id,'name':i.name})
+    return make_response(jsonify(dimensions=dimensions_arr),200)
 
 
 @app.route('/product/<int:id>', methods=['GET'])

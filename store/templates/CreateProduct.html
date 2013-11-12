@@ -8,14 +8,14 @@
         } else {
         return false;
     }};
-        $.ajax({
+    $.ajax({
             dataType: "json",
-            url: '/product',
+            url: '/dimension',
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
-                $.each(json.products, function(i, pr){
-                    $('#dimension').append('<option value="' + pr.dimension + '">' + pr.dimension + '</option>');
+                $.each(json.dimensions, function(i, pr){
+                    $('#dimension').append('<option value="' + pr.name + '">' + pr.name + '</option>');
                 })
             }
         });
@@ -57,7 +57,7 @@
     <h2>Dimension*</h2>
 
     <select id="dimension" name="dimension">
-    <option></option>
+    <option>-Select Value-</option>
 
 </select>
 
