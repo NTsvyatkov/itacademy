@@ -3,7 +3,7 @@ from sqlalchemy import and_
 from flask import render_template, request, make_response, jsonify
 from business_logic.product_manager import list_products
 from maintenance.pager import Pagination
-from views import app
+from flask_bootstrap import app
 from models.product_dao import Product
 
 
