@@ -1,24 +1,19 @@
-
 {% extends "layout.html" %}
-
-
-
-{% block create_user %}
+{% block body %}
 <style type="text/css">
 div { clear:both;position:relative; }
-
 </style>
+</br></br></br></br>
 <form id="info"  name="form"  class = "form" method ="POST"  >
-        <div style = "height: 10px;"></div>
+        <div style = "height: 15px;"></div>
     <table>
-      <!-- user login-->
         <tr>
 
 	   <td>
 		 <div class ="user_name"> <div id="name-wrap" class="slider">
 	           <label for="name">User_name</label>
 
-              <input id="name" name="name" type="text" value="" maxlength="50">
+              <input id="name" name="name" type="text" value=""maxlength="50">
        </div>
        </div>
            <div style = "height: 10px;"></div>
@@ -236,4 +231,4 @@ $('#close').click(function (){
 
 
     </script>
-{% endblock%}
+{% endblock body  %}

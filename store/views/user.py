@@ -12,6 +12,10 @@ from business_logic.validation import ValidationException, NotFoundException
 def create_user():
         return render_template('create_user.html',)
 
+@app.route('/search_user.html', methods=('GET', 'POST'))
+def search_user():
+        return render_template('search_user.html',)
+
 @app.route('/usergrid')
 def usergrid():
         return render_template('search_user.html',)

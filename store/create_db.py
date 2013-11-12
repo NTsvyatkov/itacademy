@@ -5,7 +5,7 @@ from models.order_dao import Order
 from models import Base
 
 
-mysql_config='mysql+mysqldb://root:111@localhost/'
+mysql_config='mysql+mysqldb://root:080388@localhost/'
 engine = create_engine(mysql_config)
 engine.execute("CREATE DATABASE store_DB ")
 engine.execute("USE store_DB")

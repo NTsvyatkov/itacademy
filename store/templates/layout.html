@@ -25,16 +25,24 @@
 
   </head>
   <body>
-<div id="menu">
+{% block bar %}
+<ul id="menu">
+<li><a href="login(2).html" title="Home"><img src="../static/images/home.png" alt="Home" class="home" /></a></li>
+<li><a href="create_user.html" title="Create User">Create User</a></li>
+<li><a href="CreateProduct.html" title="Create Product">Create Product</a></li>
+<li><a href="search_user.html" title="Search User">Search User</a></li>
+<li><a href="product_grid.html" title="product_grid">Products</a></li>
+<li><a href="product_buy.html" title="product_buy">Product buy</a></li>
 
-            <ul class="nav">
-              <li id="li-TableProduct"><a href="/TableProduct">Products</a></li>
-              <li id="li-CreateUser"><a href="/CreateUser">Create User</a></li>
-              <li id="li-CreateProduct"><a href="/CreateProduct">Create Product</a></li>
-            </ul>
-</div>
-{% block create_user  %}
-{% endblock    %}
+</ul>
+
+{% endblock bar %}
+{% block body %}
+{% block pagination %}
+
+{% endblock pagination %}
+
+{% endblock body %}
 
 
   </body>

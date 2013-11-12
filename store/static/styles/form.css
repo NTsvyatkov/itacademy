@@ -1,5 +1,4 @@
 
-body                       { font:12px/1.3 Arial, Sans-serif; }
 form                       { width:380px;padding:0 90px 20px;margin:auto;background:#f7f7f7;border:1px solid #ddd; }
 div                        { clear:both;position:relative;margin:0 0 10px; }
 label                      { cursor:pointer;display:block; }
@@ -12,10 +11,8 @@ input[type="submit"]       { cursor:pointer;border:1px solid #999;padding:5px;-m
 input[type="submit"]:hover,
 input[type="submit"]:focus { border-color:#333;background:#ddd; }
 input[type="submit"]:active{ margin-top:1px; }
-</style>
 
-* {margin:0; padding:0; outline:none}
-body {Verdana,Arial; margin:25px; background:#fff url(../images/bg.gif) repeat-x; color:#091f30}
+
 .container {
   position: relative;
   width: 85px;

@@ -1,43 +1,88 @@
 {% extends "layout.html" %}
 {% block body %}
-    <script src="{{ url_for('static', filename='js/jquery-1.5.2.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/jquery.validate.min.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/myscripts.js') }}"></script>
+
+<script type="text/javascript">
+    function confirmDelete() {
+        if (confirm("All fields will be cleared. Do you want to continue?")) {
+        return true;
+        } else {
+        return false;
+    }};
+    function create_select(){
+        $.ajax({
+            dataType: "json",
+            url: '/product',
+            type: 'GET',
+            data: json_value,
+            contentType: "application/json",
+            success:function(json)
+                $.each(json.products, function(json){
+                $('#id').append('<option value="' + json.products[i].dimension + '"></option>');
+        })
+    });
+    };
+
+    $.ajax({
+        dataType: 'json',
+        type: "POST",
+        url: "/product",
+        data:JSON.stringify({
+                name:$('input[name="name"]').val(),
+                description: $('input[name="description"]').val(),
+                price: $('input[name="price"]').val(),
+                dimension: $('input[name="id"]').val()
+               }),
+        contentType: 'application/json;',
+
+
+        success: function(json){
+        }
+    });
+</script>
+
 <style type="text/css">
-div { clear:both;position:relative;margin:0 0 10px; }
-.error{
-  color: red;
+    div { clear:both;position:relative; }
 </style>
 
-    <form id="info" class="CreatePro" action="{{ url_for('product12') }}" method="Post">
-	</br><h1>Create Product</h1></br>
-    <div  id="name-wrap" class="slider">
-        <label for="name">Name*</label>
-        <input type="text" id="name" name="name">
-    </div>
+    <form id="info"  name="form"  class = "form" method ="POST"  >
+        <div style = "height: 10px;"></div>
+    <h1>Create Product</h1>
+		 <div class ="product_name"> <div id="product_name-wrap" class="slider">
+	           <label for="product_name">Name*</label>
+
+              <input id="product_name" name="product_name" type="text" value=""maxlength="100">
+       </div>
+       </div>
+           <div style = "height: 10px;"></div>
+
+              <div class = "error_user_name"></div>
+
 
     <div id="description-wrap"  class="slider">
         <label for="description">Description</label>
         <textarea type="text" rows="6" cols="36" name="description" id="description"></textarea>
     </div>
 
-    <div id="price-wrap"  class="slider">
-        <label for="price">Price*</label>
-        <input type="text" id="price" name="price">
-    </div>
+		 <div class ="price"> <div id="price-wrap" class="slider">
+	           <label for="price">Price*</label>
+
+              <input id="price" name="price" type="text" value=""maxlength="100">
+       </div>
+       </div>
+           <div style = "height: 10px;"></div>
+
+              <div class = "error_user_name"></div>
 
     <h2>Dimension*</h2>
 
-    <select id="id" name="id">
-    <option value="">Select value</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    </select></br></br></br></br></br></br>
+    <select id="id" name="dimension">
+    <option></option>
+
+</select>
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel">
-     <input type="submit" id="btn" name="btn" value="Create">
+    <input type="button" value ="Create" class="button" onclick="return validate_form();" id ="post_form">
     <script type="text/javascript">
          function confirmDelete() {
     if (confirm("All fields will be cleared. Do you want to continue?")) {

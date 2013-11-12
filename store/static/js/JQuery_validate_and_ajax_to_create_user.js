@@ -54,6 +54,7 @@ var result_user_name = user_name.match(regV_user_name);
             return false;
     }
 
+
 var last_name =   document.form.last_name.value;
        if (last_name == ""){
        $(".error_last_name").html("'Last Name is required field.'").css({'color':'red'});

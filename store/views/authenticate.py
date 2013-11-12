@@ -5,6 +5,7 @@ from views import app
 
 
 @app.route('/')
+
 @app.route('/login')
 def login():
     if 'username' in session:
@@ -24,7 +25,6 @@ def login_authenticate():
         else:
             error = 'Invalid username/password'
             return render_template('login(2).html', error=error)
-
 
 @app.route('/logout')
 def logout():

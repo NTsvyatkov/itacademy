@@ -6,6 +6,18 @@ from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, create_product, delete_product, update_product, get_product_by_id
 from business_logic.validation import ValidationException
 
+@app.route('/CreateProduct.html', methods=('GET', 'POST'))
+def CreateProduct():
+        return render_template('CreateProduct.html',)
+
+@app.route('/product_grid.html', methods=('GET', 'POST'))
+def product_grid():
+        return render_template('product_grid.html',)
+
+@app.route('/product_buy.html', methods=('GET', 'POST'))
+def product_buy():
+        return render_template('product_buy.html',)
+
 @app.route('/product', methods = ['GET'])
 def products():
     products_list = list_products()
@@ -18,7 +30,7 @@ def products():
 @app.route('/product/<int:id>', methods=['GET'])
 def products_id(id):
     i=get_product_by_id(request.get['id'])
-    product ={'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description, 'dimension': i.description}
+    product ={'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description, 'dimension': i.dimension}
     resp = make_response(jsonify(products=product),200)
     return resp
 
