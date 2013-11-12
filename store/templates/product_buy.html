@@ -1,11 +1,9 @@
-<html xmlns="http://www.w3.org/1999/html">
-    <head>
-        <link href="static/styles/style.css" rel="stylesheet" type="text/css" />
-        <script type="text/javascript" src="static/js/jquery-1.7.2.js"></script>
+{% extends "layout.html" %}
+{% block body %}
 
         <script type="text/javascript">
 
-            var count_tr=25;
+            var count_tr=45;
             var tr = [];
 
 
@@ -29,7 +27,7 @@
 
             function clearing_tr(i)
                 {
-                    for (var j=0; j<=7; j++)
+                    for (var j=0; j<=4; j++)
                         {
                             tr[i].cells[j].innerHTML='';
                         }
@@ -38,7 +36,7 @@
 
             function clearing_grid()
                 {
-                    for (var n=2 ; n<=count_tr; n++)
+                    for (var n=1 ; n<=count_tr; n++)
                         {
                             clearing_tr(n);
                         }
@@ -52,7 +50,7 @@
 
                 }
 
-            function create_entity(){
+            function createEntity(){
                 $.ajax({
                 dataType: "json",
                 url: '/buy',
@@ -67,20 +65,18 @@
                         for (var product_k in json.products)
                         {
                             k++;
-                            if (k>count_tr) break;
                             tr[k].cells[0].innerHTML = json.products[product_k].name;
                             tr[k].cells[1].innerHTML = json.products[product_k].description;
                             tr[k].cells[2].innerHTML = json.products[product_k].price;
-                            tr[k].cells[3].innerHTML = "<input type='text' id = 'output' style='width:50px' value = '1' alt=" + k + ">";
+                            tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px' value = '1' alt=" + k + ">";
                             tr[k].cells[4].innerHTML = "<input type='button' value='Add to Card' id='button'  alt=" + k + ">";
                             tr[k].cells[3].abbr=k;
                             tr[k].cells[4].abbr=k;
-                            tr[k].cells[4].onclick= function add_tr2()
+                            tr[k].cells[4].onclick= function()
                                 {
-//                                    var id = document.getElementById('output').value
-//                                    var id = tr[this.abbr].cells[3].innerHTML
-                                    var id = json.products[product_k].id;
-                                    buyProduct(id,this.abbr)
+                                    var value = document.getElementById('output'+this.abbr).value
+                                    var id = json.products[this.abbr-1].id;
+                                    buyProduct(id, value)
                                 }
                         }
                         k=0;
@@ -89,31 +85,61 @@
                 })
             }
 
+            $('#search_button').click(function(){
+              var name = document.getElementById('name').value
+              var start_prise = document.getElementById('start_prise').value
+              var end_prise = document.getElementById('end_prise').value
+//              alert(name)
+//              alert(start_prise)
+//              alert(end_prise)
+              createEntityByFilter(name, start_prise, end_prise)
+            })
+
+
 
 //            $('#search_button').click(function(){
-            function create_entity_filter(){
+            function createEntityByFilter(name, start_prise, end_prise){
                 $.ajax({
                 dataType: "json",
-                url: '/buygrid',
+                url: '/buy/'+name+'/'+start_prise+'/'+end_prise,
                 type: 'POST',
-                data: json_value,
                 contentType: "application/json",
                 success: function(json)
                     {
-                        create_entity()
+                        deleting_grid()
+                        creat_grid(json.products.length)
+                        /*Create table */
+                        for (var product_k in json.products)
+                        {
+                            k++;
+                            tr[k].cells[0].innerHTML = json.products[product_k].name;
+                            tr[k].cells[1].innerHTML = json.products[product_k].description;
+                            tr[k].cells[2].innerHTML = json.products[product_k].price;
+                            tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px' value = '1' alt=" + k + ">";
+                            tr[k].cells[4].innerHTML = "<input type='button' value='Add to Card' id='button'  alt=" + k + ">";
+                            tr[k].cells[3].abbr=k;
+                            tr[k].cells[4].abbr=k;
+                            tr[k].cells[4].onclick= function()
+                                {
+                                    var value = document.getElementById('output'+this.abbr).value
+                                    var id = json.products[this.abbr-1].id;
+                                    buyProduct(id, value)
+                                }
+                        }
+                        k=0;
+                        /*End creating table*/
+
                     }
+
                 })
             }
 
 
-            function buyProduct(id)
+            function buyProduct(id,value)
             {
-                if (id=='') id=0;
-                form_value = {id : id }
-                json_value = JSON.stringify(form_value);
                 $.ajax({
                     dataType: "json",
-                    url: '/buy/'+id,
+                    url: '/buy/'+id+'/'+value,
                     type: 'POST',
                     /*data: {id:id}*/
                     contentType: "application/json",
@@ -141,26 +167,24 @@
             form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
             json_value = JSON.stringify(form_value);
 
-            create_entity();
-
-            //create_entity_filter()
+            createEntity();
 
 
             $('#clr').click(deleting_grid);
             });
         </script>
-    </head>
 
-    <body>
+
+
         <div class="">
             <div class="">
                 <div class=" ">
                     <span>Filter</span>
-                    <form class='grid' action="" method="POST">
-                        <span>Keyword <input type="text" name = 'name' style="width:150px" /></span>
-                        <span>Prise <input type="text" name = 'start_prise' style="width:50px" /> - </span>
-                        <span><input type="text" name = 'end_prise' style="width:50px" /> </span>
-                        <span><input type="submit" value="search" id='search_button'></span>
+                    <form class='grid' action="">
+                        <span>Keyword <input type="text" id = 'name' style="width:150px" /></span>
+                        <span>Prise <input type="text" id = 'start_prise' style="width:50px" /> - </span>
+                        <span><input type="text" id = 'end_prise' style="width:50px" /> </span>
+                        <span><input type="button" value="search" id='search_button'></span>
                     </form>
                 </div>
             </div>
@@ -194,5 +218,4 @@
 
             </div>
         </div>
-    </body>
-</html>
+{% endblock body %}
