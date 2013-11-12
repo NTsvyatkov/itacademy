@@ -1,6 +1,6 @@
 
 function validate_form(){
-var user_name =   document.form.name.value;
+var user_name =   document.form.login.value;
 
         if (user_name == ""){
                 $(".error_user_name").html("'User Name is required field.'").css({'color':'red'});
@@ -156,7 +156,7 @@ var region =   document.form.region.value;
         type: "POST",
         url: "/user",
         data:JSON.stringify({
-                name:$('input[name="name"]').val(),
+                login:$('input[name="login"]').val(),
                 first_name: $('input[name="first_name"]').val(),
                 last_name: $('input[name="last_name"]').val(),
                 password: $('input[name="password"]').val(),
