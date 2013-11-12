@@ -8,7 +8,6 @@
         } else {
         return false;
     }};
-    //function create_select(){
         $.ajax({
             dataType: "json",
             url: '/product',
@@ -20,24 +19,6 @@
                 })
             }
         });
-    //};
-
-   /* $.ajax({
-        dataType: 'json',
-        type: "POST",
-        url: "/product",
-        data:JSON.stringify({
-                name:$('input[name="name"]').val(),
-                description: $('input[name="description"]').val(),
-                price: $('input[name="price"]').val(),
-                dimension: $('input[name="id"]').val()
-               }),
-        contentType: 'application/json;',
-
-
-        success: function(json){
-        }
-    });*/
 </script>
 
 <style type="text/css">
@@ -82,7 +63,7 @@
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel">
-    <input type="button" value ="Create" class="button" onclick="return validate_form();" id ="post_form">
+    <input type="button" value ="Create" class="button" onclick="return validate_form2()" id ="post_form">
     <script type="text/javascript">
          function confirmDelete() {
     if (confirm("All fields will be cleared. Do you want to continue?")) {
