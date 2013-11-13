@@ -59,7 +59,7 @@
  function create_entity(){
        $.ajax({
        dataType: "json",
-        url: '/product',
+        url: '/api/product',
         type: 'GET',
         data: json_value,
         contentType: "application/json",
@@ -123,7 +123,7 @@
    json_value = JSON.stringify(form_value);
    $.ajax({
        dataType: "json",
-        url: '/product/'+id,
+        url: '/api/product/'+id,
         type: 'DELETE',
         /*data: {id:id}*/
         contentType: "application/json",

@@ -18,7 +18,7 @@ def product_grid():
 def product_buy():
         return render_template('product_buy.html',)
 
-@app.route('/product', methods = ['GET'])
+@app.route('/api/product', methods = ['GET'])
 def products():
     products_list = list_products()
     products_arr=[]
@@ -26,7 +26,7 @@ def products():
         products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
     return make_response(jsonify(products=products_arr),200)
 
-@app.route('/dimension', methods = ['GET'])
+@app.route('/api/dimension', methods = ['GET'])
 def dimensions():
     dimensions_list = list_dimensions()
     dimensions_arr=[]
@@ -35,31 +35,31 @@ def dimensions():
     return make_response(jsonify(dimensions=dimensions_arr),200)
 
 
-@app.route('/product/<int:id>', methods=['GET'])
+@app.route('/api/product/<int:id>', methods=['GET'])
 def products_id(id):
     i=get_product_by_id(request.get['id'])
     product ={'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description, 'dimension': i.dimension}
     resp = make_response(jsonify(products=product),200)
     return resp
 
-@app.route('/product/<int:id>', methods=['DELETE'])
+@app.route('/api/product/<int:id>', methods=['DELETE'])
 def products_id_delete(id):
     delete_product(id)
     resp = make_response(jsonify({'message':'success'}),200)
     return resp
 
 
-@app.route('/product', methods = ['POST'])
+@app.route('/api/product', methods = ['POST'])
 def products_post():
     js = request.get_json()
     create_product(js['name'],js['description'],js['price'],js['id'])
     resp = make_response(0,201)
     return resp
 
-@app.route('/product', methods = ['PUT'])
+@app.route('/api/product', methods = ['PUT'])
 def products_update():
     js = request.get_json()
-    update_product(js['id'],js['name'],js['description'],js['price'],js['dim_id'])
+    update_product(js['id'],js['name'],js['description'],js['price'],js['dimension'])
     resp = make_response(0,200)
     return resp
 
