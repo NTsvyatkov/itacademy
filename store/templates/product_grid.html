@@ -23,6 +23,7 @@
               tr[i].appendChild(document.createElement('TD'));
              }
         }
+      $( "tr:even" ).css( "background-color", "#c0c0c0" );
     }
 
     creat_grid(count_tr);
@@ -156,10 +157,11 @@
 
   <div id="products_block">
       <div id="products_filter">
-          <span>Filter List</span>
-        <div class="product_filter_in">
-         <form class='form' style="width:40%; margin:0 auto;">
 
+        <div class="product_filter_in">
+
+         <form class='form' style="width:70%; margin:0 auto; padding: 5px; ">
+            <div class="ProductTitle">Filter List</div>
              <div class="field">
                   <lable>Name: </lable>
                   <select id="name_options">

@@ -44,7 +44,7 @@ filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', end
   }
 #menu a:hover{
 color: gray;
-weight:bold;
+font-weight:bold;
 text-shadow: 5px 5px 5px #484848;
   }
 
@@ -53,18 +53,26 @@ text-shadow: 5px 5px 5px #484848;
  border:0px solid grey;
 }
 
+.ProductTitle{
+ font-weight:bold;
+ font-size:24px;
+ color:#606060;
+ text-shadow: 5px 5px 5px #484848;
+ width:100%;
+}
+
 #products_block{
  width:90%;
  margin:0px auto;
  padding:10px;
- border:1px solid grey;
+ border:0px solid grey;
  }
 
 #products_filter{
  width:80%;
  margin:20px auto;
  padding:10px;
- border:1px solid grey;
+ border:0px solid grey;
  }
 
 .grid img {
@@ -101,7 +109,7 @@ form{
  }
 
 label                      { cursor:pointer;display:block; }
-input[type="text"]         { width:100px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
+input[type="text"]         { width:130px;border:2px solid #999;padding:5px;border-radius:4px; }
 input[type="text"]:focus   { border-color:#777; }
 input[name="zip"]          { width:150px; }
 
@@ -124,15 +132,35 @@ input[type="button"]:focus { border-color:#333;background:#ddd; }
 input[type="button"]:active{ margin-top:1px; }
 
 
+.grid {
+ width:980px;
+ border-left:1px solid #c6d5e1;
+ border-top:1px solid #c6d5e1;
+ border-bottom:none;
+ margin:0 auto 15px;
+ background:#E8E8E8;
+ }
 
+.grid th {
+ background:url(../images/header-bg.gif);
+ text-align:left;
+ color:#cfdce7;
+ border:1px solid #fff;
+ border-right:none;
+  }
 
+.grid th h3 {
+ font-size:14px;
+ padding:6px 8px 8px;
+ }
 
+.grid td {
+ padding:4px 6px 6px;
+ border-bottom:1px solid #c6d5e1;
+ border-right:1px solid #c6d5e1;
+ text-align:center;
+ }
 
-
-.grid {width:980px; border-left:1px solid #c6d5e1; border-top:1px solid #c6d5e1; border-bottom:none; margin:0 auto 15px}
-.grid th {background:url(../images/header-bg.gif); text-align:left; color:#cfdce7; border:1px solid #fff; border-right:none}
-.grid th h3 {font-size:14px; padding:6px 8px 8px}
-.grid td {padding:4px 6px 6px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1; text-align:center;}
 .grid .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
 .grid .desc, .sortable .asc {background:url(../images/header-selected-bg.gif)}
 .grid .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
@@ -142,6 +170,7 @@ input[type="button"]:active{ margin-top:1px; }
 .grid .oddrow td {background:#ecf2f6}
 .grid td.evenselected {background:#ecf2f6}
 .grid td.oddselected {background:#dce6ee}
+
 
 #controls {width:980px; margin:0 auto; height:20px}
 #perpage {float:left; width:200px}
