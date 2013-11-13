@@ -4,7 +4,7 @@ from models.product_dao import Product
 from flask_bootstrap import app
 from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product, update_product, get_product_by_id
-from business_logic.validation import ValidationException
+
 
 @app.route('/CreateProduct.html', methods=('GET', 'POST'))
 def CreateProduct():
@@ -63,15 +63,6 @@ def products_update():
     resp = make_response(0,200)
     return resp
 
-@app.errorhandler(ValidationException)
-def err_han(e):
-    error_dict = {'message': e.message}
-    return make_response(jsonify(error_dict), 404)
-
-@app.errorhandler(BaseException)
-def err_han2(e):
-    error_dict = {'message': e.message}
-    return make_response(jsonify(error_dict), 500)
 
 #@app.route('/productgrid')
 #def productgrid():
