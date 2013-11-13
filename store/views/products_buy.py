@@ -7,7 +7,7 @@ from flask_bootstrap import app
 from models.product_dao import Product
 
 
-@app.route('/buy', methods = ['GET'])
+@app.route('/api/buy', methods = ['GET'])
 def listBuyProducts():
     list = list_products()
     array=[]
@@ -16,14 +16,14 @@ def listBuyProducts():
     return make_response(jsonify(products=array),200)
 
 
-@app.route('/buy/<int:id>/<int:value>', methods = ['POST'])
+@app.route('/api/buy/<int:id>/<int:value>', methods = ['POST'])
 def amountProducts(id, value):
     print(id)
     print(value)
     return make_response(jsonify({'message':'success'}),200)
 
 
-@app.route('/buy/<name>/<start_prise>/<end_prise>', methods = ['POST'])
+@app.route('/api/buy/<name>/<start_prise>/<end_prise>', methods = ['POST'])
 def filterBuyProducts(name, start_prise, end_prise):
 
     #if request.form['name'] and request.form['start_prise'] and request.form['end_prise']:

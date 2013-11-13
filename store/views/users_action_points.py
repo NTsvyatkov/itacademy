@@ -5,7 +5,7 @@ from business_logic.validation import ValidationException
 
 from flask_bootstrap import app
 
-@app.route('/action_point', methods=['GET'])
+@app.route('/api/action_point', methods=['GET'])
 def actionPointList():
     action_point = getListActionPoint()
     action_point_list = []
@@ -14,27 +14,27 @@ def actionPointList():
     return make_response(jsonify(action_point_list=action_point_list), 200)
 
 
-@app.route('/action_point/<int:id>', methods=['GET'])
+@app.route('/api/action_point/<int:id>', methods=['GET'])
 def actionPointByID(id):
     ap_id = getActionPointByID(request.get['id'])
     action_point = {"id": ap_id.action_point_id, "name": ap_id.action_point_name}
     return make_response(jsonify(action_point=action_point), 200)
 
 
-@app.route('/action_point', methods=['POST'])
+@app.route('/api/action_point', methods=['POST'])
 def createActionPoint():
     js = request.get_json()
     createActionPoint(js['id'], js['name'])
     return make_response(201)
 
 
-@app.route('/action_point/<int:id>', methods=['POST'])
+@app.route('/api/action_point/<int:id>', methods=['POST'])
 def deleteActionPoint(id):
     deleteActionPoint(id)
     return make_response(jsonify({'message':'success'}),200)
 
 
-@app.route('/action_point', methods=['PUT'])
+@app.route('/api/action_point', methods=['PUT'])
 def updateActionPoint():
     js = request.get_json()
     updateActionPoint(js['id'], js['name'])

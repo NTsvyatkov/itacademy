@@ -7,7 +7,7 @@ from business_logic.validation import ValidationException, NotFoundException
 from flask_bootstrap import app
 
 
-@app.route('/roles', methods=['GET'])
+@app.route('/api/roles', methods=['GET'])
 def rolesList():
     roles = getlistRole()
     roles_list = []
@@ -16,26 +16,26 @@ def rolesList():
     return make_response(jsonify(roles=roles_list), 200)
 
 
-@app.route('/roles/<int:id>', methods=['GET'])
+@app.route('/api/roles/<int:id>', methods=['GET'])
 def rolesByID(id):
     role = getRoleByID(request.get['id'])
     roles = {"id": role.role_id, "name": role.name}
     return make_response(jsonify(roles=roles), 200)
 
 
-@app.route('/roles', methods=['POST'])
+@app.route('/api/roles', methods=['POST'])
 def createRole():
     createNewRole(request.get_json(['id']), request.get_json(['name']))
     return make_response(201)
 
 
-@app.route('/roles/<int:id>', methods=['DELETE'])
+@app.route('/api/roles/<int:id>', methods=['DELETE'])
 def deleteRole(id):
     deleteRole(id)
     return make_response(jsonify({'message':'success'}), 200)
 
 
-@app.route('/roles', methods=['PUT'])
+@app.route('/api/roles', methods=['PUT'])
 def updateRole():
     updateRole(request.get_json(['id']), request.get_json(['name']))
     return make_response(200)

@@ -45,7 +45,7 @@ var dimension =   document.form.dimension.value;
     $.ajax({
         dataType: 'json',
         type: "POST",
-        url: "/product",
+        url: "/api/product",
         data:JSON.stringify({
                 name:$('input[name="product_name"]').val(),
                 description: $('input[name="description"]').val(),

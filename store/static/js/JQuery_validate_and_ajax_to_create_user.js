@@ -154,7 +154,7 @@ var region =   document.form.region.value;
     $.ajax({
         dataType: 'json',
         type: "POST",
-        url: "/user",
+        url: "/api/user",
         data:JSON.stringify({
                 login:$('input[name="login"]').val(),
                 first_name: $('input[name="first_name"]').val(),

@@ -57,7 +57,7 @@
  function create_entity(){
        $.ajax({
        dataType: "json",
-        url: '/user',
+        url: '/api/user',
         type: 'GET',
         data: json_value,
         contentType: "application/json",
@@ -118,7 +118,7 @@ function delete_id(id,tr_id)
    json_value = JSON.stringify(form_value);
    $.ajax({
        dataType: "json",
-        url: '/user/'+id,
+        url: '/api/user/'+id,
         type: 'DELETE',
         /*data: {id:id}*/
         contentType: "application/json",

@@ -53,7 +53,7 @@
             function createEntity(){
                 $.ajax({
                 dataType: "json",
-                url: '/buy',
+                url: '/api/buy',
                 type: 'GET',
                 data: json_value,
                 contentType: "application/json",
@@ -101,7 +101,7 @@
             function createEntityByFilter(name, start_prise, end_prise){
                 $.ajax({
                 dataType: "json",
-                url: '/buy/'+name+'/'+start_prise+'/'+end_prise,
+                url: '/api/buy/'+name+'/'+start_prise+'/'+end_prise,
                 type: 'POST',
                 contentType: "application/json",
                 success: function(json)
@@ -139,7 +139,7 @@
             {
                 $.ajax({
                     dataType: "json",
-                    url: '/buy/'+id+'/'+value,
+                    url: '/api/buy/'+id+'/'+value,
                     type: 'POST',
                     /*data: {id:id}*/
                     contentType: "application/json",

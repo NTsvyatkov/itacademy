@@ -21,7 +21,7 @@ def usergrid():
         return render_template('search_user.html',)
 
 
-@app.route('/user', methods = ['GET'])
+@app.route('/api/user', methods = ['GET'])
 def users():
     user_list = getListUser()
     users_arr=[]
@@ -32,7 +32,7 @@ def users():
     return make_response(jsonify(users=users_arr),200)
 
 
-@app.route('/user/<int:id>', methods = ['GET'])
+@app.route('/api/user/<int:id>', methods = ['GET'])
 def users_id(id):
     i=getUserByID(request.get['id'])
     user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':i.role_id}
@@ -46,14 +46,14 @@ def users_id_delete(id):
     return resp
 
 
-@app.route('/user', methods = ['POST'])
+@app.route('/api/user', methods = ['POST'])
 def users_post():
     js = request.get_json()
     createUser(js['user_id'],js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
     resp = make_response(0,201)
     return resp
 
-@app.route('/user', methods = ['PUT'])
+@app.route('/api/user', methods = ['PUT'])
 def users_update():
     js = request.get_json()
     updateUser(js['user_id'],js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
