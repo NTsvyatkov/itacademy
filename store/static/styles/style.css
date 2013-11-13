@@ -1,10 +1,20 @@
 
-body {font: 18px Arial, Helvetica, sans-serif; background: #9b9b9b;
+body {
+ font: 18px Arial, Helvetica, sans-serif;
+ background-image:url(../images/body-background.png);
+ padding:0px;
+ margin:0px;
   }
 #menu  {font: 15px Arial, Helvetica, sans-serif;
-  background-image:url('../images/bc_bg.png');
-  background-repeat:repeat-x;
-  height:30px;
+  background: rgb(226,226,226); /* Old browsers */
+background: -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%, rgba(209,209,209,1) 51%, rgba(254,254,254,1) 100%); /* FF3.6+ */
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,1)), color-stop(51%,rgba(209,209,209,1)), color-stop(100%,rgba(254,254,254,1))); /* Chrome,Safari4+ */
+background: -webkit-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* Chrome10+,Safari5.1+ */
+background: -o-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* Opera 11.10+ */
+background: -ms-linear-gradient(top,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* IE10+ */
+background: linear-gradient(to bottom,  rgba(226,226,226,1) 0%,rgba(219,219,219,1) 50%,rgba(209,209,209,1) 51%,rgba(254,254,254,1) 100%); /* W3C */
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',GradientType=0 ); /* IE6-9 */
+  height:50px;
   line-height:30px;
   color:#9b9b9b;
   border:solid 1px #cacaca;
@@ -13,11 +23,14 @@ body {font: 18px Arial, Helvetica, sans-serif; background: #9b9b9b;
   margin:0px;
   padding:0px;
   }
-  #menu li {list-style-type:none;
+  #menu li {
+  list-style-type:none;
   float:left;
   padding-left:10px;
+  tex-align:center;
+  line-height:50px;
   }
-  #menu a {height:30px;
+  #menu a {height:50px;
   display:block;
   background-image:url('../images/bc_separator.png');
   background-repeat:no-repeat;
@@ -29,7 +42,10 @@ body {font: 18px Arial, Helvetica, sans-serif; background: #9b9b9b;
   .home {border:none;
   margin: 8px 0px;
   }
-#menu a:hover{color: gray;
+#menu a:hover{
+color: gray;
+weight:bold;
+text-shadow: 5px 5px 5px #484848;
   }
 
 
@@ -76,7 +92,13 @@ select{
 width:80px;
 }
 
-form                       { width:580px;padding:0 170px 20px;margin:auto;background:#ecf2f6; }
+form{
+ width:580px;
+ padding:0 170px 20px;
+ margin:auto;
+ background-image:url(../images/fbg.png);
+ border:2px solid #707070 ;
+ }
 
 label                      { cursor:pointer;display:block; }
 input[type="text"]         { width:100px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
