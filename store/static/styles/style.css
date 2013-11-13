@@ -33,51 +33,53 @@ body {font: 18px Arial, Helvetica, sans-serif; background: #9b9b9b;
   }
 
 
-        #product_table{
-        border:0px solid grey;
-        }
+#product_table{
+ border:0px solid grey;
+}
 
-        #products_block{
-        width:90%;
-        margin:0px auto;
-        padding:10px;
-        border:1px solid grey;
-        }
+#products_block{
+ width:90%;
+ margin:0px auto;
+ padding:10px;
+ border:1px solid grey;
+ }
 
-        #products_filter{
-        width:80%;
-        margin:20px auto;
-        padding:10px;
-        border:1px solid grey;
+#products_filter{
+ width:80%;
+ margin:20px auto;
+ padding:10px;
+ border:1px solid grey;
+ }
 
-        }
+.grid img {
+ width:20px;
+  }
 
+.product_filter_in{
+ width:100%;
+ margin-top:10px;
+ }
 
+.field{
+  clear:both;
+  text-align:right;
+  width:350px;
 
-       .grid img {
-        width:20px;
-        }
+  padding-top:5px;
+  }
 
+.field label{
+ float:left;
+  }
 
-        .product_filter_in
-        {
-        width:40%;
-        margin-top:10px;
-        }
-        .field {
-         clear:both;
-         text-align:right;
-         }
-         .field label {
-         float:left;
-         }
-
-
+select{
+width:80px;
+}
 
 form                       { width:580px;padding:0 170px 20px;margin:auto;background:#ecf2f6; }
 
 label                      { cursor:pointer;display:block; }
-input[type="text"]         { width:300px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
+input[type="text"]         { width:100px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
 input[type="text"]:focus   { border-color:#777; }
 input[name="zip"]          { width:150px; }
 
@@ -108,7 +110,7 @@ input[type="button"]:active{ margin-top:1px; }
 .grid {width:980px; border-left:1px solid #c6d5e1; border-top:1px solid #c6d5e1; border-bottom:none; margin:0 auto 15px}
 .grid th {background:url(../images/header-bg.gif); text-align:left; color:#cfdce7; border:1px solid #fff; border-right:none}
 .grid th h3 {font-size:14px; padding:6px 8px 8px}
-.grid td {padding:4px 6px 6px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1}
+.grid td {padding:4px 6px 6px; border-bottom:1px solid #c6d5e1; border-right:1px solid #c6d5e1; text-align:center;}
 .grid .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
 .grid .desc, .sortable .asc {background:url(../images/header-selected-bg.gif)}
 .grid .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
