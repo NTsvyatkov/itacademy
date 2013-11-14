@@ -87,24 +87,17 @@
 
             $('#search_button').click(function(){
               var name = document.getElementById('name').value
-              var start_prise = document.getElementById('start_prise').value
-              var end_prise = document.getElementById('end_prise').value
-//              alert(name)
-//              alert(start_prise)
-//              alert(end_prise)
-              createEntityByFilter(name, start_prise, end_prise)
+              var start_price = document.getElementById('start_price').value
+              var end_price = document.getElementById('end_price').value
+              createEntityByFilter(name, start_price, end_price)
             })
 
 
-
-//            $('#search_button').click(function(){
-            function createEntityByFilter(name, start_prise, end_prise){
-                data = { 'name': name, 'start_prise': start_prise, 'end_prise': end_prise }
+            function createEntityByFilter(name, start_price, end_price){
                 $.ajax({
                 dataType: "json",
-                url: '/api/buy',
-                type: 'POST',
-                data: JSON.stringify(data),
+                url: '/api/buy?name='+name+'&start_price='+start_price+'&end_price='+end_price+'',
+                type: 'GET',
                 contentType: "application/json",
                 success: function(json)
                     {
@@ -139,11 +132,12 @@
 
             function buyProduct(id,value)
             {
+                data = {'value': value}
                 $.ajax({
                     dataType: "json",
-                    url: '/api/buy/'+id+'/'+value,
+                    url: '/api/buy/'+id,
                     type: 'POST',
-                    /*data: {id:id}*/
+                    data: JSON.stringify(data),
                     contentType: "application/json",
                     success: function(json)
                     {
@@ -184,8 +178,8 @@
                     <form class='form' action="">
                          <div class="ProductTitle">Filter</div>
                         <span>Keyword <input type="text" id = 'name' style="width:150px" /></span>
-                        <span>Prise <input type="text" id = 'start_prise' style="width:50px" /> - </span>
-                        <span><input type="text" id = 'end_prise' style="width:50px" /> </span>
+                        <span>Prise <input type="text" id = 'start_price' style="width:50px" /> - </span>
+                        <span><input type="text" id = 'end_price' style="width:50px" /> </span>
                         <span><input type="button" value="search" id='search_button'></span>
                     </form>
                 </div>
@@ -202,7 +196,7 @@
                             Description
                         </th>
                         <th>
-                            Prise
+                            Price
                         </th>
                         <th>
 
@@ -213,9 +207,10 @@
                     </tr>
                 </table>
 
-          <div style="text-align: center"><input type="button" id="prev" value="<">&nbsp
+                <div style="text-align: center"><input type="button" id="prev" value="<">&nbsp
               <input type="button" id="next" value=">"></div>
 
+                </div>
 
             </div>
         </div>

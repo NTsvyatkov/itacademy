@@ -55,6 +55,18 @@ class Product(Base):
     def get_all_products():
         return Product.query.all()
 
+    @staticmethod
+    def listFilterBuyProducts(name, start_price, end_price):
+        query = Product.query
+        if name:
+            query = query.filter(Product.name == name)
+        if start_price:
+            query = query.filter(Product.price >= start_price)
+        if end_price:
+            query = query.filter(Product.price <= end_price)
+        return query.all()
+
+
 
 class Dimension(Base):
     __tablename__ = 'dimensions'

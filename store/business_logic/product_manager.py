@@ -65,12 +65,3 @@ def delete_product(id):
 def list_dimensions():
         d_list = Dimension.get_all_dimensions()
         return d_list
-
-def filterByStartPrise(start_prise):
-    return Product.query.filter(Product.price >= start_prise)
-
-def filterByEndPrise(end_prise):
-    return Product.query.filter(Product.price <= end_prise)
-
-def filterByProductName(name):
-    return Product.query.filter(Product.name == name)
