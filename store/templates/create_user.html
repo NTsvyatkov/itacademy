@@ -229,4 +229,43 @@ $('#close').click(function (){
 
 
     </script>
+
+
+
+        <script>
+
+
+
+$( document ).ready(function() {
+$.ajax({
+       dataType: "json",
+        url: '/api/regions',
+        type: 'GET',
+
+        contentType: "application/json",
+        success: function(data){
+        var regions = document.form.region_data
+        var region = data.length;
+        var opt = 0;
+        for (var i = 0; i < region; i++){
+        opt = new Option( region[i][0], region[i][1] );
+        if( region[i][1] === selected ) {
+          // то помечаем его как выбранный:
+         regions.opt.selected = "selected";
+        }
+
+
+          regions.options.add( opt, i );
+                                      }
+
+
+
+                                }
+
+
+                    });
+
+                                        });
+
+        </script>
 {% endblock body  %}
