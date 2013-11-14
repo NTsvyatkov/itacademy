@@ -10,7 +10,7 @@ RoleDao.createNewRole("Admin")
 RegionDao.createNewRegion("Crimea")
 
 
-UserDao.createNewUser('Max', '111','Maxim','Sidorov', 'max.sidorov@gmail.ru', 1,1)
+UserDao.createNewUser('Anton', '111','Maxim','Sidorov', 'max.sidorov@gmail.ru', 1,1)
 UserDao.createNewUser('Vanya', '111','Ivan','Ivanov', 'vanya@gmail.com', 1,1)
 UserDao.createNewUser('Andrew', '111','Andrew','Petrov', 'andrew@mail.ru', 1,1)
 UserDao.createNewUser('Katya', '111','Ekaterina','Ivanova', 'ekaterina@rambler.com', 1,1)

@@ -6,6 +6,8 @@
 
    var count_tr=25;
    var tr = [];
+   var page = 1;
+
 
  
   $(document).ready (function() {
@@ -137,17 +139,39 @@ function delete_id(id,tr_id)
                        alert(error.message);
                     }
 
-  })
- }
-
-
-
-
-
-
-   $('#clr').click(deleting_grid);
  });
 
+   $('#clr').click(deleting_grid);
+
+  function grid_pagination (){$.ajax({
+        dataType: "json",
+        url: '/api/user/'+page,
+        type: 'GET',
+        contentType: "application/json",
+        success: function(json)
+        {
+           ajax_success(json);
+         }
+      })
+     }
+
+  if (page==1)
+  {grid_pagination ();}
+
+   $('#next').click(function(){
+
+    page=page+1;
+    grid_pagination ()
+    });
+
+    $('#prev').click(function(){
+
+    page=page-1;
+    grid_pagination ()
+    });
+
+
+ }});
    </script>
 
   </head>
@@ -224,10 +248,9 @@ function NewWindow()
 
            </tr>
        </table>
+                           <div style="text-align: center"><input type="button" id="prev" value="<">&nbsp
+              <input type="button" id="next" value=">"></div>
       </div>
-
-
-
 
   </div>
 

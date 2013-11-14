@@ -64,7 +64,7 @@ def products_id_delete(id):
 def products_post():
     js = request.get_json()
     create_product(js['name'],js['description'],js['price'],js['id'])
-    resp = make_response(0,201)
+    resp = make_response('',201)
     return resp
 
 @app.route('/api/product', methods = ['PUT'])
