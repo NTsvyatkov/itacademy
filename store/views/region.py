@@ -28,7 +28,7 @@ def regions_id(id):
 @app.route('/api/regions', methods = ['POST'])
 def regions_post():
     js = request.json
-    createRegion(js['region_id'],js['name'])
+    createRegion(js['name'])
     resp = make_response(0, 201)
     return resp
 

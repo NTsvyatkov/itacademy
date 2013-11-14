@@ -114,12 +114,9 @@ div { clear:both;position:relative; }
                  <div class ="region">
 
 
-                     <select id="region" name="region_id" type ="checkbox">
+                     <select id="region" name="regions_id" type ="checkbox">
                      <option value ="" > Select from the list</option>
-                     <option value="North">North</option>
-                     <option value="South">South</option>
-                     <option value="West">West</option>
-                     <option value="East">East</option>
+
                  </select>
                  </div>
                 <div style = "height: 10px;"></div>
@@ -231,8 +228,7 @@ $('#close').click(function (){
     </script>
 
 
-
-        <script>
+<script>
 
 
 
@@ -244,18 +240,16 @@ $.ajax({
 
         contentType: "application/json",
         success: function(data){
-        var regions = document.form.region_data
-        var region = data.length;
+        var regions_status = document.form.regions_id;
+        var region_length = data.regions.length;
+        var regions_data = data.regions;
         var opt = 0;
-        for (var i = 0; i < region; i++){
-        opt = new Option( region[i][0], region[i][1] );
-        if( region[i][1] === selected ) {
-          // то помечаем его как выбранный:
-         regions.opt.selected = "selected";
-        }
+        for (var i = 0; i < region_length; i++){
+        opt = new Option( regions_data[i].name, regions_data[i].region_id );
 
 
-          regions.options.add( opt, i );
+
+          regions_status.options.add( opt, i );
                                       }
 
 
@@ -268,4 +262,6 @@ $.ajax({
                                         });
 
         </script>
+
+
 {% endblock body  %}

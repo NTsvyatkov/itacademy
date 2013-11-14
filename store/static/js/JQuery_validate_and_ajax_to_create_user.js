@@ -151,7 +151,7 @@ var region =   document.form.region.value;
 
 
 
-    $.ajax({
+   $.ajax({
         dataType: 'json',
         type: "POST",
         url: "/api/user",
@@ -161,7 +161,7 @@ var region =   document.form.region.value;
                 last_name: $('input[name="last_name"]').val(),
                 password: $('input[name="password"]').val(),
                 email: $('input[name="email"]').val(),
-                region_id: $('#region').val(),
+                region_id: $('select#region').val(),
                 role_id: $( 'input:radio[name=role_id]:checked' ).val()
                }),
         contentType: 'application/json;',
@@ -180,27 +180,6 @@ var region =   document.form.region.value;
 
                                 }
                      });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
 
