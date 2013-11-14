@@ -5,6 +5,7 @@ body {
  padding:0px;
  margin:0px;
   }
+
 #menu  {font: 15px Arial, Helvetica, sans-serif;
   background: rgb(226,226,226); /* Old browsers */
   background: -moz-linear-gradient(top,  rgba(226,226,226,1) 0%, rgba(219,219,219,1) 50%,
@@ -31,14 +32,16 @@ body {
   margin:0px 0px 5px 0px;
   padding:0px;
   }
-  #menu li {
+
+#menu li {
   list-style-type:none;
   float:left;
   padding-left:10px;
   tex-align:center;
   line-height:50px;
   }
-  #menu a {height:50px;
+
+#menu a {height:50px;
   display:block;
   background-image:url('../images/bc_separator.png');
   background-repeat:no-repeat;
@@ -47,13 +50,16 @@ body {
   text-decoration: none;
   color:#454545;
   }
-  .home {border:none;
+
+.home {border:none;
   margin: 8px 0px;
   }
-#menu a:hover{
-color: gray;
-font-weight:bold;
-text-shadow: 5px 5px 5px #484848;
+
+#menu a:hover, a:active {
+ color: gray;
+ font-weight:bold;
+ text-shadow: 5px 5px 5px #484848;
+ text-decoration:none;
   }
 
 
