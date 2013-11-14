@@ -30,31 +30,32 @@
     </a>
  </li>
  <li>
-     <a href="create_user.html" title="Create User" {% if request.path =='/create_user.html'%}class="active"{% endif %}>
+     <a href="create_user" title="Create User" {% if request.environ.PATH_INFO.strip('/') =='create_user'%}class="active"{% endif %}>
      Create User
+
      </a>
  </li>
  <li>
-     <a href="CreateProduct.html" title="Create Product"
-     {% if request.path =='/CreateProduct.html'%}class="active"{% endif %}>
+     <a href="createproduct" title="Create Product"
+     {% if request.environ.PATH_INFO.strip('/') =='createproduct'%}class="active"{% endif %}>
      Create Product
      </a>
  </li>
  <li>
-     <a href="search_user.html" title="Search User"
-     {% if request.path =='/search_user.html'%}class="active"{% endif %}>
+     <a href="search_user" title="Search User"
+     {% if request.environ.PATH_INFO.strip('/') =='search_user'%}class="active"{% endif %}>
      Search User
      </a>
  </li>
  <li>
-     <a href="product_grid.html" title="product_grid"
-        {% if request.path =='/product_grid.html'%}class="active"{% endif %} >
+     <a href="product_grid" title="product_grid"
+        {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
      Products
      </a>
  </li>
  <li>
-     <a href="product_buy.html" title="product_buy"
-         {% if request.path =='/product_buy.html'%}class="active"{% endif %}>
+     <a href="product_buy" title="product_buy"
+         {% if request.environ.PATH_INFO.strip('/') =='product_buy'%}class="active"{% endif %}>
      Product buy
      </a>
  </li>
