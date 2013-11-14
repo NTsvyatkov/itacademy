@@ -15,7 +15,7 @@
             contentType: "application/json",
             success:function(json) {
                 $.each(json.dimensions, function(i, pr){
-                    $('#dimension').append('<option value="' + pr.name + '">' + pr.name + '</option>');
+                    $('#id').append('<option value="' + pr.id + '">' + pr.name + '</option>');
                 })
             }
         });
@@ -56,9 +56,9 @@
 
     <h2>Dimension*</h2>
 
-    <select id="dimension" name="dimension">
-    <option>-Select Value-</option>
-    </select>
+    <select id="id" name="id">
+    <option>Select</option>
+    </select></br></br></br></br></br>
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel">

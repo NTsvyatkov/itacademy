@@ -27,14 +27,14 @@ var product_name =   document.form.product_name.value;
     }
 
 
-var dimension =   document.form.dimension.value;
-       if (dimension == ""){
-       $(".error_dimension").html("'dimension is required field.'").css({'color':'red'});
-                $(".dimension").toggleClass("errorList");
-                $(".dimension").click(function(){
+var id =   document.form.id.value;
+       if (id == ""){
+       $(".error_id").html("'dimension is required field.'").css({'color':'red'});
+                $(".id").toggleClass("errorList");
+                $(".id").click(function(){
 
-                $(".error_dimension").html("");
-                $(".dimension").removeClass("errorList")
+                $(".error_id").html("");
+                $(".id").removeClass("errorList")
 
                 });
             return false;
@@ -48,9 +48,9 @@ var dimension =   document.form.dimension.value;
         url: "/api/product",
         data:JSON.stringify({
                 name:$('input[name="product_name"]').val(),
-                description: $('input[name="description"]').val(),
+                description: $('textarea[name="description"]').val(),
                 price: $('input[name="price"]').val(),
-                dimension: $('input[name="dimension"]').val(),
+                id: $('select[name="id"]').val()
                }),
         contentType: 'application/json;',
 

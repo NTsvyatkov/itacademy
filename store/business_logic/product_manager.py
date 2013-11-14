@@ -12,8 +12,7 @@ def validate_name(name):
 def validate_price(price):
     if price is None:
         raise ValidationException("Price is required field")
-    elif not isinstance(price, float):
-        raise ValidationException("Price has invalid decimal value")
+
     elif price < 0:
         raise ValidationException("Price can't be a negative number")
 
