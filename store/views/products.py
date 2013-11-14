@@ -6,15 +6,15 @@ from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product, update_product, get_product_by_id
 
 
-@app.route('/CreateProduct.html', methods=('GET', 'POST'))
+@app.route('/createproduct', methods=('GET', 'POST'))
 def CreateProduct():
         return render_template('CreateProduct.html',)
 
-@app.route('/product_grid.html', methods=('GET', 'POST'))
+@app.route('/product_grid', methods=('GET', 'POST'))
 def product_grid():
         return render_template('product_grid.html',)
 
-@app.route('/product_buy.html', methods=('GET', 'POST'))
+@app.route('/product_buy', methods=('GET', 'POST'))
 def product_buy():
         return render_template('product_buy.html',)
 

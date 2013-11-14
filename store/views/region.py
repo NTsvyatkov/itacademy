@@ -4,7 +4,7 @@ from flask_bootstrap import app
 from business_logic.region_manager import getlistRegion, createRegion, updateRegion, deleteRegion, getRegionByID
 from business_logic.validation import ValidationException
 
-@app.route('/region.html', methods=('GET', 'POST'))
+@app.route('/region', methods=('GET', 'POST'))
 def region():
         return render_template('region.html',)
 
@@ -19,7 +19,7 @@ def regions():
 
 @app.route('/api/regions/<int:id>', methods=['GET'])
 def regions_id(id):
-    i=getRegionByID(request.get['id'])
+    i=getRegionByID(request.base_url.get['id'])
     region ={'region_id': i.region_id, 'name': i.name}
     resp = make_response(jsonify(regions=region), 200)
     return resp

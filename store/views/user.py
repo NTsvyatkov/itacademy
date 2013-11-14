@@ -8,11 +8,11 @@ from business_logic.user_manager import getListUser, getUserByID, deleteUser, cr
 from business_logic.validation import ValidationException, NotFoundException
 
 
-@app.route('/create_user.html', methods=('GET', 'POST'))
+@app.route('/create_user', methods=('GET', 'POST'))
 def create_user():
         return render_template('create_user.html',)
 
-@app.route('/search_user.html', methods=('GET', 'POST'))
+@app.route('/search_user', methods=('GET', 'POST'))
 def search_user():
         return render_template('search_user.html',)
 
