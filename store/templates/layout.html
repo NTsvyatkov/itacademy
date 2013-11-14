@@ -24,12 +24,17 @@
   <body>
 {% block bar %}
 <ul id="menu">
-<li><a href="login(2).html" title="Home"><img src="../static/images/home.png" alt="Home" class="home" /></a></li>
-<li><a href="create_user.html" title="Create User">Create User</a></li>
-<li><a href="CreateProduct.html" title="Create Product">Create Product</a></li>
-<li><a href="search_user.html" title="Search User">Search User</a></li>
-<li><a href="product_grid.html" title="product_grid">Products</a></li>
-<li><a href="product_buy.html" title="product_buy">Product buy</a></li>
+<li><a href="/login" title="Home"><img src="../static/images/home.png" alt="Home" class="home" /></a></li>
+<li><a href="create_user.html" title="Create User" {% if request.path =='/create_user.html'%}class="active"{% endif %}>
+     Create User</a></li>
+<li><a href="CreateProduct.html" title="Create Product"
+     {% if request.path =='/CreateProduct.html'%}class="active"{% endif %}>Create Product</a></li>
+<li><a href="search_user.html" title="Search User"
+     {% if request.path =='/search_user.html'%}class="active"{% endif %}>Search User</a></li>
+<li><a href="product_grid.html" title="product_grid"
+        {% if request.path =='/product_grid.html'%}class="active"{% endif %} >Products</a></li>
+<li><a href="product_buy.html" title="product_buy"
+         {% if request.path =='/product_buy.html'%}class="active"{% endif %}>Product buy</a></li>
 
 </ul>
 

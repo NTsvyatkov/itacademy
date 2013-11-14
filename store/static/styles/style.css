@@ -61,7 +61,12 @@ body {
  text-shadow: 5px 5px 5px #484848;
  text-decoration:none;
   }
-
+#menu .active{
+ color: gray;
+ font-weight:bold;
+ text-shadow: 5px 5px 5px #484848;
+ text-decoration:none;
+}
 
 #product_table{
  border:0px solid grey;
