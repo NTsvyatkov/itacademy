@@ -5,6 +5,7 @@
 
    var count_tr=23;
    var tr = [];
+   var page = 1;
 
    /* Creating table of products */
 
@@ -59,15 +60,62 @@
 
  function create_entity(){
        $.ajax({
-       dataType: "json",
+        dataType: "json",
         url: '/api/product',
         type: 'GET',
         data: json_value,
         contentType: "application/json",
         success: function(json)
         {
-           //clearing_grid()
+            ajax_success(json);
+         }
+      })
+ }
 
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+    json_value = JSON.stringify(form_value);
+
+
+
+    $('#apply_button').click(function(){
+    create_entity();
+    });
+
+
+  function delete_id(id,tr_id)
+  {
+  if (id=='') id=0;
+   form_value = {id : id};
+   json_value = JSON.stringify(form_value);
+   $.ajax({
+       dataType: "json",
+        url: '/api/product/'+id,
+        type: 'DELETE',
+        /*data: {id:id}*/
+        contentType: "application/json",
+        success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The product has been successfully deleted');
+                          clearing_tr(tr_id);
+                          create_entity();
+                         }
+                        else
+                         alert (json.message);
+                    },
+
+        error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+
+  })
+ }
+
+  function ajax_success(json){
 
            deleting_grid()
            creat_grid(json.products.length)
@@ -102,55 +150,42 @@
                 k=0;
             /*End creating table*/
 
+
+  }
+
+   $('#clr').click(deleting_grid);
+
+  function grid_pagination (){$.ajax({
+        dataType: "json",
+        url: '/api/products/'+page,
+        type: 'GET',
+        contentType: "application/json",
+        success: function(json)
+        {
+           ajax_success(json);
          }
       })
- }
+     }
 
-    var k=0;
-    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
-    json_value = JSON.stringify(form_value);
+  if (page==1)
+  {grid_pagination ();}
 
-    create_entity();
+   $('#next').click(function(){
 
-    $('#apply_button').click(function(){
-    create_entity();
+    page=page+1;
+    grid_pagination ()
+    });
+
+    $('#prev').click(function(){
+
+    page=page-1;
+    grid_pagination ()
     });
 
 
-  function delete_id(id,tr_id)
-  {
-  if (id=='') id=0;
-   form_value = {id : id}
-   json_value = JSON.stringify(form_value);
-   $.ajax({
-       dataType: "json",
-        url: '/api/product/'+id,
-        type: 'DELETE',
-        /*data: {id:id}*/
-        contentType: "application/json",
-        success: function(json)
-                    {
-                        if (json.message == 'success')
-                         {
-                          alert('The product has been successfully deleted');
-                          clearing_tr(tr_id);
-                          create_entity();
-                         }
-                        else
-                         alert (json.message);
-                    },
-
-        error: function(e)
-                    {
-                       error = JSON.parse(e.responseText);
-                       alert(error.message);
-                    }
-
-  })
- }
-
-   $('#clr').click(deleting_grid);
  });
+
+
 
    </script>
 
@@ -240,6 +275,10 @@
                </th>
            </tr>
        </table>
-      </div>
 
+          <div style="text-align: center"><input type="button" id="prev" value="<">&nbsp
+              <input type="button" id="next" value=">"></div>
+
+      </div>
+</div>
 {% endblock body %}

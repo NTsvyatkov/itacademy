@@ -34,6 +34,17 @@ def dimensions():
         dimensions_arr.append({'id':i.id,'name':i.name})
     return make_response(jsonify(dimensions=dimensions_arr),200)
 
+@app.route('/api/products/<int:page>', methods=['GET'])
+def products_page(page):
+    #products_list = list_products()
+    all_rec = Product.get_all_products()
+    pagination = Pagination(5, all_rec, page)
+    prods = pagination.pager()
+    products_arr=[]
+    for i in prods:
+        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
+    return make_response(jsonify(products=products_arr),200)
+
 
 @app.route('/api/product/<int:id>', methods=['GET'])
 def products_id(id):
