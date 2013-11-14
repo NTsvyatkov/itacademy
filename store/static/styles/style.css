@@ -123,18 +123,7 @@ input[name="zip"]          { width:150px; }
 
 
 
-/* submit button */
-input[type="submit"]       { cursor:pointer;border:1px solid #999;padding:5px;-moz-border-radius:4px;background:#eee; }
-input[type="submit"]:hover,
-input[type="submit"]:focus { border-color:#333;background:#ddd; }
-input[type="submit"]:active{ margin-top:1px; }
-
-input[type="reset"]       { cursor:pointer;border:1px solid #999;padding:5px;-moz-border-radius:4px;background:#eee; }
-input[type="reset"]:hover,
-input[type="reset"]:focus { border-color:#333;background:#ddd; }
-input[type="reset"]:active{ margin-top:1px; }
-
-input[type="button"] {
+input[type="button"], input[type="submit"], input[type="reset"]  {
  cursor:pointer;
  border:2px solid #999;
  padding:5px;
@@ -151,9 +140,9 @@ input[type="button"] {
          GradientType=0 ); /* IE6-9 */
 v
  }
-input[type="button"]:hover,
-input[type="button"]:focus { border-color:#333;background:#ddd; }
-input[type="button"]:active{ margin-top:1px; }
+input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover,
+input[type="button"]:focus,input[type="submit"]:focus, input[type="reset"]:focus { border-color:#333;background:#ddd; }
+input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:active{ margin-top:1px; }
 
 
 .grid {
