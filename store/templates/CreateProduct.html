@@ -10,7 +10,7 @@
     }};
     $.ajax({
             dataType: "json",
-            url: '/dimension',
+            url: '/api/dimension',
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
@@ -58,8 +58,7 @@
 
     <select id="dimension" name="dimension">
     <option>-Select Value-</option>
-
-</select>
+    </select>
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel">
