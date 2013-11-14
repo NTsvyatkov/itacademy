@@ -6,9 +6,9 @@ from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product, update_product, get_product_by_id
 
 
-@app.route('/createproduct', methods=('GET', 'POST'))
+@app.route('/create_product', methods=('GET', 'POST'))
 def CreateProduct():
-        return render_template('CreateProduct.html',)
+        return render_template('create_product.html',)
 
 @app.route('/product_grid', methods=('GET', 'POST'))
 def product_grid():

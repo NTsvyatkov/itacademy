@@ -34,7 +34,7 @@ def users():
 
 @app.route('/api/user/<int:id>', methods = ['GET'])
 def users_id(id):
-    i=getUserByID(request.get['id'])
+    i=getUserByID(id)
     user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':i.role_id}
     resp = make_response(jsonify(users=user),200)
     return resp
