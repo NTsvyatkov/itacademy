@@ -18,6 +18,7 @@ class Order(Base):
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
 
     def __init__(self, user_id, date, status_id, delivery_id):
+        super(Order, self).__init__()
         self.user_id = user_id
         self.date = date
         self.status_id = status_id
@@ -66,6 +67,7 @@ class OrderStatus(Base):
     name = Column(String(50))
 
     def __init__(self, name):
+        super(OrderStatus, self).__init__()
         self.name = name
 
     # Next method retrieve list of records
@@ -103,6 +105,7 @@ class DeliveryType(Base):
     name = Column(String(50))
 
     def __init__(self, name):
+        super(DeliveryType, self).__init__()
         self.name = name
 
     def __str__(self):
@@ -145,6 +148,7 @@ class OrderProduct(Base):
 
 
     def __init__(self, order_id, product_id, quantity):
+        super(OrderProduct, self).__init__()
         self.quantity = quantity
         self.order_id = order_id
         self.product_id = product_id
