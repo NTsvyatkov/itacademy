@@ -11,7 +11,7 @@ def err_han(e):
 
 @app.errorhandler(BaseException)
 def err_han2(e):
-    error_dict = {'message': e.message}
+    error_dict = {'message': 'This operation not permitted  on the server'}
     return make_response(jsonify(error_dict), 500)
 
 @app.errorhandler(NotFoundException)
