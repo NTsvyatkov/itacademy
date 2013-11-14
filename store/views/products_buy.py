@@ -23,42 +23,15 @@ def amountProducts(id, value):
     return make_response(jsonify({'message':'success'}),200)
 
 
-@app.route('/api/buy/<name>/<start_prise>/<end_prise>', methods = ['POST'])
-def filterBuyProducts(name, start_prise, end_prise):
+@app.route('/api/buy', methods = ['POST'])
+def filterBuyProducts():
 
-    #if request.form['name'] and request.form['start_prise'] and request.form['end_prise']:
-    #    list = Product.query.filter(and_(Product.price.between(request.form['start_prise'],request.form['end_prise'])),
-    #                                Product.name == request.form['name'])
-    #elif request.form['name']:
-    #    list = Product.query.filter(Product.name == request.form['name'])
-    #elif request.form['start_prise']:
-    #    list = Product.query.filter(Product.price.between(request.form['start_prise'],'1000000'))
-    #elif request.form['end_prise']:
-    #    list = Product.query.filter(Product.price.between('0',request.form['end_prise']))
-    #else:
-    #    list = list_products()
-    #array = []
-    #for i in list:
-    #    array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
-    #return make_response(jsonify(products=array),200)
-
-    #query = Product.query
-    #if request.form['name']:
-    #    list = qu.filter(Product.name == request.query_string.get('name'))
-    #if request.form['start_prise']:
-    #    list = qu.filter(Product.price.between('0',request.form['end_prise']))
-    #if request.form['end_prise']:
-    #    list = qu.filter(Product.price.between('0',request.form['end_prise']))
-    #else:
-    #    list = list_products()
-
-
-    #list = filterByStartPrise(start_prise)
-
-    #list = filterByEndPrise(end_prise)
-
-    list = filterByProductName(name)
-
+    if request.json['name']:
+        list = filterByProductName(request.json['name'])
+    if request.json['start_prise']:
+        list = filterByStartPrise(request.json['start_prise'])
+    if request.json['end_prise']:
+        list = filterByEndPrise(request.json['end_prise'])
     array = []
     for i in list:
         array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})

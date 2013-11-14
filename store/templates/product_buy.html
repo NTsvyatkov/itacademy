@@ -99,10 +99,12 @@
 
 //            $('#search_button').click(function(){
             function createEntityByFilter(name, start_prise, end_prise){
+                data = { 'name': name, 'start_prise': start_prise, 'end_prise': end_prise }
                 $.ajax({
                 dataType: "json",
-                url: '/api/buy/'+name+'/'+start_prise+'/'+end_prise,
+                url: '/api/buy',
                 type: 'POST',
+                data: JSON.stringify(data),
                 contentType: "application/json",
                 success: function(json)
                     {
