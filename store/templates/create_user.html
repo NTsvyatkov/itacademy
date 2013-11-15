@@ -130,31 +130,7 @@ div { clear:both;position:relative; }
     <fieldset>
             <legend >Role</legend>
     <div class ="role" style ="width: 200px ">
-      <table>
-          <tr>
-              <td>
-             <input id="role-1" name="role_id" type="radio" value="Administrator"> <label for="role-1">Administrator</label>
-              </td>
-          </tr>
-          <tr>
-               <td>
-                <input id="role-3" name="role_id" type="radio" value="Merchandizer"> <label for="role-3">Merchandizer</label>
-               <td>
-          </tr>
-          <tr>
-              <td>
-               <input id="role-2" name="role_id" type="radio" value="Supervizor"> <label for="role-2">Supervizor</label>
-              </td>
-          </tr>
-          <tr>
-              <td>
-               <input id="role-0" name="role_id" type="radio" value="Customer" checked="checked"> <label for="role-0">Customer</label>
-              </td>
-          </tr>
-
-
-
-      </table>
+      <div id="roles"></div>
 
     </div>
 
@@ -274,7 +250,7 @@ $.ajax({
         success: function(data){
               var roles_length = data.roles.length;
              var roles_data = data.roles;
-            var foo = document.getElementById("mydiv");
+            var foo = document.getElementById("roles");
         for(var i=0;i< roles_length;i++){
             var label = document.createElement("label");
             var element = document.createElement("input");
