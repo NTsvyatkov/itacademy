@@ -36,14 +36,17 @@ def dimensions():
 
 @app.route('/api/products/<int:page>', methods=['GET'])
 def products_page(page):
-    #products_list = list_products()
     all_rec = Product.get_all_products()
-    pagination = Pagination(5, all_rec, page)
+    records_per_page = 5
+    pagination = Pagination(records_per_page, all_rec, page)
     prods = pagination.pager()
-    products_arr=[]
+    records_amount = len(all_rec)
+    products_arr = []
     for i in prods:
-        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
-    return make_response(jsonify(products=products_arr),200)
+        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
+                             'dimension': i.dimension.name})
+    return make_response(jsonify(products=products_arr, records_amount=records_amount,
+                                 records_per_page=records_per_page), 200)
 
 
 @app.route('/api/product/<int:id>', methods=['GET'])

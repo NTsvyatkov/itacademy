@@ -5,11 +5,11 @@
 
    var count_tr=23;
    var tr = [];
-   var page = 1;
 
    /* Creating table of products */
 
   $(document).ready(function() {
+    var page = 1;
     var table_grid = document.getElementById('grid');
     function creat_grid(count)
     {
@@ -155,7 +155,7 @@
 
    $('#clr').click(deleting_grid);
 
-  function grid_pagination (){$.ajax({
+  function grid_pagination(){$.ajax({
         dataType: "json",
         url: '/api/products/'+page,
         type: 'GET',
@@ -163,25 +163,42 @@
         success: function(json)
         {
            ajax_success(json);
+           records_amount=(json.records_amount);
+           records_per_page=(json.records_per_page);
+           pages_amount = Math.ceil(records_amount/records_per_page);
+           document.getElementById("page").innerHTML = page;
+           document.getElementById("pages_amount").innerHTML = pages_amount
          }
       })
      }
 
   if (page==1)
-  {grid_pagination ();}
+  {grid_pagination();
+  }
 
    $('#next').click(function(){
-
-    page=page+1;
-    grid_pagination ()
+    if (page*records_per_page>=records_amount){page=page}
+    else {page=page+1}
+    grid_pagination()
     });
 
     $('#prev').click(function(){
-
     page=page-1;
-    grid_pagination ()
+        if (page<=1){
+        page=1;
+    }
+    grid_pagination()
     });
 
+    $('#first').click(function(){
+    page=1;
+    grid_pagination()
+    });
+
+    $('#last').click(function(){
+    page=pages_amount;
+    grid_pagination()
+    });
 
  });
 
@@ -276,8 +293,13 @@
            </tr>
        </table>
 
-          <div style="text-align: center"><input type="button" id="prev" value="<">&nbsp
-              <input type="button" id="next" value=">"></div>
+          <div id="pagination" style="text-align: center">
+              <input type="button" id="first" value="First">&nbsp
+              <input type="button" id="prev" value="Prev">&nbsp
+              Page <span id="page"></span> of <span id="pages_amount"></span>
+              <input type="button" id="next" value="Next">&nbsp
+              <input type="button" id="last" value="Last">
+          </div>
 
       </div>
 </div>
