@@ -53,7 +53,7 @@
             function createEntity(){
                 $.ajax({
                 dataType: "json",
-                url: '/api/buy',
+                url: '/api/product',
                 type: 'GET',
                 data: json_value,
                 contentType: "application/json",
@@ -96,7 +96,7 @@
             function createEntityByFilter(name, start_price, end_price){
                 $.ajax({
                 dataType: "json",
-                url: '/api/buy?name='+name+'&start_price='+start_price+'&end_price='+end_price+'',
+                url: '/api/product?name='+name+'&start_price='+start_price+'&end_price='+end_price+'',
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json)
@@ -135,7 +135,7 @@
                 data = {'value': value}
                 $.ajax({
                     dataType: "json",
-                    url: '/api/buy/'+id,
+                    url: '/api/order/product/'+id,
                     type: 'POST',
                     data: JSON.stringify(data),
                     contentType: "application/json",
@@ -178,7 +178,7 @@
                     <form class='form' action="">
                          <div class="ProductTitle">Filter</div>
                         <span>Keyword <input type="text" id = 'name' style="width:150px" /></span>
-                        <span>Prise <input type="text" id = 'start_price' style="width:50px" /> - </span>
+                        <span>Price <input type="text" id = 'start_price' style="width:50px" /> - </span>
                         <span><input type="text" id = 'end_price' style="width:50px" /> </span>
                         <span><input type="button" value="search" id='search_button'></span>
                     </form>

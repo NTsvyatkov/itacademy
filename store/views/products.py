@@ -18,13 +18,25 @@ def product_grid():
 def product_buy():
         return render_template('product_buy.html',)
 
+#@app.route('/api/product', methods = ['GET'])
+#def products():
+#    products_list = list_products()
+#    products_arr=[]
+#    for i in products_list:
+#        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
+#    return make_response(jsonify(products=products_arr),200)
+
+
 @app.route('/api/product', methods = ['GET'])
-def products():
-    products_list = list_products()
-    products_arr=[]
-    for i in products_list:
-        products_arr.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description,'dimension':i.dimension.name})
-    return make_response(jsonify(products=products_arr),200)
+def filterBuyProducts():
+    list = Product.listFilterBuyProducts((request.args.get('name')),(request.args.get('start_price')),
+                                         (request.args.get('end_price')))
+    array = []
+    for i in list:
+        array.append({'id':i.id,'name':i.name,'price':i.price, 'description':i.description})
+    return make_response(jsonify(products=array),200)
+
+
 
 @app.route('/api/dimension', methods = ['GET'])
 def dimensions():
