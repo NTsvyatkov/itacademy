@@ -18,10 +18,10 @@ def getlistActionPointToRole():
     return ActionPointToRoleDao.getAllActionPointsToRole()
 
 
-def createActionPointToRole(ap_to_role_id, role_id, action_point):
+def createActionPointToRole(role_id, action_point):
     validationRoleID(role_id)
     validationActionPointID(action_point)
-    ActionPointToRoleDao.createNewActionPointToRole(ap_to_role_id, role_id, action_point)
+    ActionPointToRoleDao.createNewActionPointToRole(role_id, action_point)
 
 
 def updateActionPointToRole(ap_to_role_id, role_id, action_point):
