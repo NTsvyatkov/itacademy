@@ -28,7 +28,7 @@ def product_buy():
 
 
 @app.route('/api/product', methods = ['GET'])
-def filterBuyProducts():
+def products():
     list = Product.listFilterBuyProducts((request.args.get('name')),(request.args.get('start_price')),
                                          (request.args.get('end_price')))
     array = []
