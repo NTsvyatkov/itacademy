@@ -168,6 +168,20 @@
            pages_amount = Math.ceil(records_amount/records_per_page);
            document.getElementById("page").innerHTML = page;
            document.getElementById("pages_amount").innerHTML = pages_amount
+
+           if (page==1){
+               $('#prev').css({ "visibility": "hidden"});
+               $('#first').css({ "visibility": "hidden"});
+           } else {$('#prev').css({ "visibility": "visible"});
+               $('#first').css({ "visibility": "visible"});
+           }
+
+           if (page==pages_amount){
+               $('#next').css({ "visibility": "hidden"});
+               $('#last').css({ "visibility": "hidden"});
+           } else {$('#next').css({ "visibility": "visible"});
+               $('#last').css({ "visibility": "visible"});
+           }
          }
       })
      }
