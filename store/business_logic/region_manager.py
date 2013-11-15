@@ -17,9 +17,9 @@ def getlistRegion():
     return RegionDao.getAllRegions()
 
 
-def createRegion(region_id, name):
+def createRegion(name):
     validationRegionName(name)
-    RegionDao.createNewRegion(region_id, name)
+    RegionDao.createNewRegion(name)
 
 
 def updateRegion(region_id, name):

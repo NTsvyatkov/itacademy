@@ -18,9 +18,9 @@ def getlistRole():
     return RoleDao.getAllRoles()
 
 
-def createNewRole(role_id, name):
+def createNewRole(name):
     validationRoleName(name)
-    RoleDao.createNewRole(role_id, name)
+    RoleDao.createNewRole(name)
 
 
 def updateRole(role_id, name):

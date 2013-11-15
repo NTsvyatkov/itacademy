@@ -24,9 +24,9 @@ def getListActionPoint():
     return ActionPointDao.getAllActionPoints()
 
 
-def createActionPoint(ap_id, name):
+def createActionPoint(name):
     validationActionPointName(name)
-    ActionPointDao.createNewActionPoint(ap_id, name)
+    ActionPointDao.createNewActionPoint(name)
 
 
 def updateActionPoint(ap_id, name):
