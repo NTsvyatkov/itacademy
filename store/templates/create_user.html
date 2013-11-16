@@ -130,31 +130,7 @@ div { clear:both;position:relative; }
     <fieldset>
             <legend >Role</legend>
     <div class ="role" style ="width: 200px ">
-      <table>
-          <tr>
-              <td>
-             <input id="role-1" name="role_id" type="radio" value="Administrator"> <label for="role-1">Administrator</label>
-              </td>
-          </tr>
-          <tr>
-               <td>
-                <input id="role-3" name="role_id" type="radio" value="Merchandizer"> <label for="role-3">Merchandizer</label>
-               <td>
-          </tr>
-          <tr>
-              <td>
-               <input id="role-2" name="role_id" type="radio" value="Supervizor"> <label for="role-2">Supervizor</label>
-              </td>
-          </tr>
-          <tr>
-              <td>
-               <input id="role-0" name="role_id" type="radio" value="Customer" checked="checked"> <label for="role-0">Customer</label>
-              </td>
-          </tr>
-
-
-
-      </table>
+      <div id="roles"></div>
 
     </div>
 
@@ -263,5 +239,43 @@ $.ajax({
 
         </script>
 
+<script>
+    $( document ).ready(function() {
+$.ajax({
+       dataType: "json",
+        url: '/api/roles',
+        type: 'GET',
+
+        contentType: "application/json",
+        success: function(data){
+              var roles_length = data.roles.length;
+             var roles_data = data.roles;
+            var foo = document.getElementById("roles");
+        for(var i=0;i< roles_length;i++){
+            var label = document.createElement("label");
+            var element = document.createElement("input");
+            element.setAttribute("type", "radio");
+            element.setAttribute("value", roles_data[i].role_id);
+            element.setAttribute("name", "gr");
+            element.setAttribute("id", roles_data[i].name.value);
+            if (i==0)
+              element.setAttribute("checked", true);
+            label.appendChild(element);
+            label.innerHTML += roles_data[i].name;
+            label.innerHTML += '<br />';
+            foo.appendChild(label);
+        }
+                                      }
+
+
+
+
+
+
+                    });
+
+                                        });
+
+        </script>
 
 {% endblock body  %}
