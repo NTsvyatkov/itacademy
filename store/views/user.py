@@ -4,6 +4,7 @@ from flask import Flask, jsonify, render_template, request, make_response
 from models.user_dao import UserDao
 from models import db_session
 from flask_bootstrap import app
+from maintenance.pager_user import Pagination
 from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
 from business_logic.validation import ValidationException, NotFoundException
 
@@ -31,6 +32,20 @@ def users():
 
     return make_response(jsonify(users=users_arr),200)
 
+@app.route('/api/user/<int:page>', methods=['GET'])
+def users_page(page):
+    all_rec = UserDao.getAllUsers()
+    records_per_page = 5
+    pagination = Pagination(records_per_page, all_rec, page)
+    prods = pagination.pager()
+    records_amount = len(all_rec)
+    users_arr = []
+    for i in prods:
+        users_arr.append({'login': i.login, 'first_name': i.first_name, 'last_name': i.last_name, 'role_id': i.role_id,
+                             'email': i.email, 'region_id': i.region_id})
+    return make_response(jsonify(users=users_arr, records_amount=records_amount,
+                                 records_per_page=records_per_page), 200)
+
 
 @app.route('/api/user/<int:id>', methods = ['GET'])
 def users_id(id):
@@ -39,9 +54,9 @@ def users_id(id):
     resp = make_response(jsonify(users=user),200)
     return resp
 
-@app.route('/user/<int:id>', methods=['DELETE'])
-def users_id_delete(id):
-    deleteUser(id)
+@app.route('/api/user/<int:id>', methods=['DELETE'])
+def users_id_delete(user_id):
+    deleteUser(user_id)
     resp = make_response(jsonify({'message':'success'}),200)
     return resp
 
@@ -70,3 +85,5 @@ def err_han(e):
 def err_han(ex):
     error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
+
+
