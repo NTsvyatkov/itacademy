@@ -1,4 +1,3 @@
-__author__ = 'alex'
 from flask import jsonify, render_template, request, make_response
 from models.product_dao import Product
 from flask_bootstrap import app
