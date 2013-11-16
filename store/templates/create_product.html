@@ -30,47 +30,38 @@
     <h1 class="ProductTitle" >Create Product</h1>
 		 <div class ="product_name"> <div id="product_name-wrap" class="slider">
 	           <label for="product_name">Name*</label>
+               <input cols="6" id="product_name" name="product_name" type="text" value=""maxlength="100">
+               <div style = "height: 10px; width: 30px;"></div>
+               <div class = "error_product_name"></div>
+         </div>
+         </div>
 
-              <input id="product_name" name="product_name" type="text" value=""maxlength="100">
-       </div>
-       </div>
-           <div style = "height: 10px;"></div>
-
-              <div class = "error_user_name"></div>
-
-
-    <div id="description-wrap"  class="slider">
+        <div id="description-wrap"  class="slider">
         <label for="description">Description</label>
-        <textarea type="text" rows="6" cols="36" name="description" id="description"></textarea>
-    </div>
+        <textarea type="text" rows="6" cols="27" name="description" id="description"></textarea>
+        </div></br>
 
 		 <div class ="price"> <div id="price-wrap" class="slider">
 	           <label for="price">Price*</label>
+               <input id="price" name="price" type="text" value=""maxlength="100">
+               <div style = "height: 10px;"></div>
+               <div class = "error_price"></div>
+         </div>
+         </div>
 
-              <input id="price" name="price" type="text" value=""maxlength="100">
-       </div>
-       </div>
-           <div style = "height: 10px;"></div>
-
-              <div class = "error_user_name"></div>
 
     <h2 class="ProductTitle" >Dimension*</h2>
 
-    <select id="id" name="id">
-    <option value="">Select</option>
-    </select></br></br></br></br></br>
+        <select id="id" name="id">
+        <option value="">Select</option>
+        <div style = "height: 10px;"></div>
+        <div class = "error_id"> </div>
+        </select></br></br></br></br></br>
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel">
     <input type="button" value ="Create" class="button" onclick="return validate_form2()" id ="post_form">
-    <script type="text/javascript">
-         function confirmDelete() {
-    if (confirm("All fields will be cleared. Do you want to continue?")) {
-        return true;
-    } else {
-        return false;
-    }};
-    </script>
+
     </form>
 
 {% endblock body  %}

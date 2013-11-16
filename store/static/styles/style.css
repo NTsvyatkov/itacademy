@@ -133,7 +133,7 @@ label{
  }
 
  input[type="text"], input[type="password"] {
- width:140px;
+ width:200px;
  border:2px solid #999;
  padding:5px;
  border-radius:4px;
@@ -164,7 +164,7 @@ input[type="button"], input[type="submit"], input[type="reset"]  {
  background: linear-gradient(to bottom,  #e2e2e2 0%,#dbdbdb 50%,#d1d1d1 51%,#fefefe 100%); /* W3C */
  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#e2e2e2', endColorstr='#fefefe',
          GradientType=0 ); /* IE6-9 */
-v
+
  }
 input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover,
 input[type="button"]:focus,input[type="submit"]:focus, input[type="reset"]:focus { border-color:#333;background:#ddd; }

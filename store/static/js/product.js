@@ -46,7 +46,7 @@ var result_price = price.match(regV_price);
 var id =   document.form.id.value;
 
         if (id == ""){
-        $(".error_region").html("'You must select a dimension'").css({'color':'red'});
+        $(".error_id").html("'You must select a dimension'").css({'color':'red'});
                 $(".id").toggleClass("errorList");
                 $(".id").click(function(){
 
