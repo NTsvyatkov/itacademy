@@ -1,9 +1,10 @@
-from sqlalchemy import and_
 from models.product_dao import Product, Dimension
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
 from models.order_dao import Order, OrderProduct, OrderStatus,DeliveryType
+
+
 from datetime import date
 
 # This file can fill you DB store_db

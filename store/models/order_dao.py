@@ -185,14 +185,17 @@ class OrderProduct(Base):
         db_session.commit()
 
     @staticmethod
+    def getOrderbByID(order_id):
+        return OrderProduct.query.filter(OrderProduct.order_id == order_id).first()
+
+    @staticmethod
     def getOrderProduct(user_id, product_id):
         return OrderProduct.query.filter(and_(OrderProduct.order_id == user_id,
                                               OrderProduct.product_id == product_id)).first()
 
-
     @staticmethod
     def getSumQuantity(order_id, quantity):
-        return OrderProduct.get_by_product(order_id).quantity + quantity
+        return OrderProduct.getOrderbByID(order_id).quantity + quantity
 
 #b = DeliveryType.get_delivery_all()
 
