@@ -13,9 +13,11 @@ var product_name =   document.form.product_name.value;
             return false;
             }
 
- var price =   document.form.price.value;
+var price =   document.form.price.value;
+var regV_price = /^\d+(?:\.\d{0,2})?$/;
+var result_price = price.match(regV_price);
         if (price == ""){
-                $(".error_price").html("'Price is required field.'").css({'color':'red'});
+        $(".error_price").html("'Name is required field'").css({'color':'red'});
                 $(".price").toggleClass("errorList");
                 $(".price").click(function(){
 
@@ -24,12 +26,27 @@ var product_name =   document.form.product_name.value;
 
                 });
             return false;
+        }
+         else {
+
+
+        if (!result_price){   $(".error_price").html("'Price must be greater than 0.00'").css({'color':'red'});
+                $(".price").toggleClass("errorList");
+                $(".price").click(function(){
+
+                $(".error_price").html("");
+                $(".price").removeClass("errorList")
+
+                });
+            return false;
+      }
+
     }
 
-
 var id =   document.form.id.value;
-       if (id == ""){
-       $(".error_id").html("'dimension is required field.'").css({'color':'red'});
+
+        if (id == ""){
+        $(".error_region").html("'You must select a dimension'").css({'color':'red'});
                 $(".id").toggleClass("errorList");
                 $(".id").click(function(){
 
