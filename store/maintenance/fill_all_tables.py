@@ -1,3 +1,4 @@
+from sqlalchemy import and_
 from models.product_dao import Product, Dimension
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
@@ -59,6 +60,3 @@ OrderProduct.add_order_product(1,7,3)
 OrderProduct.add_order_product(3,3,2)
 OrderProduct.add_order_product(5,1,1)
 OrderProduct.add_order_product(6,3,4)
-
-
-

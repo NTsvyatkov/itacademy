@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
@@ -184,7 +184,15 @@ class OrderProduct(Base):
         db_session.delete(del_order_product)
         db_session.commit()
 
+    @staticmethod
+    def getOrderProduct(user_id, product_id):
+        return OrderProduct.query.filter(and_(OrderProduct.order_id == user_id,
+                                              OrderProduct.product_id == product_id)).first()
 
+
+    @staticmethod
+    def getSumQuantity(order_id, quantity):
+        return OrderProduct.get_by_product(order_id).quantity + quantity
 
 #b = DeliveryType.get_delivery_all()
 
