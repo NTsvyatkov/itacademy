@@ -1,9 +1,17 @@
 from flask import Flask
 from business_logic.validation import ValidationException, NotFoundException
 from flask import jsonify, make_response
+from models import db_session
+from traceback import format_exc
+
 app = Flask(__name__, template_folder='templates', static_folder='static')
 app.config.from_object('config')
-from traceback import format_exc
+
+
+@app.after_request
+def session_closes(request):
+    db_session.remove()
+    return request
 
 @app.errorhandler(ValidationException)
 def err_han(e):
