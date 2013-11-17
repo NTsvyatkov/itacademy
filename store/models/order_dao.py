@@ -14,7 +14,7 @@ class Order(Base):
     date = Column(DATE, default=date.today())
     status_id = Column(Integer, ForeignKey('order_status.id'))
     status = relationship('OrderStatus', backref=backref('order', lazy='dynamic'))
-    delivery_id = Column(Integer, ForeignKey('delivery_type.id'))
+    delivery_id = Column(Integer, ForeignKey('delivery_type.id'), nullable=True)
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
 
     def __init__(self, user_id, date, status_id, delivery_id):
@@ -45,7 +45,7 @@ class Order(Base):
 
 
     @staticmethod
-    def add_order(user_id, date, status_id, delivery_id):
+    def add_order(user_id, date, status_id, delivery_id = None):
         order = Order(user_id, date, status_id, delivery_id)
         db_session.add(order)
         db_session.commit()
