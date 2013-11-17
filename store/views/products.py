@@ -16,11 +16,6 @@ def product_grid():
         return render_template('product_grid.html',)
 
 
-@app.route('/product_buy', methods=('GET', 'POST'))
-def product_buy():
-        return render_template('product_buy.html',)
-
-
 #@app.route('/api/product', methods=['GET'])
 #def products():
 #    products_list = list_products()
