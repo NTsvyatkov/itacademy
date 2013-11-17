@@ -37,7 +37,7 @@
  </li>
  <li>
      <a href="create_product" title="Create Product"
-     {% if request.environ.PATH_INFO.strip('/') =='createproduct'%}class="active"{% endif %}>
+     {% if request.environ.PATH_INFO.strip('/') =='create_product'%}class="active"{% endif %}>
      Create Product
      </a>
  </li>
@@ -57,6 +57,13 @@
      <a href="product_buy" title="product_buy"
          {% if request.environ.PATH_INFO.strip('/') =='product_buy'%}class="active"{% endif %}>
      Product buy
+     </a>
+ </li>
+
+ <li>
+     <a href="current_orders" title="current_orders"
+         {% if request.environ.PATH_INFO.strip('/') =='current_orders'%}class="active"{% endif %}>
+     Current orders
      </a>
  </li>
 

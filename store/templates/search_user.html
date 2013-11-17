@@ -171,17 +171,17 @@
            document.getElementById("pages_amount").innerHTML = pages_amount
 
            if (page==1){
-               $('#prev').css({ "visibility": "hidden"});
-               $('#first').css({ "visibility": "hidden"});
-           } else {$('#prev').css({ "visibility": "visible"});
-               $('#first').css({ "visibility": "visible"});
+               $('#prev').css({ "opacity":"0.4"});
+               $('#first').css({ "opacity":"0.4"});
+           } else {$('#prev').css({ "opacity": "1"});
+               $('#first').css({ "opacity": "1"});
            }
 
            if (page==pages_amount){
-               $('#next').css({ "visibility": "hidden"});
-               $('#last').css({ "visibility": "hidden"});
-           } else {$('#next').css({ "visibility": "visible"});
-               $('#last').css({ "visibility": "visible"});
+               $('#next').css({ "opacity": "0.4"});
+               $('#last').css({ "opacity": "0.4"});
+           } else {$('#next').css({ "opacity": "1"});
+               $('#last').css({ "opacity": "1"});
            }
          }
       })
@@ -297,14 +297,14 @@ function NewWindow()
            </tr>
        </table>
 
-          <div id="pagination" style="text-align: center">
-              <input type="button" id="first" value="First">&nbsp
-              <input type="button" id="prev" value="Prev">&nbsp
-              Page <span id="page"></span> of <span id="pages_amount"></span>
-              <input type="button" id="next" value="Next">&nbsp
-              <input type="button" id="last" value="Last">
-          </div>
+            <div id="pagination" style="text-align: center">
+                <input type="button" id="first" value="First">&nbsp
+                <input type="button" id="prev" value="Prev">&nbsp
 
-  </div>
+                <input type="button" id="next" value="Next">&nbsp
+                <input type="button" id="last" value="Last">
+                <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
+            </div>
+
 
 {% endblock body %}

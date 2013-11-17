@@ -19,7 +19,7 @@ class Order(Base):
 
     def __init__(self, user_id, date, status_id, delivery_id):
         super(Order, self).__init__()
-        self.user_id = user_id
+        self.user = user_id
         self.date = date
         self.status_id = status_id
         self.delivery_id = delivery_id
@@ -31,6 +31,9 @@ class Order(Base):
      # Nex method retrieve list of orders for one user if user_id exist and filter by date if date exist
      # and retrieve list of orders for all user if user_id is None and filter by date if date exist
      # example  get_order_user_id_date ('',date.today()) get_order_user_id_date (1)
+    @staticmethod
+    def getAllOrders():
+        return Order.query.order_by(Order.id).all()
 
     @staticmethod
     def get_order_user_id_date(user_id=None, date=None):

@@ -1,5 +1,5 @@
 from flask import jsonify, render_template, request, make_response
-from models.product_dao import dimensions
+from models.product_dao import Dimension
 from flask_bootstrap import app
 from maintenance.pager import Pagination
 from business_logic.product_dimension_manager import list_dimension, create_dimension, delete_dimension, update_dimension, get_dimension_by_id
@@ -20,22 +20,22 @@ def dimensions_id(id):
     dimensions ={'id': i.id, 'dimension': i.dimension.name}
     resp = make_response(jsonify(dimensions=dimensions),200)
     return resp
-	
+
 @app.route('/api/products/dimensions', methods = ['POST'])
 def dimensions_post():
     js = request.get_json()
     create_dimension(js['dimension'],js['id'])
     resp = make_response(0,201)
     return resp
-	
-	
+
+
 @app.route('/api/products/dimensions/<int:id>', methods=['DELETE'])
 def dimensions_id_delete(id):
     delete_dimension(id)
     resp = make_response(jsonify({'message':'success'}),200)
     return resp
 
-	
+
 @app.route('/api/products/dimensions', methods = ['PUT'])
 def dimension_update():
     js = request.get_json()
@@ -43,13 +43,13 @@ def dimension_update():
     resp = make_response(0,200)
     return resp
 
-	
+
 @app.errorhandler(ValidationException)
 def err_han(e):
     error_dict = {'message': e.message}
     return make_response(jsonify(error_dict), 404)
-	
-	
+
+
 @app.route('/productgrid')
 @app.route('/productgrid/<int:page>')
 def productgrid(page=1):

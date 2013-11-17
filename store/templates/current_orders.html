@@ -1,0 +1,194 @@
+{% extends "layout.html" %}
+{% block body %}
+        <script type="text/javascript">
+
+            var count_tr=45;
+            var tr = [];
+
+
+            $(document).ready (function() {
+            var page = 1;
+            var table_grid = document.getElementById('grid');
+            function creat_grid(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            for (var j=0; j<=4; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                }
+            creat_grid();
+
+            function clearing_tr(i)
+                {
+                    for (var j=0; j<=4; j++)
+                        {
+                            tr[i].cells[j].innerHTML='';
+                        }
+                }
+
+
+            function clearing_grid()
+                {
+                    for (var n=1 ; n<=count_tr; n++)
+                        {
+                            clearing_tr(n);
+                        }
+                }
+            function deleting_grid()
+                {
+                    for (var n=table_grid.rows.length ; n>=2; n--)
+                        {
+                            table_grid.removeChild(table_grid.childNodes[n]);
+                        }
+
+                }
+
+            function createEntity(){
+                $.ajax({
+                dataType: "json",
+                url: '/api/order',
+                type: 'GET',
+                data: json_value,
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        ajax_success(json);
+                    }
+                })
+            }
+
+
+            function ajax_success(json){
+                deleting_grid()
+                creat_grid(json.orders.length)
+                /*Create table */
+                for (var order_k in json.orders)
+                    {
+                        k++;
+                        tr[k].cells[0].innerHTML = json.orders[order_k].id;
+                        tr[k].cells[1].innerHTML = json.orders[order_k].user_id;
+                        tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
+                        tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                        tr[k].cells[4].abbr=k;
+                        tr[k].cells[4].onclick = function edit_tr2()
+                                      {
+                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                      }
+                    }
+                    k=0;
+                    /*End creating table*/
+            }
+
+var k=0;
+            form_value = {id : $('#name_form').val(), name : $('#order_name').val()};
+            json_value = JSON.stringify(form_value);
+
+            createEntity();
+
+
+            $('#clr').click(deleting_grid);
+
+  function grid_pagination(){$.ajax({
+        dataType: "json",
+        url: '/api/order/'+page,
+        type: 'GET',
+        contentType: "application/json",
+        success: function(json)
+        {
+           ajax_success(json);
+           records_amount=(json.records_amount);
+           records_per_page=(json.records_per_page);
+           pages_amount = Math.ceil(records_amount/records_per_page);
+           document.getElementById("page").innerHTML = page;
+           document.getElementById("pages_amount").innerHTML = pages_amount
+
+           if (page==1){
+               $('#prev').css({ "visibility": "hidden"});
+               $('#first').css({ "visibility": "hidden"});
+           } else {$('#prev').css({ "visibility": "visible"});
+               $('#first').css({ "visibility": "visible"});
+           }
+
+           if (page==pages_amount){
+               $('#next').css({ "visibility": "hidden"});
+               $('#last').css({ "visibility": "hidden"});
+           } else {$('#next').css({ "visibility": "visible"});
+               $('#last').css({ "visibility": "visible"});
+           }
+         }
+      })
+     }
+
+  if (page==1)
+  {grid_pagination();
+  }
+
+   $('#next').click(function(){
+    if (page*records_per_page>=records_amount){page=page}
+    else {page=page+1}
+    grid_pagination()
+    });
+
+    $('#prev').click(function(){
+    page=page-1;
+        if (page<=1){
+        page=1;
+    }
+    grid_pagination()
+    });
+
+    $('#first').click(function(){
+    page=1;
+    grid_pagination()
+    });
+
+    $('#last').click(function(){
+    page=pages_amount;
+    grid_pagination()
+
+
+ })});
+
+   </script>
+         <div class="">
+                <table id='grid' class="grid">
+                    <tr>
+                        <th>
+                            Order_id
+                        </th>
+                        <th>
+                            User
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+
+                    </tr>
+                </table>
+
+
+            <div id="pagination" style="text-align: center">
+                <input type="button" id="first" value="First">&nbsp
+                <input type="button" id="prev" value="Prev">&nbsp
+
+                <input type="button" id="next" value="Next">&nbsp
+                <input type="button" id="last" value="Last">
+                <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
+            </div>
+         </div>
+
+{% endblock body %}
