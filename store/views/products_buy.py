@@ -16,7 +16,7 @@ def amountProducts(id):
     if order is not None:
         OrderProduct.updateSumQuantity(order.id, id, request.get_json('value'))
     else:
-        Order.add_order(user_id,date.today(),'Card', )
+        Order.add_order(user_id,date.today(),'Cart', )
         OrderProduct.add_order_product(Order.getOrderByStatus(user_id).id, id, request.get_json('value'))
     return make_response(jsonify({'message':'success'}),200)
 
