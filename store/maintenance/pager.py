@@ -32,5 +32,5 @@ class Pagination(object):
         return self.page + 1
 
     def pager(self):
-        return Product.query.order_by(Product.name).slice(self.start, self.stop)
+        return Product.query.filter_by(is_deleted=False).order_by(Product.name).slice(self.start, self.stop)
 

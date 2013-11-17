@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean
 from sqlalchemy.orm import relationship, backref
 
 
@@ -11,16 +11,18 @@ class Product(Base):
     price = Column(Float)
     dimension_id = Column(Integer, ForeignKey('dimensions.id'))
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
+    is_deleted = Column(Boolean, default=False)
 
-    def __init__(self, name, description, price, dimension):
+    def __init__(self, name, description, price, dimension, is_deleted=False):
         super(Product, self).__init__()
         self.name = name
         self.description = description
         self.price = price
         self.dimension = dimension
+        self.is_deleted = is_deleted
 
     def __str__(self):
-        return '%s, %s, %s, %s' % (self.name, self.description, self.price, self.dimension)
+        return '%s, %s, %s, %s, %s' % (self.name, self.description, self.price, self.dimension, self.is_deleted)
 
     @staticmethod
     def add_product(name, description, price, id):
@@ -31,7 +33,7 @@ class Product(Base):
     @staticmethod
     def del_product(id):
         entry = Product.get_product(id)
-        db_session.delete(entry)
+        entry.is_deleted = True
         db_session.commit()
 
     @staticmethod
@@ -53,7 +55,7 @@ class Product(Base):
 
     @staticmethod
     def get_all_products():
-        return Product.query.all()
+        return Product.query.filter_by(is_deleted=False).all()
 
     @staticmethod
     def listFilterBuyProducts(name, start_price, end_price):
@@ -65,7 +67,6 @@ class Product(Base):
         if end_price:
             query = query.filter(Product.price <= end_price)
         return query.all()
-
 
 
 class Dimension(Base):
@@ -99,3 +100,5 @@ class Dimension(Base):
     @staticmethod
     def get_all_dimensions():
         return Dimension.query.all()
+#Product.del_product(10)
+#print Product.get_product(10)
