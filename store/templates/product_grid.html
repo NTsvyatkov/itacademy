@@ -100,7 +100,7 @@
                          {
                           alert('The product has been successfully deleted');
                           clearing_tr(tr_id);
-                          create_entity();
+                          grid_pagination();
                          }
                         else
                          alert (json.message);
@@ -275,7 +275,7 @@
          </form>
           <div style="margin-left:70%;">
              <input type="button" value="Apply" id='apply_button'>
-             <input type="button" value="clear" id='clr'>
+             <input type="button" value="Clear" id='clr'>
            </div>
         </div>
 
