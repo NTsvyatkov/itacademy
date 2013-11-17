@@ -47,6 +47,7 @@ DeliveryType.add_delivery('Himself')
 OrderStatus.add_status('In Stock')
 OrderStatus.add_status('Delivery process')
 OrderStatus.add_status('Delivered')
+OrderStatus.add_status('Cart')
 
 Order.add_order(1,date.today(),2,2)
 Order.add_order(3,date.today(),1,1)
