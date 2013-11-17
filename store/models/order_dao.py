@@ -60,6 +60,11 @@ class Order(Base):
         db_session.commit()
 
 
+    @staticmethod
+    def getOrderByStatus(user_id):
+        return Order.query.filter(and_(Order.status == 'Card', Order.user_id == user_id)).first()
+
+
 class OrderStatus(Base):
     __tablename__ = "order_status"
 
@@ -185,17 +190,10 @@ class OrderProduct(Base):
         db_session.commit()
 
     @staticmethod
-    def getOrderbByID(order_id):
-        return OrderProduct.query.filter(OrderProduct.order_id == order_id).first()
-
-    @staticmethod
-    def getOrderProduct(user_id, product_id):
-        return OrderProduct.query.filter(and_(OrderProduct.order_id == user_id,
-                                              OrderProduct.product_id == product_id)).first()
-
-    @staticmethod
-    def getSumQuantity(order_id, quantity):
-        return OrderProduct.getOrderbByID(order_id).quantity + quantity
+    def updateSumQuantity(order_id, product_id, new_quantity):
+        order_product_up = OrderProduct.get_order_product(order_id, product_id)
+        order_product_up.quantity += new_quantity
+        db_session.commit()
 
 #b = DeliveryType.get_delivery_all()
 
