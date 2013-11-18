@@ -6,8 +6,8 @@ from models.order_dao import Order, OrderProduct
 
 
 @app.route('/product_buy', methods=('GET', 'POST'))
-def product_buy():
-        return render_template('product_buy.html',)
+def productBuy():
+    return render_template('product_buy.html',)
 
 
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
