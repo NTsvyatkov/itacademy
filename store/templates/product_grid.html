@@ -3,15 +3,18 @@
 
 <script type="text/javascript">
 
-  var count_tr=23;
-  var count_td=6;
+
   var tr = [];
 
-  /* Creating table of products */
 
   $(document).ready(function() {
+
+    var count_tr=$('#table_size').val();
+    var count_td=6;
     var page = 1;
     var table_grid = document.getElementById('grid');
+
+  /* Creating table of products (size = count_tr Х count_td)  */
     function create_grid(count_tr, count_td)
     {
         for (var i=1; i<=count_tr;i++ )
@@ -155,7 +158,7 @@
   function grid_pagination(){
     $.ajax({
         dataType: "json",
-        url: '/api/products/'+page,
+        url: '/api/products/?page='+page+'&table_size='+count_tr,
         type: 'GET',
         contentType: "application/json",
         success: function(json)
@@ -211,6 +214,14 @@
     page=pages_amount;
     grid_pagination()
     });
+
+
+
+    $('#table_size').change(function () {
+     count_tr=$('#table_size').val();
+     $( "#table_siz option:selected" ).each(grid_pagination())
+     })
+
 
  });
 
@@ -279,6 +290,16 @@
 
       </div>
       <div id="products_table">
+
+        <div class="field" style="margin-left:5%;">
+                  <lable>Table size: </lable>
+                  <select id="table_size">
+                    <option selected>5</option>
+                    <option>25</option>
+
+                   </select>
+          </div>
+
        <table id='grid' class="grid">
            <tr>
                <th>

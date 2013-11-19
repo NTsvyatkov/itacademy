@@ -62,7 +62,7 @@ create_entity();
  function create_entity(){
        $.ajax({
         dataType: "json",
-        url: '/api/order',
+        url: '/api/order_product',
         type: 'GET',
         contentType: "application/json",
         success: function(json)
@@ -88,7 +88,7 @@ create_entity();
   if (id=='') id=0;
    $.ajax({
        dataType: "json",
-        url: '/api/order/'+id,
+        url: '/api/order_product/'+id,
         type: 'DELETE',
         contentType: "application/json",
         success: function(json)

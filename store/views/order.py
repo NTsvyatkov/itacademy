@@ -7,7 +7,7 @@ from business_logic.product_manager import list_products, list_dimensions, creat
 
 
 
-@app.route('/api/order', methods=['GET'])
+@app.route('/api/order_product', methods=['GET'])
 def order():
     order_list = Product.listFilterBuyProducts((request.args.get('name')), (request.args.get('start_price')),
                                          (request.args.get('end_price')))
@@ -17,14 +17,14 @@ def order():
     return make_response(jsonify(order=order_arr), 200)
 
 
-@app.route('/api/order/<int:id>', methods=['DELETE'])
+@app.route('/api/order_product/<int:id>', methods=['DELETE'])
 def order_id_delete(id):
     delete_product(id)
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
 
-@app.route('/api/order', methods=['POST'])
+@app.route('/api/order_product', methods=['POST'])
 def order_post():
     js = request.get_json()
     create_product(js['name'], js['description'], js['price'], js['id'])
@@ -32,6 +32,6 @@ def order_post():
     return resp
 
 
-@app.route('/order')
+@app.route('/order_product')
 def order_grid():
     return render_template('order.html')

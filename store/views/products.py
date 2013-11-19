@@ -45,11 +45,12 @@ def dimensions():
     return make_response(jsonify(dimensions=dimensions_arr), 200)
 
 
-@app.route('/api/products/<int:page>', methods=['GET'])
-def products_page(page):
+@app.route('/api/products/', methods=['GET'])
+def products_page():
     all_rec = list_products()
-    records_per_page = 5
-    pagination = Pagination(records_per_page, all_rec, page)
+    records_per_page = int(request.args.get('table_size'))
+    page=int(request.args.get('page'))
+    pagination = Pagination(records_per_page,all_rec,page )
     prods = pagination.pager()
     records_amount = len(all_rec)
     products_arr = []
@@ -90,10 +91,6 @@ def products_update():
     resp = make_response(0, 200)
     return resp
 
-
-@app.route('/productgrid')
-def productgrid():
-    return render_template('product_grid.html')
 
 
 #@app.route('/productgrid')
