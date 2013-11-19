@@ -1,0 +1,250 @@
+{% extends "layout.html" %}
+{% block body %}
+
+<script type="text/javascript">
+
+  var count_tr=10;
+  var count_td=6;
+  var tr = [];
+
+  /* Creating table of products */
+
+  $(document).ready(function() {
+    var page = 1;
+    var table_grid = document.getElementById('grid');
+    function create_grid(count_tr, count_td)
+    {
+        for (var i=1; i<=count_tr;i++ )
+        {
+            tr[i] = document.createElement('TR');
+            table_grid.appendChild(tr[i]);
+            tr[i].id=i;
+            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            for (var j=0; j<=count_td; j++)
+             {
+              tr[i].appendChild(document.createElement('TD'));
+             }
+        }
+      $( "tr:even" ).css( "background-color", "#c0c0c0" );
+    }
+
+    create_grid(count_tr,count_td);
+  /*End of creating table*/
+
+
+  function clearing_tr(i)
+  {
+      for (var j=0; j<=6; j++)
+      {
+          tr[i].cells[j].innerHTML='';
+      }
+  }
+
+
+  function clearing_grid()
+  {
+    for (var n=2 ; n<=count_tr; n++)
+    {
+      clearing_tr(n);
+    }
+  }
+
+ function deleting_grid()
+ {
+    for (var n=table_grid.rows.length ; n>=2; n--)
+      {
+       table_grid.removeChild(table_grid.childNodes[n]);
+      }
+
+ }
+
+create_entity();
+ function create_entity(){
+       $.ajax({
+        dataType: "json",
+        url: '/api/order',
+        type: 'GET',
+        contentType: "application/json",
+        success: function(json)
+        {
+            ajax_success(json);
+         }
+      })
+ }
+
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+    json_value = JSON.stringify(form_value);
+
+
+
+    $('#apply_button').click(function(){
+    create_entity();
+    });
+
+
+  function delete_id(id)
+  {
+  if (id=='') id=0;
+   $.ajax({
+       dataType: "json",
+        url: '/api/order/'+id,
+        type: 'DELETE',
+        contentType: "application/json",
+        success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The product has been successfully deleted from the cart');
+                          create_entity();
+                         }
+                        else
+                         alert (json.message);
+                    },
+
+        error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+
+  })
+ }
+
+  function ajax_success(json){
+           deleting_grid()
+           create_grid(json.order.length,count_td)
+           /*Create table with new order_products list */
+            for (var product_k in json.order)
+                  {
+                 k++;
+                 product_name =json.order[product_k].name;
+                 id_product =json.order[product_k].id;
+                 tr[k].cells[0].innerHTML =product_name;
+                 tr[k].cells[1].innerHTML = json.order[product_k].description;
+                 tr[k].cells[2].innerHTML = json.order[product_k].dimension;
+                 tr[k].cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
+                 input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'>\
+                          <input type='button' value='update' class='update_amount'>";
+
+                 tr[k].cells[4].innerHTML = input;
+                 if (json.order[product_k].quantity) quant= json.order[product_k].quantity; else quant= 0;
+                 var amount= +json.order[product_k].price * +quant;
+                 tr[k].cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
+                 tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
+                 id='"+product_name+"' alt=" + json.order[product_k].id + " >";
+                }
+                k=0;
+
+            /*End creating table*/
+
+                $('.delete_img').click(function(){
+                  if(confirm('Are you sure that you want to remove '+ this.id +' from the cart?'))
+                  {
+                    delete_id(this.alt);
+                   }
+                 })
+
+                $('tr input.update_amount').click(function(){
+                   var tr= $(this).closest('tr');
+                   var price = tr.children('td').children('.price').text();
+                   var quantity = $(this).prev().val() ;
+                   var sum = +price*+quantity;
+                   tr.children('td').children('.amount').text(sum);
+
+
+                   $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
+                })
+
+  }
+
+   $('#clr').click(deleting_grid);
+
+ function get_total_amount()
+ {
+   var total =0;
+   for( var i=0, total=0; i<$('.amount').size(); i++)
+   {
+    total = +$('.amount:eq('+i+')').text() + +total;
+   }
+   return total;
+ }
+
+ $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
+
+ });
+
+
+
+   </script>
+
+
+  <div id="products_block">
+      <div id="products_filter">
+
+
+
+      </div>
+      <div id="products_table">
+       <table id='grid' class="grid">
+           <tr>
+
+                <th>
+                   Product name
+               </th>
+               <th>
+                   Description
+               </th>
+               <th>
+                   Dimension
+               </th>
+                <th>
+                   Price
+               </th>
+               <th>
+                   Quantity
+               </th>
+               <th>
+                   Amount
+               </th>
+               <th>
+                   Delete
+               </th>
+           </tr>
+       </table>
+
+      </div>
+          <div style="clear:both;"></div>
+      <div class="product_filter_in" style=" margin:0px auto; ">
+         <div class="ProductTitle" id="total_amount" style="width:75%; text-align:right;" >
+             Total amount:
+         </div>
+         <div class="order_block">
+          <form class='form' style="width:30%; margin-left:20%; padding: 5px; ">
+           <div class="field">
+               <lable>Delivery Type: </lable>
+               <select id="delivery_options" style="width:165px;">
+                    <option></option>
+                    <option>start with</option>
+                    <option>contains</option>
+                    <option>equal to</option>
+               </select>
+           </div>
+           <div class="field">
+               <lable>Delivery Address: </lable>
+               <input type="text" id="input_address">
+           </div>
+
+           <div class="field">
+               <lable>Comments: </lable>
+               <textarea class="comments_area"></textarea>
+           </div>
+           <div class="field">
+              <input type="button" id="add_order" value="Place an order">
+           </div>
+          </form>
+         </div>
+
+        </div>
+</div>
+{% endblock body %}

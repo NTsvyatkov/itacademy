@@ -116,7 +116,11 @@ body {
   }
 
 select{
-width:80px;
+ width:80px;
+ border:2px solid #999;
+ padding:5px;
+ border-radius:4px;
+
 }
 
 form{
@@ -130,6 +134,13 @@ form{
 label{
  cursor:pointer;
  display:block;
+ }
+
+.comments_area {
+ width:150px;
+ border:2px solid #999;
+ padding:5px;
+ border-radius:4px;
  }
 
  input[type="text"], input[type="password"] {

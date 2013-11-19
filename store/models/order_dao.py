@@ -19,7 +19,7 @@ class Order(Base):
 
     def __init__(self, user_id, date, status_id, delivery_id):
         super(Order, self).__init__()
-        self.user = user_id
+        self.user_id = user_id
         self.date = date
         self.status_id = status_id
         self.delivery_id = delivery_id
@@ -28,15 +28,16 @@ class Order(Base):
     def get_order(id):
         return Order.query.get(id)
 
-     # Nex method retrieve list of orders for one user if user_id exist and filter by date if date exist
-     # and retrieve list of orders for all user if user_id is None and filter by date if date exist
-     # example  get_order_user_id_date ('',date.today()) get_order_user_id_date (1)
+
     @staticmethod
     def getAllOrders():
         return Order.query.order_by(Order.id).all()
 
     @staticmethod
     def get_order_user_id_date(user_id=None, date=None):
+        """ Nex method retrieve list of orders for one user if user_id exist and filter by date if date exist
+        and retrieve list of orders for all user if user_id is None and filter by date if date exist
+        example  get_order_user_id_date ('',date.today()) get_order_user_id_date (1)"""
         if date and user_id:
             return Order.query.filter(Order.user_id == user_id).filter(Order.date == date).all()
         elif user_id:
@@ -78,14 +79,16 @@ class OrderStatus(Base):
         super(OrderStatus, self).__init__()
         self.name = name
 
-    # Next method retrieve list of records
+
     @staticmethod
     def get_status_all():
+        # Next method retrieve list of records
         return OrderStatus.query.order_by(id).all()
 
-    # Next method retrieve record by id
+
     @staticmethod
     def get_status(id):
+        # Next method retrieve record by id
         return OrderStatus.query.get(id)
 
     @staticmethod
@@ -105,6 +108,10 @@ class OrderStatus(Base):
         dele = OrderStatus.get_status(id)
         db_session.delete(dele)
         db_session.commit()
+
+    @staticmethod
+    def get_all_order_status():
+        return OrderStatus.query.all()
 
 
 class DeliveryType(Base):
@@ -161,9 +168,10 @@ class OrderProduct(Base):
         self.order_id = order_id
         self.product_id = product_id
 
-    #Next method retrieve one record for composite primary key (order_id, product_id)
+
     @staticmethod
     def get_order_product(order_id,product_id):
+        #Next method retrieve one record for composite primary key (order_id, product_id)
         return OrderProduct.query.get((order_id, product_id))
 
     @staticmethod
