@@ -167,6 +167,10 @@ class OrderProduct(Base):
 
     #Next method retrieve one record for composite primary key (order_id, product_id)
     @staticmethod
+    def getAllOrderProduct():
+        return OrderProduct.query.order_by(OrderProduct.order_id).all()
+
+    @staticmethod
     def get_order_product(order_id,product_id):
         return OrderProduct.query.get((order_id, product_id))
 

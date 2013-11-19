@@ -76,6 +76,7 @@
                         tr[k].cells[0].innerHTML = json.orders[order_k].id;
                         tr[k].cells[1].innerHTML = json.orders[order_k].user_id;
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
+                        tr[k].cells[3].innerHTML = "$"+json.orders[order_k].amount;
                         tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
                         tr[k].cells[4].abbr=k;
                         tr[k].cells[4].onclick = function edit_tr2()
@@ -203,6 +204,17 @@ var k=0;
                 })
             }
         });
+     $.ajax({
+            dataType: "json",
+            url: '/api/delivery',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.dilivery, function(i, pr){
+                    $('#delivery').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                })
+            }
+        });
 
 </script>
 
@@ -211,21 +223,15 @@ var k=0;
 </style>
 
     <form id="info"  name="form"  class = "form" method ="POST"  >
-        <div style = "height: 10px;"></div>
-    <h1 class="ProductTitle" >Create Product</h1>
-
         <h2 class="ProductTitle" >Status</h2>
-
         <select id="status" name="status">
         <option value="">Select</option>
-        <div style = "height: 10px;"></div>
         </select>
 
         <h2 class="ProductTitle" >Delivery type</h2>
 
         <select id="delivery" name="delivery">
         <option value="">Select</option>
-        <div style = "height: 10px;"></div>
         </select>
 
 

@@ -37,7 +37,7 @@ def orders_page(page):
     records_amount = len(all_rec)
     orders_arr = []
     for i in prods:
-        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name})
+        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'amount': (i.delivery.id)})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
