@@ -64,16 +64,16 @@ def users_id_delete(user_id):
 
 @app.route('/api/user', methods = ['POST'])
 def users_post():
-    js = request.get_json()
-    createUser(js['user_id'],js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
-    resp = make_response(0,201)
+    js = request.json
+    createUser(js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
+    resp = make_response('',201)
     return resp
 
 @app.route('/api/user', methods = ['PUT'])
 def users_update():
-    js = request.get_json()
-    updateUser(js['user_id'],js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
-    resp = make_response(0,200)
+    js = request.json
+    updateUser(js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
+    resp = make_response('',200)
     return resp
 
 @app.errorhandler(ValidationException)
