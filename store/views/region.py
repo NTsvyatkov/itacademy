@@ -27,9 +27,9 @@ def regions_id(id):
 
 @app.route('/api/regions', methods = ['POST'])
 def regions_post():
-    js = request.json
+    js = request.get_json()
     createRegion(js['name'])
-    resp = make_response(0, 201)
+    resp = make_response('', 201)
     return resp
 
 
@@ -44,7 +44,7 @@ def regions_id_delete(id):
 def regions_update():
     js = request.json
     updateRegion(js['region_id'],js['name'])
-    resp = make_response(0, 200)
+    resp = make_response('', 200)
     return resp
 
 

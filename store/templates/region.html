@@ -103,9 +103,9 @@
  $('#clr').click(deleting_grid);
 })
 
- function Add(name) {
+ function add(name) {
    $.ajax({
-    // data = { 'name': name}       
+    data : JSON.stringify({ 'name': name}),
      dataType: "json",
      url: '/api/regions',
      type: 'POST',
@@ -138,12 +138,12 @@
       })
    }
 
- function Update(name) {
+ function update(id, name) {
    $.ajax({ 
      dataType: "json",
      url: '/api/regions',
      type: 'PUT',
-     //data = { 'name': name} 
+     data : JSON.stringify({'id': id, 'name': name}),
      contentType: "application/json",
      success:function(json){
            //clearing_grid()
@@ -196,13 +196,13 @@
 </div>
 
 
-<form action="" method="POST" method="PUT" id="info">
+<form action="" id="info">
 <fieldset style="width: 300px; height: 100px">
   <legend>Add/Edit Region</legend>
     <div id="name-wrap">
     <label for="name">Name</label>
     <input type="text" id="name" name="name">
-    <p><input type="submit" value="Add" OnClick="add(name)">  <input type="submit" value="Update" OnClick="Update(name)">  <input type="submit" value="Cancel" OnClick=""></p>
+    <p><input type="button" value="Add" OnClick="add(name)">  <input type="button" value="Update" OnClick="update(id, name)">  <input type="submit" value="Cancel" OnClick=""></p>
 </fieldset>
 </form>
     
