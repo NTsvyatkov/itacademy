@@ -149,6 +149,10 @@ class DeliveryType(Base):
         db_session.delete(del_delivery)
         db_session.commit()
 
+    @staticmethod
+    def get_all_delivery_type():
+        return DeliveryType.query.all()
+
 
 class OrderProduct(Base):
     __tablename__ = "order_product"
@@ -166,6 +170,10 @@ class OrderProduct(Base):
         self.product_id = product_id
 
     #Next method retrieve one record for composite primary key (order_id, product_id)
+    @staticmethod
+    def getAllOrderProduct():
+        return OrderProduct.query.order_by(OrderProduct.order_id).all()
+
     @staticmethod
     def get_order_product(order_id,product_id):
         return OrderProduct.query.get((order_id, product_id))
