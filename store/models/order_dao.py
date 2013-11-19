@@ -50,7 +50,7 @@ class Order(Base):
 
     @staticmethod
     def add_order(user_id, date, status_id, delivery_id = None):
-        order = Order(user_id, date, status_id, delivery_id)
+        order = Order(user_id, date, OrderStatus.query.get(status_id), DeliveryType.query.get(delivery_id))
         db_session.add(order)
         db_session.commit()
 
@@ -152,11 +152,6 @@ class DeliveryType(Base):
         db_session.delete(del_delivery)
         db_session.commit()
 
-    @staticmethod
-    def get_all_delivery_type():
-        return DeliveryType.query.all()
-
-
 
 class OrderProduct(Base):
     __tablename__ = "order_product"
@@ -189,7 +184,7 @@ class OrderProduct(Base):
 
     @staticmethod
     def add_order_product(order_id, product_id, quantity):
-        order_product = OrderProduct(order_id, product_id, quantity)
+        order_product = OrderProduct(Order.query.get(order_id),Product.query.get(product_id), quantity)
         db_session.add(order_product)
         db_session.commit()
 
@@ -211,6 +206,11 @@ class OrderProduct(Base):
         order_product_up.quantity += new_quantity
         db_session.commit()
 
+
+
+def get_order_product_list():
+    return Order.query.join(OrderProduct).join(Product).filter(and_(Order.user_id == 2, \
+         OrderStatus.name == 'Delivered'))
 #b = DeliveryType.get_delivery_all()
 
 #OrderProduct.add_order_product(1,4,5)
@@ -234,3 +234,6 @@ class OrderProduct(Base):
 #for i in order1:
 #    print i.quantity
 
+list_order = get_order_product_list()
+for i in list_order:
+    print i.product.name
