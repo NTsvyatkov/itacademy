@@ -76,11 +76,12 @@
                         tr[k].cells[0].innerHTML = json.orders[order_k].id;
                         tr[k].cells[1].innerHTML = json.orders[order_k].user_id;
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
+                        tr[k].cells[3].innerHTML = "$"+json.orders[order_k].amount;
                         tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
                         tr[k].cells[4].abbr=k;
                         tr[k].cells[4].onclick = function edit_tr2()
                                       {
-                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                       alert ('Edit order # '+tr[this.abbr].cells[0].innerHTML+'');
                                       }
                     }
                     k=0;
@@ -96,63 +97,65 @@ var k=0;
 
             $('#clr').click(deleting_grid);
 
-  function grid_pagination(){$.ajax({
-        dataType: "json",
-        url: '/api/order/'+page,
-        type: 'GET',
-        contentType: "application/json",
-        success: function(json)
-        {
-           ajax_success(json);
-           records_amount=(json.records_amount);
-           records_per_page=(json.records_per_page);
-           pages_amount = Math.ceil(records_amount/records_per_page);
-           document.getElementById("page").innerHTML = page;
-           document.getElementById("pages_amount").innerHTML = pages_amount
+            function grid_pagination(){$.ajax({
+                dataType: "json",
+                url: '/api/order/'+page,
+                type: 'GET',
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        ajax_success(json);
+                        records_amount=(json.records_amount);
+                        records_per_page=(json.records_per_page);
+                        pages_amount = Math.ceil(records_amount/records_per_page);
+                        document.getElementById("page").innerHTML = page;
+                        document.getElementById("pages_amount").innerHTML = pages_amount
 
-           if (page==1){
-               $('#prev').css({ "visibility": "hidden"});
-               $('#first').css({ "visibility": "hidden"});
-           } else {$('#prev').css({ "visibility": "visible"});
-               $('#first').css({ "visibility": "visible"});
-           }
+                        if (page==1){
+                            $('#prev').css({ "opacity":"0.4"});
+                            $('#first').css({ "opacity":"0.4"});
+                        } else {$('#prev').css({ "opacity": "1"});
+                            $('#first').css({ "opacity": "1"});
+                        }
 
-           if (page==pages_amount){
-               $('#next').css({ "visibility": "hidden"});
-               $('#last').css({ "visibility": "hidden"});
-           } else {$('#next').css({ "visibility": "visible"});
-               $('#last').css({ "visibility": "visible"});
-           }
-         }
-      })
-     }
+                        if (page==pages_amount){
+                            $('#next').css({ "opacity": "0.4"});
+                            $('#last').css({ "opacity": "0.4"});
+                        } else {$('#next').css({ "opacity": "1"});
+                            $('#last').css({ "opacity": "1"});
+                        }
+                    }
+                })
+            }
 
-  if (page==1)
-  {grid_pagination();
-  }
+            if (page==1){
+                grid_pagination();
+            }
 
-   $('#next').click(function(){
-    if (page*records_per_page>=records_amount){page=page}
-    else {page=page+1}
-    grid_pagination()
-    });
+            $('#next').click(function(){
+            if (page*records_per_page>=records_amount){page=page}
+            else {page=page+1}
+            grid_pagination()
+            });
 
-    $('#prev').click(function(){
-    page=page-1;
-        if (page<=1){
-        page=1;
-    }
-    grid_pagination()
-    });
+            $('#prev').click(function(){
+            page=page-1;
+            if (page<=1){
+            page=1;
+            }
+            grid_pagination()
+            });
 
-    $('#first').click(function(){
-    page=1;
-    grid_pagination()
-    });
+            $('#first').click(function(){
+            page=1;
+            grid_pagination()
+            });
 
-    $('#last').click(function(){
-    page=pages_amount;
-    grid_pagination()
+            $('#last').click(function(){
+            page=pages_amount;
+            grid_pagination()
+
+
 
 
  })});
@@ -202,7 +205,19 @@ var k=0;
                     $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
                 })
             }
-        });
+    });
+    </script><script>
+     $.ajax({
+            dataType: "json",
+            url: '/api/delivery',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.dilivery, function(k, j){
+                    $('#delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
+                })
+            }
+     });
 
 </script>
 
@@ -211,46 +226,34 @@ var k=0;
 </style>
 
     <form id="info"  name="form"  class = "form" method ="POST"  >
-        <div style = "height: 10px;"></div>
-    <h1 class="ProductTitle" >Create Product</h1>
-
         <h2 class="ProductTitle" >Status</h2>
-
         <select id="status" name="status">
-        <option value="">Select</option>
-        <div style = "height: 10px;"></div>
+        <option value="">Select status</option>
         </select>
 
         <h2 class="ProductTitle" >Delivery type</h2>
 
         <select id="delivery" name="delivery">
-        <option value="">Select</option>
-        <div style = "height: 10px;"></div>
-        </select>
+        <option value="">Select delivery type</option>
+        </select></br></br>
 
 
-        <div class ="product_name"> <div id="product_name-wrap" class="slider">
-	           <label for="product_name">Name*</label>
-               <input cols="6" id="product_name" name="product_name" type="text" value=""maxlength="100">
-               <div style = "height: 10px; width: 30px;"></div>
-               <div class = "error_product_name"></div>
-         </div>
-         </div>
+        <div class ="delivery_address"> <div id="delivery_address-wrap" class="slider">
+	           <label for="delivery_address">Delivery Address</label>
+               <input id="delivery_address" name="delivery_address" type="text" value="" >
+        </div>
+        </div></br>
 
-		 <div class ="price"> <div id="price-wrap" class="slider">
-	           <label for="price">Price*</label>
-               <input id="price" name="price" type="text" value=""maxlength="100">
-               <div style = "height: 10px;"></div>
-               <div class = "error_price"></div>
+		 <div class ="comments"> <div id="comments-wrap" class="slider">
+	           <label for="comments">Comments</label>
+               <textarea rows="6" cols="27" id="comments" name="comments" type="text" value="" ></textarea>
          </div>
          </div>
 
 
-    </br></br></br></br></br>
+    </br></br>
 
-    <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
-    <input type="button" name="cancel" value="Cancel">
-    <input type="button" value ="Create" class="button" onclick="return validate_form2()" id ="post_form">
+    <input type="button" value ="Update" class="button">
 
     </form>
 

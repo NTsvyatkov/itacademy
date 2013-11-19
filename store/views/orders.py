@@ -5,7 +5,7 @@ from models.order_dao import Order,  OrderStatus
 from maintenance.pager_by_orders import Pagination
 
 @app.route('/my_orders')
-def orders():
+def  my_orders():
     return render_template('my_orders.html',)
 
 #@app.route('/api/orders', methods=['GET'])
