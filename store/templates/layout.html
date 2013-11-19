@@ -60,12 +60,6 @@
      Product buy
      </a>
  </li>
- <li>
-     <a href="my_orders" title="my_orders"
-         {% if request.environ.PATH_INFO.strip('/') =='my_orders'%}class="active"{% endif %}>
-     My Orders
-     </a>
- </li>
 
  <li>
      <a href="current_orders" title="current_orders"
@@ -78,6 +72,12 @@
      <a href="region" title="region"
          {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
      Region
+     </a>
+ </li>
+     <li>
+     <a href="my_orders" title="my_orders"
+         {% if request.environ.PATH_INFO.strip('/') =='my_orders'%}class="active"{% endif %}>
+     My Orders
      </a>
  </li>
 
