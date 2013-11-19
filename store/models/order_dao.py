@@ -149,6 +149,10 @@ class DeliveryType(Base):
         db_session.delete(del_delivery)
         db_session.commit()
 
+    @staticmethod
+    def get_all_delivery_type():
+        return DeliveryType.query.all()
+
 
 class OrderProduct(Base):
     __tablename__ = "order_product"
