@@ -191,4 +191,77 @@ var k=0;
             </div>
          </div>
 
+        <script type="text/javascript">
+    $.ajax({
+            dataType: "json",
+            url: '/api/dimension',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.dimensions, function(i, pr){
+                    $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                })
+            }
+        });
+     $.ajax({
+            dataType: "json",
+            url: '/api/dimension',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.dimensions, function(i, pr){
+                    $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                })
+            }
+        });
+</script>
+
+<style type="text/css">
+    div { clear:both;position:relative; }
+</style>
+
+    <form id="info"  name="form"  class = "form" method ="POST"  >
+        <div style = "height: 10px;"></div>
+    <h1 class="ProductTitle" >Create Product</h1>
+
+        <h2 class="ProductTitle" >Status</h2>
+
+        <select id="status" name="status">
+        <option value="">Select</option>
+        <div style = "height: 10px;"></div>
+        </select>
+
+        <h2 class="ProductTitle" >Delivery type</h2>
+
+        <select id="delivery" name="delivery">
+        <option value="">Select</option>
+        <div style = "height: 10px;"></div>
+        </select>
+
+
+        <div class ="product_name"> <div id="product_name-wrap" class="slider">
+	           <label for="product_name">Name*</label>
+               <input cols="6" id="product_name" name="product_name" type="text" value=""maxlength="100">
+               <div style = "height: 10px; width: 30px;"></div>
+               <div class = "error_product_name"></div>
+         </div>
+         </div>
+
+		 <div class ="price"> <div id="price-wrap" class="slider">
+	           <label for="price">Price*</label>
+               <input id="price" name="price" type="text" value=""maxlength="100">
+               <div style = "height: 10px;"></div>
+               <div class = "error_price"></div>
+         </div>
+         </div>
+
+
+    </br></br></br></br></br>
+
+    <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
+    <input type="button" name="cancel" value="Cancel">
+    <input type="button" value ="Create" class="button" onclick="return validate_form2()" id ="post_form">
+
+    </form>
+
 {% endblock body %}

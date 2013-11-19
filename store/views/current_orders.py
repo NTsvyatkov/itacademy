@@ -18,7 +18,7 @@ def orders():
     orders_list = getListOrder()
     orders_arr = []
     for i in orders_list:
-        orders_arr.append({'id': i.id, 'user_id': i.user.last_name, 'status_id': i.order_status.name})
+        orders_arr.append({'id': i.id, 'user_id': i.user.last_name, 'status_id': i.status.name})
     return make_response(jsonify(orders=orders_arr), 200)
 
 
@@ -31,7 +31,7 @@ def orders_page(page):
     records_amount = len(all_rec)
     orders_arr = []
     for i in prods:
-        orders_arr.append({'id': i.id, 'user_id': i.user_id, 'status_id': i.status_id})
+        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
