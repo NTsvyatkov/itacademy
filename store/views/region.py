@@ -35,7 +35,7 @@ def region_page(page):
     records_amount = len(all_rec)
     regions_arr = []
     for i in prods:
-        regions_arr.append({'id': i.id, 'name': i.name})
+        regions_arr.append({'name': i.name})
     return make_response(jsonify(regions=regions_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
