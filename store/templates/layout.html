@@ -73,6 +73,13 @@
      </a>
  </li>
 
+  <li>
+     <a href="region" title="region"
+         {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
+     Region
+     </a>
+ </li>
+
 </ul>
 
 {% endblock bar %}

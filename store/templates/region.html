@@ -1,115 +1,162 @@
 {% extends "layout.html" %}
 {% block body %}
-   <script type="text/javascript">
 
-   var count_tr=10;
+ <script type="text/javascript">
+
+  var count_tr=10;
    var tr = [];
 
    /* Creating table of regions */
 
   $(document).ready(function() {
-   var table_grid = document.getElementById('grid');
-   function creat_grid(count){
-     for (var i=1; i<=count;i++ ){
-       tr[i] = document.createElement('TR');
-       table_grid.appendChild(tr[i]);
-       tr[i].id=i;
-       if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-         for (var j=0; j<=2; j++){
-           tr[i].appendChild(document.createElement('TD'));}
-       }
-     }
+    var page = 1;
+    var table_grid = document.getElementById('grid');
+    function creat_grid(count)
+    {
+        for (var i=1; i<=count;i++ )
+        {
+            tr[i] = document.createElement('TR');
+            table_grid.appendChild(tr[i]);
+            tr[i].id=i;
+            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            for (var j=0; j<=2; j++)
+             {
+              tr[i].appendChild(document.createElement('TD'));
+             }
+        }
+      $( "tr:even" ).css( "background-color", "#c0c0c0" );
+    }
 
     creat_grid(count_tr);
   /*End of creating table*/
 
 
-  function clearing_tr(i){
-      for (var j=0; j<=2; j++){
-          tr[i].cells[j].innerHTML='';}
+  function clearing_tr(i)
+  {
+      for (var j=0; j<=2; j++)
+      {
+          tr[i].cells[j].innerHTML='';
+      }
   }
 
-  function clearing_grid(){
-    for (var n=2 ; n<=count_tr; n++){
-      clearing_tr(n);}
+
+  function clearing_grid()
+  {
+    for (var n=2 ; n<=count_tr; n++)
+    {
+      clearing_tr(n);
+    }
   }
 
-  function deleting_grid(){
-    for (var n=table_grid.rows.length ; n>=2; n--){
-       table_grid.removeChild(table_grid.childNodes[n]);}
-  }
+ function deleting_grid()
+ {
+    for (var n=table_grid.rows.length ; n>=2; n--)
+      {
+       table_grid.removeChild(table_grid.childNodes[n]);
+      }
 
-  function create_entity(){
-    $.ajax({
-    dataType: "json",
-    url: '/api/regions',
-    type: 'GET',
-    data: json_value,
-    contentType: "application/json",
-    success: function(json){
-           //clearing_grid()
-      deleting_grid()
-      creat_grid(json.regions.length)
-          /*Create table with new regions list */
-    for (var region_k in json.regions){
-      k++;
-      if (k>count_tr) break;
-        tr[k].cells[0].innerHTML = json.regions[region_k].name;
-        tr[k].cells[1].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
-        tr[k].cells[2].innerHTML = "<input type='button' value='Delete' id='delete_region'  alt=" + k + ">";
-        tr[k].cells[1].abbr=k;
-        tr[k].cells[2].abbr=k;
-        tr[k].cells[1].onclick = function edit_region(){
-         // gthtyjc
-          }
-        tr[k].cells[2].onclick= function delete_region(){
-          var str = document.getElementById('output'+this.abbr).valueL
-          if (confirm('Are you sure you want to delete region '+ str+'?')){
-            delete_id(id, value)}
-        }
-        }
-        k=0;
-            /*End creating table*/
-         }
-      })
-   }
-
-  var k=0;
-  form_value = {id : $('#name_form').val(), name : $('#region_name').val()}
-  json_value = JSON.stringify(form_value);
-
-  function delete_region(id,value){
-    if (id=='') id=0;
-      form_value = {id : id}
-      json_value = JSON.stringify(form_value);
-      $.ajax({
-        dataType: "json",
-        url: '/api/regions'+id,
-        type: 'DELETE',
-        contentType: "application/json",
-        success: function(json){
-          if (json.message == 'success'){
-            alert('The region has been successfully deleted');
-            clearing_tr(tr_id);
-            create_entity();}
-          else
-            alert (json.message);},
-        error: function(e){
-          error = JSON.parse(e.responseText);
-          alert(error.message);}
-  })
  }
 
- $('#clr').click(deleting_grid);
-})
 
- function Add(name) {
+ function create_entity(){
+       $.ajax({
+        dataType: "json",
+        url: '/api/regions',
+        type: 'GET',
+        data: json_value,
+        contentType: "application/json",
+        success: function(json)
+        {
+            ajax_success(json);
+         }
+      })
+ }
+
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#region_name').val()};
+    json_value = JSON.stringify(form_value);
+
+
+
+
+  function delete_id(id,tr_id)
+  {
+  if (id=='') id=0;
+   form_value = {id : id};
+   json_value = JSON.stringify(form_value);
    $.ajax({
-    // data = { 'name': name}       
+       dataType: "json",
+        url: '/api/regions/'+id,
+        type: 'DELETE',
+        /*data: {id:id}*/
+        contentType: "application/json",
+        success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The region has been successfully deleted');
+                          clearing_tr(tr_id);
+                          create_entity();
+                         }
+                        else
+                         alert (json.message);
+                    },
+
+        error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+
+  })
+  }
+
+  function ajax_success(json){
+
+           deleting_grid()
+           creat_grid(json.regions.length)
+           /*Create table with new regions list */
+            for (var region_k in json.regions)
+                {
+                 k++;
+
+                 tr[k].cells[0].innerHTML = json.regions[region_k].name;
+                 tr[k].cells[1].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[2].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[1].abbr=k;
+                 tr[k].cells[2].abbr=k;
+                 tr[k].cells[1].onclick = function edit_region()
+                                      {
+                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                      }
+                 tr[k].cells[2].onclick= function delete_region()
+                                      {
+                                        var str = tr[this.abbr].cells[1].innerHTML
+                                        var id_tr = tr[this.abbr].cells[0].innerHTML
+                                        if (confirm('Are you sure you want to delete region '+ str +' '+id_tr+'?'))
+                                        {
+                                          delete_id(id_tr,this.abbr)
+                                        }
+                                       }
+                }
+                k=0;
+            /*End creating table*/
+
+
+  }
+  $('#clr').click(deleting_grid);
+  })
+
+
+ function add(name) {
+
+   $.ajax({
+
      dataType: "json",
      url: '/api/regions',
      type: 'POST',
      contentType: "application/json",
+     data : JSON.stringify({name: name}),
      success:function(json){
            //clearing_grid()
       deleting_grid()
@@ -138,12 +185,12 @@
       })
    }
 
- function Update(name) {
+ function update(name, id) {
    $.ajax({ 
      dataType: "json",
      url: '/api/regions',
      type: 'PUT',
-     //data = { 'name': name} 
+     data : JSON.stringify({id:id, name:name}),
      contentType: "application/json",
      success:function(json){
            //clearing_grid()
@@ -173,7 +220,22 @@
       })
  }
 
-   </script>
+  function edit_region()
+  $.ajax({
+            dataType: "json",
+            url: '/api/regions',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.regions, function(i, pr){
+                    $('#name').append('<input value="' + pr.id + '">' + pr.name + '</input>');
+                })
+            }
+        });
+
+
+
+</script>
 
 
 
@@ -199,12 +261,12 @@
 <form action="" method="POST" method="PUT" id="info">
 <fieldset style="width: 300px; height: 100px">
   <legend>Add/Edit Region</legend>
-    <div id="name-wrap">
+    <div>
     <label for="name">Name</label>
     <input type="text" id="name" name="name">
-    <p><input type="submit" value="Add" OnClick="add(name)">  <input type="submit" value="Update" OnClick="Update(name)">  <input type="submit" value="Cancel" OnClick=""></p>
+    <p><input type="button" value="Add" OnClick="add(name)">  <input type="button" value="Update" OnClick="update(name)">  <input type="submit" value="Cancel" OnClick=""></p>
 </fieldset>
 </form>
-    
+
     
 {% endblock body %}
