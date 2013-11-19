@@ -162,7 +162,7 @@ var region =   document.form.region.value;
                 password: $('input[name="password"]').val(),
                 email: $('input[name="email"]').val(),
                 region_id: $('select#region').val(),
-                role_id: $( 'input:radio[name=role_id]:checked' ).val()
+                role_id: $('input[name=role]:checked', '#roles').val()
                }),
         contentType: 'application/json;',
 

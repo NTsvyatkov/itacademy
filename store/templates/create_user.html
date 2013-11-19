@@ -256,8 +256,8 @@ $.ajax({
             var element = document.createElement("input");
             element.setAttribute("type", "radio");
             element.setAttribute("value", roles_data[i].role_id);
-            element.setAttribute("name", "gr");
-            element.setAttribute("id", roles_data[i].name.value);
+             element.setAttribute("name", "role");
+             element.setAttribute("id", roles_data[i].role_id);
             if (i==0)
               element.setAttribute("checked", true);
             label.appendChild(element);
