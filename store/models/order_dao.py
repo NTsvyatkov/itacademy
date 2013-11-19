@@ -106,6 +106,10 @@ class OrderStatus(Base):
         db_session.delete(dele)
         db_session.commit()
 
+    @staticmethod
+    def get_all_order_status():
+        return OrderStatus.query.all()
+
 
 class DeliveryType(Base):
     __tablename__ = "delivery_type"

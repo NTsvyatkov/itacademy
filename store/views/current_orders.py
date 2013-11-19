@@ -1,7 +1,7 @@
 from flask import render_template, request, make_response, jsonify, session
 from flask_bootstrap import app
 from maintenance.pager_order import Pagination
-from business_logic.order_manager import getListOrder, get_order_by_id
+from business_logic.order_manager import getListOrder, get_order_by_id, list_status
 from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 
 
@@ -11,7 +11,13 @@ from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 def current_orders():
         return render_template('current_orders.html',)
 
-
+@app.route('/api/status', methods=['GET'])
+def status():
+    status_list = list_status()
+    status_arr = []
+    for i in status_list:
+        status_arr.append({'id': i.id, 'name': i.name})
+    return make_response(jsonify(status=status_arr), 200)
 
 @app.route('/api/order', methods=['GET'])
 def orders():

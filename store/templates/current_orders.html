@@ -194,26 +194,16 @@ var k=0;
         <script type="text/javascript">
     $.ajax({
             dataType: "json",
-            url: '/api/dimension',
+            url: '/api/status',
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
-                $.each(json.dimensions, function(i, pr){
+                $.each(json.status, function(i, pr){
                     $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
                 })
             }
         });
-     $.ajax({
-            dataType: "json",
-            url: '/api/dimension',
-            type: 'GET',
-            contentType: "application/json",
-            success:function(json) {
-                $.each(json.dimensions, function(i, pr){
-                    $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
-                })
-            }
-        });
+
 </script>
 
 <style type="text/css">
