@@ -213,7 +213,7 @@ var k=0;
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
-                $.each(json.dilivery, function(k, j){
+                $.each(json.delivery, function(k, j){
                     $('#delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
                 })
             }
