@@ -203,7 +203,8 @@ class OrderProduct(Base):
     @staticmethod
     def updateSumQuantity(order_id, product_id, new_quantity):
         order_product_up = OrderProduct.get_order_product(order_id, product_id)
-        order_product_up.quantity += new_quantity
+        #order_product_up.quantity = order_product_up.quantity + new_quantity
+        order_product_up.quantity = new_quantity
         db_session.commit()
 
 
