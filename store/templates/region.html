@@ -67,7 +67,7 @@
                         if (json.message == 'success')
                          {
                           alert('The region has been successfully deleted');
-                          ajax_success();
+                          create_entity();
                          }
                         else
                          alert (json.message);
@@ -82,8 +82,10 @@
   })
  }
 
-  k=0
+  var k=0
  function ajax_success(json){
+
+
            deleting_grid()
            creat_grid(json.regions.length)
 
@@ -120,7 +122,7 @@
   $('#edit_button').click(function(){
   update(name);
     });
-  $('#clr').click(deleting_grid);
+  $('#Cansel').click(deleting_grid);
 
  function add(name) {
  form_value = {name : $( name = $('#region_name').val())}
@@ -132,8 +134,7 @@
      type: 'POST',
      contentType: "application/json",
      success:function(json){
-          creat_grid(json.regions.length);
-         create_entity();
+          create_entity();
 
          }
 
@@ -153,7 +154,6 @@
      data : JSON.stringify({'region_id': region_id, 'name': name}),
      contentType: "application/json",
      success:function(json){
-           creat_grid(json.regions.length);
          create_entity();
 
          }
