@@ -6,8 +6,7 @@
             var tr = [];
 
             $(document).ready (function() {
-//            var count_tr=$('#table_size').val();
-            var count_tr=5
+            var count_tr=$('#table_size').val();
             var count_td=6;
             var page = 1;
             var table_grid = document.getElementById('grid');
@@ -26,7 +25,6 @@
                         }
                     $( "tr:even" ).css( "background-color", "#c0c0c0" );
                 }
-//            create_grid(count_tr,count_td);
 
             function clearing_tr(i)
                 {
@@ -231,6 +229,14 @@
                         <span><input type="button" value="search" id='search_button'></span>
                     </form>
                 </div>
+            </div>
+            <div class="field" style="margin-left:5%;">
+                  <lable>Table size: </lable>
+                  <select id="table_size">
+                    <option selected>5</option>
+                    <option>25</option>
+
+                   </select>
             </div>
             <div style="margin-left:80%;">
             </div>
