@@ -15,10 +15,11 @@ def productBuy():
 def amountProducts(id):
     user_id = 1  #session['id']
     json = request.get_json()
-    order = Order.getOrderByStatus(user_id)
-    if order is None:
+    order_status = Order.getOrderByStatus(user_id)
+    if order_status is None:
         Order.add_order(user_id,date.today(), 4, )
     #if OrderProduct.query.filter(and_(OrderProduct.product_id == id, OrderProduct.order_id == order.id)):
+    order = Order.getOrderByStatus(user_id)
     if  OrderProduct.get_order_product(order.id, id):
         OrderProduct.updateSumQuantity(order.id, id, json['value'])
     else:
