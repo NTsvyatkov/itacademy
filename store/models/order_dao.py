@@ -234,6 +234,6 @@ def get_order_product_list():
 #for i in order1:
 #    print i.quantity
 
-list_order = get_order_product_list()
-for i in list_order:
-    print i.product.name
+#list_order = get_order_product_list()
+#for i in list_order:
+#    print i.product.name
