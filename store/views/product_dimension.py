@@ -7,7 +7,7 @@ from business_logic.validation import ValidationException
 
 
 @app.route('/api/products/dimensions', methods = ['GET'])
-def dimensions():
+def dimension():
     dimension_list = list_dimension()
     dimension_arr=[]
     for i in dimensions_list:
