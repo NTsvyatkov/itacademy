@@ -15,7 +15,7 @@
        table_grid.appendChild(tr[i]);
        tr[i].id=i;
        if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-         for (var j=0; j<=2; j++){
+         for (var j=0; j<=3; j++){
            tr[i].appendChild(document.createElement('TD'));}
        }
      }
@@ -25,7 +25,7 @@
 
 
   function clearing_tr(i){
-      for (var j=0; j<=2; j++){
+      for (var j=0; j<=3; j++){
           tr[i].cells[j].innerHTML='';}
   }
 
@@ -38,141 +38,131 @@
     for (var n=table_grid.rows.length ; n>=2; n--){
        table_grid.removeChild(table_grid.childNodes[n]);}
   }
+  create_entity();
 
   function create_entity(){
-    $.ajax({
-    dataType: "json",
-    url: '/api/regions',
-    type: 'GET',
-    data: json_value,
-    contentType: "application/json",
-    success: function(json){
-           //clearing_grid()
-      deleting_grid()
-      creat_grid(json.regions.length)
-          /*Create table with new regions list */
-    for (var region_k in json.regions){
-      k++;
-      if (k>count_tr) break;
-        tr[k].cells[0].innerHTML = json.regions[region_k].name;
-        tr[k].cells[1].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
-        tr[k].cells[2].innerHTML = "<input type='button' value='Delete' id='delete_region'  alt=" + k + ">";
-        tr[k].cells[1].abbr=k;
-        tr[k].cells[2].abbr=k;
-        tr[k].cells[1].onclick = function edit_region(){
-         // gthtyjc
-          }
-        tr[k].cells[2].onclick= function delete_region(){
-          var str = document.getElementById('output'+this.abbr).valueL
-          if (confirm('Are you sure you want to delete region '+ str+'?')){
-            delete_id(id, value)}
-        }
-        }
-        k=0;
-            /*End creating table*/
+       $.ajax({
+        dataType: "json",
+        url: '/api/regions',
+        type: 'GET',
+        //data: json_value,
+        contentType: "application/json",
+        success: function(json)
+        {
+            ajax_success(json);
          }
       })
-   }
+  }
 
-  var k=0;
-  form_value = {id : $('#name_form').val(), name : $('#region_name').val()}
-  json_value = JSON.stringify(form_value);
-
-  function delete_region(id,value){
-    if (id=='') id=0;
-      form_value = {id : id}
-      json_value = JSON.stringify(form_value);
-      $.ajax({
-        dataType: "json",
-        url: '/api/regions'+id,
+  function delete_id(id)
+  {
+  if (id=='') id=0;
+   $.ajax({
+       dataType: "json",
+        url: '/api/regions/'+id,
         type: 'DELETE',
         contentType: "application/json",
-        success: function(json){
-          if (json.message == 'success'){
-            alert('The region has been successfully deleted');
-            clearing_tr(tr_id);
-            create_entity();}
-          else
-            alert (json.message);},
-        error: function(e){
-          error = JSON.parse(e.responseText);
-          alert(error.message);}
+        success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The region has been successfully deleted');
+                          ajax_success();
+                         }
+                        else
+                         alert (json.message);
+                    },
+
+        error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+
   })
  }
 
- $('#clr').click(deleting_grid);
-})
+  k=0
+ function ajax_success(json){
+           deleting_grid()
+           creat_grid(json.regions.length)
+
+            for (var region_k in json.regions)
+                {
+                 k++;
+        tr[k].cells[0].innerHTML = json.regions[region_k].region_id;
+        tr[k].cells[1].innerHTML = json.regions[region_k].name;
+        tr[k].cells[2].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
+        tr[k].cells[3].innerHTML = "<input type='button' value='Delete' id='delete_region'  alt=" + k + ">";
+        tr[k].cells[2].abbr=k;
+        tr[k].cells[3].abbr=k;
+        tr[k].cells[2].onclick = function edit_region(){
+         // gthtyjc
+          }
+        tr[k].cells[3].onclick= function delete_region(){
+          var str = tr[this.abbr].cells[1].innerHTML
+          var id_tr = tr[this.abbr].cells[0].innerHTML
+          if (confirm('Are you sure you want to delete region '+ str +' '+id_tr+'?')){
+            delete_id(id_tr)}
+        }
+        }
+        k=0;
+
+         }
+
+
+
+
+
+  $('#add_button').click(function(){
+  add(name);
+    });
+  $('#edit_button').click(function(){
+  update(name);
+    });
+  $('#clr').click(deleting_grid);
 
  function add(name) {
+ form_value = {name : $( name = $('#region_name').val())}
+
    $.ajax({
-    data : JSON.stringify({ 'name': name}),
+    data : JSON.stringify({'name' : name}) ,
      dataType: "json",
      url: '/api/regions',
      type: 'POST',
      contentType: "application/json",
      success:function(json){
-           //clearing_grid()
-      deleting_grid()
-      creat_grid(json.regions.length)
-          /*Create table with new regions list */
-    for (var region_k in json.regions){
-      k++;
-      if (k>count_tr) break;
-        tr[k].cells[0].innerHTML = json.regions[region_k].name;
-        tr[k].cells[1].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
-        tr[k].cells[2].innerHTML = "<input type='button' value='Delete' id='delete_region'  alt=" + k + ">";
-        tr[k].cells[1].abbr=k;
-        tr[k].cells[2].abbr=k;
-        tr[k].cells[1].onclick = function edit_region(){
-         // var str = document.getElementById('output'+this.abbr).valueL
-          }
-        tr[k].cells[2].onclick= function delete_region(){
-          var str = document.getElementById('output'+this.abbr).valueL
-          if (confirm('Are you sure you want to delete region '+ str+'?')){
-            delete_id(id, value)}
-        }
-        }
-        k=0;
-            /*End creating table*/
-         }
-      })
-   }
+          creat_grid(json.regions.length);
+         create_entity();
 
- function update(id, name) {
+         }
+
+         }
+      )
+  }
+
+
+
+ function update(region_id, name) {
+  form_value = {name : $( name = $('#region_name').val())}
+
    $.ajax({ 
      dataType: "json",
      url: '/api/regions',
      type: 'PUT',
-     data : JSON.stringify({'id': id, 'name': name}),
+     data : JSON.stringify({'region_id': region_id, 'name': name}),
      contentType: "application/json",
      success:function(json){
-           //clearing_grid()
-      deleting_grid()
-      creat_grid(json.regions.length)
-          /*Create table with new regions list */
-    for (var region_k in json.regions){
-      k++;
-      if (k>count_tr) break;
-        tr[k].cells[0].innerHTML = json.regions[region_k].name;
-        tr[k].cells[1].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
-        tr[k].cells[2].innerHTML = "<input type='button' value='Delete' id='delete_region'  alt=" + k + ">";
-        tr[k].cells[1].abbr=k;
-        tr[k].cells[2].abbr=k;
-        tr[k].cells[1].onclick = function edit_region(){
-         // var str = document.getElementById('output'+this.abbr).valueL
-          }
-        tr[k].cells[2].onclick= function delete_region(){
-          var str = document.getElementById('output'+this.abbr).valueL;
-          if (confirm('Are you sure you want to delete region '+ str+'?')){
-            delete_id(id, value)}
-        }
-        }
-        k=0;
-            /*End creating table*/
-         }
-      })
- }
+           creat_grid(json.regions.length);
+         create_entity();
 
+         }
+
+         }
+      )
+  }
+
+  })
    </script>
 
 
@@ -182,6 +172,9 @@
 <div id="region_table">
   <table id='grid' class="grid">
     <tr>
+      <th>
+        id
+      </th>
       <th>
         name
       </th>
@@ -200,9 +193,9 @@
 <fieldset style="width: 300px; height: 100px">
   <legend>Add/Edit Region</legend>
     <div id="name-wrap">
-    <label for="name">Name</label>
-    <input type="text" id="name" name="name">
-    <p><input type="button" value="Add" OnClick="add(name)">  <input type="button" value="Update" OnClick="update(id, name)">  <input type="submit" value="Cancel" OnClick=""></p>
+    <label for="region_name">Name</label>
+    <input type="text" id="region_name" name="name">
+    <p><input type="button" value="Add" id="add_button" /*OnClick="add(name)"*/>  <input type="button" value="Update" id="edit_button"/*OnClick="update(id, name)"*/>  <input type="submit" value="Cancel" OnClick=""></p>
 </fieldset>
 </form>
     

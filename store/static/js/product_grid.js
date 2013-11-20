@@ -7,8 +7,6 @@ $(document).ready(function() {
     var table_grid = document.getElementById('grid');
     var th = ['id','Product name','Description','Price','Dimension','Edit','Delete'];
 
-
-
   /* Creating table of products (size = count_tr Х count_td)  */
 
     tr[0] = document.createElement('TR');
@@ -19,8 +17,7 @@ $(document).ready(function() {
           tr[0].cells[j].innerHTML=th[j];
     }
 
-
-    function create_grid(count_tr, count_td)
+  function create_grid(count_tr, count_td)
     {
         for (var i=1; i<=count_tr;i++ )
         {
@@ -48,8 +45,7 @@ $(document).ready(function() {
       }
   }
 
-
-  function clearing_grid()
+ function clearing_grid()
   {
     for (var n=2 ; n<=count_tr; n++)
     {
@@ -57,18 +53,17 @@ $(document).ready(function() {
     }
   }
 
-
  function deleting_grid()
- {
+  {
     for (var n=table_grid.rows.length ; n>=2; n--)
       {
        table_grid.removeChild(table_grid.childNodes[n]);
       }
 
- }
+  }
 
-
-  function grid_pagination(){
+  function grid_pagination()
+   {
     $.ajax({
         dataType: "json",
         url: '/api/products/?page='+page+'&table_size='+count_tr,
@@ -124,10 +119,10 @@ $(document).ready(function() {
                     }
 
    })
- }
+  }
 
- function ajax_success(json){
-
+ function ajax_success(json)
+  {
            deleting_grid();
            create_grid(json.products.length,count_td);
            /*Create table with new products list */
@@ -161,7 +156,6 @@ $(document).ready(function() {
                 }
 
             /*End creating table*/
-
 
   }
 
