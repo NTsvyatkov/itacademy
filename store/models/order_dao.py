@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
@@ -17,12 +17,24 @@ class Order(Base):
     delivery_id = Column(Integer, ForeignKey('delivery_type.id'), nullable=True)
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
 
+    #total_price = Column(DECIMAL, nullable=True)
+    #assignee_id = Column(Integer, ForeignKey('user.id'), nullable=True)
+    #assignee = relationship('UserDao', backref=backref('order', lazy='dynamic'))
+    #preferable_delivery_date = Column(DATE, nullable=True)
+    #delivery_date = Column(DATE, nullable=True)
+    #gift = Column(Boolean, default=False, nullable=True)
+
     def __init__(self, user_id, date, status_id, delivery_id):
         super(Order, self).__init__()
         self.user_id = user_id
         self.date = date
         self.status_id = status_id
         self.delivery_id = delivery_id
+        #self.total_price = total_price
+        #self.assignee_id = assignee_id
+        #self.preferable_delivery_date = preferable_delivery_date
+        #self.delivery_date = delivery_date
+        #self.gift = gift
 
     @staticmethod
     def get_order(id):
@@ -160,7 +172,7 @@ class OrderProduct(Base):
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
     quantity = Column(Integer)
-
+    #price = Column()
 
     def __init__(self, order_id, product_id, quantity):
         super(OrderProduct, self).__init__()

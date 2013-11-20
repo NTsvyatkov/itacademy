@@ -59,7 +59,7 @@ class Product(Base):
 
     @staticmethod
     def listFilterBuyProducts(name, start_price, end_price):
-        query = Product.query
+        query = Product.query.filter_by(is_deleted=False)
         if name:
             query = query.filter(Product.name == name)
         if start_price:
