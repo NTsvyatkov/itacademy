@@ -50,7 +50,7 @@ class Order(Base):
 
     @staticmethod
     def add_order(user_id, date, status_id, delivery_id = None):
-        order = Order(user_id, date, OrderStatus.query.get(status_id), DeliveryType.query.get(delivery_id))
+        order = Order(user_id, date, status_id, delivery_id)
         db_session.add(order)
         db_session.commit()
 
@@ -184,7 +184,7 @@ class OrderProduct(Base):
 
     @staticmethod
     def add_order_product(order_id, product_id, quantity):
-        order_product = OrderProduct(Order.query.get(order_id),Product.query.get(product_id), quantity)
+        order_product = OrderProduct(order_id, product_id, quantity)
         db_session.add(order_product)
         db_session.commit()
 
@@ -206,34 +206,3 @@ class OrderProduct(Base):
         order_product_up.quantity += new_quantity
         db_session.commit()
 
-
-
-def get_order_product_list():
-    return Order.query.join(OrderProduct).join(Product).filter(and_(Order.user_id == 2, \
-         OrderStatus.name == 'Delivered'))
-#b = DeliveryType.get_delivery_all()
-
-#OrderProduct.add_order_product(1,4,5)
-
-#Order.add_order(1,date.today(),2,1)
-
-#for i in b:
-#    print i
-#
-#print (DeliveryType.get_delivery(2))
-#print date.today()
-
-#k= OrderProduct.get_order_product(1,7)
-#print k.quantity
-#
-#Order.update_order(1,4,date.today(),1,1)
-#print Order.get_order(1).date
-#d=date.today()
-#order1 = OrderProduct.get_by_order(3)
-#
-#for i in order1:
-#    print i.quantity
-
-#list_order = get_order_product_list()
-#for i in list_order:
-#    print i.product.name

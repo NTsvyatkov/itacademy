@@ -1,233 +1,8 @@
 {% extends "layout.html" %}
 {% block body %}
 
-<script type="text/javascript">
+<script src="{{ url_for('static', filename='js/product_grid.js') }}"></script>
 
-
-  var tr = [];
-
-
-  $(document).ready(function() {
-
-    var count_tr=$('#table_size').val();
-    var count_td=6;
-    var page = 1;
-    var table_grid = document.getElementById('grid');
-
-  /* Creating table of products (size = count_tr Х count_td)  */
-    function create_grid(count_tr, count_td)
-    {
-        for (var i=1; i<=count_tr;i++ )
-        {
-            tr[i] = document.createElement('TR');
-            table_grid.appendChild(tr[i]);
-            tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
-            for (var j=0; j<=count_td; j++)
-             {
-              tr[i].appendChild(document.createElement('TD'));
-             }
-        }
-      $( "tr:even" ).css( "background-color", "#c0c0c0" );
-    }
-
-    create_grid(count_tr,count_td);
-  /*End of creating table*/
-
-
-  function clearing_tr(i)
-  {
-      for (var j=0; j<=6; j++)
-      {
-          tr[i].cells[j].innerHTML='';
-      }
-  }
-
-
-  function clearing_grid()
-  {
-    for (var n=2 ; n<=count_tr; n++)
-    {
-      clearing_tr(n);
-    }
-  }
-
- function deleting_grid()
- {
-    for (var n=table_grid.rows.length ; n>=2; n--)
-      {
-       table_grid.removeChild(table_grid.childNodes[n]);
-      }
-
- }
-
-
- function create_entity(){
-       $.ajax({
-        dataType: "json",
-        url: '/api/product',
-        type: 'GET',
-        data: json_value,
-        contentType: "application/json",
-        success: function(json)
-        {
-            ajax_success(json);
-         }
-      })
- }
-
-    var k=0;
-    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
-    json_value = JSON.stringify(form_value);
-
-
-
-    $('#apply_button').click(function(){
-    create_entity();
-    });
-
-
-  function delete_id(id)
-  {
-  if (id=='') id=0;
-   $.ajax({
-       dataType: "json",
-        url: '/api/product/'+id,
-        type: 'DELETE',
-        contentType: "application/json",
-        success: function(json)
-                    {
-                        if (json.message == 'success')
-                         {
-                          alert('The product has been successfully deleted');
-                          grid_pagination();
-                         }
-                        else
-                         alert (json.message);
-                    },
-
-        error: function(e)
-                    {
-                       error = JSON.parse(e.responseText);
-                       alert(error.message);
-                    }
-
-  })
- }
-
-  function ajax_success(json){
-
-           deleting_grid()
-           create_grid(json.products.length,count_td)
-           /*Create table with new products list */
-            for (var product_k in json.products)
-                {
-                 k++;
-
-                 tr[k].cells[0].innerHTML = json.products[product_k].id;
-                 tr[k].cells[1].innerHTML = json.products[product_k].name;
-                 tr[k].cells[2].innerHTML = json.products[product_k].description;
-                 tr[k].cells[3].innerHTML = json.products[product_k].price;
-                 tr[k].cells[4].innerHTML = json.products[product_k].dimension;
-                 tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
-                 tr[k].cells[5].abbr=k;
-                 tr[k].cells[6].abbr=k;
-                 tr[k].cells[5].onclick = function edit_tr2()
-                                      {
-                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
-                                      }
-                 tr[k].cells[6].onclick= function delete_tr2()
-                                      {
-                                        var str = tr[this.abbr].cells[1].innerHTML
-                                        var id_tr = tr[this.abbr].cells[0].innerHTML
-                                        if (confirm('Are you sure you want to delete product '+ str +' '+id_tr+'?'))
-                                        {
-                                          delete_id(id_tr)
-                                        }
-                                       }
-                }
-                k=0;
-            /*End creating table*/
-
-
-  }
-
-   $('#clr').click(deleting_grid);
-
-  function grid_pagination(){
-    $.ajax({
-        dataType: "json",
-        url: '/api/products/?page='+page+'&table_size='+count_tr,
-        type: 'GET',
-        contentType: "application/json",
-        success: function(json)
-        {
-           ajax_success(json);
-           records_amount=(json.records_amount);
-           records_per_page=(json.records_per_page);
-           pages_amount = Math.ceil(records_amount/records_per_page);
-           document.getElementById("page").innerHTML = page;
-           document.getElementById("pages_amount").innerHTML = pages_amount
-
-           if (page==1){
-               $('#prev').css({ "opacity":"0.4"});
-               $('#first').css({ "opacity":"0.4"});
-           } else {$('#prev').css({ "opacity": "1"});
-               $('#first').css({ "opacity": "1"});
-           }
-
-           if (page==pages_amount){
-               $('#next').css({ "opacity": "0.4"});
-               $('#last').css({ "opacity": "0.4"});
-           } else {$('#next').css({ "opacity": "1"});
-               $('#last').css({ "opacity": "1"});
-           }
-         }
-      })
-     }
-
-  if (page==1)
-  {grid_pagination();
-  }
-
-   $('#next').click(function(){
-    if (page*records_per_page>=records_amount){page=page}
-    else {page=page+1}
-    grid_pagination()
-    });
-
-    $('#prev').click(function(){
-    page=page-1;
-        if (page<=1){
-        page=1;
-    }
-    grid_pagination()
-    });
-
-    $('#first').click(function(){
-    page=1;
-    grid_pagination()
-    });
-
-    $('#last').click(function(){
-    page=pages_amount;
-    grid_pagination()
-    });
-
-
-
-    $('#table_size').change(function () {
-     count_tr=$('#table_size').val();
-     $( "#table_siz option:selected" ).each(grid_pagination())
-     })
-
-
- });
-
-
-
-   </script>
 
 
   <div id="products_block">
@@ -270,17 +45,6 @@
                  <input type="text" id="description_input">
              </div>
 
-             <div class="field">
-                  <lable>Filter Name Test: </lable>
-                  <select id="product_name">
-                    <option>Apple</option>
-                    <option>Orange</option>
-                    <option>Pineapple</option>
-                    <option>Banana</option>
-                   </select>
-          </div>
-
-
          </form>
           <div style="margin-left:70%;">
              <input type="button" value="Apply" id='apply_button'>
@@ -300,31 +64,13 @@
                    </select>
           </div>
 
+
+
        <table id='grid' class="grid">
-           <tr>
-               <th>
-                   id
-               </th>
-                <th>
-                   Product name
-               </th>
-               <th>
-                   Description
-               </th>
-               <th>
-                   Price
-               </th>
-               <th>
-                   Dimension
-               </th>
-               <th>
-                   Edit
-               </th>
-               <th>
-                   Delete
-               </th>
-           </tr>
        </table>
+
+
+
 
           <div id="pagination" style="text-align: center">
               <input type="button" id="first" value="First">&nbsp

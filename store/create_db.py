@@ -10,5 +10,4 @@ engine = create_engine(mysql_config)
 engine.execute("CREATE DATABASE store_DB ")
 engine.execute("USE store_DB")
 
-print Base.metadata
 Base.metadata.create_all(engine)

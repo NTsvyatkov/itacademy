@@ -16,15 +16,6 @@ def product_grid():
         return render_template('product_grid.html',)
 
 
-#@app.route('/api/product', methods=['GET'])
-#def products():
-#    products_list = list_products()
-#    products_arr = []
-#    for i in products_list:
-#        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
-#                             'dimension': i.dimension.name})
-#    return make_response(jsonify(products=products_arr), 200)
-
 
 @app.route('/api/product', methods=['GET'])
 def products():
@@ -35,7 +26,6 @@ def products():
         array.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description})
     return make_response(jsonify(products=array), 200)
 
-
 @app.route('/api/dimension', methods=['GET'])
 def dimensions():
     dimensions_list = list_dimensions()
@@ -43,6 +33,10 @@ def dimensions():
     for i in dimensions_list:
         dimensions_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(dimensions=dimensions_arr), 200)
+
+
+
+
 
 
 @app.route('/api/products/', methods=['GET'])
@@ -91,12 +85,3 @@ def products_update():
     resp = make_response(0, 200)
     return resp
 
-
-
-#@app.route('/productgrid')
-#def productgrid():
-#    if 'username' in db_session:
-#        return render_template('product_grid.html')
-#    else:
-#        error = 'You are not logged in'
-#        return render_template('login(2).html', error=error)
