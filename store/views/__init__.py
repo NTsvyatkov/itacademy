@@ -5,3 +5,4 @@ from views import authenticate
 from views import  products_buy
 from views import user
 from views import current_orders, orders, order
+from views import dimensions
