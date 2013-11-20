@@ -28,7 +28,7 @@
     <form id="info"  name="form"  class = "form" method ="POST"  >
         <div style = "height: 10px;"></div>
     <h1 class="ProductTitle" >Create Product</h1>
-		 <div class ="product_name"> <div id="product_name-wrap" class="slider">
+		 <div class ="product_name"> <div id="product_name-wrap">
 	           <label for="product_name">Name*</label>
                <input cols="6" id="product_name" name="product_name" type="text" value=""maxlength="100">
                <div style = "height: 10px; width: 30px;"></div>
@@ -36,12 +36,12 @@
          </div>
          </div>
 
-        <div id="description-wrap"  class="slider">
+        <div id="description-wrap">
         <label for="description">Description</label>
         <textarea type="text" rows="6" cols="27" name="description" id="description"></textarea>
         </div></br>
 
-		 <div class ="price"> <div id="price-wrap" class="slider">
+		 <div class ="price"> <div id="price-wrap">
 	           <label for="price">Price*</label>
                <input id="price" name="price" type="text" value=""maxlength="100">
                <div style = "height: 10px;"></div>
@@ -50,13 +50,14 @@
          </div>
 
 
-    <h2 class="ProductTitle" >Dimension*</h2>
-
-        <select id="id" name="id">
+    <h3 class="ProductTitle" >Dimension*</h3>
+        <div class ="id"> <div id="id-wrap">
+        <select class="id" id="id" name="id">
         <option value="">Select</option>
         <div style = "height: 10px;"></div>
         <div class = "error_id"> </div>
-        </select></br></br></br></br></br>
+        </select></div></div>
+            </br></br></br></br></br>
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel">

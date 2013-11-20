@@ -26,5 +26,5 @@ def list_status():
         return s_list
 
 def list_delivery():
-        del_list = DeliveryType.get_all_delivery_type()
+        del_list = DeliveryType.get_delivery_all()
         return del_list

@@ -84,7 +84,6 @@
 
   k=0
  function ajax_success(json){
-
            deleting_grid()
            creat_grid(json.regions.length)
 
@@ -113,12 +112,15 @@
 
 
 
-       $('#clr').click(deleting_grid);
+
 
   $('#add_button').click(function(){
   add(name);
     });
-
+  $('#edit_button').click(function(){
+  update(name);
+    });
+  $('#clr').click(deleting_grid);
 
  function add(name) {
  form_value = {name : $( name = $('#region_name').val())}
@@ -139,9 +141,7 @@
       )
   }
 
-  $('#edit_button').click(function(){
-  update(name);
-    });
+
 
  function update(region_id, name) {
   form_value = {name : $( name = $('#region_name').val())}
@@ -153,32 +153,14 @@
      data : JSON.stringify({'region_id': region_id, 'name': name}),
      contentType: "application/json",
      success:function(json){
-           //clearing_grid()
-      deleting_grid()
-      creat_grid(json.regions.length)
-          /*Create table with new regions list */
-    for (var region_k in json.regions){
-      k++;
-      if (k>count_tr) break;
-        tr[k].cells[0].innerHTML = json.regions[region_k].name;
-        tr[k].cells[1].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
-        tr[k].cells[2].innerHTML = "<input type='button' value='Delete' id='delete_region'  alt=" + k + ">";
-        tr[k].cells[1].abbr=k;
-        tr[k].cells[2].abbr=k;
-        tr[k].cells[1].onclick = function edit_region(){
-         // var str = document.getElementById('output'+this.abbr).valueL
-          }
-        tr[k].cells[2].onclick= function delete_region(){
-          var str = document.getElementById('output'+this.abbr).valueL;
-          if (confirm('Are you sure you want to delete region '+ str+'?')){
-            delete_id(id, value)}
-        }
-        }
-        k=0;
-            /*End creating table*/
+           creat_grid(json.regions.length);
+         create_entity();
+
          }
-      })
- }
+
+         }
+      )
+  }
 
   })
    </script>

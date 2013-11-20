@@ -120,6 +120,14 @@ select{
  border:2px solid #999;
  padding:5px;
  border-radius:4px;
+}
+.current_order{
+    width:162px;
+
+}
+
+.create_product{
+    width:182px;
 
 }
 
@@ -250,6 +258,10 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
     color:red;
     border:2px solid red;
 
+}
+.errorList2
+{
+    color:red;
 }
 #hover{
    display:none;
