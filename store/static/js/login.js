@@ -1,13 +1,13 @@
 function validate_login(){
-var login1 =   document.form.login1.value;
+var name =   document.form.name.value;
 
-        if (login1 == ""){
-                $(".error_login1").html("'Enter your login'").css({'color':'red'});
-                $(".login1").toggleClass("errorList");
-                $(".login1").click(function(){
+        if (name == ""){
+                $(".error_name").html("'Enter your login'").css({'color':'red'});
+                $(".name").toggleClass("errorList2");
+                $(".name").click(function(){
 
-                $(".error_login1").html("");
-                $(".login1").removeClass("errorList")
+                $(".error_name").html("");
+                $(".name").removeClass("errorList2")
                     });
             return false;
             }
@@ -17,11 +17,11 @@ var password =   document.form.password.value;
 
         if (password == ""){
                 $(".error_password").html("'Enter your password'").css({'color':'red'});
-                $(".password").toggleClass("errorList");
+                $(".password").toggleClass("errorList2");
                 $(".password").click(function(){
 
                 $(".error_password").html("");
-                $(".password").removeClass("errorList")
+                $(".password").removeClass("errorLis2t")
 
                    });
             return false;

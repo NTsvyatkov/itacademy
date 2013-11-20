@@ -48,6 +48,18 @@ def orders_page(page):
         orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'amount': '0.00' })
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
+@app.route('/api/order2/<int:page>', methods=['GET'])
+def orders_page2(page):
+    all_rec = Order.getAllOrders()
+    records_per_page = 10
+    pagination = Pagination(records_per_page, all_rec, page)
+    prods = pagination.pager()
+    records_amount = len(all_rec)
+    orders_arr = []
+    for i in prods:
+        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'amount': '0.00' })
+    return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
+                                 records_per_page=records_per_page), 200)
 
 @app.route('/api/order/<int:id>', methods=['GET'])
 def orders_id(id):
