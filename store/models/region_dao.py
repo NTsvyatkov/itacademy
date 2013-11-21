@@ -34,7 +34,7 @@ class RegionDao(Base):
 
     @staticmethod
     def updateRegion(id, new_name):
-        entry = RegionDao.getRegionByID(id)
+        entry =RegionDao.getRegionByID(id)
         entry.name = new_name
         db_session.commit()
 
