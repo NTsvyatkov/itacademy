@@ -99,7 +99,10 @@
         tr[k].cells[2].abbr=k;
         tr[k].cells[3].abbr=k;
         tr[k].cells[2].onclick = function edit_region(){
-         // gthtyjc
+          var str = tr[this.abbr].cells[1].innerHTML
+          var id_tr = tr[this.abbr].cells[0].innerHTML
+          document.getElementById('region_name').value=str
+          region_id=id_tr
           }
         tr[k].cells[3].onclick= function delete_region(){
           var str = tr[this.abbr].cells[1].innerHTML
@@ -117,14 +120,14 @@
 
 
   $('#add_button').click(function(){
-  add(name);
+  add();
     });
   $('#edit_button').click(function(){
-  update(name);
+  update();
     });
   $('#Cansel').click(deleting_grid);
 
- function add(name) {
+ function add() {
  form_value = {name : $( name = $('#region_name').val())}
 
    $.ajax({
@@ -134,17 +137,24 @@
      type: 'POST',
      contentType: "application/json",
      success:function(json){
-           create_entity();
+                        if (json.message == 'success')
+                         {
+                          alert('The region has been successfully added');
 
-         }
+                         }
+                        else
+                         alert (json.message);
+                    }
 
          }
       )
+     create_entity();
+     document.getElementById('info').reset();
   }
 
 
 
- function update(region_id, name) {
+ function update() {
   form_value = {name : $( name = $('#region_name').val())}
 
    $.ajax({ 
@@ -154,12 +164,19 @@
      data : JSON.stringify({'region_id': region_id, 'name': name}),
      contentType: "application/json",
      success:function(json){
-         create_entity();
+                        if (json.message == 'success')
+                         {
+                          alert('The region has been successfully added');
 
-         }
+                         }
+                        else
+                         alert (json.message);
+                    }
 
          }
       )
+     create_entity();
+     document.getElementById('info').reset();
   }
 
   })
@@ -194,8 +211,8 @@
   <legend>Add/Edit Region</legend>
     <div id="name-wrap">
     <label for="region_name">Name</label>
-    <input type="text" id="region_name" name="name">
-    <p><input type="button" value="Add" id="add_button" /*OnClick="add(name)"*/>  <input type="button" value="Update" id="edit_button"/*OnClick="update(id, name)"*/>  <input type="submit" value="Cancel" OnClick=""></p>
+    <input type="text" id="region_name" name="name" >
+    <p><input type="button" value="Add" id="add_button">  <input type="button" value="Update" id="edit_button">  <input type="submit" value="Cancel" OnClick=""></p>
 </fieldset>
 </form>
     

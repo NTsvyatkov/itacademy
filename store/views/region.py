@@ -6,7 +6,7 @@ from maintenance.pager_region import Pagination
 from business_logic.region_manager import getlistRegion, createRegion, updateRegion, deleteRegion, getRegionByID, getlistRegion
 from business_logic.validation import ValidationException
 
-@app.route('/region', methods=('GET', 'POST'))
+@app.route('/region', methods=('GET', 'POST', 'PUT'))
 def region():
         return render_template('region.html',)
 
@@ -59,7 +59,7 @@ def regions_id_delete(id):
 def regions_update():
     js = request.json
     updateRegion(js['region_id'],js['name'])
-    resp = make_response('', 200)
+    resp = make_response('0', 200)
     return resp
 
 
