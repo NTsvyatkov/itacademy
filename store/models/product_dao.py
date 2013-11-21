@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean, or_
 from sqlalchemy.orm import relationship, backref
 
 
@@ -61,7 +61,7 @@ class Product(Base):
     def listFilterBuyProducts(name, start_price, end_price):
         query = Product.query.filter_by(is_deleted=False)
         if name:
-            query = query.filter(Product.name == name)
+            query = query.filter(or_(Product.name == name, Product.description == name))
         if start_price:
             query = query.filter(Product.price >= start_price)
         if end_price:

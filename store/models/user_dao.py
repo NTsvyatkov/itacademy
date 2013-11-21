@@ -108,7 +108,6 @@ class UserDao(Base):
     @staticmethod
     def isUserExists(userLogin, userPassword):
         user = UserDao.getUserByLogin(userLogin, userPassword)
-        print(user)
         result = False
         if user is not None:
             result = True

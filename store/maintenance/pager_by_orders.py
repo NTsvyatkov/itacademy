@@ -32,6 +32,6 @@ class Pagination(object):
     def next_num(self):
         return self.page + 1
 
-    def pager(self):
-        return Order.query.order_by(Order.id).slice(self.start, self.stop)
+    def pager(self, user_id):
+        return Order.query.filter(Order.user_id == user_id).order_by(Order.id).slice(self.start, self.stop)
 

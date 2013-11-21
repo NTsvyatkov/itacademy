@@ -21,15 +21,17 @@ def  my_orders():
 
 @app.route('/api/orders/<int:page>', methods=['GET'])
 def ordersPage(page):
-    all_rec = Order.query.order_by(Order.id).all()
+    #user_id = session['id']
+    user_id = 1
+    all_rec = Order.query.filter(Order.user_id == user_id).all()
     records_per_page = 5
     pagination = Pagination(records_per_page, all_rec, page)
-    prods = pagination.pager()
+    prods = pagination.pager(user_id)
     records_amount = len(all_rec)
     orders_list = []
     for i in prods:
         orders_list.append({'date': i.date.strftime("%d/%m/%y"), 'orderStatus': OrderStatus.get_status(i.status_id).name,
-                      'amount': i.delivery_id})
+                      'amount': '0.00'})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
