@@ -102,7 +102,7 @@
           var str = tr[this.abbr].cells[1].innerHTML
           var id_tr = tr[this.abbr].cells[0].innerHTML
           document.getElementById('region_name').value=str
-          region_id=id_tr
+          region=id_tr
           }
         tr[k].cells[3].onclick= function delete_region(){
           var str = tr[this.abbr].cells[1].innerHTML
@@ -156,12 +156,12 @@
 
  function update() {
   form_value = {name : $( name = $('#region_name').val())}
-
+  region_id=~~region
    $.ajax({ 
      dataType: "json",
      url: '/api/regions',
      type: 'PUT',
-     data : JSON.stringify({'region_id': region_id, 'name': name}),
+     data : JSON.stringify({'region_id': region_id, 'name':name}),
      contentType: "application/json",
      success:function(json){
                         if (json.message == 'success')

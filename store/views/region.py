@@ -59,7 +59,7 @@ def regions_id_delete(id):
 def regions_update():
     js = request.json
     updateRegion(js['region_id'],js['name'])
-    resp = make_response('0', 200)
+    resp = make_response('', 200)
     return resp
 
 
