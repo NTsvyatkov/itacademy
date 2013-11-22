@@ -9,103 +9,105 @@ div { clear:both;position:relative; }
         <tr>
 
 	   <td>
-		 <div class ="user_name"> <div id="name-wrap" class="slider">
-	           <label for="name">User_name</label>
 
+	           <label for="login">Login:</label>
+        <div class ="user_name">
               <input id="login" name="login" type="text" value=""maxlength="50">
-       </div>
+
+       <td>
+        <div class = "error_user_name"></div>
+       </td>
        </div>
            <div style = "height: 10px;"></div>
        </td>
 
         </tr>
-        <tr>
-              <div class = "error_user_name"></div>
-        </tr>
+
                <!--user name-->
         <tr>
             <td>
-                <div class ="first_name">
-		            <div id="first_name-wrap" class="slider">
-               <label for="first_name"> First_name</label>
 
+
+               <label for="first_name"> First Name:</label>
+             <div class ="first_name">
                   <input id="first_name" name="first_name" type="text" value="" maxlength="50">
-                    </div>
+             <td>
+            <div class = "error_first_name"></div>
+             </td>
              </div>
                 <div style = "height: 10px;"></div>
             </td>
 
         </tr>
-        <tr>
-              <div class = "error_first_name"></div>
-         </tr>
+
                 <!--user last name-->
         <tr>
             <td>
+
+
+                <label for="last_name"> Last Name:</label>
                 <div class ="last_name">
-		            <div id="last_name-wrap" class="slider">
-                <label for="last_name"> Last_name</label>
                 <input id="last_name" name="last_name" type="text" value="" maxlength="50">
-                    </div>
+
                 </div>
                 <div style = "height: 10px;"></div>
             </td>
+            <td>
+            <div class = "error_last_name"></div>
+            </td>
+        </tr>
 
-        </tr>
-        <tr>
-              <div class = "error_last_name"></div>
-        </tr>
                 <!--user password -->
         <tr>
             <td>
-                 <div class ="password">
-                    <div id="password-wrap" class="slider">
-                 <label for="password">Password</label>
 
+
+                 <label for="password">Password:</label>
+                <div class ="password">
                   <input id="password" name="password" type="password" value="" maxlength="20">
-                    </div>
+
                 </div>
                 <div style = "height: 10px;"></div>
             </td>
+        <td>
+          <div class = "error_password"></div>
+        </td>
+        </tr>
 
-        </tr>
-        <tr>
-              <div class = "error_password"></div>
-        </tr>
                 <!--confirm-->
         <tr>
             <td>
-                <div class ="confirm">
-                     <div id="confirm-wrap" class="slider">
-         <label for="confirm">Confirm Password</label>
 
+
+                 <label for="confirm">Confirm Password:</label>
+                <div class ="confirm">
                 <input id="confirm" name="confirm" type="password" value="" maxlength="20">
-                     </div>
+
                 </div>
                 <div style = "height: 10px;"></div>
             </td>
+                <td>
+                <div class = "error_confirm"></div>
+                </td>
+        </tr>
 
-        </tr>
-        <tr>
-              <div class = "error_confirm"></div>
-        </tr>
                 <!--email-->
         <tr>
             <td>
-                <div class ="email">
-                    <div id="email-wrap" class="slider">
-                <label for="email">Email</label>
 
+
+                <label for="email">Email:</label>
+                <div class ="email">
                 <input id="email" name="email" type="text" value="" maxlength="100">
-                    </div>
+
                 </div>
                 <div style = "height: 10px;"></div>
             </td>
+            <td>
+            <div class = "error_email"></div>
+            </td>
+        </tr>
 
-        </tr>
-        <tr>
-              <div class = "error_email"></div>
-        </tr>
                 <!--Select Region-->
         <tr>
             <td>
@@ -114,16 +116,18 @@ div { clear:both;position:relative; }
                  <div class ="region">
 
 
-                     <select id="region" name="regions_id">
+                     <select id="region" name="regions_id" class ="current_order">
                      <option value ="" > Select from the list</option>
-
+                        <div ></div>
                  </select>
                  </div>
                 <div style = "height: 10px;"></div>
             </td>
-
+            <td>
+            <div class = "error_region"> </div>
+            </td>
         </tr>
-        <tr><div class = "error_region"> </div>
+
    </table>
                 <!--Choice of a role-->
     <div style ="width: 500px " >
