@@ -19,12 +19,12 @@ def  my_orders():
 #    return make_response(jsonify(products=array), 200)
 
 
-@app.route('/api/orders/<int:page>', methods=['GET'])
-def ordersPage(page):
-    #user_id = session['id']
-    user_id = 1
+@app.route('/api/orders/', methods=['GET'])
+def ordersPage():
+    user_id = session['id']  # user_id = 1
+    records_per_page = int(request.args.get('table_size'))
+    page=int(request.args.get('page'))
     all_rec = Order.query.filter(Order.user_id == user_id).all()
-    records_per_page = 5
     pagination = Pagination(records_per_page, all_rec, page)
     prods = pagination.pager(user_id)
     records_amount = len(all_rec)

@@ -13,7 +13,7 @@ def productBuy():
 
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
 def amountProducts(id):
-    user_id = 1  #session['id']
+    user_id = session['id']
     json = request.get_json()
     order_status = Order.getOrderByStatus(user_id)
     if order_status is None:
