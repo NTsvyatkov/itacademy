@@ -21,7 +21,7 @@ def  my_orders():
 
 @app.route('/api/orders/', methods=['GET'])
 def ordersPage():
-    user_id = session['id']  # user_id = 1
+    user_id = session['id'] 
     records_per_page = int(request.args.get('table_size'))
     page=int(request.args.get('page'))
     all_rec = Order.query.filter(Order.user_id == user_id).count()
