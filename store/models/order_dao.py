@@ -213,9 +213,10 @@ class OrderProduct(Base):
         db_session.commit()
 
     @staticmethod
-    def update_order_product(order_id, product_id, new_quantity):
+    def update_order_product(order_id, product_id, new_quantity, new_price):
         order_product_up = OrderProduct.get_order_product(order_id, product_id)
         order_product_up.quantity = new_quantity
+        order_product_up.price = new_price
         db_session.commit()
 
     @staticmethod
