@@ -18,7 +18,7 @@ class Pagination(object):
     def has_prev(self):
         if self.page == 1:
             return False
-        return (Order.query.order_by(Order.name).slice(self.start-1, self.start)).count() > 0
+        return (Order.query.order_by(Order.id).slice(self.start-1, self.start)).count() > 0
 
     @property
     def has_next(self):
@@ -34,4 +34,3 @@ class Pagination(object):
 
     def pager(self, user_id):
         return Order.query.filter(Order.user_id == user_id).order_by(Order.id).slice(self.start, self.stop)
-
