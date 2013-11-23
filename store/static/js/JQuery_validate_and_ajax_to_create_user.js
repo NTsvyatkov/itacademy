@@ -1,45 +1,49 @@
 
 function validate_form(){
-var user_name =   document.form.login.value;
 
-        if (user_name == ""){
-                $(".error_user_name").html("'User Name is required field.'").css({'color':'red'});
-                $(".user_name").toggleClass("errorList");
-                $(".user_name").click(function(){
+    var login =   document.form.login.value;
+    var regV_login = /^[0-9a-zA-Zа-яА-Я]+$/;
+    var result_login = login.match(regV_login);
+        if (login == ""){
+                $(".error_login").html("'User Name is required field.'").css({'color':'red'});
+                $(".login").toggleClass("errorList");
+                $(".login").click(function(){
 
-                $(".error_user_name").html("");
-                $(".user_name").removeClass("errorList")
+                $(".error_login").html("");
+                $(".login").removeClass("errorList")
 
                      });
             return false;
             }
-        else if (user_name.length > 50){
-            $(".error_user_name").html("field max length = 50 characters").css({'color':'red'});
-                $(".user_name").toggleClass("errorList");
-                $(".user_name").click(function(){
+        else if  (!result_login)
 
-                $(".error_user_name").html("");
-                $(".user_name").removeClass("errorList")
-                });
-            return false;
+        {
+        $(".error_login").html("'User Name should contain only alphanumerical characters'").css({'color':'red'});
+                $(".login").toggleClass("errorList");
+                $(".login").click(function(){
 
-        }
-        else {
-var regV_user_name = /^[0-9a-zA-Zа-яА-Я]+$/;
-var result_user_name = user_name.match(regV_user_name);
-        if(!result_user_name){
-        $(".error_user_name").html("'User Name should contain only alphanumerical characters'").css({'color':'red'});
-                $(".user_name").toggleClass("errorList");
-                $(".user_name").click(function(){
-
-                $(".error_user_name").html("");
-                $(".user_name").removeClass("errorList")
+                $(".error_login").html("");
+                $(".login").removeClass("errorList")
                 });
             return false;
 
     }
+        else if (login.length > 50){
+            $(".error_login").html("'Field max length = 50 characters'").css({'color':'red'});
+                $(".login").toggleClass("errorList");
+                $(".login").click(function(){
+
+                $(".error_login").html("");
+                $(".login").removeClass("errorList")
+                });
+            return false;
 
         }
+
+
+
+
+
 
  var first_name =   document.form.first_name.value;
         if (first_name == ""){
@@ -52,9 +56,19 @@ var result_user_name = user_name.match(regV_user_name);
 
                 });
             return false;
+
     }
+        else if (first_name.length > 50){
+            $(".error_first_name").html("'Field max length = 50 characters'").css({'color':'red'});
+                $(".first_name").toggleClass("errorList");
+                $(".first_name").click(function(){
 
+                $(".error_first_name").html("");
+                $(".first_name").removeClass("errorList")
+                });
+            return false;
 
+        }
 var last_name =   document.form.last_name.value;
        if (last_name == ""){
        $(".error_last_name").html("'Last Name is required field.'").css({'color':'red'});
@@ -66,9 +80,26 @@ var last_name =   document.form.last_name.value;
 
                 });
             return false;
+
+    }
+      else if (last_name.length > 50)
+
+       {
+       $(".error_last_name").html("'Field max length = 50 characters'").css({'color':'red'});
+                $(".last_name").toggleClass("errorList");
+                $(".last_name").click(function(){
+
+                $(".error_last_name").html("");
+                $(".last_name").removeClass("errorList")
+
+                });
+            return false;
+
     }
 
 var password =   document.form.password.value;
+var RegV_password = /\S/;
+var RegV_password_result = password.match(RegV_password);;
        if (password == ""){
        $(".error_password").html("'Password is required field.'").css({'color':'red'});
                 $(".password").toggleClass("errorList");
@@ -80,8 +111,20 @@ var password =   document.form.password.value;
                 });
             return false;
     }
-       else if (password.length >20){
-       $(".error_password").html("'Password max length = 20 characters.'").css({'color':'red'});
+       else if (password.length >10){
+       $(".error_password").html("'Password max length = 10 characters.'").css({'color':'red'});
+                $(".password").toggleClass("errorList");
+                $(".password").click(function(){
+
+                $(".error_password").html("");
+                $(".password").removeClass("errorList")
+
+                });
+        return false;
+    }
+
+    else if (  RegV_password_result   ){
+       $(".error_password").html("'Spaces are not allowed'").css({'color':'red'});
                 $(".password").toggleClass("errorList");
                 $(".password").click(function(){
 
@@ -105,7 +148,7 @@ var confirm =   document.form.confirm.value;
         }
 
 var email =   document.form.email.value;
-var regV_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
+var regV_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,100})+$/;
 var result_email = email.match(regV_email);
         if (email == ""){
         $(".error_email").html("'Email is required field.'").css({'color':'red'});
@@ -118,10 +161,8 @@ var result_email = email.match(regV_email);
                 });
             return false;
         }
-         else {
-
-
-        if (!result_email){   $(".error_email").html("'Invalid email format'").css({'color':'red'});
+        else if (email.length >100)
+        {   $(".error_email").html("'Password max length = 100 characters.'").css({'color':'red'});
                 $(".email").toggleClass("errorList");
                 $(".email").click(function(){
 
@@ -132,7 +173,21 @@ var result_email = email.match(regV_email);
             return false;
       }
 
-    }
+        else if  (!result_email)
+
+
+        {   $(".error_email").html("'Invalid email format'").css({'color':'red'});
+                $(".email").toggleClass("errorList");
+                $(".email").click(function(){
+
+                $(".error_email").html("");
+                $(".email").removeClass("errorList")
+
+                });
+            return false;
+      }
+
+
 var region =   document.form.region.value;
 
         if (region == ""){
