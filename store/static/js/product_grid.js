@@ -2,10 +2,12 @@
 $(document).ready(function() {
     var tr = [];
     var count_tr=$('#table_size').val();
-    var count_td=6;
+    var th = ['id','Product name','Description','Price','Dimension','Edit','Delete'];
+    var count_td= th.length-1;
     var page = 1;
     var table_grid = document.getElementById('grid');
-    var th = ['id','Product name','Description','Price','Dimension','Edit','Delete'];
+    var filter_query='';
+
 
   /* Creating table of products (size = count_tr Х count_td)  */
 
@@ -66,7 +68,7 @@ $(document).ready(function() {
    {
     $.ajax({
         dataType: "json",
-        url: '/api/products/?page='+page+'&table_size='+count_tr,
+        url: '/api/products/?page='+page+'&table_size='+count_tr+ filter_query,
         type: 'GET',
         success: function(json)
         {
@@ -134,7 +136,7 @@ $(document).ready(function() {
                  tr[k].cells[0].innerHTML = json.products[product_k].id;
                  tr[k].cells[1].innerHTML = json.products[product_k].name;
                  tr[k].cells[2].innerHTML = json.products[product_k].description;
-                 tr[k].cells[3].innerHTML = json.products[product_k].price;
+                 tr[k].cells[3].innerHTML = json.products[product_k].price.toFixed(2);
                  tr[k].cells[4].innerHTML = json.products[product_k].dimension;
                  tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
                  tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
@@ -201,14 +203,60 @@ $(document).ready(function() {
 
   /* Update and delete table button*/
 
+    var check= true;
+    var error='';
     $('#apply_button').click(function(){
-          grid_pagination()
+      if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) && (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
+         {
+          check = false;
+          error = 'If you set value for Name select, you should set value for Name input. And conversely!<br>';
+         }
+
+      if ((!( $('#description_options').val() != 0 && $('#description_input').val() )) && (!( $('#description_options').val() == 0 && !($('#description_input').val()) )))
+         {
+          check = false;
+          error = error + 'If you set value for Description select, you should set value for Description input. And conversely!<br>';
+         }
+
+      if  ((!( $('#price_options').val() != 0 && $('#price_input').val() )) && (!( $('#price_options').val() == 0 && !($('#price_input').val()) )))
+         {
+          check = false;
+          error = error +  'If you set value for Price select, you should set value for Price input. And conversely!<br>';
+         }
+      var val = $('#price_input').val();
+      if(!(val/val)&&(val!=0))
+      {
+       check = false;
+        error = error + 'Price is not number'
+      }
+
+      if (check)
+       {
+        var name_options = '&name_options='+ $('#name_options').val()+'&name='+ $('#name_input').val();
+        var d_op = '&description_options='+$('#description_options').val()+'&description='+$('#description_input').val();
+        var price_options = '&price_options='+$('#price_options').val()+'&price='+$('#price_input').val();
+        filter_query = name_options +d_op+price_options;
+        alert (filter_query);
+        grid_pagination();
+        $('#error_div').empty();
+       }
+      else
+      {
+        $('#error_div').empty();
+        $('#error_div').html(error);
+        error ='';
+      }
      });
 
     $('#clr').click(function(){
-    deleting_grid()
+    $('#name_options').val(0);
+    $('#name_input').val('');
+    $('#description_options').val(0);
+    $('#description_input').val('');
+    $('#price_options').val(0);
+    $('#price_input').val('');
     });
 
 
- });
+});
 

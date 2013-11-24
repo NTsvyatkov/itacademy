@@ -49,7 +49,14 @@ def dimensions():
 
 @app.route('/api/products/', methods=['GET'])
 def products_page():
-    all_rec = list_products()
+    if request.args.get('name') or request.args.get('description') or request.args.get('price'):
+        filter_list={'name':request.args.get('name'),'name_options':request.args.get('name_options'),\
+        'description':request.args.get('description'),'description_options':request.args.get('description_options'),\
+        'price':request.args.get('price'),'price_options':request.args.get('price_options')}
+    #    all_rec = Product.filter_product_grid(filter_list)
+    else:
+        all_rec = list_products()
+
     records_per_page = int(request.args.get('table_size'))
     page=int(request.args.get('page'))
     pagination = Pagination(records_per_page,all_rec,page )
