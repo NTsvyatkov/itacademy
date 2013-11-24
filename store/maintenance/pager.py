@@ -36,15 +36,5 @@ class Pagination(object):
     def pager(self):
         return Product.query.filter_by(is_deleted=False).order_by(Product.id).slice(self.start, self.stop)
 
-    def pagerByFilter(self, name, start_price, end_price):
-        query = Product.query.filter_by(is_deleted=False)
-        if name:
-            query = query.filter(or_(Product.name == name, Product.description == name))
-        if start_price:
-            query = query.filter(Product.price >= start_price)
-        if end_price:
-            query = query.filter(Product.price <= end_price)
-        return query.filter_by(is_deleted=False).order_by(Product.id).slice(self.start, self.stop)
-
 
 

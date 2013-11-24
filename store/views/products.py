@@ -1,7 +1,6 @@
 from flask import jsonify, render_template, request, make_response
 from models.product_dao import Product
 from flask_bootstrap import app
-from maintenance.pager import Pagination
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product,\
     update_product, get_product_by_id
 
@@ -19,14 +18,12 @@ def product_grid():
 
 @app.route('/api/product', methods=['GET'])
 def products():
-    all_rec = len(Product.listFilterBuyProducts(request.args.get('name'), request.args.get('start_price'),
-                                         request.args.get('end_price')))
+    name = request.args.get('name')
+    start_price = request.args.get('start_price')
+    end_price = request.args.get('end_price')
     records_per_page = int(request.args.get('table_size'))
-    page=int(request.args.get('page'))
-    pagination = Pagination(records_per_page,all_rec,page )
-    prods = pagination.pagerByFilter((request.args.get('name')), (request.args.get('start_price')),
-                                         (request.args.get('end_price')))
-    records_amount = all_rec
+    page = int(request.args.get('page'))
+    prods, records_amount = Product.pager_by_filter(name, start_price, end_price, page, records_per_page)
     products_arr = []
     for i in prods:
         products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
@@ -44,16 +41,12 @@ def dimensions():
     return make_response(jsonify(dimensions=dimensions_arr), 200)
 
 
-
-
-
 @app.route('/api/products/', methods=['GET'])
 def products_page():
     all_rec = list_products()
     records_per_page = int(request.args.get('table_size'))
-    page=int(request.args.get('page'))
-    pagination = Pagination(records_per_page,all_rec,page )
-    prods = pagination.pager()
+    page = int(request.args.get('page'))
+    prods = Product.all_products(records_per_page, page)
     records_amount = len(all_rec)
     products_arr = []
     for i in prods:

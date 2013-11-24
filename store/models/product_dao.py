@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean, or_
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean,and_,or_
 from sqlalchemy.orm import relationship, backref
 
 
@@ -58,7 +58,7 @@ class Product(Base):
         return Product.query.filter_by(is_deleted=False).all()
 
     @staticmethod
-    def listFilterBuyProducts(name, start_price, end_price):
+    def pager_by_filter(name=None, start_price=None, end_price=None, page=None, records_per_page=None):
         query = Product.query.filter_by(is_deleted=False)
         if name:
             query = query.filter(or_(Product.name == name, Product.description == name))
@@ -66,7 +66,19 @@ class Product(Base):
             query = query.filter(Product.price >= start_price)
         if end_price:
             query = query.filter(Product.price <= end_price)
-        return query.all()
+        stop = page * records_per_page
+        start = stop - records_per_page
+        return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop), \
+            query.filter_by(is_deleted=False).count()
+
+    @staticmethod
+    def all_products(records_per_page, page):
+
+        ## put filter here
+
+        stop = page * records_per_page
+        start = stop - records_per_page
+        return Product.query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop)
 
 
 class Dimension(Base):
