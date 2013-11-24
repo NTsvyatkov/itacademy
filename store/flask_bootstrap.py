@@ -16,7 +16,7 @@ def session_closes(request):
 @app.errorhandler(ValidationException)
 def err_han(e):
     error_dict = {'message': e.message}
-    return make_response(jsonify(error_dict), 404)
+    return make_response(jsonify(error_dict), 400)
 
 @app.errorhandler(BaseException)
 def err_han2(e):
