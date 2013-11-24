@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
@@ -10,19 +10,31 @@ class Order(Base):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('UserDao', backref=backref('order', lazy='dynamic'))
+    user = relationship('UserDao', backref=backref('order', lazy='dynamic'), foreign_keys=[user_id])
     date = Column(DATE, default=date.today())
     status_id = Column(Integer, ForeignKey('order_status.id'))
     status = relationship('OrderStatus', backref=backref('order', lazy='dynamic'))
     delivery_id = Column(Integer, ForeignKey('delivery_type.id'), nullable=True)
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
+    assignee_id = Column(Integer, ForeignKey('user.id'), nullable=True)
+    assignee = relationship('UserDao', foreign_keys=[assignee_id])
+    total_price = Column(DECIMAL, nullable=True)
+    preferable_delivery_date = Column(DATE, nullable=True)
+    delivery_date = Column(DATE, nullable=True)
+    gift = Column(Boolean, default=False, nullable=True)
 
-    def __init__(self, user_id, date, status_id, delivery_id):
+    def __init__(self, user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date,
+                 delivery_date, gift):
         super(Order, self).__init__()
         self.user_id = user_id
         self.date = date
         self.status_id = status_id
         self.delivery_id = delivery_id
+        self.total_price = total_price
+        self.assignee_id = assignee_id
+        self.preferable_delivery_date = preferable_delivery_date
+        self.delivery_date = delivery_date
+        self.gift = gift
 
     @staticmethod
     def get_order(id):
@@ -49,18 +61,26 @@ class Order(Base):
 
 
     @staticmethod
-    def add_order(user_id, date, status_id, delivery_id = None):
-        order = Order(user_id, date, status_id, delivery_id)
+    def add_order(user_id, date, status_id, delivery_id = None, total_price = None, assignee_id = None,
+                  preferable_delivery_date = None, delivery_date=None, gift= None):
+        order = Order(user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date, delivery_date, gift)
         db_session.add(order)
         db_session.commit()
 
     @staticmethod
-    def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id):
+    def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
+                     new_total_price, new_assignee_id, new_preferable_delivery_date, new_delivery_date, new_gift):
         ord_up = Order.get_order(id)
         ord_up.user_id = new_user_id
         ord_up.date = new_date
         ord_up.status_id = new_status_id
         ord_up.delivery_id = new_delivery_id
+        ord_up.total_price = new_total_price
+        ord_up.assignee_id = new_assignee_id
+        ord_up.preferable_delivery_date = new_preferable_delivery_date
+        ord_up.delivery_date = new_delivery_date
+        ord_up.gift = new_gift
+
         db_session.commit()
 
 
@@ -160,13 +180,17 @@ class OrderProduct(Base):
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
     quantity = Column(Integer)
+    price = Column(Integer, nullable=True)
+    #price_id = Column(Integer,ForeignKey('products.price'), nullable=True)
+    #price = relationship('Product', backref=backref('order_product', lazy='dynamic'))
 
 
-    def __init__(self, order_id, product_id, quantity):
+    def __init__(self, order_id, product_id, quantity, price):
         super(OrderProduct, self).__init__()
         self.quantity = quantity
         self.order_id = order_id
         self.product_id = product_id
+        self.price = price
 
 
     @staticmethod
@@ -183,15 +207,16 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
 
     @staticmethod
-    def add_order_product(order_id, product_id, quantity):
-        order_product = OrderProduct(order_id, product_id, quantity)
+    def add_order_product(order_id, product_id, quantity, price = None):
+        order_product = OrderProduct(order_id, product_id, quantity, price)
         db_session.add(order_product)
         db_session.commit()
 
     @staticmethod
-    def update_order_product(order_id, product_id, new_quantity):
+    def update_order_product(order_id, product_id, new_quantity, new_price):
         order_product_up = OrderProduct.get_order_product(order_id, product_id)
         order_product_up.quantity = new_quantity
+        order_product_up.price = new_price
         db_session.commit()
 
     @staticmethod
@@ -203,8 +228,11 @@ class OrderProduct(Base):
     @staticmethod
     def updateSumQuantity(order_id, product_id, new_quantity):
         order_product_up = OrderProduct.get_order_product(order_id, product_id)
-        order_product_up.quantity += new_quantity
+        #order_product_up.quantity = order_product_up.quantity + new_quantity
+        order_product_up.quantity = new_quantity
         db_session.commit()
+
+
 
 
 def order_product_grid(user_id):
