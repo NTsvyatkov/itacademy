@@ -236,7 +236,6 @@ $(document).ready(function() {
         var d_op = '&description_options='+$('#description_options').val()+'&description='+$('#description_input').val();
         var price_options = '&price_options='+$('#price_options').val()+'&price='+$('#price_input').val();
         filter_query = name_options +d_op+price_options;
-        alert (filter_query);
         grid_pagination();
         $('#error_div').empty();
        }
@@ -249,12 +248,13 @@ $(document).ready(function() {
      });
 
     $('#clr').click(function(){
-    $('#name_options').val(0);
-    $('#name_input').val('');
-    $('#description_options').val(0);
-    $('#description_input').val('');
-    $('#price_options').val(0);
-    $('#price_input').val('');
+      $('#name_options').val(0);
+      $('#name_input').val('');
+      $('#description_options').val(0);
+      $('#description_input').val('');
+      $('#price_options').val(0);
+      $('#price_input').val('');
+      $('#error_div').empty()
     });
 
 
