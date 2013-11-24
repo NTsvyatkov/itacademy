@@ -233,3 +233,8 @@ class OrderProduct(Base):
         db_session.commit()
 
 
+
+
+def order_product_grid(user_id):
+    return db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
+        filter(and_(Order.user_id==user_id ,Order.status_id=='1')).all()

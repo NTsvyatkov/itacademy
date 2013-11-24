@@ -80,6 +80,54 @@ class Product(Base):
         start = stop - records_per_page
         return Product.query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop)
 
+    @staticmethod
+    def filter_product_grid(list):
+        """This method exercise filter by filter list in product_grid.html
+           filter_description, filter_name  1 = start with
+                                            2 = contains
+                                            3 = equal to
+            filter_price 1 = less than
+                         2 = more than
+                         3 = equal to
+        """
+        if list['name']:
+            filter_name={'1':Product.name.like(list['name']+'%'),\
+                         '2':Product.name.like(list['name']),\
+                         '3':Product.name == list['name']}
+
+        if list['description']:
+            filter_description={'1':Product.description.like(list['description']+'%'),\
+                                '2':Product.description.like(list['description']),\
+                                '3':Product.description == list['description']}
+        if list['price']:
+            filter_price={'1':Product.price < (list['price']),\
+                          '2':Product.price > (list['price']),\
+                          '3':Product.price == list['price']}
+
+        if list['name'] and list['description'] and list['price']:
+            return Product.query.filter(and_(filter_name[list['name_options']],\
+                                             filter_description[list['description_options']],\
+                                             filter_price[list['price_options']])).all()
+        elif list['name'] and list['description']:
+            return Product.query.filter(and_(filter_name[list['name_options']],\
+                                             filter_description[list['description_options']])).all()
+        elif list['name'] and list['price']:
+            return Product.query.filter(and_(filter_name[list['name_options']],\
+                                             filter_price[list['price_options']])).all()
+        elif list['description'] and list['price']:
+            return Product.query.filter(and_(filter_description[list['description_options']],\
+                                             filter_price[list['price_options']])).all()
+        elif list['name']:
+            return Product.query.filter(filter_name[list['name_options']]).all()
+
+        elif list['description']:
+            return Product.query.filter(filter_name[list['description_options']]).all()
+
+        elif list['price']:
+            return Product.query.filter(filter_name[list['price_options']]).all()
+
+
+
 
 class Dimension(Base):
     __tablename__ = 'dimensions'
@@ -114,3 +162,12 @@ class Dimension(Base):
         return Dimension.query.all()
 #Product.del_product(10)
 #print Product.get_product(10)
+#
+#filter_list={'name':'mango','name_options':'2',\
+#        'description':'fresh','description_options':'1',\
+#        'price':'7.4','price_options':'2'}
+#
+#all_rec = Product.filter_product_grid(filter_list)
+#
+#for i in all_rec:
+#    print i.name

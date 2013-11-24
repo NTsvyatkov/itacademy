@@ -8,7 +8,6 @@
   var tr = [];
 
   /* Creating table of products */
-
   $(document).ready(function() {
     var page = 1;
     var table_grid = document.getElementById('grid');
@@ -31,6 +30,17 @@
     create_grid(count_tr,count_td);
   /*End of creating table*/
 
+  /*Create "Delivery option's" select */
+ var arr =[
+ {%for i in dimensions_arr %}
+ {val : {{ i.id }} , text: '{{i.name}}'},
+ {% endfor %}
+          ];
+  var select = $('#delivery_options')
+  $(arr).each(function() {
+    select.append($("<option>").attr('value',this.val).text(this.text));
+  });
+ /*End  "Delivery option's" select */
 
   function clearing_tr(i)
   {
@@ -72,7 +82,7 @@ create_entity();
       })
  }
 
-    var k=0;
+
     form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
     json_value = JSON.stringify(form_value);
 
@@ -112,8 +122,9 @@ create_entity();
  }
 
   function ajax_success(json){
-           deleting_grid()
-           create_grid(json.order.length,count_td)
+           deleting_grid();
+           create_grid(json.order.length,count_td);
+           var k=0;
            /*Create table with new order_products list */
             for (var product_k in json.order)
                   {
@@ -124,17 +135,19 @@ create_entity();
                  tr[k].cells[1].innerHTML = json.order[product_k].description;
                  tr[k].cells[2].innerHTML = json.order[product_k].dimension;
                  tr[k].cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
-                 input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'>\
-                          <input type='button' value='update' class='update_amount'>";
+                 input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
+                          style='width:60px'><input type='button' value='update' class='update_amount'>";
 
                  tr[k].cells[4].innerHTML = input;
-                 if (json.order[product_k].quantity) quant= json.order[product_k].quantity; else quant= 0;
-                 var amount= +json.order[product_k].price * +quant;
+                 if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
+                 var amount= (+json.order[product_k].price * +quant).toFixed(2);
                  tr[k].cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
                  tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                 }
-                k=0;
+
+                $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
+
 
             /*End creating table*/
 
@@ -148,15 +161,15 @@ create_entity();
                 $('tr input.update_amount').click(function(){
                    var tr= $(this).closest('tr');
                    var price = tr.children('td').children('.price').text();
-                   var quantity = $(this).prev().val() ;
+                   var quantity = Math.round($(this).prev().val());
+                   $(this).prev().val(quantity);
                    var sum = +price*+quantity;
-                   tr.children('td').children('.amount').text(sum);
-
-
+                   tr.children('td').children('.amount').text(sum.toFixed(2));
                    $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
                 })
 
   }
+
 
    $('#clr').click(deleting_grid);
 
@@ -170,7 +183,6 @@ create_entity();
    return total;
  }
 
- $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
 
  });
 
@@ -224,10 +236,7 @@ create_entity();
            <div class="field">
                <lable>Delivery Type: </lable>
                <select id="delivery_options" style="width:165px;">
-                    <option></option>
-                    <option>start with</option>
-                    <option>contains</option>
-                    <option>equal to</option>
+
                </select>
            </div>
            <div class="field">

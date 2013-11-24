@@ -15,10 +15,10 @@
              <div class="field">
                   <lable>Name: </lable>
                   <select id="name_options">
-                    <option></option>
-                    <option>start with</option>
-                    <option>contains</option>
-                    <option>equal to</option>
+                    <option value="0"></option>
+                    <option value="1">start with</option>
+                    <option value="2">contains</option>
+                    <option value="3">equal to</option>
                    </select>
                     <input type="text" id="name_input">
              </div>
@@ -26,23 +26,25 @@
              <div class="field">
                  <lable>Description: </lable>
                  <select id="description_options">
-                    <option></option>
-                    <option>start with</option>
-                    <option>contains</option>
-                    <option>equal to</option>
+                    <option value="0"></option>
+                    <option value="1">start with</option>
+                    <option value="2">contains</option>
+                    <option value="3">equal to</option>
                   </select>
                     <input type="text" id="description_input">
              </div>
 
              <div class="field">
                  <lable>Price: </lable>
-                 <select id="description_options">
-                    <option></option>
-                    <option>less than</option>
-                    <option>more than</option>
-                    <option>equal to</option>
+                 <select id="price_options">
+                    <option value="0"></option>
+                    <option value="1">less than</option>
+                    <option value="2">more than</option>
+                    <option value="3">equal to</option>
                  </select>
-                 <input type="text" id="description_input">
+                 <input type="text" id="price_input">
+             </div>
+             <div id="error_div" style="color:red; text-align:center; font-size:14px;">
              </div>
 
          </form>
