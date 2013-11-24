@@ -2,7 +2,6 @@
 from flask import render_template, request, make_response, jsonify, session
 from flask_bootstrap import app
 from models.order_dao import Order,  OrderStatus
-from maintenance.pager_by_orders import Pagination
 
 @app.route('/my_orders')
 def  my_orders():
@@ -24,10 +23,7 @@ def ordersPage():
     user_id = session['id']
     records_per_page = int(request.args.get('table_size'))
     page=int(request.args.get('page'))
-    all_rec = Order.query.filter(Order.user_id == user_id).count()
-    pagination = Pagination(records_per_page, all_rec, page)
-    prods = pagination.pager(user_id)
-    records_amount = all_rec
+    prods, records_amount = Order.pagerByFilter(user_id, page, records_per_page)
     orders_list = []
     for i in prods:
         orders_list.append({'date': i.date.strftime("%d/%m/%y"), 'orderStatus': OrderStatus.get_status(i.status_id).name,

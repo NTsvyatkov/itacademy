@@ -58,7 +58,7 @@ class Product(Base):
         return Product.query.filter_by(is_deleted=False).all()
 
     @staticmethod
-    def pager_by_filter(name=None, start_price=None, end_price=None, page=None, records_per_page=None):
+    def pagerByFilter(name=None, start_price=None, end_price=None, page=None, records_per_page=None):
         query = Product.query.filter_by(is_deleted=False)
         if name:
             query = query.filter(or_(Product.name == name, Product.description == name))
