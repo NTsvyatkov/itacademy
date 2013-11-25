@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
 import re
+from datetime import date
 from validation import ValidationException, NotFoundException
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
-from models.order_dao import Order, OrderStatus, DeliveryType
+from models.order_dao import Order, OrderStatus, DeliveryType, OrderProduct
 
 
 def getListOrder():
@@ -28,3 +29,14 @@ def list_status():
 def list_delivery():
         del_list = DeliveryType.get_delivery_all()
         return del_list
+
+def addOrderWithStatusCart(user_id):
+    if Order.getOrderByStatus(user_id) is None:
+        Order.add_order(user_id,date.today(), 4)
+
+def addProductToCartStatus(user_id, id, json):
+    order = Order.getOrderByStatus(user_id)
+    if  OrderProduct.get_order_product(order.id, id):
+        OrderProduct.updateSumQuantity(order.id, id, json['value'])
+    else:
+        OrderProduct.add_order_product(order.id, id, json['value'])

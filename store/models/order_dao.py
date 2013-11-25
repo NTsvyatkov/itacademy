@@ -10,18 +10,21 @@ class Order(Base):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('UserDao', backref=backref('order', lazy='dynamic'), foreign_keys=[user_id])
+    #user = relationship('UserDao', backref=backref('order', lazy='dynamic'), foreign_keys=[user_id])
+    user = relationship('UserDao', foreign_keys=user_id)
     date = Column(DATE, default=date.today())
     status_id = Column(Integer, ForeignKey('order_status.id'))
     status = relationship('OrderStatus', backref=backref('order', lazy='dynamic'))
     delivery_id = Column(Integer, ForeignKey('delivery_type.id'), nullable=True)
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
     assignee_id = Column(Integer, ForeignKey('user.id'), nullable=True)
-    assignee = relationship('UserDao', foreign_keys=[assignee_id])
+    #assignee = relationship('UserDao', foreign_keys=[assignee_id])
+    assignee = relationship('UserDao', foreign_keys=assignee_id)
     total_price = Column(DECIMAL, nullable=True)
     preferable_delivery_date = Column(DATE, nullable=True)
     delivery_date = Column(DATE, nullable=True)
     gift = Column(Boolean, default=False, nullable=True)
+
 
     def __init__(self, user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date,
                  delivery_date, gift):
