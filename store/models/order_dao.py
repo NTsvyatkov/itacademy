@@ -88,6 +88,14 @@ class Order(Base):
     def getOrderByStatus(user_id):
         return Order.query.filter(and_(Order.status_id == 4, Order.user_id == user_id)).first()
 
+    @staticmethod
+    def pagerByFilter(user_id=None, page=None, records_per_page=None):
+        query = Order.query.filter(Order.user_id == user_id)
+        stop = page * records_per_page
+        start = stop - records_per_page
+        return query.order_by(Order.id).slice(start, stop), \
+            query.count()
+
 
 class OrderStatus(Base):
     __tablename__ = "order_status"

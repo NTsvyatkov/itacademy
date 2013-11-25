@@ -98,8 +98,8 @@ var last_name =   document.form.last_name.value;
     }
 
 var password =   document.form.password.value;
-var RegV_password = /\S/;
-var RegV_password_result = password.match(RegV_password);;
+
+
        if (password == ""){
        $(".error_password").html("'Password is required field.'").css({'color':'red'});
                 $(".password").toggleClass("errorList");
@@ -123,8 +123,19 @@ var RegV_password_result = password.match(RegV_password);;
         return false;
     }
 
-    else if (  RegV_password_result   ){
+    else if (  /\s/.test(password)  ){
        $(".error_password").html("'Spaces are not allowed'").css({'color':'red'});
+                $(".password").toggleClass("errorList");
+                $(".password").click(function(){
+
+                $(".error_password").html("");
+                $(".password").removeClass("errorList")
+
+                });
+        return false;
+    }
+    else if (  password.length < 4){
+       $(".error_password").html("'  Password should contain at least 4 characters'").css({'color':'red'});
                 $(".password").toggleClass("errorList");
                 $(".password").click(function(){
 
@@ -150,6 +161,7 @@ var confirm =   document.form.confirm.value;
 var email =   document.form.email.value;
 var regV_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,100})+$/;
 var result_email = email.match(regV_email);
+
         if (email == ""){
         $(".error_email").html("'Email is required field.'").css({'color':'red'});
                 $(".email").toggleClass("errorList");
@@ -220,20 +232,12 @@ var region =   document.form.region.value;
                 role_id:Number( $('input[name=role]:checked', '#roles').val())
                }),
         contentType: 'application/json;',
+        complete : function (resp){
+
+            alert('Запрос успешно отправлен в базу');
+            parent.location = 'http://127.0.0.1:5000/search_user'; }
 
 
-        success: function(data){
-
-      var view =   $("#result").text(data.result);
-      var view = data.length,
-        element = null;
-            for (var i = 0; i < view; i++) {
-        element = arr[i];
-
-}
-
-
-                                }
                      });
 
 }

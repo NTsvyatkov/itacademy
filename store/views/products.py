@@ -23,7 +23,7 @@ def products():
     end_price = request.args.get('end_price')
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    prods, records_amount = Product.pager_by_filter(name, start_price, end_price, page, records_per_page)
+    prods, records_amount = Product.pagerByFilter(name, start_price, end_price, page, records_per_page)
     products_arr = []
     for i in prods:
         products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
