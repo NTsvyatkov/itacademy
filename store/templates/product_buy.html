@@ -86,7 +86,7 @@
                         k++;
                         tr[k].cells[0].innerHTML = json.products[product_k].name;
                         tr[k].cells[1].innerHTML = json.products[product_k].description;
-                        tr[k].cells[2].innerHTML = json.products[product_k].price;
+                        tr[k].cells[2].innerHTML = "$ "+ json.products[product_k].price;
                         tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px' value = '1' alt=" + k + ">";
                         tr[k].cells[4].innerHTML = "<input type='button' value='Add to Cart' id='button'  alt=" + k + ">";
                         tr[k].cells[3].abbr=k;
@@ -204,19 +204,6 @@
             count_tr=$('#table_size').val();
             $( "#table_siz option:selected" ).each(grid_pagination())
             });
-
-            $('#name').blur(function() {
-                var regV_login = /^[a-zA-Z]+$/;
-                var res = $(this).val().match(regV_login)
-                if(!res && $(this).val() != ''){
-                    $(this).css({'border' : '2px solid #ff0000'});
-                    $('#valid').text('Field not be empty');
-                    document.getElementById('search_button').disabled = true;
-            } else {
-                $(this).css({'border' : '2px solid #999'});
-                document.getElementById('search_button').disabled = false;
-            }
-             });
 
 
             $('#start_price').blur(function() {
