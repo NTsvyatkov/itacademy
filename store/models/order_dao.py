@@ -89,7 +89,7 @@ class Order(Base):
 
     @staticmethod
     def getOrderByStatus(user_id):
-        return Order.query.filter(and_(Order.status_id == 4, Order.user_id == user_id)).first()
+        return Order.query.filter(and_(Order.status_id == 3, Order.user_id == user_id)).first()
 
     @staticmethod
     def pagerByFilter(user_id=None, page=None, records_per_page=None):
