@@ -310,6 +310,9 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
  color:red;
  text-align:center;
  font-size:14px;
+ text-align:justify;
+ margin:10px;
+ font-weight: bold;
 }
 
 .order_block{

@@ -206,22 +206,27 @@ $(document).ready(function() {
     var check= true;
     var error='';
     $('#apply_button').click(function(){
-      if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) && (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
+      if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) &&
+        (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
          {
           check = false;
           error = 'If you set value for Name select, you should set value for Name input. And conversely!<br>';
          }
 
-      if ((!( $('#description_options').val() != 0 && $('#description_input').val() )) && (!( $('#description_options').val() == 0 && !($('#description_input').val()) )))
+      if ((!( $('#description_options').val() != 0 && $('#description_input').val() )) &&
+         (!( $('#description_options').val() == 0 && !($('#description_input').val()) )))
          {
           check = false;
-          error = error + 'If you set value for Description select, you should set value for Description input. And conversely!<br>';
+          error = error + 'If you set value for Description select, you should set value \
+                                                                       for Description input. And conversely!<br>';
          }
 
-      if  ((!( $('#price_options').val() != 0 && $('#price_input').val() )) && (!( $('#price_options').val() == 0 && !($('#price_input').val()) )))
+      if  ((!( $('#price_options').val() != 0 && $('#price_input').val() ))
+       && (!( $('#price_options').val() == 0 && !($('#price_input').val()) )))
          {
           check = false;
-          error = error +  'If you set value for Price select, you should set value for Price input. And conversely!<br>';
+          error = error +  'If you set value for Price select, you should set value for Price input. \
+                                                                                           And conversely!<br>';
          }
       var val = $('#price_input').val();
 

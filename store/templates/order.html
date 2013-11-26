@@ -224,7 +224,7 @@ ajax_pull('Grid','GET','data');
                || ($('#input_address').val().length == 0))
        {
         no_error = false;
-        error = 'Comment string should be less then 1500 characters<br> and address string less then 50, but not 0';
+        error ='- Comment string should be less then 1500 characters and address string less then 50, but not 0<br>';
        }
 
        for( var i=0, total=0, k=0; i<$('.quantity').size(); i++)
@@ -232,7 +232,7 @@ ajax_pull('Grid','GET','data');
           quantity = $('.quantity:eq('+i+')').val();
 
           if(!(quantity/quantity)||(quantity==0) && k != 1 ){  /*Check on numeric */
-              error = 'Quantity should be numeric and not 0' ;
+              error = error+ '- Quantity should be numeric and not 0';
               k= 1;
               no_error = false;
             }
@@ -248,7 +248,7 @@ ajax_pull('Grid','GET','data');
        else
        {
          no_error = false;
-         error = 'Number of credit card is illegal';
+         error =error+ '- Number of credit card is illegal<br>';
        }
       r_e_ccv2=/^[0-9]{4}$/;
       cvv2_number = $('#cvv2_number').val();
@@ -256,7 +256,7 @@ ajax_pull('Grid','GET','data');
       else
        {
           no_error=false;
-          error='CVV2 number is wrong';
+          error=error+ '- CVV2 number is wrong<br>';
 
       }
       /*----------------------*/
