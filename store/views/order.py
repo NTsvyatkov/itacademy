@@ -19,9 +19,9 @@ def order():
     return make_response(jsonify(order=order_arr), 200)
 
 
-@app.route('/api/order_product/<int:id>', methods=['DELETE'])
-def order_id_delete(id):
-    OrderProduct.delete_order_product()
+@app.route('/api/order_product/<int:id_product>/<int:id_order>', methods=['DELETE'])
+def order_id_delete(id_order,id_product):
+    OrderProduct.delete_order_product(id_order,id_product)
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 

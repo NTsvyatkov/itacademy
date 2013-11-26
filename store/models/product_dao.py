@@ -95,39 +95,36 @@ class Product(Base):
 
         if list['name']:
             filter_name={'1':Product.name.like(list['name']+'%'),\
-                         '2':Product.name.like(list['name']),\
+                         '2':Product.name.like('%'+list['name'])+'%',\
                          '3':Product.name == list['name']}
 
         if list['description']:
             filter_description={'1':Product.description.like(list['description']+'%'),\
-                                '2':Product.description.like(list['description']),\
+                                '2':Product.description.like('%'+list['description']+'%'),\
                                 '3':Product.description == list['description']}
         if list['price']:
             filter_price={'1':Product.price < (list['price']),\
                           '2':Product.price > (list['price']),\
                           '3':Product.price == list['price']}
 
-        if list['name'] and list['description'] and list['price']:
-            query= Product.query.filter(and_(filter_name[list['name_options']],\
-                                             filter_description[list['description_options']],\
-                                             filter_price[list['price_options']]))
-        elif list['name'] and list['description']:
-            query= Product.query.filter(and_(filter_name[list['name_options']],\
-                                             filter_description[list['description_options']]))
-        elif list['name'] and list['price']:
-            query= Product.query.filter(and_(filter_name[list['name_options']],\
-                                             filter_price[list['price_options']]))
-        elif list['description'] and list['price']:
-            query= Product.query.filter(and_(filter_description[list['description_options']],\
-                                             filter_price[list['price_options']]))
-        elif list['name']:
-            query= Product.query.filter(filter_name[list['name_options']])
-
-        elif list['description']:
-            query= Product.query.filter(filter_description[list['description_options']])
-
-        elif list['price']:
-            query= Product.query.filter(filter_price[list['price_options']])
+        query= Product.query
+        if list['name']:
+            query= query.filter(filter_name[list['name_options']])
+        if list['description']:
+            query= query.filter(filter_description[list['description_options']])
+        if list['price']:
+            query= query.filter(filter_price[list['price_options']])
+        #elif list['description'] and list['price']:
+        #    query= Product.query.filter(and_(filter_description[list['description_options']],\
+        #                                     filter_price[list['price_options']]))
+        #elif list['name']:
+        #    query= Product.query.filter(filter_name[list['name_options']])
+        #
+        #elif list['description']:
+        #    query= Product.query.filter(filter_description[list['description_options']])
+        #
+        #elif list['price']:
+        #    query= Product.query.filter(filter_price[list['price_options']])
 
         count=query.filter_by(is_deleted=False).count()
         return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop).all(), count

@@ -123,7 +123,7 @@ ajax_pull('Grid','GET','data');
   if (id=='') id=0;
    $.ajax({
        dataType: "json",
-        url: '/api/order_product/'+id,
+        url: '/api/order_product/'+id+'/'+order_id,
         type: 'DELETE',
         contentType: "application/json",
         success: function(json)
@@ -131,7 +131,7 @@ ajax_pull('Grid','GET','data');
                         if (json.message == 'success')
                          {
                           alert('The product has been successfully deleted from the cart');
-                          create_entity();
+                          ajax_pull('Grid','GET','data');
                          }
                         else
                          alert (json.message);
@@ -247,8 +247,8 @@ ajax_pull('Grid','GET','data');
        if (r_e.test(credit_number)){}
        else
        {
-         no_error = false;
-         error =error+ '- Number of credit card is illegal<br>';
+         /*no_error = false;
+         error =error+ '- Number of credit card is illegal<br>';*/
        }
       r_e_ccv2=/^[0-9]{4}$/;
       cvv2_number = $('#cvv2_number').val();
