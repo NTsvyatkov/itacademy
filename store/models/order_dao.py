@@ -212,9 +212,7 @@ class OrderProduct(Base):
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
     quantity = Column(Integer)
-    price = Column(Integer, nullable=True)
-    #price_id = Column(Integer,ForeignKey('products.price'), nullable=True)
-    #price = relationship('Product', backref=backref('order_product', lazy='dynamic'))
+    price = Column(DECIMAL, nullable=True)
 
 
     def __init__(self, order_id, product_id, quantity, price):
