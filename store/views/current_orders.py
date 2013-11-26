@@ -77,7 +77,7 @@ def orders():
     assignee_id = request.args.get('assignee_id')
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    records_amount, orders = Order.pagerByFilterOrder(status_id, assignee_id, page, records_per_page)
+    orders, records_amount = Order.pagerByFilterOrder(status_id, assignee_id, page, records_per_page)
     orders_arr = []
     for i in orders:
         orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'total_price': i.total_price, 'assignee_id' : i.user.role.name})
