@@ -88,7 +88,8 @@
 
            deleting_grid()
            creat_grid(json.regions.length)
-
+        document.getElementById('add_button').style.display='inline'
+        document.getElementById('edit_button').style.display='none'
             for (var region_k in json.regions)
                 {
                  k++;
@@ -103,6 +104,8 @@
           var id_tr = tr[this.abbr].cells[0].innerHTML
           document.getElementById('region_name').value=str
           region=id_tr
+          document.getElementById('add_button').style.display='none'
+          document.getElementById('edit_button').style.display='inline'
           }
         tr[k].cells[3].onclick= function delete_region(){
           var str = tr[this.abbr].cells[1].innerHTML
@@ -125,7 +128,9 @@
   $('#edit_button').click(function(){
   update();
     });
-  $('#Cansel').click(deleting_grid);
+  $('#cansel').click(function(){
+  cansel();
+    });
 
  function add() {
  form_value = {name : $( name = $('#region_name').val())}
@@ -136,7 +141,7 @@
      url: '/api/regions',
      type: 'POST',
      contentType: "application/json",
-     success:function(json){
+     success:function(json) {
                         if (json.message == 'success')
                          {
                           alert('The region has been successfully added');
@@ -178,7 +183,11 @@
      create_entity();
      document.getElementById('info').reset();
   }
+  function cansel(){
+   document.getElementById('add_button').style.display='inline'
+   document.getElementById('edit_button').style.display='none'
 
+  }
   })
    </script>
 
@@ -212,7 +221,7 @@
     <div id="name-wrap">
     <label for="region_name">Name</label>
     <input type="text" id="region_name" name="name" >
-    <p><input type="button" value="Add" id="add_button">  <input type="button" value="Update" id="edit_button">  <input type="submit" value="Cancel" OnClick=""></p>
+    <p><input type="button" value="Add" id="add_button"><input type="button" value="Update" id="edit_button"><input type="reset"  id="cansel"  value="Cansel"></p>
 </fieldset>
 </form>
     
