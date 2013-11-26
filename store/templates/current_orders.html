@@ -7,7 +7,7 @@
 
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
-            var count_td=11;
+            var count_td=6;
             var page = 1;
             var table_grid = document.getElementById('grid');
 
@@ -19,7 +19,7 @@
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
                             if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=4; j++)
+                            for (var j=0; j<=5; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
@@ -53,14 +53,12 @@
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
                         tr[k].cells[3].innerHTML = json.orders[order_k].total_price;
                         tr[k].cells[4].innerHTML = json.orders[order_k].assignee_id;
-                        tr[k].cells[5].innerHTML = "<input type='button' value='Edit' id='edit_order'  alt=" + k + ">";
+                        tr[k].cells[5].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
                         tr[k].cells[5].abbr=k;
-                        tr[k].cells[5].onclick = function edit_order(){
-                                                var str = tr[this.abbr].cells[1].innerHTML
-                                                var id_tr = tr[this.abbr].cells[0].innerHTML
-                                                document.getElementById('region_name').value=str
-                                                region=id_tr
-                                                                        }
+                        tr[k].cells[5].onclick= function()
+                            {
+                                alert('Details')
+                            }
                     }
                     k=0;
                     /*End creating table*/
@@ -198,6 +196,32 @@
     });
 
     </script>
+              <script type="text/javascript">
+    $.ajax({
+            dataType: "json",
+            url: '/api/status',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.status, function(i, pr){
+                    $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                })
+            }
+    });
+    </script><script>
+     $.ajax({
+            dataType: "json",
+            url: '/api/delivery',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.delivery, function(k, j){
+                    $('#delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
+                })
+            }
+     });
+
+</script>
 
 
         <div class="">
@@ -215,7 +239,7 @@
             <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select id="table_size">
-                    <option selected>10</option>
+                    <option selected>5</option>
                     <option>25</option>
                    </select>
             </div>
@@ -253,10 +277,41 @@
                 <input type="button" id="next" value="Next">&nbsp
                 <input type="button" id="last" value="Last">
                 <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
-            </div>
+            </div></div></div>
+<style type="text/css">
+    div { clear:both;position:relative; }
+</style>
 
-            </div>
+    <form id="info"  name="form"  class = "form" method ="POST"  >
+         <h2 class="ProductTitle" >Status</h2>
+         <select class="current_order" id="status" name="status">
+         <option value="">Select status</option>
+         </select>
 
-            </div>
-        </div>
+         <h2 class="ProductTitle" >Delivery type</h2>
+
+         <select class="current_order" id="delivery" name="delivery">
+         <option value="">Select delivery type</option>
+         </select></br></br>
+
+
+         <div class ="delivery_address">
+	           <label for="delivery_address">Delivery Address</label>
+               <input id="delivery_address" name="delivery_address" type="text" value="" >
+         </div>
+         </div></br>
+
+		 <div class ="comments">
+	           <label for="comments">Comments</label>
+               <textarea class="comments_area" id="comments" name="comments" type="text" value="" ></textarea>
+         </div>
+         </div>
+
+
+    </br></br>
+
+         <input type="button" value ="Update" class="button">
+
+    </form>
+
 {% endblock body %}

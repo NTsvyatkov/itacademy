@@ -56,13 +56,12 @@ body {
   }
 
 #menu a:hover, a:active {
- color: gray;
+ color: black;
  font-weight:bold;
-
  text-decoration:none;
   }
 #menu .active{
- color: gray;
+ color: black;
  font-weight:bold;
 
  text-decoration:none;
@@ -305,4 +304,26 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
     width:180px;
     padding:10px;
     margin:auto;
+}
+
+.error_div{
+ color:red;
+ text-align:center;
+ font-size:14px;
+ text-align:justify;
+ margin:10px;
+ font-weight: bold;
+}
+
+.order_block{
+ width: 400px;
+ float:left;
+ background-image:url(../images/fbg.png);
+ border:2px solid #707070 ;
+ margin:10px;
+}
+
+.red_star{
+    color: red;
+    font-weight: bold;
 }

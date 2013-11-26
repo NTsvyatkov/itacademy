@@ -206,28 +206,35 @@ $(document).ready(function() {
     var check= true;
     var error='';
     $('#apply_button').click(function(){
-      if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) && (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
+      if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) &&
+        (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
          {
           check = false;
           error = 'If you set value for Name select, you should set value for Name input. And conversely!<br>';
          }
 
-      if ((!( $('#description_options').val() != 0 && $('#description_input').val() )) && (!( $('#description_options').val() == 0 && !($('#description_input').val()) )))
+      if ((!( $('#description_options').val() != 0 && $('#description_input').val() )) &&
+         (!( $('#description_options').val() == 0 && !($('#description_input').val()) )))
          {
           check = false;
-          error = error + 'If you set value for Description select, you should set value for Description input. And conversely!<br>';
+          error = error + 'If you set value for Description select, you should set value \
+                                                                       for Description input. And conversely!<br>';
          }
 
-      if  ((!( $('#price_options').val() != 0 && $('#price_input').val() )) && (!( $('#price_options').val() == 0 && !($('#price_input').val()) )))
+      if  ((!( $('#price_options').val() != 0 && $('#price_input').val() ))
+       && (!( $('#price_options').val() == 0 && !($('#price_input').val()) )))
          {
           check = false;
-          error = error +  'If you set value for Price select, you should set value for Price input. And conversely!<br>';
+          error = error +  'If you set value for Price select, you should set value for Price input. \
+                                                                                           And conversely!<br>';
          }
       var val = $('#price_input').val();
-      if(!(val/val)&&(val!=0))
+
+
+      if(!(val/val)&&(val!=0))  /*Check on numeric */
       {
        check = false;
-        error = error + 'Price is not number'
+        error = error + 'Price is not numeric'
       }
 
       if (check)
@@ -236,13 +243,14 @@ $(document).ready(function() {
         var d_op = '&description_options='+$('#description_options').val()+'&description='+$('#description_input').val();
         var price_options = '&price_options='+$('#price_options').val()+'&price='+$('#price_input').val();
         filter_query = name_options +d_op+price_options;
+        page=1;
         grid_pagination();
-        $('#error_div').empty();
+        $('.error_div').empty();
        }
       else
       {
-        $('#error_div').empty();
-        $('#error_div').html(error);
+        $('.error_div').empty();
+        $('.error_div').html(error);
         error ='';
       }
      });

@@ -86,7 +86,7 @@ class Product(Base):
            filter_description, filter_name  1 = start with
                                             2 = contains
                                             3 = equal to
-            filter_price 1 = less than
+           filter_price 1 = less than
                          2 = more than
                          3 = equal to
         """
