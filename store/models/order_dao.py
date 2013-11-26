@@ -105,7 +105,7 @@ class Order(Base):
         query = Order.query.filter(Order.user_id == user_id)
         stop = page * records_per_page
         start = stop - records_per_page
-        return Order.query.order_by(Order.id).slice(start, stop), \
+        return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
 
@@ -120,6 +120,7 @@ class Order(Base):
         start = stop - records_per_page
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
 class OrderStatus(Base):
     __tablename__ = "order_status"
 
