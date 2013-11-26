@@ -12,11 +12,11 @@ class UserDao(Base):
     __tablename__ = "user"
 
     id = Column(Integer, primary_key=True,autoincrement=True)
-    login = Column(String(50))
+    login = Column(String(50), unique=True)
     password = Column(String(50))
     first_name = Column(String(50))
     last_name = Column(String(50))
-    email = Column(String(100))
+    email = Column(String(100), unique=True)
     role_id = Column(Integer, ForeignKey(RoleDao.role_id))
     region_id = Column(Integer, ForeignKey(RegionDao.region_id))
 
