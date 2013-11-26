@@ -32,7 +32,7 @@ def list_delivery():
 
 def addOrderWithStatusCart(user_id):
     if Order.getOrderByStatus(user_id) is None:
-        Order.add_order(user_id,date.today(), 4)
+        Order.add_order(user_id,date.today(), 3)
 
 def addProductToCartStatus(user_id, id, json):
     order = Order.getOrderByStatus(user_id)
