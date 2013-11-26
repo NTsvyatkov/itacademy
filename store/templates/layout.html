@@ -17,6 +17,7 @@
     <script type="text/javascript" src="/static/js/JQuery_validate_and_ajax_to_create_user.js"></script>
     <!--This file is used for warnings on the page "create_user" -->
     <link href="{{url_for('static', filename='styles/style.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='js/datepicker/jquery.ui.all.css')}}" rel="stylesheet" type="text/css" />
 
     <title>SoftServe</title>
 
@@ -74,12 +75,21 @@
      Region
      </a>
  </li>
-     <li>
+
+  <li>
      <a href="my_orders" title="my_orders"
          {% if request.environ.PATH_INFO.strip('/') =='my_orders'%}class="active"{% endif %}>
      My Orders
      </a>
+  </li>
+
+  <li>
+     <a href="order_product" title="order_product"
+         {% if request.environ.PATH_INFO.strip('/') =='order_product'%}class="active"{% endif %}>
+     Order
+     </a>
  </li>
+
 </ul>
 
 {% endblock bar %}
