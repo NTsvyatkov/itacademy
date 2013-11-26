@@ -31,15 +31,8 @@ Product.add_product('mango', 'fresh mango', 7.5, 2)
 Product.add_product('lemon', 'indian lemon', 4.4, 2)
 
 
-RoleDao.createNewRole("Administrator")
-RoleDao.createNewRole("Merchandiser")
-RoleDao.createNewRole("Supervisor")
-RoleDao.createNewRole("Customer")
-
-RegionDao.createNewRegion("North")
-RegionDao.createNewRegion("West")
-RegionDao.createNewRegion("South")
-RegionDao.createNewRegion("East")
+RoleDao.createNewRole("Admin")
+RegionDao.createNewRegion("Crimea")
 
 UserDao.createNewUser('Max', '111','Maxim','Sidorov', 'max.sidorov@gmail.ru', 1,1)
 UserDao.createNewUser('Vanya', '111','Ivan','Ivanov', 'vanya@gmail.com', 1,1)
@@ -51,20 +44,16 @@ DeliveryType.add_delivery('Courier')
 DeliveryType.add_delivery('Express-mail')
 DeliveryType.add_delivery('Himself')
 
-OrderStatus.add_status('Ordered')
+OrderStatus.add_status('In Stock')
+OrderStatus.add_status('Delivery process')
 OrderStatus.add_status('Delivered')
 OrderStatus.add_status('Cart')
 
 Order.add_order(1,date.today(),2,2)
 Order.add_order(3,date.today(),4,1)
 Order.add_order(2,date.today(),1,2)
-<<<<<<< HEAD
 Order.add_order(4,date.today(),4,2)
 Order.add_order(2,date.today(),3,3)
-=======
-Order.add_order(4,date.today(),3,2)
-Order.add_order(2,date.today(),2,3)
->>>>>>> e53693a557ac0b3b74d162b613026ba5d0355c8b
 Order.add_order(1,date.today(),2,3)
 
 OrderProduct.add_order_product(3,4,5)
