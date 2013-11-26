@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
@@ -18,15 +18,18 @@ class Order(Base):
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
     assignee_id = Column(Integer, ForeignKey('user.id'), nullable=True)
     assignee = relationship('UserDao', foreign_keys=[assignee_id])
-    total_price = Column(DECIMAL, nullable=True)
+    total_price = Column(DECIMAL(5,2), nullable=True)
     preferable_delivery_date = Column(DATE, nullable=True)
     delivery_date = Column(DATE, nullable=True)
     gift = Column(Boolean, default=False, nullable=True)
+    delivery_address = Column(String(50))
+    comment = Column(TEXT)
 
-    def __init__(self, user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date,
-                 delivery_date, gift):
+    def __init__(self, user_id, date,status_id, delivery_id, total_price, assignee_id,
+                 preferable_delivery_date, delivery_date, gift, delivery_address, comment ):
         super(Order, self).__init__()
         self.user_id = user_id
+        self.date = date
         self.date = date
         self.status_id = status_id
         self.delivery_id = delivery_id
@@ -35,6 +38,8 @@ class Order(Base):
         self.preferable_delivery_date = preferable_delivery_date
         self.delivery_date = delivery_date
         self.gift = gift
+        self.delivery_address = delivery_address
+        self.comment = comment
 
     @staticmethod
     def get_order(id):
@@ -62,24 +67,29 @@ class Order(Base):
 
     @staticmethod
     def add_order(user_id, date, status_id, delivery_id = None, total_price = None, assignee_id = None,
-                  preferable_delivery_date = None, delivery_date=None, gift= None):
-        order = Order(user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date, delivery_date, gift)
+                  preferable_delivery_date = None, delivery_date=None, gift= None,
+                   delivery_address = None, comment =None):
+        order = Order(user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date,
+                      delivery_date, gift,delivery_address,comment)
         db_session.add(order)
         db_session.commit()
 
     @staticmethod
     def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
-                     new_total_price, new_assignee_id, new_preferable_delivery_date, new_delivery_date, new_gift):
+                     new_total_price, new_preferable_delivery_date, new_delivery_date,
+                     new_gift, new_delivery_address, new_comment ):
         ord_up = Order.get_order(id)
         ord_up.user_id = new_user_id
         ord_up.date = new_date
         ord_up.status_id = new_status_id
         ord_up.delivery_id = new_delivery_id
         ord_up.total_price = new_total_price
-        ord_up.assignee_id = new_assignee_id
+
         ord_up.preferable_delivery_date = new_preferable_delivery_date
         ord_up.delivery_date = new_delivery_date
         ord_up.gift = new_gift
+        ord_up.delivery_address = new_delivery_address
+        ord_up.comment = new_comment
 
         db_session.commit()
 
@@ -245,4 +255,28 @@ class OrderProduct(Base):
 
 def order_product_grid(user_id):
     return db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-        filter(and_(Order.user_id==user_id ,Order.status_id=='1')).all()
+        filter(and_(Order.user_id==user_id ,Order.status_id=='4')).all()
+
+def product_order_update(dict):
+
+    order_id=int(dict['order_id'])
+    amount=0
+    get_order = Order.get_order(order_id)
+    for i in dict['product_quantity']:
+        comment=dict['comment']
+        delivery_type=int(dict['delivery_type'])
+        delivery_address=dict['delivery_address']
+        product_id=int(i['product_id'])
+        quantity=int(i['quantity'])
+        price = Product.get_product(product_id).price
+
+        amount= amount + price*quantity
+
+        total_price = price*quantity
+        OrderProduct.update_order_product(order_id,product_id,quantity,total_price)
+    print amount
+    Order.update_order(order_id,get_order.user_id,get_order.date,4,delivery_type,
+                        amount, get_order.preferable_delivery_date, get_order.delivery_date,
+                        get_order.gift,delivery_address,comment )
+
+

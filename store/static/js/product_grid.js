@@ -224,10 +224,12 @@ $(document).ready(function() {
           error = error +  'If you set value for Price select, you should set value for Price input. And conversely!<br>';
          }
       var val = $('#price_input').val();
-      if(!(val/val)&&(val!=0))
+
+
+      if(!(val/val)&&(val!=0))  /*Check on numeric */
       {
        check = false;
-        error = error + 'Price is not number'
+        error = error + 'Price is not numeric'
       }
 
       if (check)
@@ -236,13 +238,14 @@ $(document).ready(function() {
         var d_op = '&description_options='+$('#description_options').val()+'&description='+$('#description_input').val();
         var price_options = '&price_options='+$('#price_options').val()+'&price='+$('#price_input').val();
         filter_query = name_options +d_op+price_options;
+        page=1;
         grid_pagination();
-        $('#error_div').empty();
+        $('.error_div').empty();
        }
       else
       {
-        $('#error_div').empty();
-        $('#error_div').html(error);
+        $('.error_div').empty();
+        $('.error_div').html(error);
         error ='';
       }
      });
