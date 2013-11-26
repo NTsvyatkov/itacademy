@@ -66,7 +66,6 @@ class Order(Base):
         else:
             return Order.query.all()
 
-
     @staticmethod
     def add_order(user_id, date, status_id, delivery_id = None, total_price = None, assignee_id = None,
                   preferable_delivery_date = None, delivery_date=None, gift= None,
@@ -120,7 +119,6 @@ class Order(Base):
         start = stop - records_per_page
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
-
 class OrderStatus(Base):
     __tablename__ = "order_status"
 
@@ -212,7 +210,9 @@ class OrderProduct(Base):
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
     quantity = Column(Integer)
-    price = Column(DECIMAL, nullable=True)
+    price = Column(Integer, nullable=True)
+    #price_id = Column(Integer,ForeignKey('products.price'), nullable=True)
+    #price = relationship('Product', backref=backref('order_product', lazy='dynamic'))
 
 
     def __init__(self, order_id, product_id, quantity, price):

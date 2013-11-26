@@ -1,5 +1,6 @@
 import unittest
 from models.user_dao import UserDao
+from mock import MagicMock, Mock
 
 
 class UserManagerTest(unittest.TestCase):
@@ -9,17 +10,23 @@ class UserManagerTest(unittest.TestCase):
         self.firstName = 'Alexander'
         self.lastName = 'Ivanov'
         self.password = 'password'
-        self.email = 'alex.ivanov@gmail.ru'
+        self.email = 'alex.ivasnov@gmail.ru'
         self.roleId = 1
         self.regionId = 1
 
     def testAddUser(self):
-        UserDao.createNewUser(self.login,self.password, self.firstName, self.lastName,self.email, self.roleId,
+        real = UserDao.createNewUser
+        real.method = Mock()
+        real.method(self.login,self.password, self.firstName, self.lastName,self.email, self.roleId,
                               self.regionId)
-        self.assertIsNotNone(UserDao.getUserByLogin(self.login, self.password))
+        real.method.assert_called_with(self.login,self.password, self.firstName, self.lastName,self.email, self.roleId,
+                              self.regionId)
 
-    def testGetUser(self):
-        self.assertIsNotNone(UserDao.getUserByLogin(self.login, self.password))
+    def testIsUserExist(self):
+        #my_mock = Mock()
+        #my_mock.some_method.return_value = False
+        #self.assertEqual(True, my_mock.UserDao.isUserExists(self.login, self.password))
+        self.assertEqual(UserDao.isUserExists(self.login, self.password), True)
 
     #def tearDown(self):
     #    user = UserDao.getUserByLogin(self.login, self.password)
