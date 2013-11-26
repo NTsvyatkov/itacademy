@@ -10,7 +10,8 @@ class Order(Base):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    user = relationship('UserDao', backref=backref('order', lazy='dynamic'), foreign_keys=[user_id])
+    #user = relationship('UserDao', backref=backref('order', lazy='dynamic'), foreign_keys=[user_id])
+    user = relationship('UserDao', foreign_keys=user_id)
     date = Column(DATE, default=date.today())
     status_id = Column(Integer, ForeignKey('order_status.id'))
     status = relationship('OrderStatus', backref=backref('order', lazy='dynamic'))
@@ -24,6 +25,7 @@ class Order(Base):
     gift = Column(Boolean, default=False, nullable=True)
     delivery_address = Column(String(50))
     comment = Column(TEXT)
+
 
     def __init__(self, user_id, date,status_id, delivery_id, total_price, assignee_id,
                  preferable_delivery_date, delivery_date, gift, delivery_address, comment ):
@@ -96,7 +98,7 @@ class Order(Base):
 
     @staticmethod
     def getOrderByStatus(user_id):
-        return Order.query.filter(and_(Order.status_id == 4, Order.user_id == user_id)).first()
+        return Order.query.filter(and_(Order.status_id == 3, Order.user_id == user_id)).first()
 
     @staticmethod
     def pagerByFilter(user_id=None, page=None, records_per_page=None):

@@ -56,13 +56,12 @@ body {
   }
 
 #menu a:hover, a:active {
- color: gray;
+ color: black;
  font-weight:bold;
-
  text-decoration:none;
   }
 #menu .active{
- color: gray;
+ color: black;
  font-weight:bold;
 
  text-decoration:none;
