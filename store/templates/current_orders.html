@@ -1,14 +1,16 @@
 {% extends "layout.html" %}
 {% block body %}
+
         <script type="text/javascript">
 
-            var count_tr=45;
             var tr = [];
 
-
             $(document).ready (function() {
+            var count_tr=$('#table_size').val();
+            var count_td=11;
             var page = 1;
             var table_grid = document.getElementById('grid');
+
             function creat_grid(count)
                 {
                     for (var i=1; i<=count;i++ )
@@ -24,24 +26,7 @@
                         }
                     $( "tr:even" ).css( "background-color", "#c0c0c0" );
                 }
-            creat_grid();
 
-            function clearing_tr(i)
-                {
-                    for (var j=0; j<=4; j++)
-                        {
-                            tr[i].cells[j].innerHTML='';
-                        }
-                }
-
-
-            function clearing_grid()
-                {
-                    for (var n=1 ; n<=count_tr; n++)
-                        {
-                            clearing_tr(n);
-                        }
-                }
             function deleting_grid()
                 {
                     for (var n=table_grid.rows.length ; n>=2; n--)
@@ -51,24 +36,14 @@
 
                 }
 
-            function createEntity(){
-                $.ajax({
-                dataType: "json",
-                url: '/api/order',
-                type: 'GET',
-                data: json_value,
-                contentType: "application/json",
-                success: function(json)
-                    {
-                        ajax_success(json);
-                    }
-                })
-            }
+            $('#search_button').click(function(){
+                grid_pagination()
+            });
 
 
             function ajax_success(json){
-                deleting_grid()
-                creat_grid(json.orders.length)
+                deleting_grid();
+                creat_grid(json.orders.length);
                 /*Create table */
                 for (var order_k in json.orders)
                     {
@@ -76,30 +51,36 @@
                         tr[k].cells[0].innerHTML = json.orders[order_k].id;
                         tr[k].cells[1].innerHTML = json.orders[order_k].user_id;
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
-                        tr[k].cells[3].innerHTML = "$"+json.orders[order_k].amount;
-                        tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                        tr[k].cells[4].abbr=k;
-                        tr[k].cells[4].onclick = function edit_tr2()
-                                      {
-                                       alert ('Edit order # '+tr[this.abbr].cells[0].innerHTML+'');
-                                      }
+                        tr[k].cells[3].innerHTML = json.orders[order_k].total_price;
+                        tr[k].cells[4].innerHTML = json.orders[order_k].assignee_id;
+                        tr[k].cells[5].innerHTML = "<input type='button' value='Edit' id='edit_order'  alt=" + k + ">";
+                        tr[k].cells[5].abbr=k;
+                        tr[k].cells[5].onclick = function edit_order(){
+                                                var str = tr[this.abbr].cells[1].innerHTML
+                                                var id_tr = tr[this.abbr].cells[0].innerHTML
+                                                document.getElementById('region_name').value=str
+                                                region=id_tr
+                                                                        }
                     }
                     k=0;
                     /*End creating table*/
             }
 
-var k=0;
+
+
+            var k=0;
             form_value = {id : $('#name_form').val(), name : $('#order_name').val()};
             json_value = JSON.stringify(form_value);
-
-            createEntity();
 
 
             $('#clr').click(deleting_grid);
 
-            function grid_pagination(){$.ajax({
+            function grid_pagination(){
+                var status_id = document.getElementById('status_id').value
+                var assignee_id = document.getElementById('assignee_id').value
+                $.ajax({
                 dataType: "json",
-                url: '/api/order/'+page,
+                url: '/api/order?page='+page+'&table_size='+count_tr+'&status_id='+status_id+'&assignee_id='+assignee_id+'',
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json)
@@ -154,21 +135,100 @@ var k=0;
             $('#last').click(function(){
             page=pages_amount;
             grid_pagination()
+            });
+
+            $('#table_size').change(function () {
+            count_tr=$('#table_size').val();
+            $( "#table_siz option:selected" ).each(grid_pagination())
+            });
+
+            $('#status').blur(function() {
+                var regV_login = /^[a-zA-Z]+$/;
+                var res = $(this).val().match(regV_login)
+                if(!res && $(this).val() != ''){
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Select not be empty');
+                    document.getElementById('search_button').disabled = true;
+            } else {
+                $(this).css({'border' : '2px solid #999'});
+                document.getElementById('search_button').disabled = false;
+            }
+             });
 
 
+            $('#assignee').blur(function() {
+                var regV_login = /^[a-zA-Z]+$/;
+                var res = $(this).val().match(regV_login)
+                if(!res && $(this).val() != ''){
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Select not be empty');
+                    document.getElementById('search_button').disabled = true;
+            } else {
+                $(this).css({'border' : '2px solid #999'});
+                document.getElementById('search_button').disabled = false;
+            }
+             });
+
+            });
+
+        </script>
+        <script type="text/javascript">
+    $.ajax({
+            dataType: "json",
+            url: '/api/status',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.status, function(i, pr){
+                    $('#status_id').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                })
+            }
+    });
+</script><script>
+        $.ajax({
+            dataType: "json",
+            url: '/api/assignee',
+            type: 'GET',
+            contentType: "application/json",
+            success:function(json) {
+                $.each(json.assignee, function(i, pr){
+                    $('#assignee_id').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                })
+            }
+    });
+
+    </script>
 
 
- })});
+        <div class="">
+            <div class="">
+                <div class=" ">
+                    <form class='form' action="">
+                         <div class="ProductTitle">Filter</div>
+                        <span>Status <select id ='status_id' ></select></span>
+                        <span>Assignee <select id ='assignee_id' ></select></span>
+                        <span><input type="button" value="search" id='search_button'></span>
+                    </form>
+                </div>
+            </div>
 
-   </script>
-         <div class="">
+            <div class="field" style="margin-left:5%;">
+                  <lable>Table size: </lable>
+                  <select id="table_size">
+                    <option selected>10</option>
+                    <option>25</option>
+                   </select>
+            </div>
+            <div style="margin-left:80%;">
+            </div>
+            <div id=" ">
                 <table id='grid' class="grid">
                     <tr>
                         <th>
                             Order_id
                         </th>
                         <th>
-                            User
+                            Customer
                         </th>
                         <th>
                             Status
@@ -177,9 +237,11 @@ var k=0;
                             Amount
                         </th>
                         <th>
+                            Assignee
+                        </th>
+                        <th>
                             Edit
                         </th>
-
                     </tr>
                 </table>
 
@@ -192,69 +254,9 @@ var k=0;
                 <input type="button" id="last" value="Last">
                 <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
             </div>
-         </div>
 
-        <script type="text/javascript">
-    $.ajax({
-            dataType: "json",
-            url: '/api/status',
-            type: 'GET',
-            contentType: "application/json",
-            success:function(json) {
-                $.each(json.status, function(i, pr){
-                    $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
-                })
-            }
-    });
-    </script><script>
-     $.ajax({
-            dataType: "json",
-            url: '/api/delivery',
-            type: 'GET',
-            contentType: "application/json",
-            success:function(json) {
-                $.each(json.delivery, function(k, j){
-                    $('#delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
-                })
-            }
-     });
+            </div>
 
-</script>
-
-<style type="text/css">
-    div { clear:both;position:relative; }
-</style>
-
-    <form id="info"  name="form"  class = "form" method ="POST"  >
-         <h2 class="ProductTitle" >Status</h2>
-         <select class="current_order" id="status" name="status">
-         <option value="">Select status</option>
-         </select>
-
-         <h2 class="ProductTitle" >Delivery type</h2>
-
-         <select class="current_order" id="delivery" name="delivery">
-         <option value="">Select delivery type</option>
-         </select></br></br>
-
-
-         <div class ="delivery_address">
-	           <label for="delivery_address">Delivery Address</label>
-               <input id="delivery_address" name="delivery_address" type="text" value="" >
-         </div>
-         </div></br>
-
-		 <div class ="comments">
-	           <label for="comments">Comments</label>
-               <textarea class="comments_area" id="comments" name="comments" type="text" value="" ></textarea>
-         </div>
-         </div>
-
-
-    </br></br>
-
-         <input type="button" value ="Update" class="button">
-
-    </form>
-
+            </div>
+        </div>
 {% endblock body %}
