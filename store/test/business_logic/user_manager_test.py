@@ -14,25 +14,25 @@ class UserManagerTest(unittest.TestCase):
         self.userId = 1
 
     def testCorrectLogin(self):
-        self.assertNotEqual(validationLogin(self.login), BaseException)
+        self.assertRaises(ValidationException,validationLogin(self.login))
 
     def testCorrectFirstName(self):
-        self.assertNotEqual(validationFirstName(self.firstName), BaseException)
+        self.assertRaises(ValidationException, validationFirstName(self.firstName))
 
     def testCorrectLastName(self):
-        self.assertNotEqual(validationLastName(self.lastName), BaseException)
+        self.assertRaises(ValidationException, validationLastName(self.lastName))
 
     def testCorrectRoleId(self):
-        self.assertNotEqual(validationRoleID(self.roleId), BaseException)
+        self.assertRaises(ValidationException, validationRoleID(self.roleId))
 
     def testCorrectUserById(self):
         self.assertIsNotNone(getUserByID(self.userId))
 
     def testCorrectPassword(self):
-        self.assertNotEqual(validationPassword(self.password), BaseException)
+        self.assertRaises(ValidationException, validationPassword(self.password))
 
     def testCorrectEmail(self):
-        self.assertNotEqual(validationEmail(self.email), BaseException)
+        self.assertRaises(ValidationException, validationEmail(self.email))
 
 if __name__ == '__main__':
     unittest.main()
