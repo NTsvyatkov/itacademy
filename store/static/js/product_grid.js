@@ -81,17 +81,17 @@ $(document).ready(function() {
            document.getElementById("pages_amount").innerHTML = pages_amount
 
            if (page==1){
-               $('#prev').css({ "opacity":"0.4"});
-               $('#first').css({ "opacity":"0.4"});
-           } else {$('#prev').css({ "opacity": "1"});
-               $('#first').css({ "opacity": "1"});
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+           } else {$('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
            }
 
            if (page==pages_amount){
-               $('#next').css({ "opacity": "0.4"});
-               $('#last').css({ "opacity": "0.4"});
-           } else {$('#next').css({ "opacity": "1"});
-               $('#last').css({ "opacity": "1"});
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+           } else {$('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
            }
          }
       })
