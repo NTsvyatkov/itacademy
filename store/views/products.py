@@ -26,8 +26,7 @@ def products():
     prods, records_amount = Product.pagerByFilter(name, start_price, end_price, page, records_per_page)
     products_arr = []
     for i in prods:
-        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
-                             'dimension': i.dimension.name})
+        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description})
     return make_response(jsonify(products=products_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 

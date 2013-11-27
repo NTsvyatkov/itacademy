@@ -119,6 +119,7 @@ class Order(Base):
         start = stop - records_per_page
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
 class OrderStatus(Base):
     __tablename__ = "order_status"
 
@@ -209,24 +210,27 @@ class OrderProduct(Base):
     order = relationship('Order', backref=backref('order_product', lazy='dynamic'))
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
+    dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
+    dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
     price = Column(DECIMAL, nullable=True)
     #price_id = Column(Integer,ForeignKey('products.price'), nullable=True)
     #price = relationship('Product', backref=backref('order_product', lazy='dynamic'))
 
 
-    def __init__(self, order_id, product_id, quantity, price):
+    def __init__(self, order_id, product_id, dimension_id, quantity, price):
         super(OrderProduct, self).__init__()
         self.quantity = quantity
         self.order_id = order_id
         self.product_id = product_id
+        self.dimension_id = dimension_id
         self.price = price
 
 
     @staticmethod
-    def get_order_product(order_id,product_id):
-        #Next method retrieve one record for composite primary key (order_id, product_id)
-        return OrderProduct.query.get((order_id, product_id))
+    def get_order_product(order_id,product_id, dimension_id):
+        #Next method retrieve one record for composite primary key (order_id, product_id, dimension_id)
+        return OrderProduct.query.get((order_id, product_id, dimension_id))
 
     @staticmethod
     def get_by_order(product_id):
@@ -237,27 +241,27 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
 
     @staticmethod
-    def add_order_product(order_id, product_id, quantity, price = None):
-        order_product = OrderProduct(order_id, product_id, quantity, price)
+    def add_order_product(order_id, product_id, dimension_id, quantity, price = None):
+        order_product = OrderProduct(order_id, product_id, dimension_id, quantity, price)
         db_session.add(order_product)
         db_session.commit()
 
     @staticmethod
-    def update_order_product(order_id, product_id, new_quantity, new_price):
-        order_product_up = OrderProduct.get_order_product(order_id, product_id)
+    def update_order_product(order_id, product_id, dimension_id, new_quantity, new_price):
+        order_product_up = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         order_product_up.quantity = new_quantity
         order_product_up.price = new_price
         db_session.commit()
 
     @staticmethod
-    def delete_order_product(order_id, product_id):
-        del_order_product = OrderProduct.get_order_product(order_id, product_id)
+    def delete_order_product(order_id, product_id, dimension_id):
+        del_order_product = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         db_session.delete(del_order_product)
         db_session.commit()
 
     @staticmethod
-    def updateSumQuantity(order_id, product_id, new_quantity):
-        order_product_up = OrderProduct.get_order_product(order_id, product_id)
+    def updateSumQuantity(order_id, product_id, dimension_id, new_quantity):
+        order_product_up = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         #order_product_up.quantity = order_product_up.quantity + new_quantity
         order_product_up.quantity = new_quantity
         db_session.commit()
