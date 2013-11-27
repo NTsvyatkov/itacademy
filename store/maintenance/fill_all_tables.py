@@ -10,9 +10,9 @@ from datetime import date
 # This file can fill you DB store_db
 # just run this file
 
-Dimension.add_dimension("Item Box", 5)
-Dimension.add_dimension("Item Package", 10)
 Dimension.add_dimension("Items", 1)
+Dimension.add_dimension("Box", 5)
+Dimension.add_dimension("Package", 10)
 
 Product.add_product('apple', 'sweet apple', 1.5)
 Product.add_product('potato', 'ukrainian potato', 5.5)
