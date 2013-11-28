@@ -137,7 +137,7 @@
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_siz option:selected" ).each(grid_pagination())
+            $( "#table_size option:selected" ).each(grid_pagination())
             });
 
             $('#status').blur(function() {
@@ -230,7 +230,9 @@
                     <form class='form' action="">
                          <div class="ProductTitle">Filter</div>
                         <span>Status <select id ='status_id' ></select></span>
-                        <span>Assignee <select id ='assignee_id' ></select></span>
+                        <span>Assignee <select id ='assignee_id' >
+                        <option value="">Merchandiser</option>
+                        </select></span>
                         <span><input type="button" value="search" id='search_button'></span>
                     </form>
                 </div>

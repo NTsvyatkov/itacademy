@@ -16,22 +16,6 @@ def product_grid():
 
 
 
-@app.route('/api/product', methods=['GET'])
-def products():
-    name = request.args.get('name')
-    start_price = request.args.get('start_price')
-    end_price = request.args.get('end_price')
-    records_per_page = int(request.args.get('table_size'))
-    page = int(request.args.get('page'))
-    prods, records_amount = Product.pagerByFilter(name, start_price, end_price, page, records_per_page)
-    products_arr = []
-    for i in prods:
-        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
-                             'dimension': i.dimension.name})
-    return make_response(jsonify(products=products_arr, records_amount=records_amount,
-                                 records_per_page=records_per_page), 200)
-
-
 @app.route('/api/dimension', methods=['GET'])
 def dimensions():
     dimensions_list = list_dimensions()

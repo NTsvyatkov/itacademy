@@ -19,13 +19,13 @@ def status():
         status_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(status=status_arr), 200)
 
-#@app.route('/api/assignee', methods=['GET'])
-#def assignee():
-#    assignee_list = list_assignee()
-#    assignee_arr = []
-#    for i in assignee_list:
-#        assignee_arr.append({'role_id': i.role_id, 'name': i.name})
-#    return make_response(jsonify(assignee=assignee_arr), 200)
+@app.route('/api/assignee', methods=['GET'])
+def assignee():
+    assignee_list = list_assignee()
+    assignee_arr = []
+    for i in assignee_list:
+        assignee_arr.append({'role_id': i.role_id, 'name': i.name})
+    return make_response(jsonify(assignee=assignee_arr), 200)
 
 
 @app.route('/api/delivery', methods=['GET']) 
@@ -80,7 +80,7 @@ def orders():
     orders, records_amount = Order.pagerByFilterOrder(status_id, assignee_id, page, records_per_page)
     orders_arr = []
     for i in orders:
-        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'total_price': i.total_price, 'assignee_id' : i.user.role.name})
+        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'total_price': i.total_price, 'assignee_id' : i.assignee.role.name})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 

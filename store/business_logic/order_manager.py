@@ -36,7 +36,7 @@ def addOrderWithStatusCart(user_id):
 
 def addProductToCartStatus(user_id, id, json):
     order = Order.getOrderByStatus(user_id)
-    if  OrderProduct.get_order_product(order.id, id):
-        OrderProduct.updateSumQuantity(order.id, id, json['value'])
+    if  OrderProduct.get_order_product(order.id, id,json['status']):
+        OrderProduct.updateSumQuantity(order.id, id,json['status'], json['value'])
     else:
-        OrderProduct.add_order_product(order.id, id, json['value'])
+        OrderProduct.add_order_product(order.id, id,json['status'], json['value'])
