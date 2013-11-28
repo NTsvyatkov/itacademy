@@ -2,7 +2,7 @@
 $(document).ready(function() {
     var tr = [];
     var count_tr=$('#table_size').val();
-    var th = ['id','Product name','Description','Price','Edit','Delete'];
+    var th = ['id','Product name','Description','Price $','Edit','Delete'];
     var count_td= th.length-1;
     var page = 1;
     var table_grid = document.getElementById('grid');
