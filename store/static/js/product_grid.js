@@ -216,9 +216,11 @@ $(document).ready(function() {
 
   /* Update and delete table button*/
 
-    var check= true;
-    var error='';
-    $('#apply_button').click(function(){
+
+    $('#apply_button').click(function()
+    {
+      var check= true;
+      var error='';
       if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) &&
         (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
          {

@@ -83,6 +83,7 @@ class Product(Base):
         stop = page * records_per_page
         start = stop - records_per_page
 
+     
         if a_dict['name']:
             filter_name={'1':Product.name.like(a_dict['name']+'%'),\
                          '2':Product.name.like('%'+a_dict['name'])+'%',\

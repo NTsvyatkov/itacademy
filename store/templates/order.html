@@ -48,6 +48,9 @@ $(document).ready(function() {
     var tr = [];
     var page = 1;
     var error_list =[];
+    /*Default value for select card type*/
+    $('#credit_card_options').val(1);
+    /*-------------*/
     /* Creating table of products */
     var table_grid = document.getElementById('grid');
     function create_grid(count_tr, count_td)
@@ -181,7 +184,7 @@ ajax_pull('Grid','GET','data');
                  tr[k].cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
-                        <input type='button' value='update' class='update_amount'> \
+                        <input type='button' value='refresh' class='update_amount'> \
                           <div class='error_div'></div>";
 
                  tr[k].cells[4].innerHTML = input;
@@ -371,7 +374,7 @@ ajax_pull('Grid','GET','data');
                         credit_card_options:$('#credit_card_options').val(),
                         credit_card_number:$('#credit_card_number').val(),
                         cvv2_number:$('#cvv2_number').val(), expire_date:$('#expire_date').val(),
-                        cvv2_number:$('#start_date').val(), expire_date:$('#issue_number').val(),
+                        start_date:$('#start_date').val(), issue_number:$('#issue_number').val(),
                         product_quantity:product_arr};
 
          /* Json for put on server*/
@@ -410,6 +413,7 @@ ajax_pull('Grid','GET','data');
 
       }
   })
+
  /*-----------------------------------*/
 
  /* What is this CVV2 --- alert  */
@@ -501,7 +505,7 @@ ajax_pull('Grid','GET','data');
            <div class="field">
             <lable>Credit Card Type:<span class='red_star'>*</span> </lable>
                <select id="credit_card_options" style="width:165px;">
-                 <option value=1>Visa</option>
+                 <option value=1 selected="selected">Visa</option>
                  <option value=2>MasterCard</option>
                  <option value=3>American Express</option>
                  <option value=4>Maestro</option>
@@ -529,7 +533,7 @@ ajax_pull('Grid','GET','data');
             </div>
 
             <div class="field">
-               <lable>Issue Number: <span class='red_star'>*</span><span style="font-size:9px;">For Maestro</span></lable>
+               <lable>Issue Number: <span style="font-size:9px;">For Maestro</span></lable>
                <input type="text" id="issue_number">
             </div>
              <div class="field">
