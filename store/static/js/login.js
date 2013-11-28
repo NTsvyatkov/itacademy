@@ -2,7 +2,7 @@ function validate_login(){
 var name =   document.form.name.value;
 
         if (name == ""){
-                $(".error_name").html("'Enter your login'").css({'color':'red'});
+                $(".error_name").html("Enter your login").css({'color':'red'});
                 $(".name").toggleClass("errorList2");
                 $(".name").click(function(){
 
@@ -16,7 +16,7 @@ var name =   document.form.name.value;
 var password =   document.form.password.value;
 
         if (password == ""){
-                $(".error_password").html("'Enter your password'").css({'color':'red'});
+                $(".error_password").html("Enter your password").css({'color':'red'});
                 $(".password").toggleClass("errorList2");
                 $(".password").click(function(){
 
