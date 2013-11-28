@@ -49,4 +49,8 @@ class RoleDao(Base):
         db_session.delete(remove_role)
         db_session.commit()
 
+    @staticmethod
+    def get_assignee_all():
+        return RoleDao.query.all()
+
 

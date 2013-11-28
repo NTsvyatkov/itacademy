@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean,
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
+from models.role_dao import RoleDao
 from datetime import date
 
 
