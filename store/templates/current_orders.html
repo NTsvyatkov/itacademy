@@ -7,7 +7,7 @@
 
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
-            var count_td=11;
+            var count_td=6;
             var page = 1;
             var table_grid = document.getElementById('grid');
 
@@ -53,22 +53,21 @@
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
                         tr[k].cells[3].innerHTML = json.orders[order_k].total_price;
                         tr[k].cells[4].innerHTML = json.orders[order_k].assignee_id;
-                        tr[k].cells[5].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
+                        tr[k].cells[5].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
                         tr[k].cells[5].abbr=k;
-                        tr[k].cells[5].onclick = function edit_region(){
-                                    var str = tr[this.abbr].cells[2].innerHTML
-                                    var id_tr = tr[this.abbr].cells[0].innerHTML
-                                    document.getElementById('order_status').value=str
-                                    status=id_tr
-                                    document.getElementById('edit_button').style.display='inline'
-                                    }
+                        tr[k].cells[5].onclick= function()
+                            {
+                                alert('Details')
+                            }
+                    }
                     k=0;
                     /*End creating table*/
             }
 
 
+
             var k=0;
-            form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+            form_value = {id : $('#name_form').val(), name : $('#order_name').val()};
             json_value = JSON.stringify(form_value);
 
 
@@ -92,15 +91,15 @@
                         document.getElementById("pages_amount").innerHTML = pages_amount
 
                         if (page==1){
-                            $('#prev').css({ "opacity":"0.9"});
-                            $('#first').css({ "opacity":"0.9"});
+                            $('#prev').css({ "opacity":"0.4"});
+                            $('#first').css({ "opacity":"0.4"});
                         } else {$('#prev').css({ "opacity": "1"});
                             $('#first').css({ "opacity": "1"});
                         }
 
                         if (page==pages_amount){
-                            $('#next').css({ "opacity": "0.9"});
-                            $('#last').css({ "opacity": "0.9"});
+                            $('#next').css({ "opacity": "0.4"});
+                            $('#last').css({ "opacity": "0.4"});
                         } else {$('#next').css({ "opacity": "1"});
                             $('#last').css({ "opacity": "1"});
                         }
@@ -138,48 +137,40 @@
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_size option:selected" ).each(grid_pagination())
+            $( "#table_siz option:selected" ).each(grid_pagination())
             });
 
+            $('#status').blur(function() {
+                var regV_login = /^[a-zA-Z]+$/;
+                var res = $(this).val().match(regV_login)
+                if(!res && $(this).val() != ''){
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Select not be empty');
+                    document.getElementById('search_button').disabled = true;
+            } else {
+                $(this).css({'border' : '2px solid #999'});
+                document.getElementById('search_button').disabled = false;
+            }
+             });
 
 
-$('#edit_button').click(function(){
-  update();
-    });
- function update() {
-  form_value = {status_id : $( status_id = $('#order_status').val())}
-  id=~~status
-   $.ajax({
-     dataType: "json",
-     url: '/api/regions',
-     type: 'PUT',
-     data : JSON.stringify({'id': id, 'status_id': status.name}),
-     contentType: "application/json",
-     success:function(json){
-                        if (json.message == 'success')
-                         {
-                          alert('The region has been successfully added');
+            $('#assignee').blur(function() {
+                var regV_login = /^[a-zA-Z]+$/;
+                var res = $(this).val().match(regV_login)
+                if(!res && $(this).val() != ''){
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Select not be empty');
+                    document.getElementById('search_button').disabled = true;
+            } else {
+                $(this).css({'border' : '2px solid #999'});
+                document.getElementById('search_button').disabled = false;
+            }
+             });
 
-                         }
-                        else
-                         alert (json.message);
-                    }
+            });
 
-         }
-      );
-     create_entity();
-     document.getElementById('info').reset();
-  }
-  function cansel(){
-    document.getElementById('add_button').style.display='inline'
-    document.getElementById('edit_button').style.display='none'
-
-  }
-
-            }});
-
-</script>
-<script type="text/javascript">
+        </script>
+        <script type="text/javascript">
     $.ajax({
             dataType: "json",
             url: '/api/status',
@@ -191,7 +182,7 @@ $('#edit_button').click(function(){
                 })
             }
     });
-
+</script><script>
         $.ajax({
             dataType: "json",
             url: '/api/assignee',
@@ -199,11 +190,13 @@ $('#edit_button').click(function(){
             contentType: "application/json",
             success:function(json) {
                 $.each(json.assignee, function(i, pr){
-                    $('#assignee_id').append('<option value="' + pr.assignee_id + '">' + pr.assignee_id + '</option>');
+                    $('#assignee_id').append('<option value="' + pr.id + '">' + pr.name + '</option>');
                 })
             }
     });
 
+    </script>
+              <script type="text/javascript">
     $.ajax({
             dataType: "json",
             url: '/api/status',
@@ -215,7 +208,7 @@ $('#edit_button').click(function(){
                 })
             }
     });
-
+    </script><script>
      $.ajax({
             dataType: "json",
             url: '/api/delivery',
@@ -235,16 +228,10 @@ $('#edit_button').click(function(){
             <div class="">
                 <div class=" ">
                     <form class='form' action="">
-                         <h2 class="ProductTitle" >Status</h2>
-                         <select class="current_order" id="status_id" name="status_id">
-                         <option value="">Select status</option>
-                         </select>
-
-                         <h2 class="ProductTitle" >Delivery type</h2>
-                         <select class="current_order" id="assignee_id" name="assignee_id">
-                         <option value="">Select assignee</option>
-                         </select></br></br>
-                         <span><input type="button" value="Filter" id='search_button'></span>
+                         <div class="ProductTitle">Filter</div>
+                        <span>Status <select id ='status_id' ></select></span>
+                        <span>Assignee <select id ='assignee_id' ></select></span>
+                        <span><input type="button" value="search" id='search_button'></span>
                     </form>
                 </div>
             </div>
@@ -252,7 +239,7 @@ $('#edit_button').click(function(){
             <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select id="table_size">
-                    <option selected>10</option>
+                    <option selected>5</option>
                     <option>25</option>
                    </select>
             </div>
@@ -323,8 +310,7 @@ $('#edit_button').click(function(){
 
     </br></br>
 
-         <input type="text" id="order_status" name="name" >
-         <input type="button" value="Update" id="edit_button">
+         <input type="button" value ="Update" class="button">
 
     </form>
 

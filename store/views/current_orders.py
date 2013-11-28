@@ -1,7 +1,7 @@
 from flask import render_template, request, make_response, jsonify, session
 from flask_bootstrap import app
 from maintenance.pager_order import Pagination
-from business_logic.order_manager import getListOrder, get_order_by_id, list_status, list_delivery, list_assignee, update_orders
+from business_logic.order_manager import getListOrder, get_order_by_id, list_status, list_delivery
 from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 
 
@@ -9,7 +9,7 @@ from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 
 @app.route('/current_orders', methods=('GET', 'POST'))
 def current_orders():
-        return render_template('current_order2.html',)
+        return render_template('current_orders.html',)
 
 @app.route('/api/status', methods=['GET'])
 def status():
@@ -19,13 +19,13 @@ def status():
         status_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(status=status_arr), 200)
 
-@app.route('/api/assignee', methods=['GET'])
-def assignee():
-    assignee_list = Order.query
-    assignee_arr = []
-    for i in assignee_list:
-        assignee_arr.append({'id': i.assignee_id, 'assignee_id': i.assignee.role.name})
-    return make_response(jsonify(assignee=assignee_arr), 200)
+#@app.route('/api/assignee', methods=['GET'])
+#def assignee():
+#    assignee_list = list_assignee()
+#    assignee_arr = []
+#    for i in assignee_list:
+#        assignee_arr.append({'role_id': i.role_id, 'name': i.name})
+#    return make_response(jsonify(assignee=assignee_arr), 200)
 
 
 @app.route('/api/delivery', methods=['GET']) 
@@ -80,18 +80,9 @@ def orders():
     orders, records_amount = Order.pagerByFilterOrder(status_id, assignee_id, page, records_per_page)
     orders_arr = []
     for i in orders:
-        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'total_price': i.total_price,'assignee_id' : i.assignee.role.name})
+        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'total_price': i.total_price, 'assignee_id' : i.user.role.name})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
-
-@app.route('/api/order', methods = ['PUT'])
-def update_order():
-    js = request.json
-    update_orders(js['id'], js['new_status_id'],js['new_delivery_id'],js['new_delivery_address'],js['new_comment'] )
-    resp = make_response('', 200)
-    return resp
-
-
 
 @app.route('/api/order/<int:id>', methods=['GET'])
 def orders_id(id):
