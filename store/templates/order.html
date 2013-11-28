@@ -2,34 +2,53 @@
 {% block body %}
 
 
-    <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.core.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
-    <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
-
+<script src="{{ url_for('static', filename='js/datepicker/jquery.ui.core.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
+<script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
 <script type="text/javascript">
 
-/*Datapicker options*/
+/* JQueri UI  - Datapicker options*/
 	$(function() {
 		$( "#expire_date" ).datepicker({
-			/*showOn: "button"
-			/*buttonImage: "static/images/calendar.gif",
-			buttonImageOnly: true*/
+          changeMonth: true,
+          changeYear: true,
+          showButtonPanel: true,
+          dateFormat: 'yy/mm',
+          onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, month, 1));
+        }
 		});
 
 		$( "#start_date" ).datepicker({
-			/*showOn: "button"
-			/*buttonImage: "static/images/calendar.gif",
-			buttonImageOnly: true*/
+          changeMonth: true,
+          changeYear: true,
+          disabled: true,
+          showButtonPanel: true,
+          dateFormat: 'yy/mm',
+          onClose: function(dateText, inst) {
+            var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+            var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+            $(this).datepicker('setDate', new Date(year, month, 1));
+        }
 		});
 	});
-/*---------------*/
-  var count_tr=10;
-  var count_td=6;
-  var tr = [];
+/*--------------------------*/
+
   var order_id=0;
-  /* Creating table of products */
-  $(document).ready(function() {
+  var maestro_card = false;
+
+$(document).ready(function() {
+
+    $('#issue_number').attr('readonly',true);
+    $('#issue_number').css('background-color','#e2e2e2');
+    var count_tr=10;
+    var count_td=6;
+    var tr = [];
     var page = 1;
+    var error_list =[];
+    /* Creating table of products */
     var table_grid = document.getElementById('grid');
     function create_grid(count_tr, count_td)
     {
@@ -44,7 +63,6 @@
               tr[i].appendChild(document.createElement('TD'));
              }
         }
-      $( "tr:even" ).css( "background-color", "#c0c0c0" );
     }
 
     create_grid(count_tr,count_td);
@@ -60,7 +78,7 @@
   $(arr).each(function() {
     select.append($("<option>").attr('value',this.val).text(this.text));
   });
- /*End  "Delivery option's" select */
+ /*End  ------------------------ select */
 
   function clearing_tr(i)
   {
@@ -89,7 +107,7 @@
  }
 
 ajax_pull('Grid','GET','data');
-
+/* Ajax function for put and get methods*/
  function ajax_pull(success_option,type_options,data){
        $.ajax({
         dataType: "json",
@@ -107,10 +125,9 @@ ajax_pull('Grid','GET','data');
               ajax_pull('Grid','GET','data');
               }
          }
-
-
       })
  }
+/*------------------------------------------*/
 
 
     $('#apply_button').click(function(){
@@ -145,7 +162,7 @@ ajax_pull('Grid','GET','data');
 
   })
  }
-
+ /*Function ajax_success parse Json and add values in table - grid  */
   function ajax_success(json){
            deleting_grid();
            create_grid(json.order.length,count_td);
@@ -204,6 +221,8 @@ ajax_pull('Grid','GET','data');
                 })
 
   }
+/*----------------------------END of ajax_success ------------------------------------*/
+
 
   function get_total_amount()
   {
@@ -216,15 +235,36 @@ ajax_pull('Grid','GET','data');
   }
 
 
-  $('#add_order').click(function(){
-       /* Validation options*/
+ $('#add_order').click(function(){
+    /* Clear error and border-color*/
+      if(error_list)
+      {
+          for (i in error_list)
+           {
+             var object1=error_list[i].id;
+             object1.css('border-color','#999');
+             object1.next('.error_div').remove();
+           }
+          error_list=[];
+      }
+     /*---------------------------------*/
+
        var error='';
        var no_error = true
-       if  (($('#input_address').val().length >50) || ($('#input_address').val().length >1000)
-               || ($('#input_address').val().length == 0))
+       var clear_list;
+
+      /* String length validation */
+       if  (($('#input_address').val().length >50) || ($('#input_address').val().length == 0))
        {
         no_error = false;
-        error ='- Comment string should be less then 1500 characters and address string less then 50, but not 0<br>';
+        error ='Address string should be less then 50 characters , but not 0 character';
+        error_list.push({id:$('#input_address'), error:error});
+       }
+       if  ($('#input_comments').val().length >1500)
+       {
+        no_error = false;
+        error ='Comment string should be less then 1500 characters';
+        error_list.push({id:$('#input_comments'), error:error});
        }
 
        for( var i=0, total=0, k=0; i<$('.quantity').size(); i++)
@@ -232,41 +272,95 @@ ajax_pull('Grid','GET','data');
           quantity = $('.quantity:eq('+i+')').val();
 
           if(!(quantity/quantity)||(quantity==0) && k != 1 ){  /*Check on numeric */
-              error = error+ '- Quantity should be numeric and not 0';
+              error = 'Quantity should be numeric and not 0';
               k= 1;
               no_error = false;
+              error_list.push({id:$('#order_error'), error:error});
             }
          }
 
-      /*--------------------*/
+      /*-----------End of Strings length validation---------*/
 
-      /*Credit card validation*/
-     r_e=/(5[1-5]\ d{ 14} )|(4\ d{ 12} (\ d{ 3} )?)|(3[47]\ d{ 13} )|(6011\ \ d{ 14} )|((30[0-5]|36\ d|38\ d)\ d{ 11})/;
-     credit_number = $('#credit_card_number').val();
+      /*Credit card numbers validation*/
+       r_e=/^[0-9]{16}$/;
+       credit_number = $('#credit_card_number').val();
 
        if (r_e.test(credit_number)){}
        else
        {
-         /*no_error = false;
-         error =error+ '- Number of credit card is illegal<br>';*/
+         no_error = false;
+         error = 'Number of credit card is illegal. It should be 16 it should be one digits!';
+         error_list.push({id: $('#credit_card_number'), error:error});
        }
-      r_e_ccv2=/^[0-9]{4}$/;
-      cvv2_number = $('#cvv2_number').val();
+
+       r_e_ccv2=/^[0-9]{3}$/;
+       cvv2_number = $('#cvv2_number').val();
+
       if (r_e_ccv2.test(cvv2_number)) {}
       else
        {
           no_error=false;
-          error=error+ '- CVV2 number is wrong<br>';
+          error='CVV2 number is wrong. it should be 3 digits!';
+          error_list.push({id:$('#cvv2_number'), error:error});
+       }
+
+      issue_number =$('#issue_number').val();
+      if  ((maestro_card == true) && (issue_number ))
+      {
+       r_e_issue_number=/^[0-9]{1}$/;
+       if (r_e_issue_number.test(issue_number)){}
+       else{
+         no_error=false;
+         error='Issue number format is wrong. it should be one digit or none!';
+         error_list.push({id:$('#issue_number'), error:error});
+       }
+      }
+
+      /*Credit card date validation*/
+
+      date_expire= $('#expire_date').val().replace('/', '-')+'-01';
+
+       if (!Date.parse(date_expire))
+         {
+             no_error = false;
+             error='Expire date have wrong format, please use calendar';
+             error_list.push({id:$('#expire_date'), error:error});
+         }
+
+      if (maestro_card == true)
+      {
+          date_start= $('#start_date').val().replace('/', '-') + '-01';
+
+         if (Date.parse(date_start) > Date.parse(date_expire))
+         {
+             no_error = false;
+             error='Start date of card can not be more then Expire date';
+             error_list.push({id:$('#start_date'), error:error});
+         }
+          if (!Date.parse(date_start))
+         {
+             no_error = false;
+             error='Start date have wrong format, please use calendar';
+             error_list.push({id:$('#start_date'), error:error});
+         }
 
       }
-      /*----------------------*/
 
+
+
+
+      /*--------------------End of Credit card validation----------------------*/
        if (no_error){
-          /*add all quantity and product_id in array */
+
+          /*Clear error message*/
+         $('.error_div').empty();
+          /*-----------------*/
+
+         /*add all quantity and product_id in array */
          var product_arr=[];
          for( var i=0, total=0; i<$('.quantity').size(); i++)
          {
-         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(), 'product_id':+$('.quantity:eq('+i+')').attr('alt')}
+         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt')}
          }
         /*------------------*/
 
@@ -278,42 +372,54 @@ ajax_pull('Grid','GET','data');
                         cvv2_number:$('#start_date').val(), expire_date:$('#issue_number').val(),
                         product_quantity:product_arr};
 
+         /* Json for put on server*/
          json_value = JSON.stringify(form_value);
-          $('.error_div').empty();
+         /*-----------------------*/
          ajax_pull('Alert','PUT',json_value);
        }
         else{
+            $('.error_div').empty();
+           for (i in error_list)
+           {
+             var object1=error_list[i].id;
+             object1.closest('div').append('<p class=error_div>'+error_list[i].error+'');
+             object1.css('border-color','#b81900');
 
-         $('#order_error').html(error)
+           }
 
-        }
-
+         }
    })
+ /* Car select-or event change*/
 
+  $('#credit_card_options').change(function () {
+      if ($('#credit_card_options').val() != 4)
+      {
+         $('#start_date').datepicker( "option", "disabled", true );
+         $('#issue_number').attr('readonly',true);
+         $('#issue_number').css('background-color','#e2e2e2');
+
+      }
+      else
+      {
+          $('#start_date').datepicker( "option", "disabled", false );
+          $('#issue_number').attr('readonly',false);
+          $('#issue_number').css('background-color','white');
+          maestro_card = true;
+
+      }
+  })
+ /*-----------------------------------*/
+
+ /* What is this CVV2 --- alert  */
   $('#cvv2_info').click(function(){
 
-    alert('A card security code (CSC), sometimes called card verification data (CVD), card verification number (CVN),\
-      card verification value (CVV or CVV2), card verification value code (CVVC), card verification code (CVC or CVC2),\
-      verification code (V-code or V code), card code verification (CCV),[1] or signature panel code (SPC)[2] \
-      are different\
-      terms for a security feature for card not present payment card transactions against credit card fraud.\
-      The CSC is in addition to the bank card number which is embossed or printed on the card. The CSC is also in\
-      addition to\
-      the PIN or passwords associated with the card. The PIN is not printed or embedded on the card but is manually\
-      entered by\
-      the cardholder during a point-of-sale (card present) transaction. Contactless card and chip cards may \
-      electronically\
-      generate their own code, such as iCVV\
-      or Dynamic CVV.\
-      MasterCard started issuing CSCs in 1997 and Visa in the United States issued them by 2001. American Express\
-      started to use the CSC in\
-      1999 in response to growing internet transactions and card member complaints of spending interruptions when \
-      the security of a card has\
-      been brought into question.');
+    alert('The CVV2 code stands for Card Verification Value 2. The CID code stands for Card Identification.'+
+          'It is a security feature on credit cards used to improve the security of transactions. It consists of ' +
+          'a 3 or 4 digit number printed, but not raised, on the back of the credit card.');
   })
+ /*---------------------------*/
 
-
- })
+})
 
 
 
@@ -377,7 +483,7 @@ ajax_pull('Grid','GET','data');
 
            <div class="field">
                <lable>Comments: </lable>
-               <textarea class="comments_area"></textarea>
+               <textarea class="comments_area" id="input_comments"></textarea>
            </div>
            <div class="field">
               <input type="button" id="add_order" value="Place an order">
@@ -396,9 +502,7 @@ ajax_pull('Grid','GET','data');
                  <option value=1>Visa</option>
                  <option value=2>MasterCard</option>
                  <option value=3>American Express</option>
-                 <option value=4>Diners Club</option>
-                 <option value=5>Discover</option>
-                 <option value=6>JCB</option>
+                 <option value=4>Maestro</option>
                </select>
             </div>
             <div class="field">

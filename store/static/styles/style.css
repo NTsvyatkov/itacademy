@@ -289,16 +289,13 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
 
 
 #refresh{
-
-   position:absolute;
+    position:absolute;
     width: 200px;
     height: 100px;
     top:50%;
     left:50%;
     margin-left:-100px;
     margin-top:-50px;
-
-
 }
 .by_form{
     width:180px;
@@ -307,12 +304,10 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
 }
 
 .error_div{
- color:red;
- text-align:center;
- font-size:14px;
+ color:#b81900;
  text-align:justify;
- margin:10px;
- font-weight: bold;
+ font-size:13px;
+ margin:15px;
 }
 
 .order_block{
@@ -324,6 +319,11 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
 }
 
 .red_star{
-    color: red;
-    font-weight: bold;
+ color: red;
+ font-weight: bold;
 }
+
+.ui-datepicker-calendar {
+ display: none;
+
+ }

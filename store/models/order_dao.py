@@ -267,7 +267,7 @@ class OrderProduct(Base):
 
 def order_product_grid(user_id):
     return db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-        filter(and_(Order.user_id==user_id ,Order.status_id=='4')).all()
+        filter(and_(Order.user_id==user_id ,Order.status_id == 3 )).all()
 
 def product_order_update(dict):
 
@@ -286,9 +286,12 @@ def product_order_update(dict):
 
         total_price = price*quantity
         OrderProduct.update_order_product(order_id,product_id,quantity,total_price)
-    print amount
-    Order.update_order(order_id,get_order.user_id,get_order.date,4,delivery_type,
-                        amount, get_order.preferable_delivery_date, get_order.delivery_date,
-                        get_order.gift,delivery_address,comment )
 
+
+    get_order.status_id = 1
+    get_order.delivery_id = delivery_type
+    get_order.total_price = amount
+    get_order.delivery_address = delivery_address
+    get_order.comment = comment
+    db_session.commit()
 

@@ -2,7 +2,7 @@
 $(document).ready(function() {
     var tr = [];
     var count_tr=$('#table_size').val();
-    var th = ['id','Product name','Description','Price','Dimension','Edit','Delete'];
+    var th = ['id','Product name','Description','Price','Edit','Delete'];
     var count_td= th.length-1;
     var page = 1;
     var table_grid = document.getElementById('grid');
@@ -137,16 +137,15 @@ $(document).ready(function() {
                  tr[k].cells[1].innerHTML = json.products[product_k].name;
                  tr[k].cells[2].innerHTML = json.products[product_k].description;
                  tr[k].cells[3].innerHTML = json.products[product_k].price.toFixed(2);
-                 tr[k].cells[4].innerHTML = json.products[product_k].dimension;
-                 tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[4].abbr=k;
                  tr[k].cells[5].abbr=k;
-                 tr[k].cells[6].abbr=k;
-                 tr[k].cells[5].onclick = function edit_tr2()
+                 tr[k].cells[4].onclick = function edit_tr2()
                                       {
                                        alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
                                       }
-                 tr[k].cells[6].onclick= function delete_tr2()
+                 tr[k].cells[5].onclick= function delete_tr2()
                                       {
                                         var str = tr[this.abbr].cells[1].innerHTML
                                         var id_tr = tr[this.abbr].cells[0].innerHTML
