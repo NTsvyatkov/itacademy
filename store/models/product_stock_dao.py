@@ -5,7 +5,7 @@ from sqlalchemy import Column, Integer
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 from models.order_dao import OrderProduct
-from models.product_dao import Dimension
+from models.product_dao import Dimension, Product
 
 
 class ProductStock(Base):
@@ -29,19 +29,20 @@ class ProductStock(Base):
     def __str__(self):
         return "CData  '%s, %s, %s'" % (self.product_id, self.dimension_id, self.quantity)
 
+
     @staticmethod
-    def addProductStock(product_id):
-        query = OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
+    def addProductStock(product_id, quantity):
+        query = Dimension.get_all_dimensions()
         for i in query:
-            productStock = ProductStock(product_id, i.dimension_id, i.quantity)
+            productStock = ProductStock(product_id, i.id, quantity)
             db_session.add(productStock)
             db_session.commit()
 
 
     @staticmethod
-    def addDimensionStock(dimension_id):
-        query = OrderProduct.query.filter(OrderProduct.dimension_id == dimension_id).all()
+    def addDimensionStock(dimension_id, quantity):
+        query = Product.get_all_products()
         for i in query:
-            productStock = ProductStock(i.product_id, dimension_id, i.quantity)
+            productStock = ProductStock(i.id, dimension_id, quantity)
             db_session.add(productStock)
             db_session.commit()

@@ -29,12 +29,6 @@ class UserManagerTest(unittest.TestCase):
         #self.assertEqual(True, my_mock.UserDao.isUserExists(self.login, self.password))
         #self.assertEqual(UserDao.isUserExists(self.login, self.password), True)
 
-    def testGetUserById(self):
-        mock = MagicMock()
-        #result = mock('Alex', 'Alexander', 'Ivanov', 'password', 'alex.ivasnov@gmail.ru', 1,1)
-        #mock.method_calls = UserDao.getUserByID(self.id)
-
-
 
     #def tearDown(self):
     #    user = UserDao.getUserByLogin(self.login, self.password)
