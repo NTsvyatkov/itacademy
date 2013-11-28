@@ -71,4 +71,3 @@ OrderProduct.add_order_product(1,7,3,3)
 OrderProduct.add_order_product(3,3,3,2)
 OrderProduct.add_order_product(5,1,2,1)
 OrderProduct.add_order_product(6,3,1,4)
-
