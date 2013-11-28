@@ -176,7 +176,8 @@ ajax_pull('Grid','GET','data');
                  id_product =json.order[product_k].id;
                  tr[k].cells[0].innerHTML =product_name;
                  tr[k].cells[1].innerHTML = json.order[product_k].description;
-                 tr[k].cells[2].innerHTML = json.order[product_k].dimension;
+                 tr[k].cells[2].innerHTML = json.order[product_k].dimension +
+                         '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">';
                  tr[k].cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
@@ -360,7 +361,8 @@ ajax_pull('Grid','GET','data');
          var product_arr=[];
          for( var i=0, total=0; i<$('.quantity').size(); i++)
          {
-         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt')}
+         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt'),
+                          'dimension_id':$('.dimension:eq('+i+')').val()}
          }
         /*------------------*/
 

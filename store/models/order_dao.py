@@ -280,6 +280,7 @@ def product_order_update(dict):
     for i in dict['product_quantity']:
         comment=dict['comment']
         delivery_type=int(dict['delivery_type'])
+        dimension=int(i['dimension_id'])
         delivery_address=dict['delivery_address']
         product_id=int(i['product_id'])
         quantity=int(i['quantity'])
@@ -288,7 +289,10 @@ def product_order_update(dict):
         amount= amount + price*quantity
 
         total_price = price*quantity
-        OrderProduct.update_order_product(order_id,product_id,quantity,total_price)
+        order_product= OrderProduct.get_order_product(order_id,product_id,dimension)
+        order_product.quantity=quantity
+        order_product.total_price=total_price
+        db_session.commit()
 
 
     get_order.status_id = 1
