@@ -40,7 +40,7 @@ def products_page():
     for i in all_rec:
         products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
                              })
-    return make_response(jsonify(products=products_arr, records_amount=records_amount,
+    return make_response(jsonify(products=products_arr, records_amount=count,
                                  records_per_page=records_per_page), 200)
 
 
