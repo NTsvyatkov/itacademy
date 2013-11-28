@@ -5,11 +5,24 @@ from flask_bootstrap import app
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
 
 
+@app.route('/order_product')
+def order_grid():
+    delivery_list = DeliveryType.get_delivery_all()
+    delivery_arr = []
+    for i in delivery_list:
+        delivery_arr.append({'id': i.id, 'name': i.name})
+
+    order_product = order_product_grid(session['id'])
+    if order_product:
+        return render_template('order.html',delivery_arr=delivery_arr)
+    else:
+        return render_template('order_empty.html')
+
 
 @app.route('/api/order_product', methods=['GET'])
 def order():
     if 'user_id' in session:
-        order_list = order_product_grid(session['user_id'])
+        order_list = order_product_grid(session['id'])
     else:
         order_list = order_product_grid(4)
     order_arr = []
@@ -35,10 +48,4 @@ def order_post():
     return resp
 
 
-@app.route('/order_product')
-def order_grid():
-    delivery_list = DeliveryType.get_delivery_all()
-    delivery_arr = []
-    for i in delivery_list:
-        delivery_arr.append({'id': i.id, 'name': i.name})
-    return render_template('order.html',dimensions_arr=delivery_arr)
+

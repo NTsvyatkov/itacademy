@@ -73,7 +73,7 @@ $(document).ready(function() {
 
   /*Create "Delivery option's" select */
  var arr =[
- {%for i in dimensions_arr %}
+ {%for i in delivery_arr %}
  {val : {{ i.id }} , text: '{{i.name}}'},
  {% endfor %}
           ];
@@ -125,6 +125,7 @@ ajax_pull('Grid','GET','data');
              }
              else {
               alert('Order successfully issued');
+              window.location.replace("/my_orders");
               ajax_pull('Grid','GET','data');
               }
          }
@@ -151,6 +152,7 @@ ajax_pull('Grid','GET','data');
                         if (json.message == 'success')
                          {
                           alert('The product has been successfully deleted from the cart');
+                          window.location.replace("/my_orders");
                           ajax_pull('Grid','GET','data');
                          }
                         else
@@ -195,7 +197,7 @@ ajax_pull('Grid','GET','data');
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
 
-                $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
+                $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
 
 
             /*End creating table*/
@@ -293,7 +295,7 @@ ajax_pull('Grid','GET','data');
        else
        {
          no_error = false;
-         error = 'Number of credit card is illegal. It should be 16 it should be one digits!';
+         error = 'The credit card number should be a 16-digit number.';
          error_list.push({id: $('#credit_card_number'), error:error});
        }
 
@@ -304,7 +306,7 @@ ajax_pull('Grid','GET','data');
       else
        {
           no_error=false;
-          error='CVV2 number is wrong. it should be 3 digits!';
+          error='The CVV2 number should be a 3-digit number.';
           error_list.push({id:$('#cvv2_number'), error:error});
        }
 
@@ -452,7 +454,7 @@ ajax_pull('Grid','GET','data');
                    Dimension
                </th>
                 <th>
-                   Price
+                   Price $
                </th>
                <th>
                    Quantity
