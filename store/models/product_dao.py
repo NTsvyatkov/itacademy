@@ -71,17 +71,8 @@ class Product(Base):
             query.filter_by(is_deleted=False).count()
 
     @staticmethod
-    def all_products(records_per_page, page):
-
-        ## put filter here
-
-        stop = page * records_per_page
-        start = stop - records_per_page
-        return Product.query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop)
-
-    @staticmethod
-    def filter_product_grid(list, page=None, records_per_page=None):
-        """This method exercise filter by filter list in product_grid.html
+    def filter_product_grid(a_dict, page=None, records_per_page=None):
+        """This method exercise filter by filter dictionary in product_grid.html
            filter_description, filter_name  1 = start with
                                             2 = contains
                                             3 = equal to
@@ -92,27 +83,28 @@ class Product(Base):
         stop = page * records_per_page
         start = stop - records_per_page
 
-        if list['name']:
-            filter_name={'1':Product.name.like(list['name']+'%'),\
-                         '2':Product.name.like('%'+list['name'])+'%',\
-                         '3':Product.name == list['name']}
+     
+        if a_dict['name']:
+            filter_name={'1':Product.name.like(a_dict['name']+'%'),\
+                         '2':Product.name.like('%'+a_dict['name'])+'%',\
+                         '3':Product.name == a_dict['name']}
 
-        if list['description']:
-            filter_description={'1':Product.description.like(list['description']+'%'),\
-                                '2':Product.description.like('%'+list['description']+'%'),\
-                                '3':Product.description == list['description']}
-        if list['price']:
-            filter_price={'1':Product.price < (list['price']),\
-                          '2':Product.price > (list['price']),\
-                          '3':Product.price == list['price']}
+        if a_dict['description']:
+            filter_description={'1':Product.description.like(a_dict['description']+'%'),\
+                                '2':Product.description.like('%'+a_dict['description']+'%'),\
+                                '3':Product.description == a_dict['description']}
+        if a_dict['price']:
+            filter_price={'1':Product.price < (a_dict['price']),\
+                          '2':Product.price > (a_dict['price']),\
+                          '3':Product.price == a_dict['price']}
 
-        query= Product.query
-        if list['name']:
-            query= query.filter(filter_name[list['name_options']])
-        if list['description']:
-            query= query.filter(filter_description[list['description_options']])
-        if list['price']:
-            query= query.filter(filter_price[list['price_options']])
+        query = Product.query
+        if a_dict['name']:
+            query= query.filter(filter_name[a_dict['name_options']])
+        if a_dict['description']:
+            query= query.filter(filter_description[a_dict['description_options']])
+        if a_dict['price']:
+            query= query.filter(filter_price[a_dict['price_options']])
         #elif list['description'] and list['price']:
         #    query= Product.query.filter(and_(filter_description[list['description_options']],\
         #                                     filter_price[list['price_options']]))
@@ -125,11 +117,8 @@ class Product(Base):
         #elif list['price']:
         #    query= Product.query.filter(filter_price[list['price_options']])
 
-        count=query.filter_by(is_deleted=False).count()
+        count = query.filter_by(is_deleted=False).count()
         return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop).all(), count
-
-
-
 
 
 class Dimension(Base):

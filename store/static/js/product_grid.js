@@ -83,20 +83,34 @@ $(document).ready(function() {
            if (page==1){
                $('#prev').prop('disabled', true);
                $('#first').prop('disabled', true);
-           } else {$('#prev').prop('disabled', false);
+//               $('#prev').css({"border": "none", "cursor":"default"});
+//               $('#first').css({"border": "none", "cursor":"default"});
+           } else {
+               $('#prev').prop('disabled', false);
                $('#first').prop('disabled', false);
+//               $('#prev').css({"border": "1px solid #999", "padding":"5px",
+//                   '-moz-border-radius':'4px',"background": "#eee","cursor":"pointer"});
+//               $('#first').css({"border": "1px solid #999", "padding":"5px",
+//                   '-moz-border-radius':'4px',"background": "#eee","cursor":"pointer"});
+//               $('#prev').hover().css({"border-color": "#333", "background":"#ddd"});
+//               $('#first').hover().css({"border-color": "#333", "background":"#ddd"});
+
            }
 
            if (page==pages_amount){
                $('#next').prop('disabled', true);
                $('#last').prop('disabled', true);
-           } else {$('#next').prop('disabled', false);
+//               $('#next').hover().css({"border": "none", "cursor":"default"});
+//               $('#last').hover().css({"border": "none", "cursor":"default"});
+           } else {
+               $('#next').prop('disabled', false);
                $('#last').prop('disabled', false);
+//               $('#next').css({"border": "1px solid #333", "cursor":"pointer"});
+//               $('#last').css({"border": "1px solid #333", "cursor":"pointer"});
            }
          }
       })
      }
-
  function delete_id(id)
   {
    $.ajax({
@@ -202,9 +216,11 @@ $(document).ready(function() {
 
   /* Update and delete table button*/
 
-    var check= true;
-    var error='';
-    $('#apply_button').click(function(){
+
+    $('#apply_button').click(function()
+    {
+      var check= true;
+      var error='';
       if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) &&
         (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
          {

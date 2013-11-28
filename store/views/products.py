@@ -29,22 +29,18 @@ def dimensions():
 def products_page():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    if request.args.get('name') or request.args.get('description') or request.args.get('price'):
-        filter_list={'name':request.args.get('name'),'name_options':request.args.get('name_options'),\
-        'description':request.args.get('description'),'description_options':request.args.get('description_options'),\
-        'price':request.args.get('price'),'price_options':request.args.get('price_options')}
-        all_rec, count = Product.filter_product_grid(filter_list, page,records_per_page)
-        records_amount = count
-    else:
-        all_rec = list_products()
-        records_amount = len(all_rec)
-        all_rec = Product.all_products(records_per_page, page)
-
+    filter_dict = {'name': request.args.get('name'),
+                   'name_options': request.args.get('name_options'),
+                   'description': request.args.get('description'),
+                   'description_options': request.args.get('description_options'),
+                   'price': request.args.get('price'),
+                   'price_options': request.args.get('price_options')}
+    all_rec, count = Product.filter_product_grid(filter_dict, page, records_per_page)
     products_arr = []
     for i in all_rec:
         products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
                              })
-    return make_response(jsonify(products=products_arr, records_amount=records_amount,
+    return make_response(jsonify(products=products_arr, records_amount=count,
                                  records_per_page=records_per_page), 200)
 
 
