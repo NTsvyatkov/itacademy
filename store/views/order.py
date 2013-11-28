@@ -15,7 +15,8 @@ def order():
     order_arr = []
     for i in order_list:
         order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': i.Product.price,\
-         'description': i.Product.description, 'dimension':i.Product.dimension.name,'quantity':i.OrderProduct.quantity})
+         'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
+         'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id })
     return make_response(jsonify(order=order_arr), 200)
 
 

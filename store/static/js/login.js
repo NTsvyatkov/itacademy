@@ -21,7 +21,7 @@ var password =   document.form.password.value;
                 $(".password").click(function(){
 
                 $(".error_password").html("");
-                $(".password").removeClass("errorLis2t")
+                $(".password").removeClass("errorList2")
 
                    });
             return false;

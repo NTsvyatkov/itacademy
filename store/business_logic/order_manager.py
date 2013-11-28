@@ -30,13 +30,25 @@ def list_delivery():
         del_list = DeliveryType.get_delivery_all()
         return del_list
 
+def list_assignee():
+        assignee_list = RoleDao.query.all()
+        return assignee_list
+
+
 def addOrderWithStatusCart(user_id):
     if Order.getOrderByStatus(user_id) is None:
         Order.add_order(user_id,date.today(), 3)
 
 def addProductToCartStatus(user_id, id, json):
     order = Order.getOrderByStatus(user_id)
-    if  OrderProduct.get_order_product(order.id, id):
-        OrderProduct.updateSumQuantity(order.id, id, json['value'])
+    if  OrderProduct.get_order_product(order.id, id,json['status']):
+        OrderProduct.updateSumQuantity(order.id, id,json['status'], json['value'])
     else:
-        OrderProduct.add_order_product(order.id, id, json['value'])
+        OrderProduct.add_order_product(order.id, id,json['status'], json['value'])
+
+def update_orders(id, new_user_id, new_date, new_status_id, new_delivery_id,
+                     new_total_price, new_preferable_delivery_date, new_delivery_date,
+                     new_gift, new_delivery_address, new_comment):
+    Order.update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
+                     new_total_price, new_preferable_delivery_date, new_delivery_date,
+                     new_gift, new_delivery_address, new_comment)

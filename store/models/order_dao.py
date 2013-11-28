@@ -3,6 +3,7 @@ from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean,
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from models.user_dao import UserDao
+from models.role_dao import RoleDao
 from datetime import date
 
 
@@ -119,6 +120,7 @@ class Order(Base):
         start = stop - records_per_page
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
 class OrderStatus(Base):
     __tablename__ = "order_status"
 
@@ -209,24 +211,27 @@ class OrderProduct(Base):
     order = relationship('Order', backref=backref('order_product', lazy='dynamic'))
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
+    dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
+    dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
     price = Column(DECIMAL, nullable=True)
     #price_id = Column(Integer,ForeignKey('products.price'), nullable=True)
     #price = relationship('Product', backref=backref('order_product', lazy='dynamic'))
 
 
-    def __init__(self, order_id, product_id, quantity, price):
+    def __init__(self, order_id, product_id, dimension_id, quantity, price):
         super(OrderProduct, self).__init__()
         self.quantity = quantity
         self.order_id = order_id
         self.product_id = product_id
+        self.dimension_id = dimension_id
         self.price = price
 
 
     @staticmethod
-    def get_order_product(order_id,product_id):
-        #Next method retrieve one record for composite primary key (order_id, product_id)
-        return OrderProduct.query.get((order_id, product_id))
+    def get_order_product(order_id,product_id, dimension_id):
+        #Next method retrieve one record for composite primary key (order_id, product_id, dimension_id)
+        return OrderProduct.query.get((order_id, product_id, dimension_id))
 
     @staticmethod
     def get_by_order(product_id):
@@ -237,28 +242,27 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
 
     @staticmethod
-    def add_order_product(order_id, product_id, quantity, price = None):
-        order_product = OrderProduct(order_id, product_id, quantity, price)
+    def add_order_product(order_id, product_id, dimension_id, quantity, price = None):
+        order_product = OrderProduct(order_id, product_id, dimension_id, quantity, price)
         db_session.add(order_product)
         db_session.commit()
 
     @staticmethod
-    def update_order_product(order_id, product_id, new_quantity, new_price):
-        order_product_up = OrderProduct.get_order_product(order_id, product_id)
+    def update_order_product(order_id, product_id, dimension_id, new_quantity, new_price):
+        order_product_up = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         order_product_up.quantity = new_quantity
         order_product_up.price = new_price
         db_session.commit()
 
     @staticmethod
-    def delete_order_product(order_id, product_id):
-        del_order_product = OrderProduct.get_order_product(order_id, product_id)
+    def delete_order_product(order_id, product_id, dimension_id):
+        del_order_product = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         db_session.delete(del_order_product)
         db_session.commit()
 
     @staticmethod
-    def updateSumQuantity(order_id, product_id, new_quantity):
-        order_product_up = OrderProduct.get_order_product(order_id, product_id)
-        #order_product_up.quantity = order_product_up.quantity + new_quantity
+    def updateSumQuantity(order_id, product_id, dimension_id, new_quantity):
+        order_product_up = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         order_product_up.quantity = new_quantity
         db_session.commit()
 
@@ -267,7 +271,7 @@ class OrderProduct(Base):
 
 def order_product_grid(user_id):
     return db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-        filter(and_(Order.user_id==user_id ,Order.status_id=='4')).all()
+        filter(and_(Order.user_id==user_id ,Order.status_id == 3 )).all()
 
 def product_order_update(dict):
 
@@ -277,6 +281,7 @@ def product_order_update(dict):
     for i in dict['product_quantity']:
         comment=dict['comment']
         delivery_type=int(dict['delivery_type'])
+        dimension=int(i['dimension_id'])
         delivery_address=dict['delivery_address']
         product_id=int(i['product_id'])
         quantity=int(i['quantity'])
@@ -285,10 +290,16 @@ def product_order_update(dict):
         amount= amount + price*quantity
 
         total_price = price*quantity
-        OrderProduct.update_order_product(order_id,product_id,quantity,total_price)
-    print amount
-    Order.update_order(order_id,get_order.user_id,get_order.date,4,delivery_type,
-                        amount, get_order.preferable_delivery_date, get_order.delivery_date,
-                        get_order.gift,delivery_address,comment )
+        order_product= OrderProduct.get_order_product(order_id,product_id,dimension)
+        order_product.quantity=quantity
+        order_product.total_price=total_price
+        db_session.commit()
 
+
+    get_order.status_id = 1
+    get_order.delivery_id = delivery_type
+    get_order.total_price = amount
+    get_order.delivery_address = delivery_address
+    get_order.comment = comment
+    db_session.commit()
 
