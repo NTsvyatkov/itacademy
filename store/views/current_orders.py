@@ -24,7 +24,7 @@ def assignee():
     assignee_list = Order.query
     assignee_arr = []
     for i in assignee_list:
-        assignee_arr.append({'id': i.assignee_id, 'assignee_id': i.assignee.role.name})
+        assignee_arr.append({'id': i.assignee_id, 'assignee_id': i.assignee.role.name if i.assignee else None})
     return make_response(jsonify(assignee=assignee_arr), 200)
 
 
