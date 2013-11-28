@@ -94,7 +94,7 @@ class Product(Base):
 
         if list['name']:
             filter_name={'1':Product.name.like(list['name']+'%'),\
-                         '2':Product.name.like('%'+list['name'])+'%',\
+                         '2':Product.name.like('%'+list['name']+'%'),\
                          '3':Product.name == list['name']}
 
         if list['description']:
