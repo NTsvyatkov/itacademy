@@ -7,9 +7,9 @@ from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 
 
 
-@app.route('/current_orders', methods=('GET', 'POST'))
+@app.route('/current_order2', methods=('GET', 'POST'))
 def current_orders():
-        return render_template('current_orders.html',)
+        return render_template('current_order2.html',)
 
 @app.route('/api/status', methods=['GET'])
 def status():
