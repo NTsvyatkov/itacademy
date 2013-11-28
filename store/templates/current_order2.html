@@ -7,7 +7,7 @@
 
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
-            var count_td=11;
+            var count_td=6;
             var page = 1;
             var table_grid = document.getElementById('grid');
 
@@ -67,18 +67,20 @@
                     /*End creating table*/
             }
 
+              var k=0;
+            form_value = {id : $('#name_form').val(), name : $('#order_name').val()};
+            json_value = JSON.stringify(form_value);
+
             $('#edit_button').click(function(){
             update();
              });
 
 
 
-            var k=0;
-            form_value = {id : $('#name_form').val(), name : $('#order_name').val()};
-            json_value = JSON.stringify(form_value);
 
 
-            $('#clr').click(deleting_grid);
+
+
 
             function grid_pagination(){
                 var status_id = document.getElementById('status_id').value
@@ -98,15 +100,15 @@
                         document.getElementById("pages_amount").innerHTML = pages_amount
 
                         if (page==1){
-                            $('#prev').css({ "opacity":"0.9"});
-                            $('#first').css({ "opacity":"0.9"});
+                            $('#prev').css({ "opacity":"0.4"});
+                            $('#first').css({ "opacity":"0.4"});
                         } else {$('#prev').css({ "opacity": "1"});
                             $('#first').css({ "opacity": "1"});
                         }
 
                         if (page==pages_amount){
-                            $('#next').css({ "opacity": "0.9"});
-                            $('#last').css({ "opacity": "0.9"});
+                            $('#next').css({ "opacity": "0.4"});
+                            $('#last').css({ "opacity": "0.4"});
                         } else {$('#next').css({ "opacity": "1"});
                             $('#last').css({ "opacity": "1"});
                         }
@@ -144,13 +146,11 @@
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_size option:selected" ).each(grid_pagination())
+            $( "#table_size option:selected" ).each(grid_pagination)
             });
 
             });
 
-        </script>
-        <script type="text/javascript">
     $.ajax({
             dataType: "json",
             url: '/api/status',
@@ -162,7 +162,7 @@
                 })
             }
     });
-</script><script>
+
         $.ajax({
             dataType: "json",
             url: '/api/assignee',
@@ -175,8 +175,7 @@
             }
     });
 
-    </script>
-              <script type="text/javascript">
+
     $.ajax({
             dataType: "json",
             url: '/api/status',
@@ -188,7 +187,7 @@
                 })
             }
     });
-    </script><script>
+
      $.ajax({
             dataType: "json",
             url: '/api/delivery',
@@ -226,7 +225,7 @@
             <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select id="table_size">
-                    <option selected>10</option>
+                    <option selected>5</option>
                     <option>25</option>
                    </select>
             </div>
@@ -303,16 +302,4 @@
 
 {% endblock body %}
 
-    Status
-    API
-    Training
-    Shop
-    Blog
-    About
-
-    © 2013 GitHub, Inc.
-    Terms
-    Privacy
-    Security
-    Contact
 
