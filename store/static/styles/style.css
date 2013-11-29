@@ -223,6 +223,10 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
  font-size:14px;
  padding:6px 8px 8px;
  }
+.grid img:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}
 
 .grid td {
  padding:4px 6px 6px;
@@ -308,6 +312,9 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
  text-align:justify;
  font-size:13px;
  margin:15px;
+ width:330px;
+ background-color: rgba(168,0,0,0.1);
+
 }
 
 .order_block{
