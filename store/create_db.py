@@ -2,6 +2,7 @@ from sqlalchemy import create_engine
 from models.product_dao import Product
 from models.user_dao import UserDao
 from models.order_dao import Order
+from models.product_stock_dao import ProductStock
 from models import Base
 
 

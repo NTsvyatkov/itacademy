@@ -6,6 +6,7 @@ from mock import MagicMock, Mock
 class UserManagerTest(unittest.TestCase):
 
     def setUp(self):
+        self.id = 1
         self.login = 'Alex'
         self.firstName = 'Alexander'
         self.lastName = 'Ivanov'
@@ -22,11 +23,12 @@ class UserManagerTest(unittest.TestCase):
         real.method.assert_called_with(self.login,self.password, self.firstName, self.lastName,self.email, self.roleId,
                               self.regionId)
 
-    def testIsUserExist(self):
+    #def testIsUserExist(self):
         #my_mock = Mock()
         #my_mock.some_method.return_value = False
         #self.assertEqual(True, my_mock.UserDao.isUserExists(self.login, self.password))
-        self.assertEqual(UserDao.isUserExists(self.login, self.password), True)
+        #self.assertEqual(UserDao.isUserExists(self.login, self.password), True)
+
 
     #def tearDown(self):
     #    user = UserDao.getUserByLogin(self.login, self.password)
