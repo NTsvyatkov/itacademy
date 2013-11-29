@@ -11,8 +11,8 @@ def order_grid():
     delivery_arr = []
     for i in delivery_list:
         delivery_arr.append({'id': i.id, 'name': i.name})
-
-    order_product = order_product_grid(4)
+    if 'user_id' in session:
+        order_product = order_product_grid(session['user_id'])
     if order_product:
         return render_template('order.html',delivery_arr=delivery_arr)
     else:
@@ -22,7 +22,7 @@ def order_grid():
 @app.route('/api/order_product', methods=['GET'])
 def order():
     if 'user_id' in session:
-        order_list = order_product_grid(session['id'])
+        order_list = order_product_grid(session['user_id'])
     else:
         order_list = order_product_grid(4)
     order_arr = []

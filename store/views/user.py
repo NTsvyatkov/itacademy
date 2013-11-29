@@ -86,5 +86,3 @@ def err_han(e):
 def err_han(ex):
     error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
-
-
