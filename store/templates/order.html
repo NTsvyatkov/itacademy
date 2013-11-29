@@ -134,17 +134,12 @@ ajax_pull('Grid','GET','data');
 /*------------------------------------------*/
 
 
-    $('#apply_button').click(function(){
-    create_entity();
-    });
 
-
-  function delete_id(id)
+  function delete_id(product_id, dimension_id)
   {
-  if (id=='') id=0;
    $.ajax({
        dataType: "json",
-        url: '/api/order_product/'+id+'/'+order_id,
+        url: '/api/order_product/'+product_id+'/'+order_id+'/'+dimension_id,
         type: 'DELETE',
         contentType: "application/json",
         success: function(json)
@@ -152,7 +147,6 @@ ajax_pull('Grid','GET','data');
                         if (json.message == 'success')
                          {
                           alert('The product has been successfully deleted from the cart');
-                          window.location.replace("/my_orders");
                           ajax_pull('Grid','GET','data');
                          }
                         else
@@ -203,9 +197,12 @@ ajax_pull('Grid','GET','data');
             /*End creating table*/
 
                 $('.delete_img').click(function(){
+                  var tr= $(this).closest('tr');
+                  var dimension_id = tr.children('td').children('.dimension').val();
+                  var product_id = this.alt;
                   if(confirm('Are you sure that you want to remove '+ this.id +' from the cart?'))
                   {
-                    delete_id(this.alt);
+                    delete_id(product_id,dimension_id);
                    }
                  })
 

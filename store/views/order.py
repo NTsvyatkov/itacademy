@@ -12,7 +12,7 @@ def order_grid():
     for i in delivery_list:
         delivery_arr.append({'id': i.id, 'name': i.name})
 
-    order_product = order_product_grid(session['id'])
+    order_product = order_product_grid(4)
     if order_product:
         return render_template('order.html',delivery_arr=delivery_arr)
     else:
@@ -33,9 +33,9 @@ def order():
     return make_response(jsonify(order=order_arr), 200)
 
 
-@app.route('/api/order_product/<int:id_product>/<int:id_order>', methods=['DELETE'])
-def order_id_delete(id_order,id_product):
-    OrderProduct.delete_order_product(id_order,id_product)
+@app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])
+def order_id_delete(id_order,id_product,dimension_id):
+    OrderProduct.delete_order_product(id_order,id_product,dimension_id)
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
