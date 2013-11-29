@@ -6,7 +6,6 @@
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
 <script type="text/javascript">
-
 /* JQueri UI  - Datapicker options*/
 	$(function() {
 		$( "#expire_date" ).datepicker({
@@ -180,8 +179,8 @@ ajax_pull('Grid','GET','data');
                  tr[k].cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
-                        <input type='button' value='refresh' class='update_amount'> \
-                          <div class='error_div'></div>";
+                        <img  alt='refresh' class='update_amount' src='static/images/refresh_32.png'> \
+                          <b class='error_div'></b>";
 
                  tr[k].cells[4].innerHTML = input;
                  if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
@@ -190,11 +189,8 @@ ajax_pull('Grid','GET','data');
                  tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
-
                 $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
-
-
-            /*End creating table*/
+            /*--------------------------------End creating table------------------------------------*/
 
                 $('.delete_img').click(function(){
                   var tr= $(this).closest('tr');
@@ -206,20 +202,20 @@ ajax_pull('Grid','GET','data');
                    }
                  })
 
-                $('tr input.update_amount').click(function(){
+                $('tr img.update_amount').click(function(){
                    var tr= $(this).closest('tr');
                    var price = tr.children('td').children('.price').text();
                    var quantity = Math.round($(this).prev().val());
-                       $(this).prev().val(quantity);
+                   $(this).prev().val(quantity);
                    if(!(quantity/quantity)||(quantity==0)){  /*Check on numeric */
-                      $('.error_div').empty();
+                      $(this).next('.error_div').empty();
                       $(this).next('.error_div').html('Quantity should be numeric and not 0');
                      }
                     else{
-                     $('.error_div').empty();
+                     $(this).next('.error_div').empty();
                      var sum = +price*+quantity;
                      tr.children('td').children('.amount').text(sum.toFixed(2));
-                     $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2));
+                     $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
                      }
                 })
 
@@ -274,7 +270,7 @@ ajax_pull('Grid','GET','data');
          {
           quantity = $('.quantity:eq('+i+')').val();
 
-          if(!(quantity/quantity)||(quantity==0) && k != 1 ){  /*Check on numeric */
+          if((!(quantity/quantity)||(quantity==0)) && k != 1 ){  /*Check on numeric */
               error = 'Quantity should be numeric and not 0';
               k= 1;
               no_error = false;
@@ -382,7 +378,7 @@ ajax_pull('Grid','GET','data');
          ajax_pull('Alert','PUT',json_value);
        }
         else{
-            $('.error_div').empty();
+            $('.product_filter_in .error_div').empty();
            for (i in error_list)
            {
              var object1=error_list[i].id;
@@ -494,7 +490,7 @@ ajax_pull('Grid','GET','data');
               <input type="button" id="add_order" value="Place an order">
            </div>
            <div class="field">
-             <div class="error_div" id="order_error"> </div>
+             <div id="order_error"> </div>
            </div>
 
         </div>

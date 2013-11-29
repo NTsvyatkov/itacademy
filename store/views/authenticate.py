@@ -22,7 +22,7 @@ def login_authenticate():
     if UserDao.isUserExists(request.form['name'], request.form['password']):
         user = UserDao.getUserByLogin(request.form['name'], request.form['password'])
         session['login'] = user.login
-        session['id'] = user.id
+        session['user_id'] = user.id
         session['role'] = RoleDao.getRoleByID(user.role_id).name
         return render_template('layout.html')
     else:
