@@ -255,7 +255,7 @@ $.ajax({
 
         contentType: "application/json",
         success: function(data){
-              var roles_length = data.roles.length;
+             var roles_length = data.roles.length;
              var roles_data = data.roles;
             var foo = document.getElementById("roles");
         for(var i=0;i< roles_length;i++){
@@ -265,10 +265,13 @@ $.ajax({
             element.setAttribute("value", roles_data[i].role_id);
              element.setAttribute("name", "role");
              element.setAttribute("id", roles_data[i].role_id);
-            if (i==0)
+           var region_active  = roles_data[i].name;
+
+            if (region_active == 'Customer')
               element.setAttribute("checked", true);
             label.appendChild(element);
             label.innerHTML += roles_data[i].name;
+
             label.innerHTML += '<br />';
             foo.appendChild(label);
         }
