@@ -67,8 +67,8 @@
                     {
                         k++;
                         tr[k].cells[0].innerHTML = json.productStock[product_k].dimension;
-                        tr[k].cells[1].innerHTML = "<input type='text' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
-                        tr[k].cells[2].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
+                        tr[k].cells[1].innerHTML = "<input type='text' class = 'quantity' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
+                        tr[k].cells[2].innerHTML = "<input type='button' value='apply' id='button'  alt=" + k + ">";
                         tr[k].cells[2].abbr=k;
                         tr[k].cells[2].onclick= function()
                             {
@@ -131,7 +131,53 @@
                 });
             }
 
-        gridCreate()
+        gridCreate();
+
+
+            $('#price').blur(function() {
+                if( isNaN($(this).val()) || ($(this).val()) < 0) {
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Field not be empty');
+                    document.getElementById('update_product').disabled = true;
+                }else{
+                    $(this).css({'border' : '2px solid #999'});
+                    document.getElementById('update_product').disabled = false;
+                }
+            });
+
+
+            $('#name').blur(function() {
+                if( ($(this).val()) == 0) {
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Field not be empty');
+                    document.getElementById('update_product').disabled = true;
+                }else{
+                    $(this).css({'border' : '2px solid #999'});
+                    document.getElementById('update_product').disabled = false;
+                }
+            });
+
+            $('#description').blur(function() {
+                if( ($(this).val()) == 0) {
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Field not be empty');
+                    document.getElementById('update_product').disabled = true;
+                }else{
+                    $(this).css({'border' : '2px solid #999'});
+                    document.getElementById('update_product').disabled = false;
+                }
+            });
+
+            $('#quantity').blur(function() {
+                if( ($(this).val()) == 0) {
+                    $(this).css({'border' : '2px solid #ff0000'});
+                    $('#valid').text('Field not be empty');
+//                    document.getElementById('update_product').disabled = true;
+                }else{
+                    $(this).css({'border' : '2px solid #999'});
+//                    document.getElementById('update_product').disabled = false;
+                }
+            });
 
             });
         </script>
