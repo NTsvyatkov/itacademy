@@ -1,0 +1,185 @@
+{% extends "layout.html" %}
+{% block body %}
+
+        <script type="text/javascript">
+
+            var tr = [];
+
+            $(document).ready (function() {
+            var count_tr=3;
+            var count_td=6;
+            var page = 1;
+            var table_grid = document.getElementById('grid');
+            function createGrid(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            for (var j=0; j<=2; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                }
+            createGrid();
+
+            function clearingTr(i)
+                {
+                    for (var j=0; j<=2; j++)
+                        {
+                            tr[i].cells[j].innerHTML='';
+                        }
+                }
+
+
+            function clearingGrid()
+                {
+                    for (var n=1 ; n<=count_tr; n++)
+                        {
+                            clearingTr(n);
+                        }
+                }
+            function deletingGrid()
+                {
+                    for (var n=table_grid.rows.length ; n>=2; n--)
+                        {
+                            table_grid.removeChild(table_grid.childNodes[n]);
+                        }
+
+                }
+
+            var k=0;
+
+            function gridCreate(){$.ajax({
+                dataType: "json",
+                url: '/api/product_stock',
+                type: 'GET',
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        deletingGrid();
+                createGrid(json.productStock.length);
+                for (var product_k in json.productStock)
+                    {
+                        k++;
+                        tr[k].cells[0].innerHTML = json.productStock[product_k].dimension;
+                        tr[k].cells[1].innerHTML = "<input type='text' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
+                        tr[k].cells[2].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
+                        tr[k].cells[2].abbr=k;
+                        tr[k].cells[2].onclick= function()
+                            {
+                                var product_id = 1
+                                var dimension_id = json.productStock[this.abbr-1].dimension_id;
+                                var quantity = document.getElementById('quantity'+this.abbr).value;
+                                updateStock(product_id, dimension_id, quantity)
+                            }
+                    }
+                    k=0;
+                    }
+                });
+            }
+
+            function updateStock(product_id, dimension_id, quantity) {
+                data = {"product_id": product_id,'dimension_id': dimension_id, "quantity": quantity};
+                $.ajax({
+                dataType: "json",
+                url: '/api/stock',
+                type: 'PUT',
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success:function(json){
+                    if (json.message == 'success')
+                        {
+                            alert('The product has been successfully added');
+                        }
+                    else{
+                        alert (json.message);
+                        }
+                    }
+                });
+            }
+
+            $('#update_product').click(function(){
+                var id = 1;
+                var name = document.getElementById('name').value;
+                var description = document.getElementById('description').value;
+                var price = document.getElementById('price').value;
+                updateProduct(id, name, description, price);
+            });
+
+            function updateProduct(id, name, description, price) {
+                data = {"id": id,'name': name, "description": description, "price":price};
+                $.ajax({
+                dataType: "json",
+                url: '/api/product',
+                type: 'PUT',
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success:function(json){
+                    if (json.message == 'success')
+                        {
+                            alert('The product has been successfully added');
+                        }
+                    else{
+                        alert (json.message);
+                        }
+                    }
+                });
+            }
+
+        gridCreate()
+
+            });
+        </script>
+
+        <div class="">
+
+                <div class="edit_block">
+
+                    <div class="field">
+                        <lable>Name: </lable>
+                        <input type="text" id="name">
+                    </div>
+                    <div class="field">
+                        <lable>Description: </lable>
+                        <textarea class="comments_area" id="description"></textarea>
+                    </div>
+                    <div class="field">
+                        <lable>Price: </lable>
+                        <input type="text" id="price">
+                    </div>
+
+                    <div class="field">
+                        <input type="button" id="update_product" value="update">
+                    </div>
+                    <div class="field">
+                        <div id="order_error"> </div>
+                    </div>
+
+                </div>
+
+            <div class="field" style="margin: auto">
+                <br><div class="ProductTitle">Stock</div>
+            </div>
+            <div id="">
+                <table id='grid' class="grid" style="width: 500px;">
+                    <tr>
+                        <th>
+                            Dimension
+                        </th>
+                        <th>
+                            Quantity
+                        </th>
+                        <th>
+                            Apply
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+        </div>
+{% endblock body %}

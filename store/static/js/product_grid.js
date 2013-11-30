@@ -151,14 +151,15 @@ $(document).ready(function() {
                  tr[k].cells[1].innerHTML = json.products[product_k].name;
                  tr[k].cells[2].innerHTML = json.products[product_k].description;
                  tr[k].cells[3].innerHTML = json.products[product_k].price.toFixed(2);
-                 tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr[k].cells[4].innerHTML =  "<a href='product_edit/"+k+"'><img src='static/images/Text Edit.png' class='edit_img' alt=" + k + "></a>";
                  tr[k].cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr[k].cells[4].abbr=k;
                  tr[k].cells[5].abbr=k;
-                 tr[k].cells[4].onclick = function edit_tr2()
-                                      {
-                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
-                                      }
+//                 tr[k].cells[4].onclick = function edit_tr2()
+//                                      {
+//                                         productEdit(tr[this.abbr].cells[0].innerHTML)
+//                                         alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+//                                      };
                  tr[k].cells[5].onclick= function delete_tr2()
                                       {
                                         var str = tr[this.abbr].cells[1].innerHTML

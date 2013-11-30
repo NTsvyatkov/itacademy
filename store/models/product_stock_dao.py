@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from sqlalchemy import ForeignKey
+from sqlalchemy import ForeignKey, and_
 from sqlalchemy import Column, Integer
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
@@ -38,6 +38,17 @@ class ProductStock(Base):
             db_session.add(productStock)
             db_session.commit()
 
+    @staticmethod
+    def getProductStock(product_id, dimension_id):
+        return ProductStock.query.filter(and_(ProductStock.product_id == product_id,
+                                              ProductStock.dimension_id == dimension_id)).first()
+
+    @staticmethod
+    def updateProductStock(product_id,dimension_id, new_quantity):
+        entry = ProductStock.getProductStock(product_id, dimension_id)
+        entry.quantity = new_quantity
+        db_session.commit()
+
 
     @staticmethod
     def addDimensionStock(dimension_id, quantity):
@@ -46,3 +57,11 @@ class ProductStock(Base):
             productStock = ProductStock(i.id, dimension_id, quantity)
             db_session.add(productStock)
             db_session.commit()
+
+    @staticmethod
+    def getStockByProduct(product_id):
+        return ProductStock.query.filter(ProductStock.product_id == product_id).all()
+
+    @staticmethod
+    def getStockByDimension(dimension_id):
+        return ProductStock.query.filter(ProductStock.dimension_id == dimension_id).all()
