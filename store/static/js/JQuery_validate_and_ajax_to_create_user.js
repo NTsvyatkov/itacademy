@@ -219,7 +219,7 @@ var region =   document.form.region.value;
 
 
    $.ajax({
-        dataType: 'json',
+
         type: "POST",
         url: "/api/user",
         data:JSON.stringify({
@@ -232,7 +232,7 @@ var region =   document.form.region.value;
                 role_id:Number( $('input[name=role]:checked', '#roles').val())
                }),
         contentType: 'application/json;',
-        complete : function (resp){
+        success : function (resp){
 
             alert('Запрос успешно отправлен в базу');
             parent.location = 'http://127.0.0.1:5000/search_user'; }

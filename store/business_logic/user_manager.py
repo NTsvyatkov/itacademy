@@ -73,7 +73,7 @@ def validationUserID(user_id):
 def getListUser():
     return UserDao.getAllUsers()
 
-def createUser(login, first_name, last_name, password, email, role_id, region_id):
+def createUser(login, first_name, last_name, password, email,region_id, role_id):
     validationLogin(login)
     validationFirstName(first_name)
     validationLastName(last_name)
