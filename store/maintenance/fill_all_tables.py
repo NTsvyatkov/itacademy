@@ -1,4 +1,5 @@
 from models.product_dao import Product, Dimension
+from models.product_stock_dao import ProductStock
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
@@ -76,3 +77,5 @@ OrderProduct.add_order_product(4,5,2,5)
 OrderProduct.add_order_product(4,6,1,4)
 OrderProduct.add_order_product(4,7,3,2)
 OrderProduct.add_order_product(4,11,1,1)
+
+ProductStock.addProductStock(1,0)
