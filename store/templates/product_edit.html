@@ -62,23 +62,26 @@
                 success: function(json)
                     {
                         deletingGrid();
-                createGrid(json.productStock.length);
-                for (var product_k in json.productStock)
-                    {
-                        k++;
-                        tr[k].cells[0].innerHTML = json.productStock[product_k].dimension;
-                        tr[k].cells[1].innerHTML = "<input type='text' class = 'quantity' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
-                        tr[k].cells[2].innerHTML = "<input type='button' value='apply' id='button'  alt=" + k + ">";
-                        tr[k].cells[2].abbr=k;
-                        tr[k].cells[2].onclick= function()
+                        createGrid(json.productStock.length);
+                        for (var product_k in json.productStock)
                             {
-                                var product_id = 1
-                                var dimension_id = json.productStock[this.abbr-1].dimension_id;
-                                var quantity = document.getElementById('quantity'+this.abbr).value;
-                                updateStock(product_id, dimension_id, quantity)
+                                k++;
+                                tr[k].cells[0].innerHTML = json.productStock[product_k].dimension;
+                                tr[k].cells[1].innerHTML = "<input type='text' class = 'quantity' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
+                                tr[k].cells[2].innerHTML = "<input type='button' value='apply' id='button'  alt=" + k + ">";
+                                tr[k].cells[2].abbr=k;
+                                tr[k].cells[2].onclick= function()
+                                    {
+                                        var product_id = 1
+                                        var dimension_id = json.productStock[this.abbr-1].dimension_id;
+                                        var quantity = document.getElementById('quantity'+this.abbr).value;
+                                        updateStock(product_id, dimension_id, quantity)
+                                    }
                             }
-                    }
-                    k=0;
+                         k=0;
+                        document.getElementById('name').value=json.product.name;
+                        document.getElementById('description').value=json.product.description;
+                        document.getElementById('price').value= json.product.price;
                     }
                 });
             }
@@ -102,6 +105,8 @@
                     }
                 });
             }
+
+
 
             $('#update_product').click(function(){
                 var id = 1;
