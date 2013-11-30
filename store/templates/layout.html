@@ -100,8 +100,8 @@
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))
         {href='logout'}"
 
-        {% if request.environ.PATH_INFO.strip('/') =='logout'%}class="active"{% endif %}>
-        {% if (session)%}
+        {% if request.environ.PATH_INFO.strip('/') =='logout'%}class="active"{% endif %} >
+        {% if session['login'] %}
           <b>{{session['login']}}</b> Log out
         {%else%}
 

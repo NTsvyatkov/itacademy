@@ -1,5 +1,6 @@
 
 $(document).ready(function() {
+
     var tr = [];
     var count_tr=$('#table_size').val();
     var th = ['id','Product name','Description','Price $','Edit','Delete'];
@@ -36,7 +37,7 @@ $(document).ready(function() {
     }
 
    create_grid(count_tr,count_td);
-  /*End of creating table*/
+  /*----------------End of creating table-------------------------------*/
 
 
   function clearing_tr(i)
@@ -78,40 +79,28 @@ $(document).ready(function() {
            records_per_page=(json.records_per_page);
            pages_amount = Math.ceil(records_amount/records_per_page);
            document.getElementById("page").innerHTML = page;
-           document.getElementById("pages_amount").innerHTML = pages_amount
+           document.getElementById("pages_amount").innerHTML = pages_amount;
 
            if (page==1){
                $('#prev').prop('disabled', true);
                $('#first').prop('disabled', true);
-//               $('#prev').css({"border": "none", "cursor":"default"});
-//               $('#first').css({"border": "none", "cursor":"default"});
+
            } else {
                $('#prev').prop('disabled', false);
                $('#first').prop('disabled', false);
-//               $('#prev').css({"border": "1px solid #999", "padding":"5px",
-//                   '-moz-border-radius':'4px',"background": "#eee","cursor":"pointer"});
-//               $('#first').css({"border": "1px solid #999", "padding":"5px",
-//                   '-moz-border-radius':'4px',"background": "#eee","cursor":"pointer"});
-//               $('#prev').hover().css({"border-color": "#333", "background":"#ddd"});
-//               $('#first').hover().css({"border-color": "#333", "background":"#ddd"});
-
            }
 
            if (page==pages_amount){
                $('#next').prop('disabled', true);
                $('#last').prop('disabled', true);
-//               $('#next').hover().css({"border": "none", "cursor":"default"});
-//               $('#last').hover().css({"border": "none", "cursor":"default"});
            } else {
                $('#next').prop('disabled', false);
                $('#last').prop('disabled', false);
-//               $('#next').css({"border": "1px solid #333", "cursor":"pointer"});
-//               $('#last').css({"border": "1px solid #333", "cursor":"pointer"});
            }
          }
       })
      }
- function delete_id(id)
+ function delete_id(id,grid_length)
   {
    $.ajax({
        dataType: "json",
@@ -122,6 +111,11 @@ $(document).ready(function() {
                         if (json.message == 'success')
                          {
                           alert('The product has been successfully deleted');
+                           if (grid_length==1)
+                           {
+                               if (page!=1)
+                                {page=page-1;}
+                           }
                           grid_pagination();
                          }
                         else
@@ -140,7 +134,8 @@ $(document).ready(function() {
  function ajax_success(json)
   {
            deleting_grid();
-           create_grid(json.products.length,count_td);
+           var grid_length = json.products.length;
+           create_grid(grid_length,count_td);
            /*Create table with new products list */
            var k=0;
             for (var product_k in json.products)
@@ -165,7 +160,7 @@ $(document).ready(function() {
                                         var id_tr = tr[this.abbr].cells[0].innerHTML
                                         if (confirm('Are you sure you want to delete product '+ str +' '+id_tr+'?'))
                                         {
-                                          delete_id(id_tr)
+                                          delete_id(id_tr,grid_length)
                                         }
                                        }
                 }

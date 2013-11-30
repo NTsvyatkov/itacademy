@@ -86,7 +86,7 @@ class Product(Base):
      
         if a_dict['name']:
             filter_name={'1':Product.name.like(a_dict['name']+'%'),\
-                         '2':Product.name.like('%'+a_dict['name'])+'%',\
+                         '2':Product.name.like('%'+a_dict['name']+'%'),\
                          '3':Product.name == a_dict['name']}
 
         if a_dict['description']:
@@ -105,17 +105,6 @@ class Product(Base):
             query= query.filter(filter_description[a_dict['description_options']])
         if a_dict['price']:
             query= query.filter(filter_price[a_dict['price_options']])
-        #elif list['description'] and list['price']:
-        #    query= Product.query.filter(and_(filter_description[list['description_options']],\
-        #                                     filter_price[list['price_options']]))
-        #elif list['name']:
-        #    query= Product.query.filter(filter_name[list['name_options']])
-        #
-        #elif list['description']:
-        #    query= Product.query.filter(filter_description[list['description_options']])
-        #
-        #elif list['price']:
-        #    query= Product.query.filter(filter_price[list['price_options']])
 
         count = query.filter_by(is_deleted=False).count()
         return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop).all(), count

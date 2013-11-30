@@ -39,20 +39,36 @@
   var maestro_card = false;
 
 $(document).ready(function() {
-
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
-    var count_tr=10;
-    var count_td=6;
+    
+    var th = ['Product name','Description','Dimension','Price $','Quantity','Amount $','Delete'];
+    var count_td= th.length-1;
+    var count_tr=$('#table_size').val();
     var tr = [];
     var page = 1;
     var error_list =[];
+    var quantity_arr=[];
+    var table_grid = document.getElementById('grid');
+    /* Change table size select event*/
+    $('#table_size').change(function () {
+     page=1;
+     count_tr=$('#table_size').val();
+     $( "#table_siz option:selected" ).each(ajax_pull('GET','data'))
+     })
     /*Default value for select card type*/
     $('#credit_card_options').val(1);
-    /*-------------*/
-    /* Creating table of products */
-    var table_grid = document.getElementById('grid');
-    function create_grid(count_tr, count_td)
+    /*----------------------------------*/
+
+ /* Creating table of products (size = count_tr Х count_td)  */
+    tr[0] = document.createElement('TR');
+    table_grid.appendChild(tr[0]);
+    for (var j=0; j<=count_td; j++)
+    {
+          tr[0].appendChild(document.createElement('TH'));
+          tr[0].cells[j].innerHTML=th[j];
+    }
+  function create_grid(count_tr, count_td)
     {
         for (var i=1; i<=count_tr;i++ )
         {
@@ -65,10 +81,11 @@ $(document).ready(function() {
               tr[i].appendChild(document.createElement('TD'));
              }
         }
+      $( "tr:even" ).css( "background-color", "#c0c0c0" );
     }
+   create_grid(count_tr,count_td);
+ /*----------------End of creating table-------------------------------*/
 
-    create_grid(count_tr,count_td);
-  /*End of creating table*/
 
   /*Create "Delivery option's" select */
  var arr =[
@@ -80,7 +97,7 @@ $(document).ready(function() {
   $(arr).each(function() {
     select.append($("<option>").attr('value',this.val).text(this.text));
   });
- /*End  ------------------------ select */
+ /*  --------------------------End select------------------------------*/
 
   function clearing_tr(i)
   {
@@ -108,24 +125,44 @@ $(document).ready(function() {
 
  }
 
-ajax_pull('Grid','GET','data');
+ajax_pull('GET','data');
 /* Ajax function for put and get methods*/
- function ajax_pull(success_option,type_options,data){
+ function ajax_pull(type_options,data){
        $.ajax({
         dataType: "json",
-        url: '/api/order_product',
+        url: '/api/order_product/?page='+page+'&table_size='+count_tr,
         type: type_options,
         contentType: "application/json",
         data:data,
         success: function(json)
         {
-            if (success_option == 'Grid'){
+          if (type_options == 'GET'){
              ajax_success(json);
+
+             records_amount=(json.records_amount);
+             records_per_page=(json.records_per_page);
+             pages_amount = Math.ceil(records_amount/records_per_page);
+             document.getElementById("page").innerHTML = page;
+             document.getElementById("pages_amount").innerHTML = pages_amount;
+             if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+             } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
              }
-             else {
+             if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+             } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+             }
+          }
+          else {
               alert('Order successfully issued');
               window.location.replace("/my_orders");
-              ajax_pull('Grid','GET','data');
+              ajax_pull('GET','data');
               }
          }
       })
@@ -134,7 +171,7 @@ ajax_pull('Grid','GET','data');
 
 
 
-  function delete_id(product_id, dimension_id)
+  function delete_id(product_id, dimension_id,grid_length)
   {
    $.ajax({
        dataType: "json",
@@ -146,7 +183,22 @@ ajax_pull('Grid','GET','data');
                         if (json.message == 'success')
                          {
                           alert('The product has been successfully deleted from the cart');
-                          ajax_pull('Grid','GET','data');
+
+
+                          for(i=0; i<quantity_arr.length;i++){
+                           if ((quantity_arr[i].product_id ==product_id) &&
+                               (quantity_arr[i].dimension_id == dimension_id))
+                           {
+                              quantity_arr[i].quantity=0;
+                           }
+                          }
+
+                          if (grid_length==1)
+                           {
+                               if (page!=1)
+                                {page=page-1;}
+                           }
+                            ajax_pull('GET','data');
                          }
                         else
                          alert (json.message);
@@ -163,11 +215,26 @@ ajax_pull('Grid','GET','data');
  /*Function ajax_success parse Json and add values in table - grid  */
   function ajax_success(json){
            deleting_grid();
-           create_grid(json.order.length,count_td);
+           var grid_length=json.order.length;
+           create_grid(grid_length,count_td);
            var k=0;
+           var amount=0;
+           if (quantity_arr.length == 0)
+           {
+              quantity_arr=json.quantity_arr;
+           }
            /*Create table with new order_products list */
             for (var product_k in json.order)
                {
+                 for(i=0; i<quantity_arr.length;i++)
+                 {
+                   if ((quantity_arr[i].product_id ==json.order[product_k].id) &&
+                       (quantity_arr[i].dimension_id == json.order[product_k].dimension_id))
+                     {
+                       json.order[product_k].quantity=quantity_arr[i].quantity
+                     }
+                 }
+
                  k++;
                  order_id=json.order[product_k].order_id;
                  product_name =json.order[product_k].name;
@@ -184,7 +251,7 @@ ajax_pull('Grid','GET','data');
 
                  tr[k].cells[4].innerHTML = input;
                  if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
-                 var amount= (+json.order[product_k].price * +quant).toFixed(2);
+                 amount= (+json.order[product_k].price * +quant).toFixed(2);
                  tr[k].cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
                  tr[k].cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
@@ -198,13 +265,16 @@ ajax_pull('Grid','GET','data');
                   var product_id = this.alt;
                   if(confirm('Are you sure that you want to remove '+ this.id +' from the cart?'))
                   {
-                    delete_id(product_id,dimension_id);
+                    delete_id(product_id,dimension_id,grid_length);
                    }
                  })
 
                 $('tr img.update_amount').click(function(){
                    var tr= $(this).closest('tr');
                    var price = tr.children('td').children('.price').text();
+                   var dimension_id = tr.children('td').children('.dimension').val();
+                   var product_id=tr.children('td').children('.delete_img').attr('alt');
+                   var sum=0;
                    var quantity = Math.round($(this).prev().val());
                    $(this).prev().val(quantity);
                    if(!(quantity/quantity)||(quantity==0)){  /*Check on numeric */
@@ -213,11 +283,19 @@ ajax_pull('Grid','GET','data');
                      }
                     else{
                      $(this).next('.error_div').empty();
-                     var sum = +price*+quantity;
+                     sum = +price*+quantity;
                      tr.children('td').children('.amount').text(sum.toFixed(2));
                      $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
+                       for(i=0; i<quantity_arr.length;i++){
+                           if ((quantity_arr[i].product_id ==product_id) &&
+                               (quantity_arr[i].dimension_id == dimension_id))
+                           {
+                              quantity_arr[i].quantity=quantity;
+                           }
+                          }
                      }
                 })
+
 
   }
 /*----------------------------END of ajax_success ------------------------------------*/
@@ -234,23 +312,24 @@ ajax_pull('Grid','GET','data');
   }
 
 
- $('#add_order').click(function(){
+  $('#add_order').click(function(){
+
+     var error='';
+     var no_error = true
+     var clear_list;
+     var object1;
     /* Clear error and border-color*/
       if(error_list)
       {
           for (i in error_list)
            {
-             var object1=error_list[i].id;
+             object1=error_list[i].id;
              object1.css('border-color','#999');
              object1.next('.error_div').remove();
            }
           error_list=[];
       }
-     /*---------------------------------*/
-
-       var error='';
-       var no_error = true
-       var clear_list;
+     /*---------------------------------*
 
       /* String length validation */
        if  (($('#input_address').val().length >50) || ($('#input_address').val().length == 0))
@@ -375,13 +454,13 @@ ajax_pull('Grid','GET','data');
          /* Json for put on server*/
          json_value = JSON.stringify(form_value);
          /*-----------------------*/
-         ajax_pull('Alert','PUT',json_value);
+         ajax_pull('PUT',json_value);
        }
         else{
             $('.product_filter_in .error_div').empty();
            for (i in error_list)
            {
-             var object1=error_list[i].id;
+             object1=error_list[i].id;
              object1.closest('div').append('<p class=error_div>'+error_list[i].error+'');
              object1.css('border-color','#b81900');
 
@@ -411,6 +490,34 @@ ajax_pull('Grid','GET','data');
 
  /*-----------------------------------*/
 
+
+  /*Pagination buttons events*/
+
+   $('#next').click(function(){
+     if (page*records_per_page>=records_amount){page=page}
+     else {page=page+1}
+     ajax_pull('GET','data');
+    });
+
+    $('#prev').click(function(){
+      page=page-1;
+      if (page<=1){
+       page=1;
+      }
+      ajax_pull('GET','data');
+    });
+
+    $('#first').click(function(){
+     page=1;
+     ajax_pull('GET','data');
+    });
+
+    $('#last').click(function(){
+     page=pages_amount;
+     ajax_pull('GET','data');
+    });
+   /*------------------------------------*/
+
  /* What is this CVV2 --- alert  */
   $('#cvv2_info').click(function(){
 
@@ -434,32 +541,27 @@ ajax_pull('Grid','GET','data');
 
       </div>
       <div id="products_table">
+      <div class="field" style="margin-left:5%;">
+          <lable>Table size: </lable>
+              <select id="table_size">
+              <option selected>5</option>
+              <option>25</option>
+          </select>
+       </div>
        <table id='grid' class="grid">
-           <tr>
-
-                <th>
-                   Product name
-               </th>
-               <th>
-                   Description
-               </th>
-               <th>
-                   Dimension
-               </th>
-                <th>
-                   Price $
-               </th>
-               <th>
-                   Quantity
-               </th>
-               <th>
-                   Amount
-               </th>
-               <th>
-                   Delete
-               </th>
-           </tr>
        </table>
+          <div id="pagination" style="text-align: center">
+              <span id="first_span">
+              <input type="button" id="first" value="First">&nbsp
+              <input type="button" id="prev" value="Prev">&nbsp
+              </span>
+
+              <input type="button" id="next" value="Next">&nbsp
+              <input type="button" id="last" value="Last">
+              <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
+
+          </div>
+
 
       </div>
           <div style="clear:both;"></div>

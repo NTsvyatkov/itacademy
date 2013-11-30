@@ -19,18 +19,27 @@ def order_grid():
         return render_template('order_empty.html')
 
 
-@app.route('/api/order_product', methods=['GET'])
+@app.route('/api/order_product/', methods=['GET'])
 def order():
-    if 'user_id' in session:
-        order_list = order_product_grid(session['user_id'])
-    else:
-        order_list = order_product_grid(4)
+    records_per_page = int(request.args.get('table_size'))
+    page = int(request.args.get('page'))
     order_arr = []
+    quantity_arr =[]
+    if 'user_id' in session:
+        order_list,count = order_product_grid(session['user_id'],page, records_per_page)
+        quantity_list = order_product_grid(session['user_id'])
+    else:
+        order_list,count = order_product_grid(4,page, records_per_page)
+        quantity_list = order_product_grid(4)
     for i in order_list:
         order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': i.Product.price,\
          'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
          'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id })
-    return make_response(jsonify(order=order_arr), 200)
+    for i in quantity_list:
+        quantity_arr.append({'product_id': i.Product.id,'quantity':i.OrderProduct.quantity,
+                             'dimension_id':i.OrderProduct.dimension.id,'page':0})
+    return make_response(jsonify(order=order_arr,quantity_arr=quantity_arr,records_amount=count,\
+                                 records_per_page=records_per_page), 200)
 
 
 @app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])

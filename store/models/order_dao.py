@@ -269,12 +269,18 @@ class OrderProduct(Base):
 
 
 
-def order_product_grid(user_id):
-    return db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-        filter(and_(Order.user_id==user_id ,Order.status_id == 3 )).all()
+def order_product_grid(user_id, page=None, records_per_page=None):
+    query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
+            filter(and_(Order.user_id==user_id ,Order.status_id == 3 ))
+    count = query.filter_by(is_deleted=False).count()
+    if page and records_per_page:
+        stop = page * records_per_page
+        start = stop - records_per_page
+        return query.slice(start, stop).all(), count
+    else:
+        return query.all()
 
 def product_order_update(dict):
-
     order_id=int(dict['order_id'])
     amount=0
     get_order = Order.get_order(order_id)
@@ -286,16 +292,12 @@ def product_order_update(dict):
         product_id=int(i['product_id'])
         quantity=int(i['quantity'])
         price = Product.get_product(product_id).price
-
         amount= amount + price*quantity
-
         total_price = price*quantity
         order_product= OrderProduct.get_order_product(order_id,product_id,dimension)
         order_product.quantity=quantity
         order_product.total_price=total_price
         db_session.commit()
-
-
     get_order.status_id = 1
     get_order.delivery_id = delivery_type
     get_order.total_price = amount
