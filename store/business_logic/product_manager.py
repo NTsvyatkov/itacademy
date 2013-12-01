@@ -47,19 +47,17 @@ def get_product_by_id(id):
     return product_by_id
 
 
-def create_product(name, description, price, id):
+def create_product(name, description, price):
     validate_name(name)
     validate_price(price)
-    validate_dimension_id(id)
-    Product.add_product(name, description, price, id)
+    Product.add_product(name, description, price)
 
 
-def update_product(id, new_name, new_description, new_price, new_dimension):
+def update_product(id, new_name, new_description, new_price):
     validate_product_id(id)
     validate_name(new_name)
     validate_price(new_price)
-    validate_dimension_id(new_dimension)
-    Product.upd_product(id, new_name, new_description, new_price, new_dimension)
+    Product.upd_product(id, new_name, new_description, new_price)
 
 
 def delete_product(id):

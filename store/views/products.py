@@ -1,8 +1,9 @@
-from flask import jsonify, render_template, request, make_response
-from models.product_dao import Product
+from flask import jsonify, render_template, request, make_response, redirect, url_for
+from models.product_dao import Product, Dimension
 from flask_bootstrap import app
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product,\
     update_product, get_product_by_id
+from models.product_stock_dao import ProductStock
 
 
 @app.route('/create_product', methods=('GET', 'POST'))
@@ -70,7 +71,32 @@ def products_post():
 @app.route('/api/product', methods=['PUT'])
 def products_update():
     js = request.get_json()
-    update_product(js['id'], js['name'], js['description'], js['price'], js['dimension'])
-    resp = make_response(0, 200)
-    return resp
+    update_product(js['id'], js['name'], js['description'], js['price'])
+    return make_response(jsonify({'message':'success'}),200)
 
+@app.route('/product_edit')
+def product_edit():
+    return render_template('product_edit.html')
+
+@app.route('/product_edit/<int:id>')
+def productsId(id):
+    print(id)
+    return redirect(url_for('product_edit'))
+
+@app.route('/api/product_stock', methods=['GET', 'POST'])
+def stockList():
+    productStock = ProductStock.getStockByProduct(1)
+    productStockList = []
+    for i in productStock:
+        productStockList.append({'dimension': Dimension.get_dimension(i.dimension_id).name, 'quantity': i.quantity,
+                                 'dimension_id': i.dimension_id})
+    product = ({"name": Product.get_product(1).name, "description": Product.get_product(1).description,
+                "price": Product.get_product(1).price})
+    return make_response(jsonify(productStock=productStockList, product=product), 200)
+
+
+@app.route('/api/stock', methods=['PUT'])
+def updateStock():
+    js = request.get_json()
+    ProductStock.updateProductStock(js['product_id'], js['dimension_id'], js['quantity'])
+    return make_response(jsonify({'message':'success'}),200)

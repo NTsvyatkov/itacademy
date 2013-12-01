@@ -2,6 +2,7 @@
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer,and_
+
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 from models.order_dao import OrderProduct
@@ -43,6 +44,17 @@ class ProductStock(Base):
             db_session.add(productStock)
             db_session.commit()
 
+    @staticmethod
+    def getProductStock(product_id, dimension_id):
+        return ProductStock.query.filter(and_(ProductStock.product_id == product_id,
+                                              ProductStock.dimension_id == dimension_id)).first()
+
+    @staticmethod
+    def updateProductStock(product_id,dimension_id, new_quantity):
+        entry = ProductStock.getProductStock(product_id, dimension_id)
+        entry.quantity = new_quantity
+        db_session.commit()
+
 
     @staticmethod
     def addDimensionStock(dimension_id, quantity):
@@ -63,4 +75,12 @@ class ProductStock(Base):
             db_session.commit()
         else:
             False
+
+
+    def getStockByProduct(product_id):
+        return ProductStock.query.filter(ProductStock.product_id == product_id).all()
+
+    @staticmethod
+    def getStockByDimension(dimension_id):
+        return ProductStock.query.filter(ProductStock.dimension_id == dimension_id).all()
 

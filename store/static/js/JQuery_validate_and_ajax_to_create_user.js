@@ -234,7 +234,7 @@ var region =   document.form.region.value;
         contentType: 'application/json;',
         success : function (resp){
 
-            alert('Запрос успешно отправлен в базу');
+            alert('User has been successfully added');
             parent.location = 'http://127.0.0.1:5000/search_user'; }
 
 

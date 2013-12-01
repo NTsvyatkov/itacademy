@@ -1,4 +1,5 @@
 from models.product_dao import Product, Dimension
+from models.product_stock_dao import ProductStock
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
@@ -63,6 +64,7 @@ RegionDao.createNewRegion("South")
 RegionDao.createNewRegion("East")
 
 UserDao.createNewUser('Max', '111','Maxim','Sidorov', 'max.sidorov@gmail.ru',1,2)
+UserDao.createNewUser('Nikol', '111','Nikolay','Lobanov', 'giman89@gmail.ru', 4,1)
 UserDao.createNewUser('Vanya', '111','Ivan','Ivanov', 'vanya@gmail.com', 2,1)
 UserDao.createNewUser('Andrew', '111','Andrew','Petrov', 'andrew@mail.ru', 3,4)
 UserDao.createNewUser('Katya', '111','Ekaterina','Ivanova', 'ekaterina@rambler.com', 4,3)
@@ -70,6 +72,10 @@ UserDao.createNewUser('Roma', '111','Roman','Melnishin', 'roma90@gmail.com', 2,1
 UserDao.createNewUser('Den', '111','Dennis','Popov', 'popov@mail.ru', 3,1)
 UserDao.createNewUser('Max90', '111','Maxim','Smirnov', 'smirnov@gmail.ru', 4,4)
 UserDao.createNewUser('Yaroslav', '111','Yaroslav','Lobanov', 'lobanov95@gmail.ru', 4,2)
+UserDao.createNewUser('Seriy', '111','Sergey','Lobanov', 'global85@gmail.ru', 1,2)
+UserDao.createNewUser('Dona', '111','Donna','Popova', 'popova@mail.ru', 3,1)
+
+
 
 DeliveryType.add_delivery('Courier')
 DeliveryType.add_delivery('Express-mail')
@@ -97,3 +103,5 @@ OrderProduct.add_order_product(4,5,2,5)
 OrderProduct.add_order_product(4,6,1,4)
 OrderProduct.add_order_product(4,7,3,2)
 OrderProduct.add_order_product(4,11,1,1)
+
+ProductStock.addProductStock(1,0)

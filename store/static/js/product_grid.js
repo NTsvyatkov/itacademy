@@ -79,6 +79,7 @@ $(document).ready(function() {
             for (var product_k in json.products)
                 {
                  k++;
+
                  tr=table_grid.rows[k];
                  tr.cells[0].innerHTML = json.products[product_k].id;
                  tr.cells[1].innerHTML = '<span class=name>'+json.products[product_k].name+'</span>';
@@ -88,6 +89,7 @@ $(document).ready(function() {
                  tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr.cells[4].abbr=k;
                  tr.cells[5].abbr=k;
+
                 }
 
                 $('.delete_img').click(function(){
