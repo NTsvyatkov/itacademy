@@ -1,7 +1,7 @@
 from flask import jsonify, render_template, request, make_response, session, json
 from models.order_dao import product_order_update
 from flask_bootstrap import app
-
+from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
 
 
@@ -49,12 +49,19 @@ def order_id_delete(id_order,id_product,dimension_id):
     return resp
 
 
-@app.route('/api/order_product', methods=['PUT'])
+@app.route('/api/order_product/', methods=['PUT'])
 def order_post():
     js = request.get_json()
     product_order_update(js)
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
-
+@app.route('/api/update/', methods=['PUT'])
+def quantity_post():
+    js = request.get_json()
+    print 111
+    validate_quantity(js['product_id'],js['dimension_id'],js['quantity'],'check');
+    print 222
+    resp = make_response(jsonify({'message': 'success'}), 200)
+    return resp
 

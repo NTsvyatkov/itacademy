@@ -3,7 +3,7 @@ from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
 from models.order_dao import Order, OrderProduct, OrderStatus,DeliveryType
-
+from models.product_stock_dao import ProductStock
 
 from datetime import date
 
@@ -29,6 +29,27 @@ Product.add_product('banana', 'brazilian banana', 12.1)
 Product.add_product('tomato', 'ukrainian tomato', 5.8)
 Product.add_product('mango', 'fresh mango', 7.5)
 Product.add_product('lemon', 'indian lemon', 4.4)
+
+ProductStock.add_new_record(1,1,15)
+ProductStock.add_new_record(2,3,10)
+ProductStock.add_new_record(3,1,15)
+ProductStock.add_new_record(4,2,18)
+ProductStock.add_new_record(5,3,15)
+ProductStock.add_new_record(6,2,25)
+ProductStock.add_new_record(7,1,15)
+ProductStock.add_new_record(8,3,45)
+ProductStock.add_new_record(9,2,60)
+ProductStock.add_new_record(10,2,15)
+ProductStock.add_new_record(11,3,15)
+ProductStock.add_new_record(12,3,10)
+ProductStock.add_new_record(13,1,15)
+ProductStock.add_new_record(14,2,18)
+ProductStock.add_new_record(15,1,15)
+ProductStock.add_new_record(12,2,25)
+ProductStock.add_new_record(13,3,15)
+ProductStock.add_new_record(11,2,45)
+ProductStock.add_new_record(10,1,60)
+
 
 
 RoleDao.createNewRole("Administrator")

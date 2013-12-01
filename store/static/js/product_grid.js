@@ -1,7 +1,7 @@
 
 $(document).ready(function() {
 
-    var tr = [];
+
     var count_tr=$('#table_size').val();
     var th = ['id','Product name','Description','Price $','Edit','Delete'];
     var count_td= th.length-1;
@@ -9,61 +9,20 @@ $(document).ready(function() {
     var table_grid = document.getElementById('grid');
     var filter_query='';
 
-
   /* Creating table of products (size = count_tr Х count_td)  */
-
-    tr[0] = document.createElement('TR');
-    table_grid.appendChild(tr[0]);
+    var tr1 = document.createElement('TR');
+    table_grid.appendChild(tr1);
     for (var j=0; j<=count_td; j++)
     {
-          tr[0].appendChild(document.createElement('TH'));
-          tr[0].cells[j].innerHTML=th[j];
+          tr1.appendChild(document.createElement('TH'));
+          tr1.cells[j].innerHTML=th[j];
     }
 
-  function create_grid(count_tr, count_td)
-    {
-        for (var i=1; i<=count_tr;i++ )
-        {
-            tr[i] = document.createElement('TR');
-            table_grid.appendChild(tr[i]);
-            tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
-            for (var j=0; j<=count_td; j++)
-             {
-              tr[i].appendChild(document.createElement('TD'));
-             }
-        }
-      $( "tr:even" ).css( "background-color", "#c0c0c0" );
-    }
 
-   create_grid(count_tr,count_td);
   /*----------------End of creating table-------------------------------*/
+  create_grid(count_tr,count_td);
 
 
-  function clearing_tr(i)
-  {
-      for (var j=0; j<=6; j++)
-      {
-          tr[i].cells[j].innerHTML='';
-      }
-  }
-
- function clearing_grid()
-  {
-    for (var n=2 ; n<=count_tr; n++)
-    {
-      clearing_tr(n);
-    }
-  }
-
- function deleting_grid()
-  {
-    for (var n=table_grid.rows.length ; n>=2; n--)
-      {
-       table_grid.removeChild(table_grid.childNodes[n]);
-      }
-
-  }
 
   function grid_pagination()
    {
@@ -73,30 +32,8 @@ $(document).ready(function() {
         type: 'GET',
         success: function(json)
         {
-           ajax_success(json);
-
-           records_amount=(json.records_amount);
-           records_per_page=(json.records_per_page);
-           pages_amount = Math.ceil(records_amount/records_per_page);
-           document.getElementById("page").innerHTML = page;
-           document.getElementById("pages_amount").innerHTML = pages_amount;
-
-           if (page==1){
-               $('#prev').prop('disabled', true);
-               $('#first').prop('disabled', true);
-
-           } else {
-               $('#prev').prop('disabled', false);
-               $('#first').prop('disabled', false);
-           }
-
-           if (page==pages_amount){
-               $('#next').prop('disabled', true);
-               $('#last').prop('disabled', true);
-           } else {
-               $('#next').prop('disabled', false);
-               $('#last').prop('disabled', false);
-           }
+          ajax_success(json);
+          include_pagination(page,json);
          }
       })
      }
@@ -136,36 +73,42 @@ $(document).ready(function() {
            deleting_grid();
            var grid_length = json.products.length;
            create_grid(grid_length,count_td);
-           /*Create table with new products list */
+           /*-------------Create table with new products list-------------------- */
            var k=0;
+
             for (var product_k in json.products)
                 {
                  k++;
-
-                 tr[k].cells[0].innerHTML = json.products[product_k].id;
-                 tr[k].cells[1].innerHTML = json.products[product_k].name;
-                 tr[k].cells[2].innerHTML = json.products[product_k].description;
-                 tr[k].cells[3].innerHTML = json.products[product_k].price.toFixed(2);
-                 tr[k].cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
-                 tr[k].cells[4].abbr=k;
-                 tr[k].cells[5].abbr=k;
-                 tr[k].cells[4].onclick = function edit_tr2()
-                                      {
-                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
-                                      }
-                 tr[k].cells[5].onclick= function delete_tr2()
-                                      {
-                                        var str = tr[this.abbr].cells[1].innerHTML
-                                        var id_tr = tr[this.abbr].cells[0].innerHTML
-                                        if (confirm('Are you sure you want to delete product '+ str +' '+id_tr+'?'))
-                                        {
-                                          delete_id(id_tr,grid_length)
-                                        }
-                                       }
+                 tr=table_grid.rows[k];
+                 tr.cells[0].innerHTML = json.products[product_k].id;
+                 tr.cells[1].innerHTML = '<span class=name>'+json.products[product_k].name+'</span>';
+                 tr.cells[2].innerHTML = json.products[product_k].description;
+                 tr.cells[3].innerHTML = json.products[product_k].price.toFixed(2);
+                 tr.cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr.cells[4].abbr=k;
+                 tr.cells[5].abbr=k;
                 }
 
-            /*End creating table*/
+                $('.delete_img').click(function(){
+                  var tr= $(this).closest('tr');
+                  var product_id = this.alt;
+                  var product_name=tr.children('td').children('.name').text();
+                  if(confirm('Are you sure you want to delete product '+ product_name +' ?'))
+                  {
+                    delete_id(product_id,grid_length);
+                   }
+                 })
+
+                $('.edit_img').click(function(){
+                  var tr= $(this).closest('tr');
+                  var product_id = this.alt;
+                  var product_name=tr.children('td').children('.name').text();
+                  alert('Edit '+ product_name +' ?');
+                   }
+                 )
+
+            /*---------------------End creating table------------------------------------*/
 
   }
 
@@ -176,46 +119,49 @@ $(document).ready(function() {
   }
 
   /*Pagination buttons events*/
-
    $('#next').click(function(){
-    if (page*records_per_page>=records_amount){page=page}
-    else {page=page+1}
-    grid_pagination()
+     if (page*records_per_page>=records_amount){page=page}
+     else {page=page+1}
+     grid_pagination()
     });
 
     $('#prev').click(function(){
-    page=page-1;
+     page=page-1;
         if (page<=1){
         page=1;
-    }
-    grid_pagination()
+        }
+     grid_pagination()
     });
 
     $('#first').click(function(){
-    page=1;
-    grid_pagination()
+     page=1;
+     grid_pagination()
     });
 
     $('#last').click(function(){
-    page=pages_amount;
-    grid_pagination()
+     page=pages_amount;
+     grid_pagination()
     });
+    /*--------------------------*/
 
-  /* Change table size select event*/
-
+  /*Change table size select event*/
     $('#table_size').change(function () {
-     page=1;
-     count_tr=$('#table_size').val();
-     $( "#table_siz option:selected" ).each(grid_pagination())
+      page=1;
+      count_tr=$('#table_size').val();
+      $( "#table_siz option:selected" ).each(grid_pagination())
      })
+/*----------------------------------------*/
 
-  /* Update and delete table button*/
+  /*------- Update and clear table's buttons----------------------------*/
 
-
-    $('#apply_button').click(function()
+  $('#apply_button').click(function()
     {
       var check= true;
       var error='';
+      var name_options;
+      var d_op;
+      var price_options;
+      /*------------------------Checking filter options-------------------------------*/
       if ((!( $('#name_options').val() != 0 && $('#name_input').val() )) &&
         (!( $('#name_options').val() == 0 && !($('#name_input').val()) )))
          {
@@ -246,12 +192,12 @@ $(document).ready(function() {
        check = false;
         error = error + 'Price is not numeric'
       }
-
+      /*--------------------------------------------------------------------------------------------------*/
       if (check)
        {
-        var name_options = '&name_options='+ $('#name_options').val()+'&name='+ $('#name_input').val();
-        var d_op = '&description_options='+$('#description_options').val()+'&description='+$('#description_input').val();
-        var price_options = '&price_options='+$('#price_options').val()+'&price='+$('#price_input').val();
+        name_options = '&name_options='+ $('#name_options').val()+'&name='+ $('#name_input').val();
+        d_op = '&description_options='+$('#description_options').val()+'&description='+$('#description_input').val();
+        price_options = '&price_options='+$('#price_options').val()+'&price='+$('#price_input').val();
         filter_query = name_options +d_op+price_options;
         page=1;
         grid_pagination();
@@ -274,7 +220,7 @@ $(document).ready(function() {
       $('#price_input').val('');
       $('#error_div').empty()
     });
-
+  /*----------------------------End  Update and clear table's button------------------------*/
 
 });
 

@@ -110,6 +110,7 @@ class Product(Base):
         return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop).all(), count
 
 
+
 class Dimension(Base):
     __tablename__ = 'dimensions'
     id = Column(Integer, primary_key=True, autoincrement=True)

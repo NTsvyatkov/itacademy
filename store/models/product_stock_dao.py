@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
 from sqlalchemy import ForeignKey
-from sqlalchemy import Column, Integer
+from sqlalchemy import Column, Integer,and_
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 from models.order_dao import OrderProduct
@@ -25,6 +25,11 @@ class ProductStock(Base):
         self.dimension_id = dimension_id
         self.quantity = quantity
 
+    @staticmethod
+    def add_new_record(product_id, dimension_id, quantity):
+        ps = ProductStock(product_id, dimension_id, quantity)
+        db_session.add(ps)
+        db_session.commit()
 
     def __str__(self):
         return "CData  '%s, %s, %s'" % (self.product_id, self.dimension_id, self.quantity)
@@ -46,3 +51,16 @@ class ProductStock(Base):
             productStock = ProductStock(i.id, dimension_id, quantity)
             db_session.add(productStock)
             db_session.commit()
+
+    @staticmethod
+    def get_quantity_result(product_id,dimension_id,quantity,check):
+        i=ProductStock.query.filter(and_(ProductStock.product_id == product_id,ProductStock.dimension_id==dimension_id,\
+                                         ProductStock.quantity >= quantity, )).all()
+        if i and check=='check':
+            return True
+        elif i and check =='update':
+            i.quantity = i.quantity-quantity
+            db_session.commit()
+        else:
+            False
+

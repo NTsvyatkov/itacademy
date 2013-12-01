@@ -1,4 +1,5 @@
 from models.product_dao import Product, Dimension
+from models.product_stock_dao import ProductStock
 from validation import ValidationException, NotFoundException
 import re
 
@@ -31,6 +32,9 @@ def validate_dimension_id(id):
     if not Dimension.get_dimension(id):
         raise NotFoundException("Unable to find dimension with given id")
 
+def validate_quantity(product_id,dimension_id,quantity,check):
+    if not ProductStock.get_quantity_result(product_id,dimension_id,quantity,check):
+        raise ValidationException("Sorry but quantity on the stock less then you want.")
 
 def list_products():
     p_list = Product.get_all_products()

@@ -30,7 +30,7 @@ def products():
 
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
 def amountProducts(id):
-    user_id = session['id']
+    user_id = session['user_id']
     json = request.get_json()
     addOrderWithStatusCart(user_id)
     addProductToCartStatus(user_id,id,json)
