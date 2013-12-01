@@ -85,9 +85,6 @@
 
   function delete_id(id,tr_id)
   {
-  if (id=='') id=0;
-   form_value = {id : id};
-   json_value = JSON.stringify(form_value);
    $.ajax({
        dataType: "json",
         url: '/api/user/'+id,
@@ -99,7 +96,7 @@
                         if (json.message == 'success')
                          {
                           alert('The user has been successfully deleted');
-                          clearing_tr(tr_id);
+                          deleting_grid();
                           create_entity();
                          }
                         else
@@ -119,12 +116,13 @@
 
            deleting_grid()
            creat_grid(json.users.length)
-          
+
             for (var user_k in json.users)
                 {
                  k++;
 
-                 tr[k].cells[0].innerHTML = json.users[user_k].login;
+                 tr[k].cells[0].innerHTML = json.users[user_k].login +
+                         '<input class="hidden_id" hidden="true" value ='+json.users[user_k].id+'>';
                  tr[k].cells[1].innerHTML = json.users[user_k].first_name;
                  tr[k].cells[2].innerHTML = json.users[user_k].last_name;
                  tr[k].cells[3].innerHTML = json.users[user_k].role_id;
@@ -140,11 +138,14 @@
                                       }
                  tr[k].cells[7].onclick= function delete_tr2()
                                       {
-                                        var str = tr[this.abbr].cells[1].innerHTML
-                                        var id_tr = tr[this.abbr].cells[0].innerHTML
-                                        if (confirm('Are you sure you want to delete user '+ str +' '+id_tr+'?'))
+
+
+                                        if (confirm('Are you sure you want to delete user ?'))
                                         {
-                                          delete_id(id_tr,this.abbr)
+                                            var tr1= $(this).closest('tr');
+                                           var id_h = tr1.children('td').children('.hidden_id').val();
+                                            alert(id_h 'deleted')
+                                          delete_id(id_h,this.abbr)
                                         }
                                        }
                 }
