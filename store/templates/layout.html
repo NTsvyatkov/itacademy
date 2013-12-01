@@ -54,6 +54,13 @@
      </a>
  </li>
  <li>
+     <a href="users" title="Users"
+     {% if request.environ.PATH_INFO.strip('/') =='users'%}class="active"{% endif %}>
+     Users
+     </a>
+ </li>
+
+ <li>
      <a href="product_grid" title="product_grid"
         {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
      Products

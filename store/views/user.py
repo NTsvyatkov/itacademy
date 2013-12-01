@@ -20,6 +20,11 @@ def search_user():
 def usergrid():
         return render_template('search_user.html',)
 
+@app.route('/users')
+def users_list():
+        return render_template('users.html',)
+
+
 
 @app.route('/api/user', methods = ['GET'])
 def users():
@@ -45,6 +50,19 @@ def users_page(page):
                           'region_id': RegionDao.getRegionByID(i.region_id).name})
     return make_response(jsonify(users=users_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
+@app.route('/api/users', methods=['GET'])
+def user_pager():
+    records_per_page = int(request.args.get('table_size'))
+    page = int(request.args.get('page'))
+    users, records_amount = UserDao.pagerByFilterUsers(page, records_per_page)
+    users_arr = []
+    for i in users:
+        users_arr.append({'id':i.id,'login': i.login, 'first_name': i.first_name, 'last_name': i.last_name,
+                          'role_id': RoleDao.getRoleByID(i.role_id).name, 'email': i.email,
+                          'region_id': RegionDao.getRegionByID(i.region_id).name})
+    return make_response(jsonify(users=users_arr, records_amount=records_amount,
+                                 records_per_page=records_per_page), 200)
+
 
 
 @app.route('/api/user/<int:id>', methods = ['GET'])
