@@ -2,7 +2,7 @@ from flask import jsonify, render_template, request, make_response, redirect, ur
 from models.product_dao import Product, Dimension
 from flask_bootstrap import app
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product,\
-    update_product, get_product_by_id
+    update_product, get_product_by_id, validate_quantity
 from models.product_stock_dao import ProductStock
 
 

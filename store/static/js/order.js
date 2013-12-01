@@ -39,7 +39,6 @@ $(document).ready(function() {
     var tr = [];
     var page = 1;
     var error_list =[];
-    var quantity_arr=[];
     var table_grid = document.getElementById('grid');
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
@@ -125,14 +124,6 @@ $(document).ready(function() {
                       if (json.message == 'success')
                         {
                           alert('The product has been successfully deleted from the cart');
-                          for(i=0; i<quantity_arr.length;i++)
-                          {
-                           if ((quantity_arr[i].product_id ==product_id) &&
-                                                       (quantity_arr[i].dimension_id == dimension_id))
-                            {
-                              quantity_arr[i].quantity=0;
-                            }
-                          }
                            /* checking that grid is not empty*/
                           if (grid_length==1)
                            {
@@ -165,21 +156,9 @@ $(document).ready(function() {
            var amount=0;
            var input;
            var tr;
-           if (quantity_arr.length == 0)
-           {
-              quantity_arr=json.quantity_arr;
-           }
            /*Create table with new order_products list */
             for (var product_k in json.order)
                {
-                 for(i=0; i<quantity_arr.length;i++)
-                 {
-                   if ((quantity_arr[i].product_id ==json.order[product_k].id) &&
-                       (quantity_arr[i].dimension_id == json.order[product_k].dimension_id))
-                     {
-                       json.order[product_k].quantity=quantity_arr[i].quantity
-                     }
-                 }
                  k++;
                  tr=table_grid.rows[k];
                  order_id=json.order[product_k].order_id;
@@ -234,15 +213,9 @@ $(document).ready(function() {
                      sum = +price*+quantity;
                      tr.children('td').children('.amount').text(sum.toFixed(2));
                      $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
-                       for(i=0; i<quantity_arr.length;i++){
-                           if ((quantity_arr[i].product_id ==product_id) &&
-                               (quantity_arr[i].dimension_id == dimension_id))
-                           {
-                              quantity_arr[i].quantity=quantity;
-                           }
-                          }
                        json_value = JSON.stringify({'quantity':quantity,'product_id':product_id,
-                                                   'dimension_id':dimension_id});
+                                                   'dimension_id':dimension_id, 'price':price,
+                                                   'order_id' :order_id });
                        update_quantity(json_value);
                      }
                 })

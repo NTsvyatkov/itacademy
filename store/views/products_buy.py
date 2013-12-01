@@ -4,7 +4,7 @@ from business_logic.product_manager import list_dimensions
 from flask_bootstrap import app
 from business_logic.order_manager import addOrderWithStatusCart, addProductToCartStatus
 from models.product_dao import Product
-
+from business_logic.product_manager import validate_quantity
 
 @app.route('/product_buy', methods=('GET', 'POST'))
 def productBuy():
@@ -32,6 +32,7 @@ def products():
 def amountProducts(id):
     user_id = session['user_id']
     json = request.get_json()
+    validate_quantity(id,json['status'],json['value'],'check')
     addOrderWithStatusCart(user_id)
     addProductToCartStatus(user_id,id,json)
     return make_response(jsonify({'message':'success'}),200)

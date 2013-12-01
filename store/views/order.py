@@ -1,5 +1,6 @@
 from flask import jsonify, render_template, request, make_response, session, json
-from models.order_dao import product_order_update
+from models.order_dao import OrderProduct
+from business_logic.order_product import product_order_update
 from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
@@ -24,7 +25,6 @@ def order():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
     order_arr = []
-    quantity_arr =[]
     if 'user_id' in session:
         order_list,count = order_product_grid(session['user_id'],page, records_per_page)
         quantity_list = order_product_grid(session['user_id'])
@@ -35,10 +35,7 @@ def order():
         order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': i.Product.price,\
          'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
          'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id })
-    for i in quantity_list:
-        quantity_arr.append({'product_id': i.Product.id,'quantity':i.OrderProduct.quantity,
-                             'dimension_id':i.OrderProduct.dimension.id,'page':0})
-    return make_response(jsonify(order=order_arr,quantity_arr=quantity_arr,records_amount=count,\
+    return make_response(jsonify(order=order_arr,records_amount=count,\
                                  records_per_page=records_per_page), 200)
 
 
@@ -59,9 +56,8 @@ def order_post():
 @app.route('/api/update/', methods=['PUT'])
 def quantity_post():
     js = request.get_json()
-    print 111
     validate_quantity(js['product_id'],js['dimension_id'],js['quantity'],'check');
-    print 222
+    OrderProduct.update_order_product(js['order_id'],js['product_id'],js['dimension_id'], js['quantity'],js['price'])
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 

@@ -7,6 +7,7 @@ from models.role_dao import RoleDao
 from datetime import date
 
 
+
 class Order(Base):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -268,7 +269,6 @@ class OrderProduct(Base):
 
 
 
-
 def order_product_grid(user_id, page=None, records_per_page=None):
     query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
             filter(and_(Order.user_id==user_id ,Order.status_id == 3 ))
@@ -280,28 +280,4 @@ def order_product_grid(user_id, page=None, records_per_page=None):
     else:
         return query.all()
 
-def product_order_update(dict):
-    order_id=int(dict['order_id'])
-    amount=0
-    get_order = Order.get_order(order_id)
-    for i in dict['product_quantity']:
-        comment=dict['comment']
-        delivery_type=int(dict['delivery_type'])
-        dimension=int(i['dimension_id'])
-        delivery_address=dict['delivery_address']
-        product_id=int(i['product_id'])
-        quantity=int(i['quantity'])
-        price = Product.get_product(product_id).price
-        amount= amount + price*quantity
-        total_price = price*quantity
-        order_product= OrderProduct.get_order_product(order_id,product_id,dimension)
-        order_product.quantity=quantity
-        order_product.total_price=total_price
-        db_session.commit()
-    get_order.status_id = 1
-    get_order.delivery_id = delivery_type
-    get_order.total_price = amount
-    get_order.delivery_address = delivery_address
-    get_order.comment = comment
-    db_session.commit()
 

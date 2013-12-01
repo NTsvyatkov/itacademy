@@ -34,7 +34,7 @@ def validate_dimension_id(id):
 
 def validate_quantity(product_id,dimension_id,quantity,check):
     if not ProductStock.get_quantity_result(product_id,dimension_id,quantity,check):
-        raise ValidationException("Sorry but quantity on the stock less then you want.")
+        raise ValidationException("Sorry, there are no such quantity with this dimension in the stock .")
 
 def list_products():
     p_list = Product.get_all_products()

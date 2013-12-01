@@ -67,12 +67,13 @@ class ProductStock(Base):
     @staticmethod
     def get_quantity_result(product_id,dimension_id,quantity,check):
         i=ProductStock.query.filter(and_(ProductStock.product_id == product_id,ProductStock.dimension_id==dimension_id,\
-                                         ProductStock.quantity >= quantity, )).all()
+                                         ProductStock.quantity >= quantity, )).first()
         if i and check=='check':
             return True
         elif i and check =='update':
             i.quantity = i.quantity-quantity
             db_session.commit()
+            return True
         else:
             False
 
