@@ -112,3 +112,11 @@ class UserDao(Base):
         if user is not None:
             result = True
         return result
+
+    @staticmethod
+    def pagerByFilterUsers(page=None, records_per_page=None):
+        query = UserDao.query
+        stop = page * records_per_page
+        start = stop - records_per_page
+        return query.order_by(UserDao.id).slice(start, stop), \
+            query.count()

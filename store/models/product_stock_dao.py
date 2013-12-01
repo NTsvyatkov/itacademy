@@ -77,7 +77,7 @@ class ProductStock(Base):
         else:
             False
 
-
+    @staticmethod
     def getStockByProduct(product_id):
         return ProductStock.query.filter(ProductStock.product_id == product_id).all()
 

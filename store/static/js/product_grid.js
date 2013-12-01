@@ -106,9 +106,11 @@ $(document).ready(function() {
                   var tr= $(this).closest('tr');
                   var product_id = this.alt;
                   var product_name=tr.children('td').children('.name').text();
-                  alert('Edit '+ product_name +' ?');
+                  if(confirm('Edit '+ product_name +' ?')){
+                    document.location.href = 'product_edit';
+                  }
                    }
-                 )
+                 );
 
             /*---------------------End creating table------------------------------------*/
 
