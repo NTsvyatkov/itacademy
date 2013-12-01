@@ -83,7 +83,12 @@ $(document).ready(function() {
               window.location.replace("/my_orders");
               ajax_pull('GET','data');
               }
-         }
+         },
+         error: function(e)
+          {
+            error = JSON.parse(e.responseText);
+             alert(error.message);
+          }
       })
    }
 /*------------------------------------------*/
