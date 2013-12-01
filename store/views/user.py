@@ -1,5 +1,4 @@
 
-
 from flask import Flask, jsonify, render_template, request, make_response
 from models.user_dao import UserDao, RoleDao, RegionDao
 from models import db_session
@@ -41,7 +40,7 @@ def users_page(page):
     records_amount = len(all_rec)
     users_arr = []
     for i in prods:
-        users_arr.append({'login': i.login, 'first_name': i.first_name, 'last_name': i.last_name,
+        users_arr.append({'id':i.id,'login': i.login, 'first_name': i.first_name, 'last_name': i.last_name,
                           'role_id': RoleDao.getRoleByID(i.role_id).name, 'email': i.email,
                           'region_id': RegionDao.getRegionByID(i.region_id).name})
     return make_response(jsonify(users=users_arr, records_amount=records_amount,
@@ -55,7 +54,7 @@ def users_id(id):
     resp = make_response(jsonify(users=user),200)
     return resp
 
-@app.route('/api/user/<int:id>', methods=['DELETE'])
+@app.route('/api/user/<int:user_id>', methods=['DELETE'])
 def users_id_delete(user_id):
     deleteUser(user_id)
     resp = make_response(jsonify({'message':'success'}),200)
