@@ -11,6 +11,7 @@
     <script src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/current_orders.js') }}"></script>
 
     <!-- It's file is jQuery library -->
     <script type="text/javascript" src="/static/js/jquery.js"></script>
@@ -83,8 +84,8 @@
      </a>
  </li>
      <li>
-     <a href="current_orders" title="current_orders"
-         {% if request.environ.PATH_INFO.strip('/') =='current_orders'%}class="active"{% endif %}>
+     <a href="current_order2" title="current_order2"
+         {% if request.environ.PATH_INFO.strip('/') =='current_order2'%}class="active"{% endif %}>
      Current orders
      </a>
      </li>

@@ -43,19 +43,6 @@ var result_price = price.match(regV_price);
 
     }
 
-var id =   document.form.id.value;
-
-        if (id == ""){
-        $(".error_id").html("'You must select a dimension'").css({'color':'red'});
-                $(".id").toggleClass("errorList2");
-                $(".id").click(function(){
-
-                $(".error_id").html("");
-                $(".id").removeClass("errorList2")
-
-                });
-            return false;
-    }
 
 
 
@@ -66,28 +53,15 @@ var id =   document.form.id.value;
         data:JSON.stringify({
                 name:$('input[name="product_name"]').val(),
                 description: $('textarea[name="description"]').val(),
-                price: $('input[name="price"]').val(),
-                id: $('select[name="id"]').val()
+                price: $('input[name="price"]').val()
                }),
-        contentType: 'application/json;',
+                contentType: 'application/json;',
+                success : function (resp){
+                            alert('The product has been successfully added')
+                }
+    });  }
 
 
-        success: function(data){
-
-      var view =   $("#result").text(data.result);
-      var view = data.length,
-        element = null;
-            for (var i = 0; i < view; i++) {
-        element = arr[i];
-
-}
-
-
-                                }
-                     });
-
-
-}
 
 
 

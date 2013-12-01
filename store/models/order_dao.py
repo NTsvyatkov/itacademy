@@ -95,6 +95,18 @@ class Order(Base):
         ord_up.comment = new_comment
 
         db_session.commit()
+    @staticmethod
+    def update_current_order(id,new_status_id, new_delivery_id,
+                     new_delivery_address, new_comment):
+        ord_up = Order.get_order(id)
+        ord_up.status_id = new_status_id
+        ord_up.delivery_id = new_delivery_id
+        ord_up.delivery_address = new_delivery_address
+        ord_up.comment = new_comment
+
+        db_session.commit()
+
+
 
 
     @staticmethod

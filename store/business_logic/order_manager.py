@@ -46,9 +46,7 @@ def addProductToCartStatus(user_id, id, json):
     else:
         OrderProduct.add_order_product(order.id, id,json['status'], json['value'])
 
-def update_orders(id, new_user_id, new_date, new_status_id, new_delivery_id,
-                     new_total_price, new_preferable_delivery_date, new_delivery_date,
-                     new_gift, new_delivery_address, new_comment):
-    Order.update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
-                     new_total_price, new_preferable_delivery_date, new_delivery_date,
-                     new_gift, new_delivery_address, new_comment)
+def update_orders(id, status_id, delivery_id,
+                  delivery_address, comment):
+    Order.update_current_order(id, status_id, delivery_id,
+                  delivery_address, comment)

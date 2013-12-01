@@ -1,7 +1,7 @@
 from flask import render_template, request, make_response, jsonify, session
 from flask_bootstrap import app
 from maintenance.pager_order import Pagination
-from business_logic.order_manager import getListOrder, get_order_by_id, list_status, list_delivery
+from business_logic.order_manager import getListOrder, get_order_by_id, list_status, list_delivery, update_orders
 from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 
 
@@ -10,6 +10,10 @@ from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 @app.route('/current_order2', methods=('GET', 'POST'))
 def current_orders():
         return render_template('current_order2.html',)
+
+@app.route('/update_current_page', methods=('GET', 'POST'))
+def update_current_page():
+        return render_template('update_current_page.html',)
 
 @app.route('/api/status', methods=['GET'])
 def status():
@@ -36,39 +40,6 @@ def delivery():
         delivery_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(delivery=delivery_arr), 200)
 
-#@app.route('/api/order', methods=['GET'])
-#def orders():
-#    orders_list = getListOrder()
-#    orders_arr = []
-#    for i in orders_list:
-#        orders_arr.append({'id': i.id, 'user_id': i.user.last_name, 'status_id': i.status.name})
-#    return make_response(jsonify(orders=orders_arr), 200)
-
-
-#@app.route('/api/order/<int:page>', methods=['GET'])
-#def orders_page(page):
-#    all_rec = Order.getAllOrders()
-#    records_per_page = 5
-#    pagination = Pagination(records_per_page, all_rec, page)
-#    prods = pagination.pager()
-#    records_amount = len(all_rec)
-#    orders_arr = []
-#    for i in prods:
-#        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'amount': '0.00' })
-#    return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
-#                                 records_per_page=records_per_page), 200)
-#@app.route('/api/order2/<int:page>', methods=['GET'])
-#def orders_page2(page):
-#    all_rec = Order.getAllOrders()
-#    records_per_page = 10
-#    pagination = Pagination(records_per_page, all_rec, page)
-#    prods = pagination.pager()
-#    records_amount = len(all_rec)
-#    orders_arr = []
-#    for i in prods:
-#        orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name, 'amount': '0.00' })
-#    return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
-#                                 records_per_page=records_per_page), 200)
 
 
 @app.route('/api/order', methods=['GET'])
@@ -84,6 +55,14 @@ def orders():
         'total_price': i.total_price, 'assignee_id' : i.assignee.role.name if i.assignee else None})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
+
+@app.route('/api/orders', methods = ['PUT'])
+def orders_update():
+    js = request.json
+    update_orders(js['id'],js['status_id'], js['delivery_id'],js['delivery_address'],js['comment'])
+    resp = make_response('', 200)
+    return resp
+
 
 @app.route('/api/order/<int:id>', methods=['GET'])
 def orders_id(id):

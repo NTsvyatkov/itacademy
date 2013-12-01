@@ -8,17 +8,6 @@
         } else {
         return false;
     }};
-    $.ajax({
-            dataType: "json",
-            url: '/api/dimension',
-            type: 'GET',
-            contentType: "application/json",
-            success:function(json) {
-                $.each(json.dimensions, function(i, pr){
-                    $('#id').append('<option value="' + pr.id + '">' + pr.name + '</option>');
-                })
-            }
-        });
 </script>
 
 <style type="text/css">
@@ -50,17 +39,11 @@
          </div>
 
 
-    <h3 class="ProductTitle" >Dimension*</h3>
-        <div class ="id"> <div id="id-wrap">
-        <select class="id" id="id" name="id">
-        <option value="">Select</option>
-        <div style = "height: 10px;"></div>
-        <div class = "error_id"> </div>
-        </select></div></div>
+
             </br></br></br></br></br>
 
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
-    <input type="button" name="cancel" value="Cancel">
+    <input type="button" name="cancel" value="Cancel" onclick="location='http://127.0.0.1:5000/product_grid'" />
     <input type="button" value ="Create" class="button" onclick="return validate_form2()" id ="post_form">
 
     </form>

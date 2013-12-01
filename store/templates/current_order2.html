@@ -1,9 +1,7 @@
 {% extends "layout.html" %}
 {% block body %}
 
-        <script type="text/javascript">
-
-            var tr = [];
+<script>     var tr = [];
 
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
@@ -35,29 +33,6 @@
                         }
 
                 }
-function tableCreate(){
-var body=document.getElementsByTagName('body')[0];
-var tbl=document.createElement('table');
-tbl.style.width='100%';
-tbl.setAttribute('border','1');
-var tbdy=document.createElement('tbody');
-for(var i=0;i<3;i++){
-    var tr=document.createElement('tr');
-    for(var j=0;j<2;j++){
-        if(i==2 && j==1){
-                break
-                 } else {
-        var td=document.createElement('td');
-        td.appendChild(document.createTextNode('\u0020'))
-        i==1&&j==1?td.setAttribute('rowSpan','2'):null;
-        tr.appendChild(td)
-        }
-    }
-    tbdy.appendChild(tr);
-}
-tbl.appendChild(tbdy);
-body.appendChild(tbl)
-}
 
 
             $('#search_button').click(function(){
@@ -82,9 +57,10 @@ body.appendChild(tbl)
                                 tr[k].cells[5].onclick = function edit_order(){
                                 var str = tr[this.abbr].cells[2].innerHTML
                                 var id_tr = tr[this.abbr].cells[0].innerHTML
-                                document.getElementById('order_name').value=str
-                                status=id_tr
-                                document.getElementById('edit_button').style.display='inline'
+                                document.getElementById('order_status').value=str
+                                status_id=id_tr
+                                document.getElementById('edit').style.display='inline'
+;
                                 }
                     }
                     k=0;
@@ -92,16 +68,44 @@ body.appendChild(tbl)
             }
 
               var k=0;
-            form_value = {id : $('#name_form').val(), name : $('#order_name').val()};
+            form_value = {id : $('#name_form').val(), name : $('#orders_name').val()};
             json_value = JSON.stringify(form_value);
 
-            $('#edit_button').click(function(){
-            update();
-             });
 
 
+            $('#edit').click(function(){
+                id=~~status_id
+                var status_id = document.getElementById('order_status').value;
+                var delivery_id = document.getElementById('order_delivery').value;
+                var delivery_address = document.getElementById('order_delivery_address').value;
+                var comment = document.getElementById('order_comment').value;
+                updateOrder(id, status_id, delivery_id, delivery_address, comment);
+            });
+
+            function updateOrder(id, status_id, delivery_id, delivery_address, comment)
+                data = {"id": id,'status_id': status_id, "delivery_id": delivery_id, "delivery_address":delivery_address,"comment": comment};
+                $.ajax({
+                dataType: "json",
+                url: '/api/orders',
+                type: 'PUT',
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success:function(json){
+                    if (json.message == 'success')
+                        {
+                            alert('The product has been successfully added');
+                             document.location.href = 'product_grid';
+                        }
+                    else{
+                        alert (json.message);
+                        }
+                    }
+                });
 
 
+     creat_grid();
+     document.getElementById('form').reset();
+  });
 
 
 
@@ -173,7 +177,7 @@ body.appendChild(tbl)
             $( "#table_size option:selected" ).each(grid_pagination)
             });
 
-            });
+
 
     $.ajax({
             dataType: "json",
@@ -222,9 +226,7 @@ body.appendChild(tbl)
                     $('#delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
                 })
             }
-     });
-
-</script>
+     });</script>
 
 
         <div class="">
@@ -292,37 +294,30 @@ body.appendChild(tbl)
     div { clear:both;position:relative; }
 </style>
 
-    <form id="info" name="form" class = "form" method ="POST" >
-         <h2 class="ProductTitle" >Status</h2>
-         <select class="current_order" id="status" name="status">
-         <option value="">Select status</option>
-         </select>
+    </form><form action="" id="form">
+<fieldset style="width: 300px; height: 100px">
+  <legend>Add/Edit Region</legend>
+         <div id="status_-wrap">
+    <label for="order_status">Status</label>
+    <input type="text" id="order_status" name="name">
 
-         <h2 class="ProductTitle" >Delivery type</h2>
+        <div id="delivery-wrap">
+    <label for="order_delivery">Delyvery type</label>
+    <input type="text" id="order_delivery" name="name">
 
-         <select class="current_order" id="delivery" name="delivery">
-         <option value="">Select delivery type</option>
-         </select></br></br>
+        <div id="delivery_address-wrap">
+    <label for="order_delivery_address">address</label>
+    <input type="text" id="order_delivery_address" name="name">
 
-
-         <div class ="delivery_address">
-         <label for="delivery_address">Delivery Address</label>
-               <input id="delivery_address" name="delivery_address" type="text" value="" >
-         </div>
-         </div></br>
-
-                 <div class ="comments">
-         <label for="comments">Comments</label>
-               <textarea class="comments_area" id="comments" name="comments" type="text" value="" ></textarea>
-         </div>
-         </div>
+            <div id="comment-wrap">
+    <label for="order_comment">address</label>
+    <input type="text" id="order_comment" name="name">
 
 
-    </br></br>
+    <p><input type="button" value="Update" id="edit"></p>
+</div>
+</fieldset>
 
-         <input type="button" value ="Update" class="button">
-
-    </form>
 
 {% endblock body %}
 
