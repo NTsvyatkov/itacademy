@@ -166,7 +166,18 @@ input[name="zip"] {
  width:150px;
  }
 
+#pagination input[type="button"].button_disable{
+    cursor: auto;
+    /*border:none;*/
 
+}
+
+#pagination input[type="button"]:hover.button_disable,
+#pagination input[type="button"]:focus.button_disable{
+    border-color:#999;
+    background: linear-gradient(to bottom, #E2E2E2 0%, #DBDBDB 50%, #D1D1D1 51%, #FEFEFE 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    margin: 0;
+}
 
 input[type="button"], input[type="submit"], input[type="reset"]  {
  cursor:pointer;
