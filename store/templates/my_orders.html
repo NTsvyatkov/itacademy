@@ -20,7 +20,7 @@
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
                             if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=3; j++)
+                            for (var j=0; j<=4; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
@@ -31,7 +31,7 @@
 
             function clearingTr(i)
                 {
-                    for (var j=0; j<=3; j++)
+                    for (var j=0; j<=4; j++)
                         {
                             tr[i].cells[j].innerHTML='';
                         }
@@ -62,14 +62,15 @@
                 for (var order_k in json.orders)
                     {
                         k++;
-                        tr[k].cells[0].innerHTML = json.orders[order_k].date;
-                        tr[k].cells[1].innerHTML = json.orders[order_k].orderStatus;
-                        tr[k].cells[2].innerHTML = "$ "+json.orders[order_k].amount;
-                        tr[k].cells[3].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
-                        tr[k].cells[3].abbr=k;
-                        tr[k].cells[3].onclick= function()
+                        tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
+                        tr[k].cells[1].innerHTML = json.orders[order_k].date;
+                        tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
+                        tr[k].cells[3].innerHTML = "$ "+json.orders[order_k].amount;
+                        tr[k].cells[4].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
+                        tr[k].cells[4].abbr=k;
+                        tr[k].cells[4].onclick= function()
                             {
-                                alert('Details')
+                                window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
                             }
                     }
                     k=0;
@@ -167,6 +168,9 @@
             <div id=" ">
                 <table id='grid' class="grid">
                     <tr>
+                        <th>
+                            Id
+                        </th>
                         <th>
                             Date
                         </th>

@@ -1,6 +1,6 @@
 from flask import jsonify, render_template, request, make_response, session, json
-from models.order_dao import OrderProduct
 from business_logic.order_product import product_order_update
+from models.order_dao import product_order_update,  OrderProduct
 from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
@@ -63,4 +63,29 @@ def quantity_post():
     OrderProduct.update_order_product(js['order_id'],js['product_id'],js['dimension_id'], js['quantity'],js['price'])
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
+
+@app.route('/order/<int:id>', methods=['GET'])
+def order_details(id):
+    return render_template('order_details.html')
+
+@app.route('/api/orders/<int:id>', methods=['GET'])
+def list_orders_id(id):
+    all_in_order = OrderProduct.get_by_product(id)
+    products = []
+    for i in all_in_order:
+        products.append({'product_id': i.product_id, 'product_name': i.product.name,
+                        'product_description': i.product.description, 'product_quantity': i.quantity,
+                        'product_dimension': i.dimension.name, 'product_price': str(i.product.price)})
+
+    order = {'order_id': all_in_order[0].order_id, 'user_name': all_in_order[0].order.user.login,
+             'date': str(all_in_order[0].order.date), 'order_status': all_in_order[0].order.status.name,
+             'delivery': all_in_order[0].order.delivery.name,
+             'assignee': all_in_order[0].order.assignee.login if all_in_order[0].order.assignee else None,
+             #'total_price': all_in_order.order.total_price,
+             'preferable_delivery_date': str(all_in_order[0].order.preferable_delivery_date),
+             'delivery_date': str(all_in_order[0].order.delivery_date),
+             'gift': all_in_order[0].order.gift, 'delivery_address': all_in_order[0].order.delivery_address,
+             'comments': all_in_order[0].order.comment, 'products': products}
+    return make_response(jsonify(orders=order), 200)
+
 
