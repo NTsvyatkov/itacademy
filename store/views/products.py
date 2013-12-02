@@ -91,7 +91,7 @@ def stockList():
         productStockList.append({'dimension': Dimension.get_dimension(i.dimension_id).name, 'quantity': i.quantity,
                                  'dimension_id': i.dimension_id})
     product = ({"name": Product.get_product(1).name, "description": Product.get_product(1).description,
-                "price": Product.get_product(1).price})
+                "price": str(Product.get_product(1).price)})
     return make_response(jsonify(productStock=productStockList, product=product), 200)
 
 

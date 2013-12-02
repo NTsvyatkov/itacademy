@@ -12,7 +12,6 @@ class Order(Base):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user.id'))
-    #user = relationship('UserDao', backref=backref('order', lazy='dynamic'), foreign_keys=[user_id])
     user = relationship('UserDao', foreign_keys=user_id)
     date = Column(DATE, default=date.today())
     status_id = Column(Integer, ForeignKey('order_status.id'))
@@ -115,7 +114,7 @@ class Order(Base):
 
     @staticmethod
     def pagerByFilter(user_id=None, page=None, records_per_page=None):
-        query = Order.query.filter(Order.user_id == user_id)
+        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
         stop = page * records_per_page
         start = stop - records_per_page
         return query.order_by(Order.id).slice(start, stop), \
@@ -228,8 +227,6 @@ class OrderProduct(Base):
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
     price = Column(DECIMAL, nullable=True)
-    #price_id = Column(Integer,ForeignKey('products.price'), nullable=True)
-    #price = relationship('Product', backref=backref('order_product', lazy='dynamic'))
 
 
     def __init__(self, order_id, product_id, dimension_id, quantity, price):
@@ -276,7 +273,7 @@ class OrderProduct(Base):
     @staticmethod
     def updateSumQuantity(order_id, product_id, dimension_id, new_quantity):
         order_product_up = OrderProduct.get_order_product(order_id, product_id, dimension_id)
-        order_product_up.quantity = new_quantity
+        order_product_up.quantity = int(order_product_up.quantity) + int(new_quantity)
         db_session.commit()
 
 
