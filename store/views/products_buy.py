@@ -20,7 +20,7 @@ def products():
     prods, records_amount = Product.pagerByFilter(name, start_price, end_price, page, records_per_page)
     products_arr = []
     for i in prods:
-        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description})
+        products_arr.append({'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description})
     status_list = list_dimensions()
     status_arr = []
     for i in status_list:

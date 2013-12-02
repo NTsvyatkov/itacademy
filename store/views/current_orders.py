@@ -52,7 +52,7 @@ def orders():
     orders_arr = []
     for i in orders:
         orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name,
-        'total_price': i.total_price, 'assignee_id' : i.assignee.role.name if i.assignee else None})
+        'total_price': str(i.total_price), 'assignee_id' : i.assignee.role.name if i.assignee else None})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 

@@ -39,7 +39,7 @@ def products_page():
     all_rec, count = Product.filter_product_grid(filter_dict, page, records_per_page)
     products_arr = []
     for i in all_rec:
-        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description,
+        products_arr.append({'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description,
                              })
     return make_response(jsonify(products=products_arr, records_amount=count,
                                  records_per_page=records_per_page), 200)
@@ -48,7 +48,7 @@ def products_page():
 @app.route('/api/product/<int:id>', methods=['GET'])
 def products_id(id):
     i = get_product_by_id(request.get['id'])
-    product = {'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description, 'dimension': i.dimension}
+    product = {'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description, 'dimension': i.dimension}
     resp = make_response(jsonify(products=product), 200)
     return resp
 
