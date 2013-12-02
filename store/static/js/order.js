@@ -40,6 +40,7 @@ $(document).ready(function() {
     var page = 1;
     var error_list =[];
     var table_grid = document.getElementById('grid');
+    var total_price;
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
 
@@ -95,7 +96,7 @@ $(document).ready(function() {
  ajax_pull('GET','data');
 
  /*-------------Update quantity in row------------------*/
- function update_quantity(json_data,object_quantity,object_amount,old_quantity,price,quantity){
+ function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr){
        $.ajax({
         dataType: "json",
         url: '/api/update/',
@@ -105,8 +106,10 @@ $(document).ready(function() {
         success: function(json)
           {
              var sum = +price*+quantity;
-             object_amount.text(sum.toFixed(2));
-             $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
+             tr.children('td').children('.amount').text(sum.toFixed(2));
+             tr.children('td').children('.old_quantity').val(quantity);
+             total_amount= total_price-(+old_quantity*+price)+(+quantity*+price)
+             $('#total_amount').text('Total amount: ' + total_amount.toFixed(2)+'$');
           },
 
         error: function(e)
@@ -164,6 +167,7 @@ $(document).ready(function() {
            var amount=0;
            var input;
            var tr;
+           total_price=json.total_price
            /*Create table with new order_products list */
             for (var product_k in json.order)
                {
@@ -192,7 +196,7 @@ $(document).ready(function() {
                  tr.cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
-                $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
+                $('#total_amount').text('Total amount: ' + total_price.toFixed(2)+'$');
             /*--------------------------------End creating table------------------------------------*/
 
                 $('.delete_img').click(function(){
@@ -225,7 +229,7 @@ $(document).ready(function() {
                        json_value = JSON.stringify({'quantity':quantity,'product_id':product_id,
                                                    'dimension_id':dimension_id, 'price':price,
                                                    'order_id' :order_id });
-                       update_quantity(json_value,object_quantity,object_amount,old_quantity,price,quantity);
+                       update_quantity(json_value,object_quantity,old_quantity,price,quantity,tr);
                      }
                 })
 

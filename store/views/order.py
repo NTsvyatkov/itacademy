@@ -31,12 +31,15 @@ def order():
     else:
         order_list,count = order_product_grid(4,page, records_per_page)
         quantity_list = order_product_grid(4)
+    total_price=0;
+    for j in quantity_list:
+        total_price=total_price + j.Product.price*j.OrderProduct.quantity
     for i in order_list:
         order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': i.Product.price,\
          'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
          'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id })
     return make_response(jsonify(order=order_arr,records_amount=count,\
-                                 records_per_page=records_per_page), 200)
+                                 records_per_page=records_per_page, total_price=total_price), 200)
 
 
 @app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])
