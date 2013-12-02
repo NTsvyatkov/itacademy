@@ -98,10 +98,6 @@ class UserDao(Base):
 
     @staticmethod
     def getUserByLogin(userLogin, userPassword):
-        #posts = UserDao.getAllUsers()
-        #for instance in posts:
-        #    if instance.login == userLogin and instance.password == userPassword:
-        #        return UserDao.getUserByID(instance.id)
         return UserDao.query.filter(and_(UserDao.login == userLogin, UserDao.password == userPassword)).first()
 
 

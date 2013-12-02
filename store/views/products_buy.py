@@ -29,7 +29,7 @@ def products():
                                  records_per_page=records_per_page), 200)
 
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
-def amountProducts(id):
+def productsBuy(id):
     user_id = session['user_id']
     json = request.get_json()
     validate_quantity(id,json['status'],json['value'],'check')
