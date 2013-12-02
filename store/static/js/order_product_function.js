@@ -31,27 +31,34 @@
    document.getElementById("page").innerHTML = page;
    document.getElementById("pages_amount").innerHTML = pages_amount;
 
-   if (page==1)
-   {
-      $('#prev').prop('disabled', true);
-      $('#first').prop('disabled', true);
-   }
-   else
-   {
-       $('#prev').prop('disabled', false);
-       $('#first').prop('disabled', false);
-   }
+   if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
+           }
 
-   if (page==pages_amount)
-   {
-     $('#next').prop('disabled', true);
-     $('#last').prop('disabled', true);
-   }
-   else
-   {
-    $('#next').prop('disabled', false);
-    $('#last').prop('disabled', false);
-    }
+           if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
+           }
 
 
 

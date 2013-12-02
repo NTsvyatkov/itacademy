@@ -1,6 +1,6 @@
 from flask import jsonify, render_template, request, make_response, session, json
 from business_logic.order_product import product_order_update
-from models.order_dao import product_order_update,  OrderProduct
+from models.order_dao import OrderProduct
 from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
@@ -35,11 +35,11 @@ def order():
     for j in quantity_list:
         total_price=total_price + j.Product.price*j.OrderProduct.quantity
     for i in order_list:
-        order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': i.Product.price,\
+        order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': str(i.Product.price),\
          'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
          'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id })
     return make_response(jsonify(order=order_arr,records_amount=count,\
-                                 records_per_page=records_per_page, total_price=total_price), 200)
+                                 records_per_page=records_per_page, total_price=str(total_price)), 200)
 
 
 @app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])

@@ -106,10 +106,10 @@ $(document).ready(function() {
         success: function(json)
           {
              var sum = +price*+quantity;
-             tr.children('td').children('.amount').text(sum.toFixed(2));
+             tr.children('td').children('.amount').text(sum);
              tr.children('td').children('.old_quantity').val(quantity);
              total_amount= total_price-(+old_quantity*+price)+(+quantity*+price)
-             $('#total_amount').text('Total amount: ' + total_amount.toFixed(2)+'$');
+             $('#total_amount').text('Total amount: ' + total_amount+'$');
           },
 
         error: function(e)
@@ -182,7 +182,7 @@ $(document).ready(function() {
                          '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">'+
                          '<input class="old_quantity" value="'+json.order[product_k].quantity+'" type="hidden">';
 
-                 tr.cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
+                 tr.cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price+"</span>";
 
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
@@ -191,12 +191,12 @@ $(document).ready(function() {
 
                  tr.cells[4].innerHTML = input;
                  if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
-                 amount= (+json.order[product_k].price * +quant).toFixed(2);
+                 amount= (+json.order[product_k].price * +quant);
                  tr.cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
                  tr.cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
-                $('#total_amount').text('Total amount: ' + total_price.toFixed(2)+'$');
+                $('#total_amount').text('Total amount: ' + total_price+'$');
             /*--------------------------------End creating table------------------------------------*/
 
                 $('.delete_img').click(function(){
