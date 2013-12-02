@@ -95,7 +95,7 @@ $(document).ready(function() {
  ajax_pull('GET','data');
 
  /*-------------Update quantity in row------------------*/
- function update_quantity(json_data){
+ function update_quantity(json_data,object_quantity,object_amount,old_quantity,price,quantity){
        $.ajax({
         dataType: "json",
         url: '/api/update/',
@@ -104,13 +104,16 @@ $(document).ready(function() {
         data:json_data,
         success: function(json)
           {
-             alert(json.message);
+             var sum = +price*+quantity;
+             object_amount.text(sum.toFixed(2));
+             $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
           },
 
         error: function(e)
           {
             error = JSON.parse(e.responseText);
-             alert(error.message);
+            alert(error.message);
+            object_quantity.val(old_quantity);
           }
       })
    }
@@ -172,7 +175,8 @@ $(document).ready(function() {
                  tr.cells[0].innerHTML =product_name;
                  tr.cells[1].innerHTML = json.order[product_k].description;
                  tr.cells[2].innerHTML = json.order[product_k].dimension +
-                         '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">';
+                         '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">'+
+                         '<input class="old_quantity" value="'+json.order[product_k].quantity+'" type="hidden">';
 
                  tr.cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
 
@@ -205,23 +209,23 @@ $(document).ready(function() {
                    var tr= $(this).closest('tr');
                    var price = tr.children('td').children('.price').text();
                    var dimension_id = tr.children('td').children('.dimension').val();
+                   var old_quantity = tr.children('td').children('.old_quantity').val();
                    var product_id=tr.children('td').children('.delete_img').attr('alt');
                    var sum=0;
                    var quantity = Math.round($(this).prev().val());
-                   $(this).prev().val(quantity);
+                   var object_quantity=$(this).prev();
+                   var object_amount =tr.children('td').children('.amount');
                    if(!(quantity/quantity)||(quantity==0)){  /*Check on numeric */
                       $(this).next('.error_div').empty();
                       $(this).next('.error_div').html('Quantity should be numeric and not 0');
+                      $(this).prev().val(old_quantity);
                      }
                     else{
                      $(this).next('.error_div').empty();
-                     sum = +price*+quantity;
-                     tr.children('td').children('.amount').text(sum.toFixed(2));
-                     $('#total_amount').text('Total amount: ' + get_total_amount().toFixed(2)+'$');
                        json_value = JSON.stringify({'quantity':quantity,'product_id':product_id,
                                                    'dimension_id':dimension_id, 'price':price,
                                                    'order_id' :order_id });
-                       update_quantity(json_value);
+                       update_quantity(json_value,object_quantity,object_amount,old_quantity,price,quantity);
                      }
                 })
 
