@@ -34,8 +34,8 @@ class UserDao(Base):
         self.region_id = region_id
 
     def __str__(self):
-        return "CData  '%s, %s, %s, %s, %s, %s, %s, '" % (self.login,
-        self.first_name, self.last_name, self.password, self.email, self.region_id, self.role_id)
+        return "CData  '%s, %s, %s, %s, %s, %s, %s, '" % (self.login, self.password,
+        self.first_name, self.last_name, self.email, self.region_id, self.role_id)
 
 
     @staticmethod

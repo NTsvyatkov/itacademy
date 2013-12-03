@@ -4,6 +4,7 @@
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
+    <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
 
 
@@ -25,7 +26,7 @@
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
                             if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=7; j++)
+                            for (var j=0; j<=5; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
@@ -60,20 +61,14 @@
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
                         tr[k].cells[3].innerHTML = json.orders[order_k].total_price;
                         tr[k].cells[4].innerHTML = json.orders[order_k].assignee_id;
-                        tr[k].cells[5].innerHTML = json.orders[order_k].delivery_address;
-                        tr[k].cells[6].innerHTML = json.orders[order_k].сomment;
-                        tr[k].cells[7].innerHTML = "<input type='button' value='Edit' id='edit_order'  alt=" + k + ">";
-                        tr[k].cells[7].abbr=k;
-                        tr[k].cells[7].onclick = function edit_order(){
+                        tr[k].cells[5].innerHTML = "<input type='button' value='Edit' id='edit_order'  alt=" + k + ">";
+                        tr[k].cells[5].abbr=k;
+                        tr[k].cells[5].onclick = function edit_order(){
                                         var id_tr = tr[this.abbr].cells[0].innerHTML
-                                        var status = json.orders[order_k].status_id;
-                                        var delivery = json.orders[order_k].delivery_id;
-                                        var delivery_addr = tr[this.abbr].cells[5].innerHTML
-                                        var comm = tr[this.abbr].cells[6].innerHTML
-                                        document.getElementById('order_status').value=status
-                                        document.getElementById('order_delivery').value=delivery
-                                        document.getElementById('order_delivery_address').value=delivery_addr
-                                        document.getElementById('order_comment').value=comm
+                                        document.getElementById('order_status').value=json.orders[id_tr-1].status_id;
+                                        document.getElementById('order_delivery').value=json.orders[id_tr-1].delivery_id;
+                                        document.getElementById('order_delivery_address').value=json.orders[id_tr-1].delivery_address;
+                                        document.getElementById('order_comment').value=json.orders[id_tr-1].comment;
                                         index=id_tr
                                         document.getElementById('edit').style.display='inline'
                                         confirm('Edit order #'+ id_tr +' ?')
@@ -93,37 +88,35 @@
 
 
                $('#edit').click(function(){
-                update();
-               });
+                var id = index;
+                var status_id = document.getElementById('order_status').value;
+                var delivery_id = document.getElementById('order_delivery').value;
+                var delivery_address = document.getElementById('order_delivery_address').value;
+                var comment = document.getElementById('order_comment').value;
+                updateOrder(id,status_id, delivery_id, delivery_address, comment);
+            });
 
-            function update() {
-                    form_value = {status_id : $( status_id = $('#order_status').val()),
-                                  delivery_id : $( delivery_id = $('#order_delivery').val()),
-                                  delivery_address : $( delivery_address = $('#order_delivery_address').val()),
-                                  comment : $( comment = $('#order_comment').val())
-                    }
-                    id=~~index
-                     $.ajax({
-                        dataType: "json",
-                        url: '/api/orders',
-                        type: 'PUT',
-                        data : JSON.stringify({'id': id, 'status_id':status_id, 'delivery_id': delivery_id, 'delivery_address':delivery_address,'comment':comment}),
-                        contentType: "application/json",
-                           success:function(json){
-                             if (json.message == 'success')
-                            {
-                                alert('The region has been successfully added');
-
-                            }
-                            else
-                            alert (json.message);
+            function updateOrder(id, status_id, delivery_id, delivery_address, comment) {
+                data = {"id": id,'status_id': status_id, "delivery_id": delivery_id, "delivery_address":delivery_address, "comment": comment};
+                $.ajax({
+                dataType: "json",
+                url: '/api/orders',
+                type: 'PUT',
+                data: JSON.stringify(data),
+                contentType: "application/json",
+                success:function(json){
+                    if (json.message == 'success')
+                        {
+                            alert('The product has been successfully updated');
+                        }
+                    else{
+                        alert (json.message);
+                        }
                      }
-
+                });
+                    grid_pagination();
+                    document.getElementById('form1').reset();
             }
-                 );
-            grid_pagination();
-                document.getElementById('form1').reset();
-             }
 
 
 
@@ -161,11 +154,13 @@
                 })
             }
 
-            if (page==1){
-                grid_pagination();
-            }
+            if (page==1)
+  {
+  grid_pagination();
+  }
 
-            $('#next').click(function(){
+  /*Pagination buttons events*/
+   $('#next').click(function(){
      if (page*records_per_page>=records_amount){page=page}
      else {page=page+1}
      grid_pagination()
@@ -188,13 +183,14 @@
      page=pages_amount;
      grid_pagination()
     });
+    /*--------------------------*/
 
+  /*Change table size select event*/
     $('#table_size').change(function () {
       page=1;
       count_tr=$('#table_size').val();
-      $( "#table_size option:selected" ).each(grid_pagination)
-     });
-
+      $( "#table_siz option:selected" ).each(grid_pagination())
+     })
 
 
     $.ajax({
@@ -224,7 +220,7 @@
 
     $.ajax({
             dataType: "json",
-            url: '/api/status',
+            url: '/api/stat',
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
@@ -295,12 +291,6 @@
                             Assignee
                         </th>
                         <th>
-                            Delivery address
-                        </th>
-                        <th>
-                            Comments
-                        </th>
-                        <th>
                             Edit
                         </th>
                     </tr>
@@ -320,10 +310,9 @@
 
 <script type="text/javascript">
 function show_form()
-{confirm('Edit order?')
-    var d = document;
+{var d = document;
 var a = d.getElementById('div_form').style.display;
- d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
+d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
 var a = d.getElementById('div_table').style.display;
 d.getElementById('div_table').style.display = (a == 'none')?'block':'none';}
 
@@ -336,7 +325,6 @@ d.getElementById('div_table').style.display = (a == 'none')?'block':'none';}
                 <h2>Edit current page</h2>
                 <label for="order_status">Status</label>
                 <select class="current_order" id="order_status" class="span3">
-                <option value="">Select status</option>
                 </select>
 
 

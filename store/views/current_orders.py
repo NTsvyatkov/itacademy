@@ -3,7 +3,7 @@ from flask_bootstrap import app
 from maintenance.pager_order import Pagination
 from business_logic.order_manager import getListOrder, get_order_by_id, list_status, list_delivery, update_orders
 from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
-
+import sqlalchemy
 
 
 
@@ -20,6 +20,16 @@ def status():
     status_list = list_status()
     status_arr = []
     for i in status_list:
+        status_arr.append({'id': i.id, 'name': i.name})
+    return make_response(jsonify(status=status_arr), 200)
+
+@app.route('/api/status', methods=['GET'])
+def status():
+    status_list = OrderStatus.query
+    stat = status_list[-1]
+    del(status_list[-1])
+    status_arr = []
+    for i in stat:
         status_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(status=status_arr), 200)
 
@@ -52,7 +62,7 @@ def orders():
     orders_arr = []
     for i in orders:
         orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name,
-        'total_price': i.total_price, 'assignee_id' : i.assignee.role.name if i.assignee else None})
+        'total_price': i.total_price, 'assignee_id' : i.assignee.role.name if i.assignee else None, 'delivery_address': i.delivery_address, 'comment': i.comment})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
