@@ -1,6 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
-
+    <link href="{{url_for('static', filename='styles/bootstrap.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
     function confirmDelete() {
         if (confirm("All fields will be cleared. Do you want to continue?")) {
@@ -16,27 +19,30 @@
 
     <form id="info"  name="form"  class = "form" method ="POST"  >
         <div style = "height: 10px;"></div>
-    <h1 class="ProductTitle" >Create Product</h1>
+    <h2>Create Product</h2>
 		 <div class ="product_name"> <div id="product_name-wrap">
 	           <label for="product_name">Name*</label>
-               <input cols="6" id="product_name" name="product_name" type="text" value=""maxlength="100">
+               <input id="product_name" name="name" type="text">
                <div style = "height: 10px; width: 30px;"></div>
                <div class = "error_product_name"></div>
          </div>
          </div>
 
-        <div id="description-wrap">
-        <label for="description">Description</label>
-        <textarea type="text" rows="6" cols="27" name="description" id="description"></textarea>
-        </div></br>
-
-		 <div class ="price"> <div id="price-wrap">
+        <div class ="price"> <div id="price-wrap">
 	           <label for="price">Price*</label>
-               <input id="price" name="price" type="text" value=""maxlength="100">
+               <input id="price" name="price" type="text">
                <div style = "height: 10px;"></div>
                <div class = "error_price"></div>
          </div>
          </div>
+
+
+
+        <div id="description-wrap">
+        <label for="description">Description</label>
+        <textarea type="text" rows="3" name="description" id="description"></textarea>
+        </div></br>
+
 
 
 

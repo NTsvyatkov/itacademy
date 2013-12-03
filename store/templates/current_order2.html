@@ -1,11 +1,19 @@
 {% extends "layout.html" %}
 {% block body %}
+    <link href="{{url_for('static', filename='styles/bootstrap.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
 
-<script>     var tr = [];
+
+
+
+<script>
+        var tr = [];
 
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
-            var count_td=11;
+            var count_td=6;
             var page = 1;
             var table_grid = document.getElementById('grid');
 
@@ -17,7 +25,7 @@
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
                             if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=5; j++)
+                            for (var j=0; j<=7; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
@@ -52,61 +60,70 @@
                         tr[k].cells[2].innerHTML = json.orders[order_k].status_id;
                         tr[k].cells[3].innerHTML = json.orders[order_k].total_price;
                         tr[k].cells[4].innerHTML = json.orders[order_k].assignee_id;
-                        tr[k].cells[5].innerHTML = "<input type='button' value='Edit' id='edit_region'  alt=" + k + ">";
-                        tr[k].cells[5].abbr=k;
-                                tr[k].cells[5].onclick = function edit_order(){
-                                var str = tr[this.abbr].cells[2].innerHTML
-                                var id_tr = tr[this.abbr].cells[0].innerHTML
-                                document.getElementById('order_status').value=str
-                                status_id=id_tr
-                                document.getElementById('edit').style.display='inline'
-;
-                                }
+                        tr[k].cells[5].innerHTML = json.orders[order_k].delivery_address;
+                        tr[k].cells[6].innerHTML = json.orders[order_k].сomment;
+                        tr[k].cells[7].innerHTML = "<input type='button' value='Edit' id='edit_order'  alt=" + k + ">";
+                        tr[k].cells[7].abbr=k;
+                        tr[k].cells[7].onclick = function edit_order(){
+                                        var id_tr = tr[this.abbr].cells[0].innerHTML
+                                        var status = json.orders[order_k].status_id;
+                                        var delivery = json.orders[order_k].delivery_id;
+                                        var delivery_addr = tr[this.abbr].cells[5].innerHTML
+                                        var comm = tr[this.abbr].cells[6].innerHTML
+                                        document.getElementById('order_status').value=status
+                                        document.getElementById('order_delivery').value=delivery
+                                        document.getElementById('order_delivery_address').value=delivery_addr
+                                        document.getElementById('order_comment').value=comm
+                                        index=id_tr
+                                        document.getElementById('edit').style.display='inline'
+                                        confirm('Edit order #'+ id_tr +' ?')
+                                        var d = document;
+                                        var a = d.getElementById('div_form').style.display;
+                                        d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
+                                        var a = d.getElementById('div_table').style.display;
+                                        d.getElementById('div_table').style.display = (a == 'none')?'block':'none';
+
+                        }
                     }
-                    k=0;
-                    /*End creating table*/
+            k=0;
             }
 
-              var k=0;
-            form_value = {id : $('#name_form').val(), name : $('#orders_name').val()};
-            json_value = JSON.stringify(form_value);
+
+            var k=0;
 
 
+               $('#edit').click(function(){
+                update();
+               });
 
-            $('#edit').click(function(){
-                id=~~status_id
-                var status_id = document.getElementById('order_status').value;
-                var delivery_id = document.getElementById('order_delivery').value;
-                var delivery_address = document.getElementById('order_delivery_address').value;
-                var comment = document.getElementById('order_comment').value;
-                updateOrder(id, status_id, delivery_id, delivery_address, comment);
-            });
-
-            function updateOrder(id, status_id, delivery_id, delivery_address, comment)
-                data = {"id": id,'status_id': status_id, "delivery_id": delivery_id, "delivery_address":delivery_address,"comment": comment};
-                $.ajax({
-                dataType: "json",
-                url: '/api/orders',
-                type: 'PUT',
-                data: JSON.stringify(data),
-                contentType: "application/json",
-                success:function(json){
-                    if (json.message == 'success')
-                        {
-                            alert('The product has been successfully added');
-                             document.location.href = 'product_grid';
-                        }
-                    else{
-                        alert (json.message);
-                        }
+            function update() {
+                    form_value = {status_id : $( status_id = $('#order_status').val()),
+                                  delivery_id : $( delivery_id = $('#order_delivery').val()),
+                                  delivery_address : $( delivery_address = $('#order_delivery_address').val()),
+                                  comment : $( comment = $('#order_comment').val())
                     }
-                });
+                    id=~~index
+                     $.ajax({
+                        dataType: "json",
+                        url: '/api/orders',
+                        type: 'PUT',
+                        data : JSON.stringify({'id': id, 'status_id':status_id, 'delivery_id': delivery_id, 'delivery_address':delivery_address,'comment':comment}),
+                        contentType: "application/json",
+                           success:function(json){
+                             if (json.message == 'success')
+                            {
+                                alert('The region has been successfully added');
 
+                            }
+                            else
+                            alert (json.message);
+                     }
 
-     creat_grid();
-     document.getElementById('form').reset();
-  });
-
+            }
+                 );
+            grid_pagination();
+                document.getElementById('form1').reset();
+             }
 
 
 
@@ -128,15 +145,15 @@
                         document.getElementById("pages_amount").innerHTML = pages_amount
 
                         if (page==1){
-                            $('#prev').css({ "opacity":"0.9"});
-                            $('#first').css({ "opacity":"0.9"});
+                            $('#prev').css({ "opacity":"0.4"});
+                            $('#first').css({ "opacity":"0.4"});
                         } else {$('#prev').css({ "opacity": "1"});
                             $('#first').css({ "opacity": "1"});
                         }
 
                         if (page==pages_amount){
-                            $('#next').css({ "opacity": "0.9"});
-                            $('#last').css({ "opacity": "0.9"});
+                            $('#next').css({ "opacity": "0.4"});
+                            $('#last').css({ "opacity": "0.4"});
                         } else {$('#next').css({ "opacity": "1"});
                             $('#last').css({ "opacity": "1"});
                         }
@@ -149,33 +166,34 @@
             }
 
             $('#next').click(function(){
-            if (page*records_per_page>=records_amount){page=page}
-            else {page=page+1}
-            grid_pagination()
-            });
+     if (page*records_per_page>=records_amount){page=page}
+     else {page=page+1}
+     grid_pagination()
+    });
 
-            $('#prev').click(function(){
-            page=page-1;
-            if (page<=1){
-            page=1;
-            }
-            grid_pagination()
-            });
+    $('#prev').click(function(){
+     page=page-1;
+        if (page<=1){
+        page=1;
+        }
+     grid_pagination()
+    });
 
-            $('#first').click(function(){
-            page=1;
-            grid_pagination()
-            });
+    $('#first').click(function(){
+     page=1;
+     grid_pagination()
+    });
 
-            $('#last').click(function(){
-            page=pages_amount;
-            grid_pagination()
-            });
+    $('#last').click(function(){
+     page=pages_amount;
+     grid_pagination()
+    });
 
-            $('#table_size').change(function () {
-            count_tr=$('#table_size').val();
-            $( "#table_size option:selected" ).each(grid_pagination)
-            });
+    $('#table_size').change(function () {
+      page=1;
+      count_tr=$('#table_size').val();
+      $( "#table_size option:selected" ).each(grid_pagination)
+     });
 
 
 
@@ -211,7 +229,7 @@
             contentType: "application/json",
             success:function(json) {
                 $.each(json.status, function(i, pr){
-                    $('#status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                    $('#order_status').append('<option value="' + pr.id + '">' + pr.name + '</option>');
                 })
             }
     });
@@ -223,41 +241,42 @@
             contentType: "application/json",
             success:function(json) {
                 $.each(json.delivery, function(k, j){
-                    $('#delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
+                    $('#order_delivery').append('<option value="' + j.id + '">' + j.name + '</option>');
                 })
             }
-     });</script>
+     })
+     });
 
-
-        <div class="">
-            <div class="">
-                <div class=" ">
-                    <form class="form" action=" " >
-                        <h2 class="ProductTitle" >Status</h2>
-                        <select class="current_order" id="status_id" name="status">
+</script>
+<div id="div_table" style="display:true" >
+                        <form style="align: center" class="form">
+                        <h2>Filter</h2>
+                        <fieldset>
+                        <label for="status_id">Status</label>
+                        <select id="status_id" multiple="multiple">
                         <option value="">Select status</option>
                         </select>
 
-                        <h2 class="ProductTitle" >Assignee</h2>
+                        <label for="order_delivery">Delivery type</label>
+                        <select id="assignee_id" multiple="multiple">
+                        <option value="">Select delivery type</option>
+                        </select></fieldset>
+                        <fieldset><span><input type="button"  value="Search" id='search_button'></span></fieldset>
+                        </form>
 
-                        <select class="current_order" id="assignee_id" name="delivery">
-                        <option value="">Select assignee</option>
-                        </select></br></br>
-                        <span><input type="button" value="search" id='search_button'></span>
-                    </form>
-                </div>
-            </div>
+
 
             <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
-                  <select id="table_size">
-                    <option selected>10</option>
+                  <select id="table_size" class="span1">
+                    <option selected>5</option>
                     <option>25</option>
                    </select>
             </div>
             <div style="margin-left:80%;">
             </div>
             <div id=" ">
+
                 <table id='grid' class="grid">
                     <tr>
                         <th>
@@ -276,47 +295,71 @@
                             Assignee
                         </th>
                         <th>
+                            Delivery address
+                        </th>
+                        <th>
+                            Comments
+                        </th>
+                        <th>
                             Edit
                         </th>
                     </tr>
                 </table>
 
-
             <div id="pagination" style="text-align: center">
-                <input type="button" id="first" value="First">&nbsp
-                <input type="button" id="prev" value="Prev">&nbsp
+              <span id="first_span">
+              <input type="button" id="first" value="First">&nbsp
+              <input type="button" id="prev" value="Prev">&nbsp
+              </span>
 
-                <input type="button" id="next" value="Next">&nbsp
-                <input type="button" id="last" value="Last">
-                <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
-            </div></div></div>
-<style type="text/css">
-    div { clear:both;position:relative; }
-</style>
+              <input type="button" id="next" value="Next">&nbsp
+              <input type="button" id="last" value="Last">
+              <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
 
-    </form><form action="" id="form">
-<fieldset style="width: 300px; height: 100px">
-  <legend>Add/Edit Region</legend>
-         <div id="status_-wrap">
-    <label for="order_status">Status</label>
-    <input type="text" id="order_status" name="name">
+          </div></div></div>
 
-        <div id="delivery-wrap">
-    <label for="order_delivery">Delyvery type</label>
-    <input type="text" id="order_delivery" name="name">
-
-        <div id="delivery_address-wrap">
-    <label for="order_delivery_address">address</label>
-    <input type="text" id="order_delivery_address" name="name">
-
-            <div id="comment-wrap">
-    <label for="order_comment">address</label>
-    <input type="text" id="order_comment" name="name">
+<script type="text/javascript">
+function show_form()
+{confirm('Edit order?')
+    var d = document;
+var a = d.getElementById('div_form').style.display;
+ d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
+var a = d.getElementById('div_table').style.display;
+d.getElementById('div_table').style.display = (a == 'none')?'block':'none';}
 
 
-    <p><input type="button" value="Update" id="edit"></p>
-</div>
-</fieldset>
+</script>
+
+<div id="div_form" style="display:none" >
+    <form id="form1">
+        <fieldset>
+                <h2>Edit current page</h2>
+                <label for="order_status">Status</label>
+                <select class="current_order" id="order_status" class="span3">
+                <option value="">Select status</option>
+                </select>
+
+
+                <label for="order_delivery">Delivery type</label>
+                <select class="current_order" id="order_delivery" class="span3">
+                <option value="">Select delivery type</option>
+                </select></fieldset>
+
+
+                <label for="order_delivery_address">Delivery address</label>
+                <input class="input-large" id="order_delivery_address" name="order_delivery_address" size="25" type="text" />
+        </fieldset>
+        <fieldset>
+        <label for="order_comment">Comment:</label>
+		  <textarea id="order_comment"  rows="3" name="order_comment"></textarea></fieldset>
+
+       <input type="button" value="Update"  id="edit" onclick="show_form(); return false">
+        </form></div>
+
+
+
+
+
 
 
 {% endblock body %}

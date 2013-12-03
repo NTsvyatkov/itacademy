@@ -67,6 +67,13 @@ def products_post():
     resp = make_response('', 201)
     return resp
 
+@app.route('/api/product_', methods=['POST'])
+def products_post_():
+    js = request.get_json()
+    create_product(js['name'], js['description'], js['price'])
+    resp = make_response('', 201)
+    return resp
+
 
 @app.route('/api/product', methods=['PUT'])
 def products_update():
