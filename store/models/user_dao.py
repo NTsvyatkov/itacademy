@@ -67,7 +67,7 @@ class UserDao(Base):
         return UserDao.query.order_by(UserDao.region_id)
 
     @staticmethod
-    def createNewUser(login, password, first_name, last_name, email, role_id, region_id):
+    def createNewUser(login, first_name, last_name, password, email, role_id, region_id):
         user = UserDao(login, password, first_name,last_name,email,role_id,region_id)
         db_session.add(user)
         db_session.commit()
