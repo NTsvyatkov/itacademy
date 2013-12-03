@@ -84,7 +84,7 @@ $(document).ready(function() {
                  tr.cells[0].innerHTML = json.products[product_k].id;
                  tr.cells[1].innerHTML = '<span class=name>'+json.products[product_k].name+'</span>';
                  tr.cells[2].innerHTML = json.products[product_k].description;
-                 tr.cells[3].innerHTML = json.products[product_k].price.toFixed(2);
+                 tr.cells[3].innerHTML = json.products[product_k].price;
                  tr.cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
                  tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr.cells[4].abbr=k;

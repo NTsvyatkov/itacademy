@@ -5,6 +5,8 @@ from business_logic.order_manager import getListOrder, get_order_by_id, list_sta
 from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
 
 
+
+
 @app.route('/current_order2', methods=('GET', 'POST'))
 def current_orders():
         return render_template('current_order2.html',)
@@ -50,14 +52,14 @@ def orders():
     orders_arr = []
     for i in orders:
         orders_arr.append({'id': i.id, 'user_id': (i.user.first_name + " " + i.user.last_name), 'status_id': i.status.name,
-        'total_price': i.total_price, 'assignee_id' : i.assignee.role.name if i.assignee else None, 'delivery_id': i.delivery.name, 'delivery_address': i.delivery_address,'comment': i.comment})
+        'total_price': i.total_price, 'assignee_id' : i.assignee.role.name if i.assignee else None})
     return make_response(jsonify(orders=orders_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
 @app.route('/api/orders', methods = ['PUT'])
 def orders_update():
     js = request.json
-    update_orders(js['id'],js['status_id'], js['delivery_id'], js['delivery_address'], js['comment'])
+    update_orders(js['id'],js['status_id'], js['delivery_id'],js['delivery_address'],js['comment'])
     resp = make_response('', 200)
     return resp
 

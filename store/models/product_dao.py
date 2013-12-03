@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, Float, Boolean,and_,or_
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, DECIMAL, Boolean, and_, or_
 from sqlalchemy.orm import relationship, backref
 
 
@@ -8,7 +8,7 @@ class Product(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(100))
     description = Column(Text)
-    price = Column(Float)
+    price = Column(DECIMAL(5, 2))
     #dimension_id = Column(Integer, ForeignKey('dimensions.id'))
     #dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     is_deleted = Column(Boolean, default=False)
@@ -153,15 +153,3 @@ class Dimension(Base):
     @staticmethod
     def get_all_dimensions():
         return Dimension.query.filter_by(is_deleted=False).all()
-#Product.del_product(10)
-#print Product.get_product(10)
-#
-#filter_list={
-#        'name':'ap','name_options':'1',\
-#        'description':'re','description_options':'1',\
-#        'price':'1','price_options':'2'}
-#
-#all_rec , all= Product.filter_product_grid(filter_list,1,3)
-#
-#for i in all_rec:
-#    print i.name

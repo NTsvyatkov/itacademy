@@ -23,16 +23,16 @@ class UserManagerTest(unittest.TestCase):
         real.method.assert_called_with(self.login,self.password, self.firstName, self.lastName,self.email, self.roleId,
                               self.regionId)
 
-    #def testIsUserExist(self):
-        #my_mock = Mock()
-        #my_mock.some_method.return_value = False
-        #self.assertEqual(True, my_mock.UserDao.isUserExists(self.login, self.password))
-        #self.assertEqual(UserDao.isUserExists(self.login, self.password), True)
+    def testIsUserExist(self):
+        self.assertEqual(UserDao.isUserExists(self.login, self.password), False)
 
+    def testGetUserById(self):
+        self.assertNotEqual(UserDao.getUserByID(1), None)
 
-    #def tearDown(self):
-    #    user = UserDao.getUserByLogin(self.login, self.password)
-    #    UserDao.deleteRecord(user.id)
+    def tearDown(self):
+        user = UserDao.getUserByLogin(self.login, self.password)
+        if user:
+            UserDao.deleteRecord(user.id)
 
 if __name__ == '__main__':
     unittest.main()

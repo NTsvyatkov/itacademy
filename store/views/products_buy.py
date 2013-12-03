@@ -20,7 +20,7 @@ def products():
     prods, records_amount = Product.pagerByFilter(name, start_price, end_price, page, records_per_page)
     products_arr = []
     for i in prods:
-        products_arr.append({'id': i.id, 'name': i.name, 'price': i.price, 'description': i.description})
+        products_arr.append({'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description})
     status_list = list_dimensions()
     status_arr = []
     for i in status_list:
@@ -29,7 +29,7 @@ def products():
                                  records_per_page=records_per_page), 200)
 
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
-def amountProducts(id):
+def productsBuy(id):
     user_id = session['user_id']
     json = request.get_json()
     validate_quantity(id,json['status'],json['value'],'check')

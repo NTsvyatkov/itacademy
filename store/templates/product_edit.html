@@ -54,7 +54,7 @@
 
             var k=0;
 
-            function gridCreate(){$.ajax({
+            function createProductStock(){$.ajax({
                 dataType: "json",
                 url: '/api/product_stock',
                 type: 'GET',
@@ -72,7 +72,7 @@
                                 tr[k].cells[2].abbr=k;
                                 tr[k].cells[2].onclick= function()
                                     {
-                                        var product_id = 1
+                                        var product_id = 1;
                                         var dimension_id = json.productStock[this.abbr-1].dimension_id;
                                         var quantity = document.getElementById('quantity'+this.abbr).value;
                                         updateStock(product_id, dimension_id, quantity)
@@ -106,8 +106,6 @@
                 });
             }
 
-
-
             $('#update_product').click(function(){
                 var id = 1;
                 var name = document.getElementById('name').value;
@@ -127,7 +125,7 @@
                 success:function(json){
                     if (json.message == 'success')
                         {
-                            alert('The product has been successfully added');
+                            alert('The product has been successfully updated');
                              document.location.href = 'product_grid';
                         }
                     else{
@@ -137,8 +135,7 @@
                 });
             }
 
-        gridCreate();
-
+            createProductStock();
 
             $('#price').blur(function() {
                 if( isNaN($(this).val()) || ($(this).val()) < 0) {
@@ -178,10 +175,8 @@
                 if( ($(this).val()) == 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
                     $('#valid').text('Field not be empty');
-//                    document.getElementById('update_product').disabled = true;
                 }else{
                     $(this).css({'border' : '2px solid #999'});
-//                    document.getElementById('update_product').disabled = false;
                 }
             });
 

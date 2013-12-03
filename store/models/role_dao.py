@@ -9,11 +9,8 @@ from models import Base, db_session
 class RoleDao(Base):
     __tablename__ = "role"
 
-    #role_id = Column(Integer, ForeignKey('action_point_to_role.ap_to_role_id'), primary_key=True, autoincrement=True)
     role_id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(50))
-
-    #role = relationship(ActionPointToRoleDao, backref=backref('role', lazy='dynamic'))
 
     def __init__(self,name):
         super(RoleDao, self).__init__()
