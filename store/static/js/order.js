@@ -96,7 +96,7 @@ $(document).ready(function() {
  ajax_pull('GET','data');
 
  /*-------------Update quantity in row------------------*/
- function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr){
+ function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr,dim){
        $.ajax({
         dataType: "json",
         url: '/api/update/',
@@ -105,11 +105,12 @@ $(document).ready(function() {
         data:json_data,
         success: function(json)
           {
-             var sum = +price*+quantity;
-             tr.children('td').children('.amount').text(sum);
+             var sum = +price*+quantity*dim;
+             tr.children('td').children('.amount').text(sum.toFixed(2));
              tr.children('td').children('.old_quantity').val(quantity);
-             total_amount= total_price-(+old_quantity*+price)+(+quantity*+price)
-             $('#total_amount').text('Total amount: ' + total_amount+'$');
+             total_amount= total_price-(+old_quantity*+price*dim)+(+quantity*+price*dim);
+             total_price=total_amount;
+             $('#total_amount').text('Total amount: ' + total_amount.toFixed(2)+'$');
           },
 
         error: function(e)
@@ -182,7 +183,7 @@ $(document).ready(function() {
                          '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">'+
                          '<input class="old_quantity" value="'+json.order[product_k].quantity+'" type="hidden">';
 
-                 tr.cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price+"</span>";
+                 tr.cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
 
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
@@ -191,12 +192,12 @@ $(document).ready(function() {
 
                  tr.cells[4].innerHTML = input;
                  if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
-                 amount= (+json.order[product_k].price * +quant);
+                 amount= (+json.order[product_k].price * +quant*+json.order[product_k].dimension_number).toFixed(2);
                  tr.cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
                  tr.cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
-                $('#total_amount').text('Total amount: ' + total_price+'$');
+                $('#total_amount').text('Total amount: ' + total_price.toFixed(2)+'$');
             /*--------------------------------End creating table------------------------------------*/
 
                 $('.delete_img').click(function(){
@@ -216,6 +217,7 @@ $(document).ready(function() {
                    var old_quantity = tr.children('td').children('.old_quantity').val();
                    var product_id=tr.children('td').children('.delete_img').attr('alt');
                    var sum=0;
+                   var dim =1;
                    var quantity = Math.round($(this).prev().val());
                    var object_quantity=$(this).prev();
                    var object_amount =tr.children('td').children('.amount');
@@ -229,7 +231,17 @@ $(document).ready(function() {
                        json_value = JSON.stringify({'quantity':quantity,'product_id':product_id,
                                                    'dimension_id':dimension_id, 'price':price,
                                                    'order_id' :order_id });
-                       update_quantity(json_value,object_quantity,old_quantity,price,quantity,tr);
+
+                    if (dimension_id ==1){
+                        dim =1;
+                    }
+                    if(dimension_id ==2){
+                        dim=5;
+                    }
+                    if(dimension_id ==3){
+                        dim=10;
+                    }
+                       update_quantity(json_value,object_quantity,old_quantity,price,quantity,tr,dim);
                      }
                 })
 
@@ -335,7 +347,7 @@ $(document).ready(function() {
 
       /*Credit card date validation*/
 
-      date_expire= $('#expire_date').val().replace('/', '-')+'-01';
+      date_expire= $('#expire_date').val().replace('/', '-')+'-01T00:00';
 
        if (!Date.parse(date_expire))
          {
@@ -346,7 +358,7 @@ $(document).ready(function() {
 
       if (maestro_card == true)
       {
-          date_start= $('#start_date').val().replace('/', '-') + '-01';
+          date_start= $('#start_date').val().replace('/', '-') + '-01T00:00';
 
          if (Date.parse(date_start) > Date.parse(date_expire))
          {

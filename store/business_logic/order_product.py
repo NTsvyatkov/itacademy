@@ -17,8 +17,9 @@ def product_order_update(dict):
         dimension_id=i.OrderProduct.dimension.id
         product_id=i.Product.id
         quantity=i.OrderProduct.quantity
+        dimension_number=i.OrderProduct.dimension.number
         price = i.Product.price
-        amount= amount + price*quantity
+        amount= amount + price*quantity*dimension_number
         total_price = price*quantity
 
         order_product= OrderProduct.get_order_product(order_id,product_id,dimension_id)
