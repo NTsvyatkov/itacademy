@@ -8,7 +8,7 @@ from business_logic.product_manager import validate_quantity
 
 @app.route('/product_buy', methods=('GET', 'POST'))
 def productBuy():
-    return render_template('product_buy.html',)
+    return render_template('buy_product.html',)
 
 @app.route('/api/product', methods=['GET'])
 def products():

@@ -25,15 +25,15 @@ def status():
         status_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(status=status_arr), 200)
 
-@app.route('/api/status', methods=['GET'])
-def status():
-    status_list = OrderStatus.query
-    stat = status_list[-1]
-    del(status_list[-1])
-    status_arr = []
-    for i in stat:
-        status_arr.append({'id': i.id, 'name': i.name})
-    return make_response(jsonify(status=status_arr), 200)
+#@app.route('/api/status', methods=['GET'])
+#def status():
+#    status_list = OrderStatus.query
+#    stat = status_list[-1]
+#    del(status_list[-1])
+#    status_arr = []
+#    for i in stat:
+#        status_arr.append({'id': i.id, 'name': i.name})
+#    return make_response(jsonify(status=status_arr), 200)
 
 @app.route('/api/assignee', methods=['GET'])
 def assignee():

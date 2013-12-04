@@ -45,12 +45,12 @@ def products_page():
                                  records_per_page=records_per_page), 200)
 
 
-@app.route('/api/product/<int:id>', methods=['GET'])
-def products_id(id):
-    i = get_product_by_id(request.get['id'])
-    product = {'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description, 'dimension': i.dimension}
-    resp = make_response(jsonify(products=product), 200)
-    return resp
+#@app.route('/api/product/<int:id>', methods=['GET'])
+#def products_id(id):
+#    i = get_product_by_id(request.get['id'])
+#    product = {'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description, 'dimension': i.dimension}
+#    resp = make_response(jsonify(products=product), 200)
+#    return resp
 
 
 @app.route('/api/product/<int:id>', methods=['DELETE'])
@@ -81,24 +81,19 @@ def products_update():
     update_product(js['id'], js['name'], js['description'], js['price'])
     return make_response(jsonify({'message':'success'}),200)
 
-@app.route('/product_edit')
-def product_edit():
+@app.route('/product/<int:id>')
+def productsId(id):
     return render_template('product_edit.html')
 
-@app.route('/product_edit/<int:id>')
-def productsId(id):
-    print(id)
-    return redirect(url_for('product_edit'))
-
-@app.route('/api/product_stock', methods=['GET', 'POST'])
-def stockList():
-    productStock = ProductStock.getStockByProduct(1)
+@app.route('/api/product/<int:id>', methods=['GET'])
+def stockList(id):
+    productStock = ProductStock.getStockByProduct(id)
     productStockList = []
     for i in productStock:
         productStockList.append({'dimension': Dimension.get_dimension(i.dimension_id).name, 'quantity': i.quantity,
                                  'dimension_id': i.dimension_id})
-    product = ({"name": Product.get_product(1).name, "description": Product.get_product(1).description,
-                "price": str(Product.get_product(1).price)})
+    product = ({"name": Product.get_product(id).name, "description": Product.get_product(id).description,
+                "price": str(Product.get_product(id).price)})
     return make_response(jsonify(productStock=productStockList, product=product), 200)
 
 

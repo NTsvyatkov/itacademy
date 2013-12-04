@@ -107,7 +107,7 @@ $(document).ready(function() {
                   var product_id = this.alt;
                   var product_name=tr.children('td').children('.name').text();
                   if(confirm('Edit '+ product_name +' ?')){
-                    document.location.href = 'product_edit';
+                    document.location.href = 'product/'+this.alt+'';
                   }
                    }
                  );

@@ -27,6 +27,9 @@
                 }
             createGrid();
 
+            var pathArray = window.location.pathname.split( '/' );
+            var product_id = pathArray[2];
+
             function clearingTr(i)
                 {
                     for (var j=0; j<=2; j++)
@@ -56,7 +59,7 @@
 
             function createProductStock(){$.ajax({
                 dataType: "json",
-                url: '/api/product_stock',
+                url: '/api/product/'+product_id,
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json)
@@ -72,7 +75,6 @@
                                 tr[k].cells[2].abbr=k;
                                 tr[k].cells[2].onclick= function()
                                     {
-                                        var product_id = 1;
                                         var dimension_id = json.productStock[this.abbr-1].dimension_id;
                                         var quantity = document.getElementById('quantity'+this.abbr).value;
                                         updateStock(product_id, dimension_id, quantity)
@@ -138,7 +140,7 @@
             createProductStock();
 
             $('#price').blur(function() {
-                if( isNaN($(this).val()) || ($(this).val()) < 0) {
+                if( isNaN($(this).val()) || ($(this).val()) <= 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
                     $('#valid').text('Field not be empty');
                     document.getElementById('update_product').disabled = true;
