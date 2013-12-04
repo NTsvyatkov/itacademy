@@ -82,8 +82,9 @@ def users_id_delete(user_id):
 @app.route('/api/user', methods = ['POST'])
 def users_post():
     js = request.json
-    createUser(js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
-    resp = make_response('',201)
+    createUser(js['login'], js['password'], js['first_name'], js['last_name'], js['email'], js['region_id'],
+               js['role_id'])
+    resp = make_response('', 201)
     return resp
 
 @app.route('/api/user', methods = ['PUT'])

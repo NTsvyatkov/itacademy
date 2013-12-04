@@ -17,9 +17,11 @@ def update_current_page():
 
 @app.route('/api/status', methods=['GET'])
 def status():
-    status_list = list_status()
+    status_list = OrderStatus.query
+    stat = status_list[-1]
+    del(status_list[-1])
     status_arr = []
-    for i in status_list:
+    for i in stat:
         status_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(status=status_arr), 200)
 
