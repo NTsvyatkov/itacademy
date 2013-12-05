@@ -81,7 +81,7 @@ $(document).ready(function() {
                  k++;
 
                  tr=table_grid.rows[k];
-                 tr.cells[0].innerHTML = json.products[product_k].id;
+                 tr.cells[0].innerHTML = '<span class = product_id>'+json.products[product_k].id+'</span>';
                  tr.cells[1].innerHTML = '<span class=name>'+json.products[product_k].name+'</span>';
                  tr.cells[2].innerHTML = json.products[product_k].description;
                  tr.cells[3].innerHTML = json.products[product_k].price;
@@ -104,10 +104,10 @@ $(document).ready(function() {
 
                 $('.edit_img').click(function(){
                   var tr= $(this).closest('tr');
-                  var product_id = this.alt;
+                  var product_id = tr.children('td').children('.product_id').text();
                   var product_name=tr.children('td').children('.name').text();
                   if(confirm('Edit '+ product_name +' ?')){
-                    document.location.href = 'product/'+this.alt+'';
+                    document.location.href = 'product/'+product_id+'';
                   }
                    }
                  );
