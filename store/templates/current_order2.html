@@ -4,7 +4,6 @@
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
-    <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
 
 
@@ -71,7 +70,7 @@
                                         document.getElementById('order_comment').value=json.orders[id_tr-1].comment;
                                         index=id_tr
                                         document.getElementById('edit').style.display='inline'
-                                        confirm('Edit order #'+ id_tr +' ?')
+                                        confirm('Edit the current order? #'+ id_tr +' ?')
                                         var d = document;
                                         var a = d.getElementById('div_form').style.display;
                                         d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
@@ -132,26 +131,45 @@
                     {
                         ajax_success(json);
                         records_amount=(json.records_amount);
-                        records_per_page=(json.records_per_page);
-                        pages_amount = Math.ceil(records_amount/records_per_page);
-                        document.getElementById("page").innerHTML = page;
-                        document.getElementById("pages_amount").innerHTML = pages_amount
+   records_per_page=(json.records_per_page);
+   pages_amount = Math.ceil(records_amount/records_per_page);
+   document.getElementById("page").innerHTML = page;
+   document.getElementById("pages_amount").innerHTML = pages_amount;
 
-                        if (page==1){
-                            $('#prev').css({ "opacity":"0.4"});
-                            $('#first').css({ "opacity":"0.4"});
-                        } else {$('#prev').css({ "opacity": "1"});
-                            $('#first').css({ "opacity": "1"});
-                        }
+   if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
+           }
 
-                        if (page==pages_amount){
-                            $('#next').css({ "opacity": "0.4"});
-                            $('#last').css({ "opacity": "0.4"});
-                        } else {$('#next').css({ "opacity": "1"});
-                            $('#last').css({ "opacity": "1"});
-                        }
-                    }
-                })
+           if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
+           }
+
+
+
+ }}
+
+                )
             }
 
             if (page==1)
