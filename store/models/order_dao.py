@@ -176,7 +176,7 @@ class OrderStatus(Base):
 
     @staticmethod
     def get_all_order_status():
-        return OrderStatus.query.all.pop()
+        return OrderStatus.query.all
 
 
 class DeliveryType(Base):

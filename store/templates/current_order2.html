@@ -4,6 +4,7 @@
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
+    <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
 
 
@@ -63,14 +64,14 @@
                         tr[k].cells[5].innerHTML = "<input type='button' value='Edit' id='edit_order'  alt=" + k + ">";
                         tr[k].cells[5].abbr=k;
                         tr[k].cells[5].onclick = function edit_order(){
-                                        var id_tr = json.orders[this.abbr-1].id;
+                                        var id_tr = tr[this.abbr].cells[0].innerHTML
                                         document.getElementById('order_status').value=json.orders[id_tr-1].status_id;
                                         document.getElementById('order_delivery').value=json.orders[id_tr-1].delivery_id;
                                         document.getElementById('order_delivery_address').value=json.orders[id_tr-1].delivery_address;
                                         document.getElementById('order_comment').value=json.orders[id_tr-1].comment;
                                         index=id_tr
                                         document.getElementById('edit').style.display='inline'
-                                        confirm('Edit the current order? #'+ id_tr +' ?')
+                                        confirm('Edit order #'+ id_tr +' ?')
                                         var d = document;
                                         var a = d.getElementById('div_form').style.display;
                                         d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
@@ -106,7 +107,7 @@
                 success:function(json){
                     if (json.message == 'success')
                         {
-                            alert('The order has been successfully updated');
+                            alert('The product has been successfully updated');
                         }
                     else{
                         alert (json.message);
@@ -131,45 +132,26 @@
                     {
                         ajax_success(json);
                         records_amount=(json.records_amount);
-   records_per_page=(json.records_per_page);
-   pages_amount = Math.ceil(records_amount/records_per_page);
-   document.getElementById("page").innerHTML = page;
-   document.getElementById("pages_amount").innerHTML = pages_amount;
+                        records_per_page=(json.records_per_page);
+                        pages_amount = Math.ceil(records_amount/records_per_page);
+                        document.getElementById("page").innerHTML = page;
+                        document.getElementById("pages_amount").innerHTML = pages_amount
 
-   if (page==1){
-               $('#prev').prop('disabled', true);
-               $('#first').prop('disabled', true);
-               $('#prev').addClass("button_disable");
-               $('#first').addClass("button_disable");
-           } else {
-               $('#prev').prop('disabled', false);
-               $('#first').prop('disabled', false);
-               $('#prev').removeClass("button_disable");
-               $('#first').removeClass("button_disable");
-               $('#prev').removeAttr("disabled");
-               $('#first').removeAttr("disabled");
-           }
+                        if (page==1){
+                            $('#prev').css({ "opacity":"0.4"});
+                            $('#first').css({ "opacity":"0.4"});
+                        } else {$('#prev').css({ "opacity": "1"});
+                            $('#first').css({ "opacity": "1"});
+                        }
 
-           if (page==pages_amount){
-               $('#next').prop('disabled', true);
-               $('#last').prop('disabled', true);
-               $('#next').addClass("button_disable");
-               $('#last').addClass("button_disable");
-
-           } else {
-               $('#next').prop('disabled', false);
-               $('#last').prop('disabled', false);
-               $('#next').removeClass("button_disable");
-               $('#last').removeClass("button_disable");
-               $('#next').removeAttr("disabled");
-               $('#last').removeAttr("disabled");
-           }
-
-
-
- }}
-
-                )
+                        if (page==pages_amount){
+                            $('#next').css({ "opacity": "0.4"});
+                            $('#last').css({ "opacity": "0.4"});
+                        } else {$('#next').css({ "opacity": "1"});
+                            $('#last').css({ "opacity": "1"});
+                        }
+                    }
+                })
             }
 
             if (page==1)
@@ -213,7 +195,7 @@
 
     $.ajax({
             dataType: "json",
-            url: '/api/status_',
+            url: '/api/status',
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
@@ -238,7 +220,7 @@
 
     $.ajax({
             dataType: "json",
-            url: '/api/status',
+            url: '/api/stat',
             type: 'GET',
             contentType: "application/json",
             success:function(json) {
@@ -328,8 +310,7 @@
 
 <script type="text/javascript">
 function show_form()
-{alert('The current order has been successfully updated');
-    var d = document;
+{var d = document;
 var a = d.getElementById('div_form').style.display;
 d.getElementById('div_form').style.display = (a == 'none')?'block':'none';
 var a = d.getElementById('div_table').style.display;
@@ -349,11 +330,12 @@ d.getElementById('div_table').style.display = (a == 'none')?'block':'none';}
 
                 <label for="order_delivery">Delivery type</label>
                 <select class="current_order" id="order_delivery" class="span3">
+                <option value="">Select delivery type</option>
                 </select></fieldset>
 
 
                 <label for="order_delivery_address">Delivery address</label>
-                <input class="input-xlarge" id="order_delivery_address" name="order_delivery_address" size="25" type="text" />
+                <input class="input-large" id="order_delivery_address" name="order_delivery_address" size="25" type="text" />
         </fieldset>
         <fieldset>
         <label for="order_comment">Comment:</label>

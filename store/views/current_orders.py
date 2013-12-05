@@ -3,9 +3,7 @@ from flask_bootstrap import app
 from maintenance.pager_order import Pagination
 from business_logic.order_manager import getListOrder, get_order_by_id, list_status, list_delivery, update_orders
 from models.order_dao import Order, OrderProduct, OrderStatus, DeliveryType
-from operator import itemgetter
-from collections import OrderedDict
-import json
+import sqlalchemy
 
 
 
@@ -18,41 +16,32 @@ def update_current_page():
         return render_template('update_current_page.html',)
 
 @app.route('/api/status', methods=['GET'])
-def status_for_update():
+def status():
     status_list = OrderStatus.query
-    stat = status_list[0:2]
+    stat = status_list[-1]
+    del(status_list[-1])
     status_arr = []
     for i in stat:
         status_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(status=status_arr), 200)
 
-@app.route('/api/status_', methods=['GET'])
-def status_for_filter():
-    status_list = OrderStatus.query
-    stat = status_list
-    status_arr = []
-    for i in stat:
-        status_arr.append({'id': i.id, 'name': i.name})
-    return make_response(jsonify(status=status_arr), 200)
-
-#@app.route('/api/assignee', methods=['GET'])
-#def assignee():
-#    assignee_list = Order.query.all()
-#    assignee_sort = assignee_list
-#    assignee_arr = []
-#    for i in assignee_sort:
-#        assignee_arr.append({'id': i.assignee_id, 'assignee_id': i.assignee.role.name if i.assignee else None})
-#    return make_response(jsonify(assignee=assignee_arr), 200)
+#@app.route('/api/status', methods=['GET'])
+#def status():
+#    status_list = OrderStatus.query
+#    stat = status_list[-1]
+#    del(status_list[-1])
+#    status_arr = []
+#    for i in stat:
+#        status_arr.append({'id': i.id, 'name': i.name})
+#    return make_response(jsonify(status=status_arr), 200)
 
 @app.route('/api/assignee', methods=['GET'])
 def assignee():
-    assignee_list = Order.query.all()
-    assignee_sorted = assignee_list
+    assignee_list = Order.query
     assignee_arr = []
-    for i in sorted(assignee_sorted):
+    for i in assignee_list:
         assignee_arr.append({'id': i.assignee_id, 'assignee_id': i.assignee.role.name if i.assignee else None})
     return make_response(jsonify(assignee=assignee_arr), 200)
-
 
 
 @app.route('/api/delivery', methods=['GET']) 
