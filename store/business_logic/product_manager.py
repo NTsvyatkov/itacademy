@@ -15,8 +15,8 @@ def validate_price(price):
         raise ValidationException("Price is required field")
     elif not re.match("^\d+(?:\.\d{0,2})?$", str(price)):
         raise ValidationException("Price has invalid decimal value")
-    elif price < 0:
-        raise ValidationException("Price can't be a negative number")
+    elif float(price) <= 0:
+        raise ValidationException("Price should be a positive number")
 
 
 def validate_product_id(id):
