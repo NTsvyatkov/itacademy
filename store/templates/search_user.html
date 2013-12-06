@@ -144,7 +144,7 @@
                                         {
                                             var tr1= $(this).closest('tr');
                                            var id_h = tr1.children('td').children('.hidden_id').val();
-                                            alert(id_h ,'deleted')
+                                            
                                           delete_id(id_h,this.abbr)
                                         }
                                        }
@@ -243,19 +243,22 @@ function NewWindow()
 		 <span>Search user</span>
 		 <div class="search">
          <select id="SelectId_user"  style="width:100px">
-			<option value="str0">  </option>
+			<option value="str0"> User Name </option>
 			<option value="str1"> first name </option>
 			<option value="str2"> last name </option>
-			<option value="str2"> email </option>
+			<option value="str3"> email </option>
+			<option value="str4"> Role </option>
+			<option value="str5"> All Columns </option>
 			 </select>
 			</div>
 	
 		<div class="search">
 		 <select id="SelectId_key"  style="width:100px">
-			<option value="str0">  </option>
-			<option value="str1"> start with </option>
+			<option value="str0"> start with </option>
+			<option value="str1"> equals </option>
 			<option value="str2"> contains </option>
-			<option value="str3"> equal to </option>
+			<option value="str3"> not equal to </option>
+			<option value="str4"> does not contain </option>
 		 </select>
 		</div>
   
@@ -264,9 +267,7 @@ function NewWindow()
          </form>
 		 </div>
           </div>
-          <div style="margin-left:80%;">
-		 <a href="#">show 25 items</a>
-		 </div>
+          
               <div id="user_table">
        <table id='grid' class="grid">
            <tr>
