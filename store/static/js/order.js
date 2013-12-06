@@ -168,7 +168,7 @@ $(document).ready(function() {
            var amount=0;
            var input;
            var tr;
-           total_price=json.total_price
+           total_price= +json.total_price
            /*Create table with new order_products list */
             for (var product_k in json.order)
                {
@@ -177,13 +177,14 @@ $(document).ready(function() {
                  order_id=json.order[product_k].order_id;
                  product_name =json.order[product_k].name;
                  id_product =json.order[product_k].id;
+                 product_price = +json.order[product_k].price;
                  tr.cells[0].innerHTML =product_name;
                  tr.cells[1].innerHTML = json.order[product_k].description;
                  tr.cells[2].innerHTML = json.order[product_k].dimension +
                          '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">'+
                          '<input class="old_quantity" value="'+json.order[product_k].quantity+'" type="hidden">';
 
-                 tr.cells[3].innerHTML = "<span class='price'>"+json.order[product_k].price.toFixed(2)+"</span>";
+                 tr.cells[3].innerHTML = "<span class='price'>"+product_price.toFixed(2)+"</span>";
 
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
@@ -192,7 +193,7 @@ $(document).ready(function() {
 
                  tr.cells[4].innerHTML = input;
                  if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
-                 amount= (+json.order[product_k].price * +quant*+json.order[product_k].dimension_number).toFixed(2);
+                 amount= (product_price * +quant*+json.order[product_k].dimension_number).toFixed(2);
                  tr.cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
                  tr.cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
