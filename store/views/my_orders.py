@@ -5,6 +5,9 @@ from models.order_dao import Order,  OrderStatus
 
 @app.route('/my_orders')
 def my_orders():
+  if session['role'] not in 'Customer':
+    return "You've got permission to access this page."
+  else:
     return render_template('my_orders.html',)
 
 

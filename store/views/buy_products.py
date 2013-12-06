@@ -8,7 +8,10 @@ from business_logic.product_manager import validate_quantity
 
 @app.route('/product_buy', methods=('GET', 'POST'))
 def productBuy():
-    return render_template('buy_product.html',)
+     if session['role'] not in 'Customer':
+       return "You've got permission to access this page."
+     else:
+         return render_template('buy_product.html',)
 
 @app.route('/api/product', methods=['GET'])
 def products():

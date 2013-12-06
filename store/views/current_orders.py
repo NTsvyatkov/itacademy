@@ -9,7 +9,10 @@ import sqlalchemy
 
 @app.route('/current_order2', methods=('GET', 'POST'))
 def current_orders():
-        return render_template('current_order2.html',)
+     if session['role'] not in 'Merchandiser':
+       return "You've got permission to access this page."
+     else:
+      return render_template('current_order2.html',)
 
 @app.route('/update_current_page', methods=('GET', 'POST'))
 def update_current_page():
