@@ -277,6 +277,16 @@ class OrderProduct(Base):
         order_product_up.quantity = int(order_product_up.quantity) + int(new_quantity)
         db_session.commit()
 
+    @staticmethod
+    def get_items_quantity(order_id):
+        order = OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
+        items = 0
+        for i in order:
+            entry = i.dimension.number*i.quantity
+            items = items+entry
+        return items
+
+
 
 
 def order_product_grid(user_id, page=None, records_per_page=None):

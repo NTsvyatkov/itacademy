@@ -37,19 +37,19 @@
  <ul id="menu">
 
       <li>
-     <a href="search_user" title="Search User"
+     <a href="/search_user" title="Search User"
          {% if request.environ.PATH_INFO.strip('/') =='search_user'%}class="active"{% endif %}>
      Users
      </a>
      </li>
       <li>
-     <a href="product_grid" title="product_grid"
+     <a href="/product_grid" title="product_grid"
         {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
      Products
      </a>
      </li>
      <li>
-     <a href="region" title="region"
+     <a href="/region" title="region"
          {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
      Regions
      </a>
@@ -58,7 +58,7 @@
      <li style="float: right">
 
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))
-        {href='logout'}"
+        {href='/logout'}"
 
         {% if request.environ.PATH_INFO.strip('/') =='logout'%}class="active"{% endif %} >
         {% if session['login'] %}
@@ -77,19 +77,19 @@
 {% if "Customer"==session['role'] %}
  <ul id="menu">
      <li>
-     <a href="product_buy" title="product_buy"
+     <a href="/product_buy" title="product_buy"
          {% if request.environ.PATH_INFO.strip('/') =='product_buy'%}class="active"{% endif %}>
      Products
      </a>
      </li>
      <li>
-     <a href="my_orders" title="my_orders"
+     <a href="/my_orders" title="my_orders"
          {% if request.environ.PATH_INFO.strip('/') =='my_orders'%}class="active"{% endif %}>
      Orders
      </a>
      </li>
      <li>
-     <a href="order_product" title="order_product"
+     <a href="/order_product" title="order_product"
          {% if request.environ.PATH_INFO.strip('/') =='order_product'%}class="active"{% endif %}>
      Cart
      </a>
@@ -98,7 +98,7 @@
      <li style="float: right">
 
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))
-        {href='logout'}"
+        {href='/logout'}"
 
         {% if request.environ.PATH_INFO.strip('/') =='logout'%}class="active"{% endif %} >
         {% if session['login'] %}
@@ -119,13 +119,13 @@
 {% if "Merchandiser"==session['role'] %}
  <ul id="menu">
      <li>
-     <a href="product_grid" title="product_grid"
+     <a href="/product_grid" title="product_grid"
         {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
      Products
      </a>
  </li>
      <li>
-     <a href="current_order2" title="current_order2"
+     <a href="/current_order2" title="current_order2"
          {% if request.environ.PATH_INFO.strip('/') =='current_order2'%}class="active"{% endif %}>
      Order
      </a>
@@ -133,7 +133,7 @@
          <li style="float: right">
 
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))
-        {href='logout'}"
+        {href='/logout'}"
 
         {% if request.environ.PATH_INFO.strip('/') =='logout'%}class="active"{% endif %} >
         {% if session['login'] %}
@@ -153,19 +153,19 @@
 {% if "Supervisor"==session['role'] %}
      <ul id="menu">
      <li>
-     <a href="search_user" title="Search User"
+     <a href="/search_user" title="Search User"
          {% if request.environ.PATH_INFO.strip('/') =='search_user'%}class="active"{% endif %}>
      Users
      </a>
      </li>
       <li>
-     <a href="product_grid" title="product_grid"
+     <a href="/product_grid" title="product_grid"
         {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
      Products
      </a>
      </li>
      <li>
-     <a href="region" title="region"
+     <a href="/region" title="region"
          {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
      Regions
      </a>
@@ -173,7 +173,7 @@
          <li style="float: right">
 
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))
-        {href='logout'}"
+        {href='/logout'}"
 
         {% if request.environ.PATH_INFO.strip('/') =='logout'%}class="active"{% endif %} >
         {% if session['login'] %}
