@@ -75,11 +75,13 @@ OrderStatus.add_status('Ordered')
 OrderStatus.add_status('Delivered')
 OrderStatus.add_status('Cart')
 
-Order.add_order(1,date.today(),2,2)
-Order.add_order(3,date.today(),1,1)
-Order.add_order(2,date.today(),1,2)
-Order.add_order(4,date.today(),3,2)
-Order.add_order(2,date.today(),2,3)
+Order.add_order(1,date.today(),2,2,12,2)
+Order.add_order(3,date.today(),1,1,43,1)
+Order.add_order(2,date.today(),1,2,31,2)
+Order.add_order(4,date.today(),3,2,53,1)
+Order.add_order(2,date.today(),2,3,42,2)
+Order.add_order(2,date.today(),2,3,42,2)
+
 Order.add_order(1,date.today(),2,3)
 
 OrderProduct.add_order_product(2,4,1,5)
