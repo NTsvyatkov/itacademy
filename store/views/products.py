@@ -4,7 +4,7 @@ from flask_bootstrap import app
 from business_logic.product_manager import list_products, list_dimensions, create_product, delete_product,\
     update_product, get_product_by_id, validate_quantity
 from models.product_stock_dao import ProductStock
-
+from views.authenticate import session
 
 @app.route('/create_product', methods=('GET', 'POST'))
 def CreateProduct():
@@ -13,6 +13,9 @@ def CreateProduct():
 
 @app.route('/product_grid', methods=('GET', 'POST'))
 def product_grid():
+    if session['role'] not in 'Supervisor':
+       return "You've got permission to access this page."
+    else:
         return render_template('product_grid.html',)
 
 

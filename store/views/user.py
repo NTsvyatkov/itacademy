@@ -6,7 +6,7 @@ from flask_bootstrap import app
 from maintenance.pager_user import Pagination
 from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
 from business_logic.validation import ValidationException, NotFoundException
-
+from views.authenticate import session
 
 @app.route('/create_user', methods=('GET', 'POST'))
 def create_user():
@@ -14,7 +14,10 @@ def create_user():
 
 @app.route('/search_user', methods=('GET', 'POST'))
 def search_user():
-        return render_template('search_user.html',)
+    if session['role'] not in 'Administrator':
+       return "You've got permission to access this page."
+    else:
+       return render_template('search_user.html',)
 
 @app.route('/usergrid')
 def usergrid():

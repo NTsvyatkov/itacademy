@@ -6,6 +6,7 @@ from models.region_dao import RegionDao
 from validation import ValidationException
 
 
+
 def validationRegionName(region_name):
     if region_name is None:
         raise ValidationException("The region name is required field")
@@ -36,7 +37,6 @@ def deleteRegion(region_id):
 def getRegionByID(region_id):
     validationRegionID(region_id)
     return RegionDao.getRegionByID(region_id)
-
 
 
 
