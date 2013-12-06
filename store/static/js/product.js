@@ -15,7 +15,9 @@ var product_name =   document.form.product_name.value;
 
 var price =   document.form.price.value;
 var regV_price = /^\d+(?:\.\d{0,2})?$/;
-var result_price = price.match(regV_price);
+var regV_valid = /^[0-9]\.[0-9][1-9]$/;
+var result_valid, result_price = price.match(regV_price, regV_valid);
+
         if (price == ""){
         $(".error_price").html("Price is required field").css({'color':'red'});
                 $(".price").toggleClass("errorList2");
@@ -31,6 +33,19 @@ var result_price = price.match(regV_price);
 
 
         if (!result_price){   $(".error_price").html("Price has invalid decimal value").css({'color':'red'});
+                $(".price").toggleClass("errorList2");
+                $(".price").click(function(){
+
+                $(".error_price").html("");
+                $(".price").removeClass("errorList2")
+
+                });
+
+        }
+         else {
+
+
+        if (!result_valid){   $(".error_price").html("Price has invalid decimal value").css({'color':'red'});
                 $(".price").toggleClass("errorList2");
                 $(".price").click(function(){
 
@@ -62,7 +77,7 @@ var result_price = price.match(regV_price);
 
                      });
 
-}
+}}
 
 
 
