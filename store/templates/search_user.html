@@ -241,6 +241,9 @@ function NewWindow()
         <div class="user_filter_in">
          <form class='form'>
 		 <span>Search user</span>
+<table>
+   <tr>
+	<td>
 		 <div class="search">
          <select id="SelectId_user"  style="width:100px">
 			<option value="str0"> User Name </option>
@@ -251,7 +254,8 @@ function NewWindow()
 			<option value="str5"> All Columns </option>
 			 </select>
 			</div>
-	
+	</td>		
+	<td>
 		<div class="search">
 		 <select id="SelectId_key"  style="width:100px">
 			<option value="str0"> start with </option>
@@ -261,9 +265,13 @@ function NewWindow()
 			<option value="str4"> does not contain </option>
 		 </select>
 		</div>
-  
+  	</td>
+  	<td>
   		<input type="text" style="width:280px" />
 		<input type="button" value="search" id='search_button'>
+	</td>
+   </tr>	
+</table>
          </form>
 		 </div>
           </div>
