@@ -81,12 +81,13 @@ $(document).ready(function() {
                  k++;
 
                  tr=table_grid.rows[k];
-                 tr.cells[0].innerHTML = '<span class = product_id>'+json.products[product_k].id+'</span>';
+                 id_product=json.products[product_k].id;
+                 tr.cells[0].innerHTML = '<span class = product_id>'+id_product+'</span>';
                  tr.cells[1].innerHTML = '<span class=name>'+json.products[product_k].name+'</span>';
                  tr.cells[2].innerHTML = json.products[product_k].description;
                  tr.cells[3].innerHTML = json.products[product_k].price;
-                 tr.cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr.cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + id_product + ">";
+                 tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + id_product + ">";
                  tr.cells[4].abbr=k;
                  tr.cells[5].abbr=k;
 
