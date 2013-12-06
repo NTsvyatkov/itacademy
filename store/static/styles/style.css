@@ -85,6 +85,14 @@ body {
  margin:0px auto;
  padding:0px;
  border:0px solid grey;
+}
+
+#order_block{
+ width:90%;
+ margin:0px auto;
+ padding:0px;
+ border:0px solid grey;
+ background-color: rgba(299,299,299,0.5);
  }
 
 #products_filter{

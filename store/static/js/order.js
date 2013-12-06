@@ -46,6 +46,8 @@ $(document).ready(function() {
 
     /* Change table size <select> event*/
     $('#table_size').change(function () {
+       page=1;
+       count_tr=$('#table_size').val();
        $( "#table_siz option:selected" ).each(ajax_pull('GET','data'))
      })
     /*---------------------------------*/
@@ -268,6 +270,10 @@ $(document).ready(function() {
      var no_error = true
      var clear_list;
      var object1;
+     var dt;
+     var month;
+     var year;
+     var now_date;
     /* Clear error and border-color*/
       if(error_list)
       {
@@ -348,12 +354,23 @@ $(document).ready(function() {
 
       /*Credit card date validation*/
 
-      date_expire= $('#expire_date').val().replace('/', '-')+'-01T00:00';
 
+      date_expire= $('#expire_date').val().replace('/', '-')+'-01T00:00';
        if (!Date.parse(date_expire))
          {
              no_error = false;
              error='Expire date have wrong format, please use calendar';
+             error_list.push({id:$('#expire_date'), error:error});
+         }
+
+       dt = new Date();
+       month = dt.getMonth()+1;
+       year = dt.getFullYear();
+       now_date = year+'-'+month+'-01T00:00';
+       if (Date.parse(date_expire) < Date.parse(now_date) )
+         {
+             no_error = false;
+             error='Expire date less then today date!';
              error_list.push({id:$('#expire_date'), error:error});
          }
 

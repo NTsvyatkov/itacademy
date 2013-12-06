@@ -23,18 +23,19 @@
 })
 </script>
 
-  <div id="products_block">
+ <div id="order_block">
       <div id="products_filter">
 
       </div>
       <div id="products_table">
-      <div class="field" style="margin-left:5%;">
+      <div class="field" style="float:right; margin-right:90px;">
           <lable>Table size: </lable>
               <select id="table_size">
-              <option selected>5</option>
-              <option>25</option>
+              <option selected value="10">Show 10 lines</option>
+              <option value="25">Show 25 lines</option>
           </select>
        </div>
+       <div style="clear:both;"></div>
        <table id='grid' class="grid">
        </table>
           <div id="pagination" style="text-align: center">
