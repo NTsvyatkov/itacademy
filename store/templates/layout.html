@@ -42,18 +42,12 @@
      Users
      </a>
      </li>
-      <li>
-     <a href="/product_grid" title="product_grid"
-        {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
-     Products
-     </a>
-     </li>
      <li>
      <a href="/region" title="region"
          {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
      Regions
      </a>
-
+     </li>
 
      <li style="float: right">
 
@@ -88,12 +82,7 @@
      Orders
      </a>
      </li>
-     <li>
-     <a href="/order_product" title="order_product"
-         {% if request.environ.PATH_INFO.strip('/') =='order_product'%}class="active"{% endif %}>
-     Cart
-     </a>
-     </li>
+
 
      <li style="float: right">
 
@@ -118,12 +107,7 @@
 
 {% if "Merchandiser"==session['role'] %}
  <ul id="menu">
-     <li>
-     <a href="/product_grid" title="product_grid"
-        {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
-     Products
-     </a>
- </li>
+
      <li>
      <a href="/current_order2" title="current_order2"
          {% if request.environ.PATH_INFO.strip('/') =='current_order2'%}class="active"{% endif %}>
@@ -152,12 +136,7 @@
 
 {% if "Supervisor"==session['role'] %}
      <ul id="menu">
-     <li>
-     <a href="/search_user" title="Search User"
-         {% if request.environ.PATH_INFO.strip('/') =='search_user'%}class="active"{% endif %}>
-     Users
-     </a>
-     </li>
+
       <li>
      <a href="/product_grid" title="product_grid"
         {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
@@ -165,11 +144,7 @@
      </a>
      </li>
      <li>
-     <a href="/region" title="region"
-         {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
-     Regions
-     </a>
-     </li>
+
          <li style="float: right">
 
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))

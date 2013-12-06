@@ -5,10 +5,14 @@ from models.region_dao import RegionDao
 from maintenance.pager_region import Pagination
 from business_logic.region_manager import getlistRegion, createRegion, updateRegion, deleteRegion, getRegionByID, getlistRegion
 from business_logic.validation import ValidationException
+from views.authenticate import session
 
 @app.route('/region', methods=('GET', 'POST', 'PUT'))
 def region():
-        return render_template('region.html',)
+    if session['role'] not in 'Administrator':
+       return "You've got permission to access this page."
+    else:
+       return render_template('region.html',)
 
 @app.route('/api/regions', methods = ['GET'])
 def regions():
@@ -74,3 +78,5 @@ def err_han(e):
 def err_han(e):
     error_dict = {'message': e.message}
     return make_response(jsonify(error_dict), 404)
+
+
