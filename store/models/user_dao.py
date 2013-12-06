@@ -6,6 +6,7 @@ from role_dao import RoleDao
 from region_dao import RegionDao
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
+import hashlib
 
 
 class UserDao(Base):
@@ -68,7 +69,7 @@ class UserDao(Base):
 
     @staticmethod
     def createNewUser(login, password, first_name, last_name, email, role_id, region_id):
-        user = UserDao(login, password, first_name,last_name,email,role_id,region_id)
+        user = UserDao(login, hashlib.md5(password).hexdigest(), first_name,last_name,email,role_id,region_id)
         db_session.add(user)
         db_session.commit()
 
@@ -76,7 +77,7 @@ class UserDao(Base):
     def updateUser(id, login, password, first_name, last_name, email, role_id, region_id):
         entry = UserDao.getUserByID(id)
         entry.login = login
-        entry.password = password
+        entry.password = hashlib.md5(password).hexdigest()
         entry.first_name = first_name
         entry.last_name = last_name
         entry.email = email
@@ -87,7 +88,7 @@ class UserDao(Base):
     @staticmethod
     def updatePassword(userId, password):
         pst = UserDao.getUserByID(userId)
-        pst.password = password
+        pst.password = hashlib.md5(password).hexdigest()
         db_session.commit()
 
     @staticmethod
@@ -98,7 +99,8 @@ class UserDao(Base):
 
     @staticmethod
     def getUserByLogin(userLogin, userPassword):
-        return UserDao.query.filter(and_(UserDao.login == userLogin, UserDao.password == userPassword)).first()
+        return UserDao.query.filter(and_(UserDao.login == userLogin,
+                                         UserDao.password == hashlib.md5(userPassword).hexdigest())).first()
 
 
     @staticmethod
