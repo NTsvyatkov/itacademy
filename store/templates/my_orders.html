@@ -20,7 +20,7 @@
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
                             if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=4; j++)
+                            for (var j=0; j<=8; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
@@ -31,7 +31,7 @@
 
             function clearingTr(i)
                 {
-                    for (var j=0; j<=4; j++)
+                    for (var j=0; j<=8; j++)
                         {
                             tr[i].cells[j].innerHTML='';
                         }
@@ -56,21 +56,34 @@
 
 
             function ajaxSuccess(json){
-                deletingGrid()
-                createGrid(json.orders.length)
+                deletingGrid();
+                createGrid(json.orders.length);
+                var grid_length = json.orders.length;
                 /*Create table */
                 for (var order_k in json.orders)
                     {
                         k++;
                         tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
-                        tr[k].cells[1].innerHTML = json.orders[order_k].date;
-                        tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
-                        tr[k].cells[3].innerHTML = "$ "+json.orders[order_k].amount;
-                        tr[k].cells[4].innerHTML = "<img src='static/images/search.png' class='edit_img' alt=" + k + ">";
-                        tr[k].cells[4].abbr=k;
-                        tr[k].cells[4].onclick= function()
+                        tr[k].cells[1].innerHTML = "$ "+json.orders[order_k].total_price;
+                        tr[k].cells[2].innerHTML = json.orders[order_k].maxDiscount+' %';
+                        tr[k].cells[3].innerHTML = json.orders[order_k].delivery_date;
+                        tr[k].cells[4].innerHTML = json.orders[order_k].orderStatus;
+                        tr[k].cells[5].innerHTML = json.orders[order_k].assignee;
+                        tr[k].cells[6].innerHTML = json.orders[order_k].role;
+                        tr[k].cells[7].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
+                        tr[k].cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" +k+ ">";
+                        tr[k].cells[7].abbr=k;
+                        tr[k].cells[8].abbr=k;
+                        tr[k].cells[7].onclick= function()
                             {
                                 window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
+                            }
+                        tr[k].cells[8].onclick= function()
+                            {
+                                if(confirm('The order will be deleted from the List of Orders. Are you sure you want to proceed?')){
+                                    id = tr[this.abbr].cells[0].innerHTML;
+                                     deleteOrder(id,grid_length);
+                                }
                             }
                     }
                     k=0;
@@ -84,11 +97,48 @@
 
             $('#clr').click(deletingGrid);
 
+                function deleteOrder(id,grid_length)
+                {
+                    $.ajax({
+                    dataType: "json",
+                    url: '/api/orders/'+id,
+                    type: 'DELETE',
+                    success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The order has been successfully deleted');
+                           if (grid_length==1)
+                           {
+                               if (page!=1)
+                                {page=page-1;}
+                           }
+                          gridPagination();
+                         }
+                        else
+                         alert (json.message);
+                    },
 
+                     error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
 
-            function gridPagination(){$.ajax({
+            })
+             }
+
+            $('#apply_button').click(function(){
+                gridPagination()
+            });
+
+            function gridPagination(){
+                var name_options = document.getElementById('name_options').value;
+                var orders_options = document.getElementById('orders_options').value;
+                var name_input = document.getElementById('name_input').value;
+                $.ajax({
                 dataType: "json",
-                url: '/api/orders/?page='+page+'&table_size='+count_tr,
+                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&name_option='+name_options+'&orders_options='+orders_options+'&name_input='+name_input+'',
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json)
@@ -155,12 +205,44 @@
 
         <div class="">
 
+            <div class="">
+                 <div>
+                <a href='create_order' style='margin-left:50px; color:black; text-decoration:none;'>
+                <input type='button' value="Create New Order">
+                </a>
+                </div>
+                <div class=" ">
+                    <form class='form' action="">
+                        <br>
+                        <div class="field">
+                            <lable style="float: left; line-height: 30px; padding-right:10px;">Status: </lable>
+                            <select id="name_options" style="width: 100px; float: left" >
+                                <option value="0">All</option>
+                                <option value="1">Created</option>
+                                <option value="2">Pending</option>
+                                <option value="3">Ordered</option>
+                                <option value="4">Delivered</option>
+                            </select>
+                        </div>
+                        <div class="field" style="width: 500px;">
+                            <lable style="float: left; line-height: 30px; padding-right:10px;">Search for orders by: </lable>
+                            <select id="orders_options" style="width: 150px;float: left">
+                                <option value="0">Order Number</option>
+                                <option value="1">Assignee</option>
+                            </select>
+                            <input type="text" id="name_input">
+                        </div>
+                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -35px"></span>
+                    </form>
+                </div>
+
+
             <div style="margin-left:80%;">
             </div>
             <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select id="table_size">
-                    <option selected>5</option>
+                    <option selected>10</option>
                     <option>25</option>
 
                    </select>
@@ -169,19 +251,31 @@
                 <table id='grid' class="grid">
                     <tr>
                         <th>
-                            Id
+                            Order Number
                         </th>
                         <th>
-                            Date
+                            Total Price
                         </th>
                         <th>
-                            Status
+                            Max Discount
                         </th>
                         <th>
-                            Amount
+                            Delivery Date
                         </th>
                         <th>
-                            Details
+                            Ststus
+                        </th>
+                        <th>
+                            Assignee
+                        </th>
+                        <th>
+                            Role
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                        <th>
+                            Delete
                         </th>
                     </tr>
                 </table>

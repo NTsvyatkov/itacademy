@@ -12,10 +12,10 @@ from models.product_dao import Dimension, Product
 class ProductStock(Base):
     __tablename__ = "product_stock"
 
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    product_id = Column(Integer, ForeignKey('products.id'))
+    #id = Column(Integer, primary_key=True, autoincrement=True)
+    product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('product_stock', lazy='dynamic'))
-    dimension_id = Column(Integer, ForeignKey('dimensions.id'))
+    dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
     dimension = relationship('Dimension', backref=backref('product_stock', lazy='dynamic'))
     quantity = Column(Integer)
 

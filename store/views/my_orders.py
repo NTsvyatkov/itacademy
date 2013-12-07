@@ -2,8 +2,10 @@
 from flask import render_template, request, make_response, jsonify, session
 from flask_bootstrap import app
 from models.order_dao import Order,  OrderStatus
+from models.role_dao import RoleDao
 
-@app.route('/my_orders')
+
+@app.route('/orders')
 def my_orders():
   if session['role'] not in 'Customer':
     return "You've got permission to access this page."
@@ -14,12 +16,23 @@ def my_orders():
 @app.route('/api/orders/', methods=['GET'])
 def ordersPage():
     user_id = session['user_id']
+    filter = {'name': request.args.get('name_input'),
+                   'order_option': request.args.get('name_options'),
+                   'name_option': request.args.get('description')}
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    prods, records_amount = Order.pagerByFilter(user_id, page, records_per_page)
+
+    prods, records_amount = Order.pagerByFilter(user_id, page, records_per_page, filter)
     orders_list = []
     for i in prods:
-        orders_list.append({'order_id': i.id, 'date': i.date.strftime("%d/%m/%y"), 'orderStatus': OrderStatus.get_status(i.status_id).name,
-                            'amount': str(i.total_price)})
+        orders_list.append({'order_id': i.id, 'delivery_date': i.date.strftime("%d/%m/%y"),
+                            'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price),
+                            'assignee':i.assignee,'maxDiscount':'none', 'role': RoleDao.getRoleByID(2).name})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
+
+@app.route('/api/orders/<int:id>', methods=['DELETE'])
+def deleteOrder(id):
+
+    resp = make_response(jsonify({'message': 'success'}), 200)
+    return resp

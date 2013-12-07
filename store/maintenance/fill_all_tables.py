@@ -41,7 +41,7 @@ ProductStock.add_new_record(11,1,15)
 ProductStock.add_new_record(11,2,15)
 ProductStock.add_new_record(1,2,10)
 ProductStock.add_new_record(3,1,15)
-ProductStock.add_new_record(1,1,18)
+#ProductStock.add_new_record(1,1,18)
 
 RoleDao.createNewRole("Administrator")
 RoleDao.createNewRole("Merchandiser")
