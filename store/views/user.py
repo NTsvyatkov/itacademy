@@ -10,6 +10,9 @@ from views.authenticate import session
 
 @app.route('/create_user', methods=('GET', 'POST'))
 def create_user():
+    if session['role'] not in 'Administrator':
+       return "You've got permission to access this page."
+    else:
         return render_template('create_user.html',)
 
 @app.route('/search_user', methods=('GET', 'POST'))

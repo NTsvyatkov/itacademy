@@ -8,6 +8,9 @@ from views.authenticate import session
 
 @app.route('/create_product', methods=('GET', 'POST'))
 def CreateProduct():
+    if session['role'] not in 'Supervisor':
+       return "You've got permission to access this page."
+    else:
         return render_template('create_product.html',)
 
 

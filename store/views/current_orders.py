@@ -16,6 +16,9 @@ def current_orders():
 
 @app.route('/update_current_page', methods=('GET', 'POST'))
 def update_current_page():
+     if session['role'] not in 'Merchandiser':
+       return "You've got permission to access this page."
+     else:
         return render_template('update_current_page.html',)
 
 @app.route('/api/status', methods=['GET'])
