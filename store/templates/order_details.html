@@ -1,10 +1,14 @@
 {% extends "layout.html" %}
 {% block body %}
+        <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.core.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
+        <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
+
 <script>
 $(document).ready(function() {
     var tr = [];
     var count_tr=$('#table_size').val();
-    var th = ['Id','Product','Description','Dimension','Price','Quantity','Amount'];
+    var th = ['Item Number','Item Name','Item Description','Dimension','Price','Quantity','Price per Line'];
     var count_td= th.length-1;
     var page = 1;
     var table_grid = document.getElementById('grid');
@@ -57,32 +61,45 @@ $(document).ready(function() {
    {
     $.ajax({
         dataType: "json",
-        url: '/api/orders/'+order_id,
+        url: '/api/order_details/?page='+page+'&table_size='+count_tr+'&order_id='+order_id,
         type: 'GET',
         success: function(json)
         {
            ajax_success(json);
 
-//           records_amount=(json.records_amount);
-//           records_per_page=(json.records_per_page);
-//           pages_amount = Math.ceil(records_amount/records_per_page);
-//           document.getElementById("page").innerHTML = page;
-//           document.getElementById("pages_amount").innerHTML = pages_amount
+           all_items=(json.all_items);
+           items_per_page=(json.items_per_page);
+           pages_amount = Math.ceil(all_items/items_per_page);
+           $("#page").text(page);
+           $("#pages_amount").text(pages_amount);
 
-           if (page==1){
+if (page==1){
                $('#prev').prop('disabled', true);
                $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
            } else {
                $('#prev').prop('disabled', false);
                $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
            }
 
            if (page==pages_amount){
                $('#next').prop('disabled', true);
                $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
            } else {
                $('#next').prop('disabled', false);
                $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
            }
          }
       })
@@ -103,50 +120,100 @@ $(document).ready(function() {
                  tr[k].cells[1].innerHTML = json.orders.products[product_k].product_name;
                  tr[k].cells[2].innerHTML = json.orders.products[product_k].product_description;
                  tr[k].cells[3].innerHTML = json.orders.products[product_k].product_dimension;
-                 tr[k].cells[4].innerHTML = json.orders.products[product_k].product_price;
+                 tr[k].cells[4].innerHTML = "$" + json.orders.products[product_k].product_price;
                  tr[k].cells[5].innerHTML = json.orders.products[product_k].product_quantity;
-                 tr[k].cells[6].innerHTML = json.orders.products[product_k].product_quantity*json.orders.products[product_k].product_price;
-
+                 tr[k].cells[6].innerHTML = "$" + (json.orders.products[product_k].product_quantity*
+                                            json.orders.products[product_k].product_price).toFixed(2,0);
                 }
-          $('#customer_name').text(json.orders.user_name);
-          $('#assignee').text(json.orders.assignee);
+          $('#customer_name').text(json.orders.customer_name);
+          $('#customer_type').text(json.orders.customer_type);
           $('#order_number').text(json.orders.order_id);
-          $('#status').text(json.orders.order_status);
           $('#total_amount').text("$" + json.orders.total_price);
-          $('#delivery_date').text(json.orders.delivery_date);
           $('#quantity_of_items').text(json.orders.quantity_of_items);
+          $('#assignee').text(json.orders.assignee);
+          $('#date_of_ordering').text(formatDate(json.orders.order_date));
+//        $('#date_of_ordering').text(json.orders.order_date);
+          $('#preferable_delivery_date').text(json.orders.preferable_delivery_date);
+          $('#status').text(json.orders.order_status);
+          $('#delivery_date').text(formatDate(json.orders.delivery_date));
           if (!(json.orders.gift)){
               $('#gift').text("No");
           }
           else{
               $('#gift').text("Yes");
           }
-          $('#delivery_type').text(json.orders.delivery);
-          $('#date_of_ordering').text(json.orders.date);
-          $('#delivery_address').text(json.orders.delivery_address);
-          $('#preferable_delivery_date').text(json.orders.preferable_delivery_date);
-          $('#comments').text(json.orders.comments);
+
           var session_role = json.orders.session_role;
-          /*If customer in session*/
-          if (session_role == 'Customer') {
-              $('#p_customer_name').css({"display": "None"});
-              $('#customer_name').css({"display": "None"});
-              $('#p_assignee').css({"display": "None"});
-              $('#assignee').css({"display": "None"});
+          var order_status = json.orders.order_status
 
-          }
+      function formatDate(date){
+          var date_array = date.split('-');
+          return date_array[1] + '/' + date_array[2] + '/' + date_array[0]
+      }
 
-          else if (session_role == 'Superviser' && json.orders.order_status == 'Ordered') {
-              $('#p_gift').css({"display": "None"});
-              $('#gift').css({"display": "None"});
-              $('#p_delivery_date').css({"display": "None"});
-              $('#delivery_date').css({"display": "None"});
+     if (session_role=="Merchandiser"){
+         if (order_status !== "Delivered") {
+         $('#status').replaceWith( '<input type="checkbox" name="order_status" id="order_status" value="Delivered">Delivered<br>' );
+         $('#delivery_date').replaceWith( '<input type="text" id="datepicker" name="delivery_date">' );
+         $("#datepicker").attr('disabled', true);
+         $('#gift').replaceWith( '<input type="checkbox" id="gift_value" name="gift" value="True"><br>' );
+         }
+         else {
+             $("#button").remove();
+         }
 
-          }
+     }
+     if (session_role=="Customer"){
+         $("#button").remove();
+     }
+     $("#order_status").click(function(){
+         if ($('#order_status').prop('checked')!==true) {
+             $("#datepicker").attr('disabled', true);
+         }
+         else {
+             $("#datepicker").attr('disabled', false);
+         }
+     })
+
+    $("#datepicker .ui-datepicker-calendar").prop("display","block");
+     $("#datepicker").datepicker({
+		});
 
 
+     function validateDeliveryDate(){
+     var dateOfOrdering = Date.parse($("#date_of_odering").val());
+     var newDateOfOrdering = new Date(dateOfOrdering);
+     var deliveryDate = Date.parse($("#datepicker").val());
+     var newDeliveryDate = new Date(deliveryDate);
+     if (newDeliveryDate < newDateOfOrdering){
+         alert("Invalid delivery date!");
+       }
+     }
+
+    function send_data() {
+    $.ajax({
+
+        type: "PUT",
+        url: "/api/order_details/",
+        data:JSON.stringify({
+                id: order_id,
+                gift:$('#gift_value').val(),
+                status: $('#order_status').val(),
+                delivery_date: "12/06/2013"
+//                delivery_date: $('textarea[name="description"]').val()
+               }),
+        contentType: 'application/json;',
+        success : function (resp){
+            alert('Order has been successfully updated');
+            grid_pagination(); }
+    });
   }
 
+     $("#save").click(function(){
+      send_data();
+      grid_pagination();
+  });
+  }
 
   if (page==1)
   {
@@ -156,7 +223,7 @@ $(document).ready(function() {
   /*Pagination buttons events*/
 
    $('#next').click(function(){
-    if (page*records_per_page>=records_amount){page=page}
+    if (page*items_per_page>=all_items){page=page}
     else {page=page+1}
     grid_pagination()
     });
@@ -184,9 +251,9 @@ $(document).ready(function() {
     $('#table_size').change(function() {
         page=1;
         count_tr=$('#table_size').val();
-        $("#table_size option:selected").each(grid_pagination())
+        pages_amount = $("#table_size option:selected").val();
+        grid_pagination();
     });
-
 });
 </script>
 
@@ -199,20 +266,28 @@ div.details_block{
 }
 div.first_details_block {
 float:left;
-width:25%;}
+width:auto;}
 
 div.second_details_block {
 float:left;
-width:25%;
+width:auto;
+margin-left: 20px
 }
 div.third_details_block {
 float:left;
-width:25%;
+width:auto;
+margin-left: 40px
 }
 
 div.fourth_details_block {
 float:left;
-width:25%;
+width:auto;
+margin-left: 20px
+}
+
+div #button {
+    clear: both;
+    margin-left: 80%;
 }
 
 </style>
@@ -220,12 +295,10 @@ width:25%;
 
 <div id="order_detail">
     <div id="products_block">
-        <div id="amount_of_records" style="margin-left:75%;">
-            <lable>Records amount:</lable>
-                  <select id="table_size">
-                    <option selected>5</option>
-                    <option>10</option>
-
+        <div id="amount_of_records" style="width: 980px; margin: auto;">
+                   <select id="table_size" style="position: relative; left:850px">
+                        <option selected value="10">show 10 lines</option>
+                        <option value="25">show 25 lines</option>
                    </select>
         </div>
         <div id="products">
@@ -245,42 +318,40 @@ width:25%;
         </div>
     <div class="details_block">
         <div class="first_details_block">
-            <p id="p_customer_name">Customer name: </p>
-            <p>Order number: </p>
-            <p>Total amount: </p>
-            <p>Total number of items: </p>
-            <p>Delivery type: </p>
-            <p>Delivery address: </p>
-            <p>Preferable delivery date: </p>
-            <p>Comments: </p>
+            <p>Customer Name (Login): </p>
+            <p>Customer Type: </p>
+            <p>Order Number: </p>
+            <p>Total Amount: </p>
+            <p>Total Number of Items: </p>
+            <p>Assignee: </p>
+            <p>Date of Ordering: </p>
+            <p>Preferable Delivery Date: </p>
         </div>
         <div class="second_details_block">
             <p><span id="customer_name"></span></p>
+            <p><span id="customer_type"></span></p>
             <p><span id="order_number"></span></p>
             <p><span id="total_amount"></span></p>
             <p><span id="quantity_of_items"></span></p>
-            <p><span id="delivery_type"></span></p>
-            <p><span id="delivery_address"></span></p>
+            <p><span id="assignee"></span></p>
+            <p><span id="date_of_ordering"></span></p>
             <p><span id="preferable_delivery_date"></span></p>
             <p><span id="comments"></span></p>
         </div>
         <div class="third_details_block">
-            <p id="p_assignee">Assignee: </p>
-            <p>Status:  </p>
-            <p id="p_delivery_date">Delivery date: </p>
-            <p id="p_gift">Gift: </p>
-            <p>Date of ordering: </p>
-        </div>
-        <div class="fourth_details_block">
-            <p><span id="assignee"></span></p>
-            <p><span id="status"></span></p>
-            <p><span id="delivery_date"></span></p>
-            <p><span id="gift"></span></p>
-            <p><span id="date_of_ordering"></span></p>
+            <lable><p id="status_checkbox">Status: <span id="status"></span></p></lable>
+            <lable><p id="delivery_date_datepicker">Delivery date: <span id="delivery_date"></span></p></lable>
+            <lable><p id="gift_checkbox">Gift: <span id="gift"></span></p></lable>
         </div>
     </div>
 
 </div>
+   <div id="button">
+       <button id="save" type="button">Save</button>
+       <button id="cancel" type="button">Cancel</button>
+   </div>
 </div>
-
 {% endblock body %}
+
+
+

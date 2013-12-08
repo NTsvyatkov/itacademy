@@ -6,6 +6,7 @@ from validation import ValidationException, NotFoundException
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.order_dao import Order, OrderStatus, DeliveryType, OrderProduct
+from datetime import datetime
 
 
 def getListOrder():
@@ -50,3 +51,7 @@ def update_orders(id, status_id, delivery_id,
                   delivery_address, comment):
     Order.update_current_order(id, status_id, delivery_id,
                   delivery_address, comment)
+
+def update_order_details(id, delivery_date):
+    date = datetime.strptime(delivery_date, '%m/%d/%Y')
+    Order.update_order_details(id, date)

@@ -79,7 +79,7 @@ class Order(Base):
     @staticmethod
     def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
                      new_total_price, new_preferable_delivery_date, new_delivery_date,
-                     new_gift, new_delivery_address, new_comment ):
+                     new_gift, new_delivery_address, new_comment):
         ord_up = Order.get_order(id)
         ord_up.user_id = new_user_id
         ord_up.date = new_date
@@ -106,8 +106,14 @@ class Order(Base):
 
         db_session.commit()
 
+    @staticmethod
+    def update_order_details(id, delivery_date):
+        order = Order.get_order(id)
+        # order.gift = gift
+        # order.status = status
+        order.delivery_date = delivery_date
 
-
+        db_session.commit()
 
     @staticmethod
     def getOrderByStatus(user_id):
@@ -268,8 +274,11 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
 
     @staticmethod
-    def get_by_product(order_id):
-        return OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
+    def get_by_order_product(order_id, page=None, records_per_page=None):
+        stop = page * records_per_page
+        start = stop - records_per_page
+        count = OrderProduct.query.filter(OrderProduct.order_id == order_id).count()
+        return OrderProduct.query.filter(OrderProduct.order_id == order_id).slice(start, stop).all(), count
 
     @staticmethod
     def add_order_product(order_id, product_id, dimension_id, quantity, price = None):
@@ -304,9 +313,6 @@ class OrderProduct(Base):
             entry = i.dimension.number*i.quantity
             items = items+entry
         return items
-
-
-
 
 def order_product_grid(user_id, page=None, records_per_page=None):
     query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\

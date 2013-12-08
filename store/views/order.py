@@ -4,7 +4,7 @@ from business_logic.order_product import product_order_update
 from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
-
+from business_logic.order_manager import update_order_details
 
 @app.route('/order_product')
 def order_grid():
@@ -70,33 +70,44 @@ def quantity_post():
 def order_details(id):
     return render_template('order_details.html')
 
-@app.route('/api/orders/<int:id>', methods=['GET'])
-def list_orders_id(id):
-    all_in_order = OrderProduct.get_by_product(id)
-    quantity_of_items = OrderProduct.get_items_quantity(id)
+@app.route('/api/order_details/', methods=['GET'])
+def list_orders_id():
+    records_per_page = int(request.args.get('table_size'))
+    page = int(request.args.get('page'))
+    order_id = int(request.args.get('order_id'))
+    all_in_order, count = OrderProduct.get_by_order_product(order_id, page, records_per_page)
+    quantity_of_items = OrderProduct.get_items_quantity(order_id)
+    customer_name = str(all_in_order[0].order.user.first_name) + " " + \
+        str(all_in_order[0].order.user.last_name + " " + "(" + str(all_in_order[0].order.user.login) + ")")
     products = []
     for i in all_in_order:
         products.append({'product_id': i.product_id, 'product_name': i.product.name,
-                        'product_description': i.product.description, 'product_quantity': i.quantity,
-                        'product_dimension': i.dimension.name, 'product_price': str(i.product.price)})
-
-# 'user_name': all_in_order[0].order.user.login
-# 'assignee': all_in_order[0].order.assignee.login if all_in_order[0].order.assignee else None,
-# 'delivery_date': str(all_in_order[0].order.delivery_date),
-# 'gift': all_in_order[0].order.gift,
-    order = {'order_id': all_in_order[0].order_id,
-             'date': str(all_in_order[0].order.date), 'order_status': all_in_order[0].order.status.name,
-             'delivery': all_in_order[0].order.delivery.name, 'total_price': str(all_in_order[0].order.total_price),
+                        'product_description': i.product.description, 'product_dimension': i.dimension.name,
+                        'product_quantity': i.quantity, 'product_price': str(i.product.price)})
+    order = {'customer_name': customer_name,
+             'customer_type': "Silver",
+             'order_id': all_in_order[0].order_id, 'total_price': str(all_in_order[0].order.total_price),
+             'quantity_of_items': quantity_of_items,
+             'assignee': str(all_in_order[0].order.assignee.first_name) + " " +
+                         str(all_in_order[0].order.assignee.last_name) +
+                         "(" + str(all_in_order[0].order.assignee.login) +
+                         ")" if all_in_order[0].order.assignee else None,
+             'order_date': str(all_in_order[0].order.date),
              'preferable_delivery_date': str(all_in_order[0].order.preferable_delivery_date),
-             'delivery_address': all_in_order[0].order.delivery_address, 'quantity_of_items': quantity_of_items,
-             'comments': all_in_order[0].order.comment, 'products': products, 'session_role': session["role"]}
-    if session["role"] == "Customer":
-        order['gift'] = all_in_order[0].order.gift
-        order['delivery_date'] = str(all_in_order[0].order.delivery_date)
-    elif session["role"] == "Supervisor":
-        order['assignee'] = all_in_order[0].order.assignee.login if all_in_order[0].order.assignee else None
-        order['user_name'] = all_in_order[0].order.user.login
-        order['delivery_date'] = str(all_in_order[0].order.delivery_date)
-        order['gift'] = all_in_order[0].order.gift
-    return make_response(jsonify(orders=order), 200)
+             'order_status': all_in_order[0].order.status.name,
+             'delivery_date': str(all_in_order[0].order.delivery_date),
+             'gift': all_in_order[0].order.gift,
+             'products': products, 'session_role': session["role"]}
+    return make_response(jsonify(orders=order, all_items=count,
+                                 items_per_page=records_per_page), 200)
 
+@app.route('/api/order_details/', methods=['PUT'])
+def update_order_details():
+    js = request.json
+    id = js.get('id')
+    gift = js.get('gift')
+    status = js.get('status')
+    delivery_date = js.get('delivery_date')
+
+    update_order_details(id, delivery_date)
+    return make_response(jsonify({'message': 'success'}), 200)
