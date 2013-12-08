@@ -41,7 +41,6 @@ ProductStock.add_new_record(11,1,15)
 ProductStock.add_new_record(11,2,15)
 ProductStock.add_new_record(1,2,10)
 ProductStock.add_new_record(3,1,15)
-#ProductStock.add_new_record(1,1,18)
 
 RoleDao.createNewRole("Administrator")
 RoleDao.createNewRole("Merchandiser")
@@ -74,6 +73,8 @@ DeliveryType.add_delivery('Himself')
 OrderStatus.add_status('Ordered')
 OrderStatus.add_status('Delivered')
 OrderStatus.add_status('Cart')
+OrderStatus.add_status('Created')
+OrderStatus.add_status('Pending')
 
 Order.add_order(1,date.today(),2,2,12,2)
 Order.add_order(3,date.today(),1,1,43,1)
@@ -81,6 +82,11 @@ Order.add_order(2,date.today(),1,2,31,2)
 Order.add_order(4,date.today(),3,2,53,1)
 Order.add_order(2,date.today(),2,3,42,2)
 Order.add_order(2,date.today(),2,3,42,2)
+
+Order.add_order(5,date.today(),1,2,40,1,13/11/2013,15/11/2013)
+Order.add_order(5,date.today(),2,2,40,2,13/11/2013,15/11/2013)
+Order.add_order(5,date.today(),5,2,40,3,13/11/2013,15/11/2013)
+Order.add_order(5,date.today(),4,2,40,4,13/11/2013,15/11/2013)
 
 Order.add_order(1,date.today(),2,3)
 

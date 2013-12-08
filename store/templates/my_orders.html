@@ -82,7 +82,11 @@
                             {
                                 if(confirm('The order will be deleted from the List of Orders. Are you sure you want to proceed?')){
                                     id = tr[this.abbr].cells[0].innerHTML;
-                                     deleteOrder(id,grid_length);
+                                    if (tr[this.abbr].cells[4].innerHTML == 'Created' || tr[this.abbr].cells[4].innerHTML == 'Pending'){
+                                        deleteOrder(id,grid_length);
+                                    }else{
+                                        alert("Sorry, you can't delete order with status "+tr[this.abbr].cells[4].innerHTML)
+                                    }
                                 }
                             }
                     }
@@ -133,12 +137,12 @@
             });
 
             function gridPagination(){
-                var name_options = document.getElementById('name_options').value;
+                var status_options = document.getElementById('status_options').value;
                 var orders_options = document.getElementById('orders_options').value;
                 var name_input = document.getElementById('name_input').value;
                 $.ajax({
                 dataType: "json",
-                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&name_option='+name_options+'&orders_options='+orders_options+'&name_input='+name_input+'',
+                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+'',
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json)
@@ -216,7 +220,7 @@
                         <br>
                         <div class="field">
                             <lable style="float: left; line-height: 30px; padding-right:10px;">Status: </lable>
-                            <select id="name_options" style="width: 100px; float: left" >
+                            <select id="status_options" style="width: 100px; float: left" >
                                 <option value="0">All</option>
                                 <option value="1">Created</option>
                                 <option value="2">Pending</option>
@@ -263,7 +267,7 @@
                             Delivery Date
                         </th>
                         <th>
-                            Ststus
+                            Status
                         </th>
                         <th>
                             Assignee

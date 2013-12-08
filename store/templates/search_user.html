@@ -121,7 +121,7 @@
                 {
                  k++;
 
-                 tr[k].cells[0].innerHTML = json.users[user_k].login +
+                 tr[k].cells[0].innerHTML = json.users[user_k].login+
                          '<input class="hidden_id" hidden="true" value ='+json.users[user_k].id+'>';
                  tr[k].cells[1].innerHTML = json.users[user_k].first_name;
                  tr[k].cells[2].innerHTML = json.users[user_k].last_name;
@@ -132,9 +132,10 @@
                  tr[k].cells[7].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr[k].cells[6].abbr=k;
                  tr[k].cells[7].abbr=k;
+                     var id=  tr[k].id= json.users[user_k].id;
                  tr[k].cells[6].onclick = function edit_tr2()
                                       {
-                                       alert ('Edit '+tr[this.abbr].cells[1].innerHTML+'');
+                                       window.location.replace('edit_user?'+tr[this.abbr].id);
                                       }
                  tr[k].cells[7].onclick= function delete_tr2()
                                       {
