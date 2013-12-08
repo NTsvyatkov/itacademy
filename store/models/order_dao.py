@@ -114,10 +114,24 @@ class Order(Base):
         return Order.query.filter(and_(Order.status_id == 3, Order.user_id == user_id)).first()
 
     @staticmethod
-    def pagerByFilter(user_id=None, page=None, records_per_page=None):
-        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
+    def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
+        query = Order.query.filter(and_(Order.user_id == user_id))
+        if filter['order_option']:
+            print('1')
+            query={'0': query.all,
+                   '1': query.filter(Order.status_id == 1),
+                    '2': query.filter(Order.status_id == 2),
+                    '3': query.filter(Order.status_id == 3),
+                    '4': query.filter(Order.status_id == 4),
+                    '5': query.filter(Order.status_id == 5)}
+
+        if filter['name_option']:
+            print('2')
+            query={'0': query.filter(Order.id == filter['name']),
+                    '1': query.filter(Order.assignee == filter['name'])}
+
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 

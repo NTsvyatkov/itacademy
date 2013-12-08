@@ -14,6 +14,7 @@ def CreateProduct():
         return render_template('create_product.html',)
 
 
+
 @app.route('/product_grid', methods=('GET', 'POST'))
 def product_grid():
     if session['role'] not in 'Supervisor':
@@ -21,7 +22,9 @@ def product_grid():
     else:
         return render_template('product_grid.html',)
 
-
+@app.route('/item_search', methods=('GET', 'POST'))
+def item_search():
+    return render_template('item_search.html',)
 
 @app.route('/api/dimension', methods=['GET'])
 def dimensions():
