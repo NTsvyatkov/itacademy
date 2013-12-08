@@ -2,6 +2,7 @@ from models import Base, db_session
 from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
+from json import loads
 from models.user_dao import UserDao
 from models.role_dao import RoleDao
 from datetime import date
@@ -47,7 +48,6 @@ class Order(Base):
     @staticmethod
     def get_order(id):
         return Order.query.get(id)
-
 
     @staticmethod
     def getAllOrders():
@@ -107,10 +107,12 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def update_order_details(id, delivery_date):
+    def update_order_details(id, gift, status, delivery_date):
         order = Order.get_order(id)
-        # order.gift = gift
-        # order.status = status
+        order_status = OrderStatus.query.filter(OrderStatus.name == status).first()
+        order.gift = gift
+        order.status = order_status
+        order.status_id = order_status.id
         order.delivery_date = delivery_date
 
         db_session.commit()
@@ -324,5 +326,3 @@ def order_product_grid(user_id, page=None, records_per_page=None):
         return query.slice(start, stop).all(), count
     else:
         return query.all()
-
-

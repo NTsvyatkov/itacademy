@@ -52,6 +52,7 @@ def update_orders(id, status_id, delivery_id,
     Order.update_current_order(id, status_id, delivery_id,
                   delivery_address, comment)
 
-def update_order_details(id, delivery_date):
-    date = datetime.strptime(delivery_date, '%m/%d/%Y')
-    Order.update_order_details(id, date)
+def update_order_details(id, gift, status, delivery_date):
+    if delivery_date:
+        delivery_date = datetime.strptime(delivery_date, '%m/%d/%Y')
+    Order.update_order_details(id, gift, status, delivery_date)

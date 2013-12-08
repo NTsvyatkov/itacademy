@@ -132,7 +132,6 @@ if (page==1){
           $('#quantity_of_items').text(json.orders.quantity_of_items);
           $('#assignee').text(json.orders.assignee);
           $('#date_of_ordering').text(formatDate(json.orders.order_date));
-//        $('#date_of_ordering').text(json.orders.order_date);
           $('#preferable_delivery_date').text(json.orders.preferable_delivery_date);
           $('#status').text(json.orders.order_status);
           $('#delivery_date').text(formatDate(json.orders.delivery_date));
@@ -150,21 +149,39 @@ if (page==1){
           var date_array = date.split('-');
           return date_array[1] + '/' + date_array[2] + '/' + date_array[0]
       }
+      function CurrentDate(){
+          var today = new Date();
+          var dd = today.getDate();
+          var mm = today.getMonth()+1;
+          var yyyy = today.getFullYear();
+          if(dd<10){dd='0'+dd}
+          if(mm<10){mm='0'+mm}
+          today = mm+'/'+dd+'/'+yyyy;
+          return today
+      }
 
      if (session_role=="Merchandiser"){
          if (order_status !== "Delivered") {
-         $('#status').replaceWith( '<input type="checkbox" name="order_status" id="order_status" value="Delivered">Delivered<br>' );
-         $('#delivery_date').replaceWith( '<input type="text" id="datepicker" name="delivery_date">' );
+         $('#status').replaceWith('<input type="checkbox" id="order_status" value="Delivered"> Delivered<br>');
+         $('#delivery_date').replaceWith( '<input type="text" id="datepicker">' );
          $("#datepicker").attr('disabled', true);
-         $('#gift').replaceWith( '<input type="checkbox" id="gift_value" name="gift" value="True"><br>' );
-         }
+         $('#gift').replaceWith( '<input type="checkbox" id="gift_value" value="Gift"><br>' );
+          }
          else {
              $("#button").remove();
+         }
+
+         if (json.orders.gift===true){
+              $('#gift_value').attr('checked', true);
          }
 
      }
      if (session_role=="Customer"){
          $("#button").remove();
+         if (json.orders.order_status !== "Delivered"){
+                 $('#delivery_date').text("Not delivered")
+             }
+
      }
      $("#order_status").click(function(){
          if ($('#order_status').prop('checked')!==true) {
@@ -172,22 +189,34 @@ if (page==1){
          }
          else {
              $("#datepicker").attr('disabled', false);
+             $("#datepicker").val(CurrentDate());
          }
-     })
+     });
 
     $("#datepicker .ui-datepicker-calendar").prop("display","block");
      $("#datepicker").datepicker({
 		});
 
-
      function validateDeliveryDate(){
-     var dateOfOrdering = Date.parse($("#date_of_odering").val());
-     var newDateOfOrdering = new Date(dateOfOrdering);
+//         var a = $("#date_of_odering").innerText;
+//         alert(a);
+//         alert(Date.parse(a));
+     var dateOfOrdering = Date.parse(formatDate(json.orders.order_date));
+     var objDateOfOrdering = new Date(dateOfOrdering);
      var deliveryDate = Date.parse($("#datepicker").val());
-     var newDeliveryDate = new Date(deliveryDate);
-     if (newDeliveryDate < newDateOfOrdering){
-         alert("Invalid delivery date!");
-       }
+     var objDeliveryDate = new Date(deliveryDate);
+     var re = /^((((0[13578])|([13578])|(1[02]))[\/](([1-9])|([0-2][0-9])|(3[01])))|(((0[469])|([469])|(11))[\/](([1-9])|([0-2][0-9])|(30)))|((2|02)[\/](([1-9])|([0-2][0-9]))))[\/]\d{4}$|^\d{4}$/;
+     if ($('#order_status').prop('checked')===true){
+         if (re.exec($("#datepicker").val()) && objDeliveryDate >= objDateOfOrdering) {
+             return true
+         }
+         else {
+             return false
+           }
+     }
+     else {
+         return true
+     }
      }
 
     function send_data() {
@@ -197,21 +226,24 @@ if (page==1){
         url: "/api/order_details/",
         data:JSON.stringify({
                 id: order_id,
-                gift:$('#gift_value').val(),
-                status: $('#order_status').val(),
-                delivery_date: "12/06/2013"
-//                delivery_date: $('textarea[name="description"]').val()
+                gift:$('#gift_value').prop('checked'),
+                status: $('#order_status').prop('checked'),
+                delivery_date: $("#datepicker").val()
                }),
         contentType: 'application/json;',
         success : function (resp){
             alert('Order has been successfully updated');
-            grid_pagination(); }
+            location.reload(); }
     });
   }
 
      $("#save").click(function(){
+      if (validateDeliveryDate() === false) {
+           alert("Invalid delivery date!");
+      }
+      else {
       send_data();
-      grid_pagination();
+      }
   });
   }
 

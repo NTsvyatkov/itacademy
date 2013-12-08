@@ -5,6 +5,7 @@ from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
 from business_logic.order_manager import update_order_details
+from json import loads
 
 @app.route('/order_product')
 def order_grid():
@@ -102,12 +103,12 @@ def list_orders_id():
                                  items_per_page=records_per_page), 200)
 
 @app.route('/api/order_details/', methods=['PUT'])
-def update_order_details():
+def v_update_order_details():
     js = request.json
     id = js.get('id')
-    gift = js.get('gift')
-    status = js.get('status')
+    gift = True if js.get('gift') else False
+    status = "Delivered" if js.get('status') else "Ordered"
     delivery_date = js.get('delivery_date')
 
-    update_order_details(id, delivery_date)
+    update_order_details(id, gift, status, delivery_date)
     return make_response(jsonify({'message': 'success'}), 200)
