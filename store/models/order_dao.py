@@ -117,23 +117,28 @@ class Order(Base):
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.filter(and_(Order.user_id == user_id))
+        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
+        if filter['status_option']:
+            filterStatus={'0': Order.id != 0,
+                    '1': Order.status_id == 4,
+                    '2': Order.status_id == 5,
+                    '3': Order.status_id == 1,
+                    '4': Order.status_id == 2}
         if filter['order_option']:
-            print('1')
-            query={'0': query.all,
-                   '1': query.filter(Order.status_id == 1),
-                    '2': query.filter(Order.status_id == 2),
-                    '3': query.filter(Order.status_id == 3),
-                    '4': query.filter(Order.status_id == 4),
-                    '5': query.filter(Order.status_id == 5)}
-
-        if filter['name_option']:
-            print('2')
-            query={'0': query.filter(Order.id == filter['name']),
-                    '1': query.filter(Order.assignee == filter['name'])}
-
+            filterOrder={'0': Order.id.like(filter['name']+'%'),
+                    '1': UserDao.first_name.like(filter['name']+'%')}
+        if filter['order_option']:
+            query = query.filter(filterOrder[filter['order_option']])
+        if filter['status_option']:
+            query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
+    @staticmethod
+    def deleteOrder(orderId):
+        removeOrder = Order.get_order(orderId)
+        db_session.delete(removeOrder)
+        db_session.commit()
 
 
     @staticmethod
