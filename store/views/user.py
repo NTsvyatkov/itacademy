@@ -15,6 +15,12 @@ def create_user():
     else:
         return render_template('create_user.html',)
 
+
+@app.route('/edit_user', methods=('GET', 'POST'))
+def edit_user():
+        return render_template('edit_user.html',)
+
+
 @app.route('/search_user', methods=('GET', 'POST'))
 def search_user():
     if session['role'] not in 'Administrator':
@@ -78,6 +84,15 @@ def users_id(id):
     resp = make_response(jsonify(users=user),200)
     return resp
 
+
+@app.route('/api/edit_user/<int:id>', methods = ['GET'])
+def users_id(id):
+    i=getUserByID(id)
+    user ={'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'region_id':i.region_id, 'role_id':RoleDao.getRoleByID(i.role_id).name}
+    resp = make_response(jsonify(users=user),200)
+    return resp
+
+
 @app.route('/api/user/<int:user_id>', methods=['DELETE'])
 def users_id_delete(user_id):
     deleteUser(user_id)
@@ -93,10 +108,10 @@ def users_post():
     resp = make_response('', 201)
     return resp
 
-@app.route('/api/user', methods = ['PUT'])
+@app.route('/api/edit_user', methods = ['PUT'])
 def users_update():
     js = request.json
-    updateUser(js['login'],js['first_name'],js['last_name'],js['password'],js['email'],js['region_id'],js['role_id'])
+    updateUser(js['user_id'],js['login'],js['password'],js['first_name'],js['last_name'],js['email'],js['role_id'],js['region_id'],)
     resp = make_response('',200)
     return resp
 
