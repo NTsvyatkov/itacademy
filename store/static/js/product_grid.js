@@ -223,7 +223,9 @@ $(document).ready(function() {
       $('#description_input').val('');
       $('#price_options').val(0);
       $('#price_input').val('');
-      $('#error_div').empty()
+      $('.error_div').empty();
+       error ='';
+
     });
   /*----------------------------End  Update and clear table's button------------------------*/
 

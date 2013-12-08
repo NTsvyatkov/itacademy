@@ -357,10 +357,7 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
  font-weight: bold;
 }
 
-.ui-datepicker-calendar {
- display: none;
 
- }
 
 .empty_order{
     color:red;

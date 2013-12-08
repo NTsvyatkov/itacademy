@@ -6,12 +6,21 @@
           changeYear: true,
           showButtonPanel: true,
           dateFormat: 'yy/mm',
+          beforeShow :function(){$('.ui-datepicker-calendar').css('display','none');},
           onClose: function(dateText, inst) {
             var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
             $(this).datepicker('setDate', new Date(year, month, 1));
         }
 		});
+        $("#expire_date").focus(function () {
+           $(".ui-datepicker-calendar").hide();
+           $("#ui-datepicker-div").position({
+             my: "center top",
+             at: "center bottom",
+             of: $(this)
+            });
+        });
 
 		$( "#start_date" ).datepicker({
           changeMonth: true,
@@ -25,6 +34,15 @@
             $(this).datepicker('setDate', new Date(year, month, 1));
         }
 		});
+
+         $("#start_date").focus(function () {
+           $(".ui-datepicker-calendar").hide();
+           $("#ui-datepicker-div").position({
+             my: "center top",
+             at: "center bottom",
+             of: $(this)
+            });
+        });
 	});
 /*--------------------------*/
 
@@ -226,7 +244,8 @@ $(document).ready(function() {
                    var object_amount =tr.children('td').children('.amount');
                    if(!(quantity/quantity)||(quantity==0)){  /*Check on numeric */
                       $(this).next('.error_div').empty();
-                      $(this).next('.error_div').html('Quantity should be numeric and not 0');
+                      //$(this).next('.error_div').html('Quantity should be numeric and not 0');
+                      alert('Quantity should be numeric and not 0');
                       $(this).prev().val(old_quantity);
                      }
                     else{
@@ -352,8 +371,7 @@ $(document).ready(function() {
        }
       }
 
-      /*Credit card date validation*/
-
+      /*----------Credit card date validation----------------------------*/
 
       date_expire= $('#expire_date').val().replace('/', '-')+'-01T00:00';
        if (!Date.parse(date_expire))
