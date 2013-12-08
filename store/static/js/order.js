@@ -1,12 +1,13 @@
 
 /* JQueri UI  - Datapicker options*/
 	$(function() {
+
+        $( "#expire_date").click(function(){$('.ui-datepicker-calendar').hide()});
 		$( "#expire_date" ).datepicker({
           changeMonth: true,
           changeYear: true,
           showButtonPanel: true,
           dateFormat: 'yy/mm',
-          beforeShow :function(){$('.ui-datepicker-calendar').css('display','none');},
           onClose: function(dateText, inst) {
             var month = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
             var year = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
@@ -22,6 +23,7 @@
             });
         });
 
+        $( "#start_date").click(function(){$('.ui-datepicker-calendar').hide()});
 		$( "#start_date" ).datepicker({
           changeMonth: true,
           changeYear: true,
@@ -35,7 +37,7 @@
         }
 		});
 
-         $("#start_date").focus(function () {
+        $("#start_date").focus(function () {
            $(".ui-datepicker-calendar").hide();
            $("#ui-datepicker-div").position({
              my: "center top",
@@ -61,7 +63,8 @@ $(document).ready(function() {
     var total_price;
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
-
+    $('#start_date').css('background-color','#e2e2e2');
+    $('#start_date').val('');
     /* Change table size <select> event*/
     $('#table_size').change(function () {
        page=1;
@@ -130,7 +133,7 @@ $(document).ready(function() {
              tr.children('td').children('.old_quantity').val(quantity);
              total_amount= total_price-(+old_quantity*+price*dim)+(+quantity*+price*dim);
              total_price=total_amount;
-             $('#total_amount').text('Total amount: ' + total_amount.toFixed(2)+'$');
+             $('#total_amount').val(total_amount.toFixed(2)+'$');
           },
 
         error: function(e)
@@ -181,14 +184,15 @@ $(document).ready(function() {
  }
  /*Function ajax_success parse Json and add values in table - grid  */
   function ajax_success(json){
-           deleting_grid();
            var grid_length=json.order.length;
-           create_grid(grid_length,count_td);
            var k=0;
            var amount=0;
            var input;
            var tr;
-           total_price= +json.total_price
+           total_price= +json.total_price;
+           $('#total_items').val(json.records_amount);
+           deleting_grid();
+           create_grid(grid_length,count_td);
            /*Create table with new order_products list */
             for (var product_k in json.order)
                {
@@ -218,7 +222,7 @@ $(document).ready(function() {
                  tr.cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
-                $('#total_amount').text('Total amount: ' + total_price.toFixed(2)+'$');
+                $('#total_amount').val(total_price.toFixed(2)+'$');
             /*--------------------------------End creating table------------------------------------*/
 
                 $('.delete_img').click(function(){
@@ -307,18 +311,6 @@ $(document).ready(function() {
      /*---------------------------------*
 
       /* String length validation */
-       if  (($('#input_address').val().length >50) || ($('#input_address').val().length == 0))
-       {
-        no_error = false;
-        error ='Address string should be less then 50 characters , but not 0 character';
-        error_list.push({id:$('#input_address'), error:error});
-       }
-       if  ($('#input_comments').val().length >1500)
-       {
-        no_error = false;
-        error ='Comment string should be less then 1500 characters';
-        error_list.push({id:$('#input_comments'), error:error});
-       }
 
        for( var i=0, total=0, k=0; i<$('.quantity').size(); i++)
         {
@@ -458,16 +450,29 @@ $(document).ready(function() {
   $('#credit_card_options').change(function () {
       if ($('#credit_card_options').val() != 4)
       {
-         $('#start_date').datepicker( "option", "disabled", true );
          $('#issue_number').attr('readonly',true);
          $('#issue_number').css('background-color','#e2e2e2');
-
+         $('#start_date').attr('readonly',true);
+         $('#start_date').css('background-color','#e2e2e2');
+         $('#start_date').val('');
+         $('#start_date').datepicker( "option", "disabled", true );
       }
       else
       {
-          $('#start_date').datepicker( "option", "disabled", false );
+
           $('#issue_number').attr('readonly',false);
           $('#issue_number').css('background-color','white');
+          $('#start_date').attr('readonly',false);
+          $('#start_date').css('background-color','white');
+          $('#start_date').datepicker( "option", "disabled", false );
+          $("#start_date").focus(function () {
+           $(".ui-datepicker-calendar").hide();
+           $("#ui-datepicker-div").position({
+             my: "center top",
+             at: "center bottom",
+             of: $(this)
+            });
+          });
           maestro_card = true;
 
       }

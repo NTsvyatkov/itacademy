@@ -4,6 +4,7 @@
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.core.js') }}"></script>
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
+<script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
@@ -24,17 +25,20 @@
 </script>
 
  <div id="order_block">
-      <div id="products_filter">
-
-      </div>
-      <div id="products_table">
-      <div class="field" style="float:right; margin-right:90px;">
+      <div id="products_table" style='width:990px;'>
+        <span class='info'>Items Selection</span><br>
+        <div class="order_top_input" style="float:left;width:100px;">
+         <a href='edit' style='color:black; text-decoration:none;'>
+         <input type='button' value="Add Item">
+        </a>
+        </div>
+        <div class="order_top_input" style="float:right;width:250px;">
           <lable>Table size: </lable>
-              <select id="table_size">
+              <select id="table_size" style='width:130px;'>
               <option selected value="10">Show 10 lines</option>
               <option value="25">Show 25 lines</option>
           </select>
-       </div>
+        </div>
        <div style="clear:both;"></div>
        <table id='grid' class="grid">
        </table>
@@ -49,28 +53,42 @@
               <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
 
           </div>
-
-
       </div>
           <div style="clear:both;"></div>
 
       <div class="product_filter_in" style=" margin:0px auto; ">
-         <div class="ProductTitle" id="total_amount" style="width:75%; text-align:right;" >
-             Total amount:
-         </div>
-       <div style="width:850px; margin:0 auto;">
+
+       <div style="width:980px; margin:0 auto;">
         <div class="order_block">
+           <span class='info'>Totals</span>
+
+           <div class="field">
+               <lable>Order Number:</lable>
+               <input type="text" id="order_number">
+           </div>
+
+            <div class="field">
+               <lable>Status:</lable>
+               <input type="text" id="order_status" class='input_read' style='border:none;' readonly >
+           </div>
+
+           <div class="field">
+               <lable>Total Price:</lable>
+               <input type="text" id="total_amount" class='input_read' style='border:none;' readonly >
+           </div>
+
+           <div class="field">
+               <lable>Total Number of Items:</lable>
+               <input type="text" id="total_items" class='input_read' style='border:none;' readonly >
+           </div>
 
            <div class="field">
                <lable>Delivery Type: </lable>
                <select id="delivery_options" style="width:165px;">
-
                </select>
            </div>
-           <div class="field">
-               <lable>Delivery Address<span class='red_star'>*</span>: </lable>
-               <input type="text" id="input_address">
-           </div>
+
+
 
            <div class="field">
                <lable>Comments: </lable>
@@ -84,7 +102,7 @@
         </div>
 
         <div class="order_block">
-            <span style='margin-left:10px; font-weight: bold;'>Card Info</span>
+            <span class='info'>Card Info</span>
            <div class="field">
             <lable>Credit Card Type:<span class='red_star'>*</span> </lable>
                <select id="credit_card_options" style="width:165px;">
