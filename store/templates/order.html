@@ -76,12 +76,18 @@
                <lable>Total Price:</lable>
                <input type="text" id="total_amount" class='input_read' style='border:none;' readonly >
            </div>
-
            <div class="field">
                <lable>Total Number of Items:</lable>
                <input type="text" id="total_items" class='input_read' style='border:none;' readonly >
            </div>
-
+           <div class="field">
+               <lable>Date of Ordering:</lable>
+               <input type="text" id="order_date" class='input_read' style='border:none;' readonly>
+            </div>
+           <div class="field">
+               <lable>Preferable De-y Date:</lable>
+               <input type="text" id="preferable_date">
+            </div>
            <div class="field">
                <lable>Delivery Type: </lable>
                <select id="delivery_options" style="width:165px;">
@@ -93,6 +99,9 @@
            <div class="field">
                <lable>Comments: </lable>
                <textarea class="comments_area" id="input_comments"></textarea>
+           </div>
+            <div class="field">
+             <input type='text' hidden='true' id="hidden_preferable_date">
            </div>
 
            <div class="field">

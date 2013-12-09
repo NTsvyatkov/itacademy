@@ -1,7 +1,7 @@
 
 /* JQueri UI  - Datapicker options*/
 	$(function() {
-
+        var dateReg =/^(0?[1-9]|[12][0-9]|3[01])[\/\-](0?[1-9]|1[012])[\/\-]\d{4}$/;
         $( "#expire_date").click(function(){$('.ui-datepicker-calendar').hide()});
 		$( "#expire_date" ).datepicker({
           changeMonth: true,
@@ -45,6 +45,21 @@
              of: $(this)
             });
         });
+
+        $( "#preferable_date" ).datepicker(
+            {
+                dateFormat: 'dd/mm/yy',
+                onClose: function(){
+                         if(!dateReg.test($( this).val())){
+                         $(this).datepicker('setDate', new Date());
+                         }
+                          var dateTypeVar = $(this).datepicker('getDate');
+                          var tt=$.datepicker.formatDate('yy-mm-dd', dateTypeVar);
+                          $('#hidden_preferable_date').val(tt)
+
+                }
+            }
+        );
 	});
 /*--------------------------*/
 
@@ -53,7 +68,8 @@
 $(document).ready(function() {
     var order_id=0;
     var maestro_card = false;
-    var th = ['Product name','Description','Dimension','Price $','Quantity','Amount $','Delete'];
+    var th = ['Item Number','Item Name','Item Description','Dimension','$ Price','Quantity',
+                                                          '$ Price per Line','Edit','Delete'];
     var count_td= th.length-1;
     var count_tr=$('#table_size').val();
     var tr = [];
@@ -61,6 +77,7 @@ $(document).ready(function() {
     var error_list =[];
     var table_grid = document.getElementById('grid');
     var total_price;
+    var order_date;
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
     $('#start_date').css('background-color','#e2e2e2');
@@ -190,7 +207,13 @@ $(document).ready(function() {
            var input;
            var tr;
            total_price= +json.total_price;
-           $('#total_items').val(json.records_amount);
+           order_date=json.order_date*1000;
+           var dt = new Date(order_date);
+           var order_date_format=dt.getDate() +'/'+(dt.getMonth()+1)+'/'+dt.getFullYear();
+           $('#total_items').val(json.total_items);
+           $('#order_date').val(order_date_format);
+           $('#order_status').val(json.order[0].order_status);
+           $('#total_amount').val(total_price.toFixed(2)+'$');
            deleting_grid();
            create_grid(grid_length,count_td);
            /*Create table with new order_products list */
@@ -202,27 +225,28 @@ $(document).ready(function() {
                  product_name =json.order[product_k].name;
                  id_product =json.order[product_k].id;
                  product_price = +json.order[product_k].price;
-                 tr.cells[0].innerHTML =product_name;
-                 tr.cells[1].innerHTML = json.order[product_k].description;
-                 tr.cells[2].innerHTML = json.order[product_k].dimension +
+                 tr.cells[1].innerHTML =product_name;
+                 tr.cells[2].innerHTML = json.order[product_k].description;
+                 tr.cells[3].innerHTML = json.order[product_k].dimension +
                          '<input class="dimension" value="'+json.order[product_k].dimension_id+'" type="hidden">'+
                          '<input class="old_quantity" value="'+json.order[product_k].quantity+'" type="hidden">';
 
-                 tr.cells[3].innerHTML = "<span class='price'>"+product_price.toFixed(2)+"</span>";
+                 tr.cells[4].innerHTML = "<span class='price'>"+product_price.toFixed(2)+"</span>";
 
                  input = "<input type='text' class='quantity' value='"+json.order[product_k].quantity+"'\
                         alt='"+json.order[product_k].id+"' style='width:60px'>\
                         <img  alt='refresh' class='update_amount' src='static/images/refresh_32.png'> \
                          <b class='error_div'></b>";
 
-                 tr.cells[4].innerHTML = input;
+                 tr.cells[5].innerHTML = input;
                  if (json.order[product_k].quantity) quant= Math.round(json.order[product_k].quantity); else quant= 0;
                  amount= (product_price * +quant*+json.order[product_k].dimension_number).toFixed(2);
-                 tr.cells[5].innerHTML = "<span class='amount'>"+amount+"</span>";
-                 tr.cells[6].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
+                 tr.cells[6].innerHTML = "<span class='amount'>"+amount+"</span>";
+                 tr.cells[7].innerHTML ="<img src='static/images/Text Edit.png' class='edit_img'>";
+                 tr.cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
                  id='"+product_name+"' alt=" + json.order[product_k].id + " >";
                }
-                $('#total_amount').val(total_price.toFixed(2)+'$');
+
             /*--------------------------------End creating table------------------------------------*/
 
                 $('.delete_img').click(function(){
@@ -297,6 +321,10 @@ $(document).ready(function() {
      var month;
      var year;
      var now_date;
+     var preferable_date;
+     var form_value;
+     var quantity;
+     var credit_number;
     /* Clear error and border-color*/
       if(error_list)
       {
@@ -404,6 +432,21 @@ $(document).ready(function() {
       }
 
       /*--------------------End of Credit card validation----------------------*/
+
+
+      /*----------------Preferable Delivery Date validation------------------*/
+      preferable_date= $('#hidden_preferable_date').val()+'T02:00';
+       if ($('#hidden_preferable_date').val())
+         {
+             preferable_date=Date.parse(preferable_date);
+             if (preferable_date < order_date) {
+             no_error = false;
+             error='Preferable Delivery Date should be goes before then Date of Ordering';
+             error_list.push({id:$('#preferable_date'), error:error});
+             }
+         }
+
+      /*--------------------end of Preferable Delivery Date validation-------*/
        if (no_error){
 
           /*Clear error message*/

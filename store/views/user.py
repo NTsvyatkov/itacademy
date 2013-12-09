@@ -84,13 +84,13 @@ def users_id(id):
     resp = make_response(jsonify(users=user),200)
     return resp
 
-
-@app.route('/api/edit_user/<int:id>', methods = ['GET'])
-def users_id(id):
-    i=getUserByID(id)
-    user ={'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'region_id':i.region_id, 'role_id':RoleDao.getRoleByID(i.role_id).name}
-    resp = make_response(jsonify(users=user),200)
-    return resp
+#This route don't work
+#@app.route('/api/edit_user/<int:id>', methods = ['GET'])
+#def users_id(id):
+#    i=getUserByID(id)
+#    user ={'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'region_id':i.region_id, 'role_id':RoleDao.getRoleByID(i.role_id).name}
+#    resp = make_response(jsonify(users=user),200)
+#    return resp
 
 
 @app.route('/api/user/<int:user_id>', methods=['DELETE'])

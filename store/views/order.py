@@ -6,6 +6,8 @@ from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
 from business_logic.order_manager import update_order_details
 from json import loads
+import calendar
+import time
 
 @app.route('/order_product')
 def order_grid():
@@ -33,16 +35,22 @@ def order():
         order_list,count = order_product_grid(4,page, records_per_page)
         quantity_list = order_product_grid(4)
     total_price=0
+    total_items=0
+
+    order_date=str(order_list[0].Order.date)
+    mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')
+    mysql_time_epoch = calendar.timegm(mysql_time_struct)
     for j in quantity_list:
         dimen = j.OrderProduct.dimension.number
         total_price=total_price + j.Product.price*j.OrderProduct.quantity*dimen
+        total_items=total_items+j.OrderProduct.quantity*dimen
     for i in order_list:
         order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': str(i.Product.price),\
-         'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
+         'order_status':i.Order.status.name,'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
          'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id,\
          'dimension_number':i.OrderProduct.dimension.number})
-    return make_response(jsonify(order=order_arr,records_amount=count,\
-                                 records_per_page=records_per_page, total_price=str(total_price)), 200)
+    return make_response(jsonify(order=order_arr,records_amount=count, total_items=total_items,\
+                order_date=mysql_time_epoch, records_per_page=records_per_page, total_price=str(total_price)), 200)
 
 
 @app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])
