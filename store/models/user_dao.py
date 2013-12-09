@@ -1,13 +1,32 @@
 #!/usr/bin/env python
 
 from sqlalchemy import ForeignKey, and_
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String,DECIMAL
 from role_dao import RoleDao
 from region_dao import RegionDao
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 import hashlib
 
+
+class UserLevel(Base):
+    __tablename__ = "user_level"
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    name = Column(String(50))
+    balance = Column(DECIMAL(7,2))
+    discount = Column(Integer)
+
+    def __init__(self,name,balance, discount):
+        super(UserLevel, self).__init__()
+        self.name = name
+        self.balance = balance
+        self.discount = discount
+
+    @staticmethod
+    def add_user_level(name, balance, discount):
+        user_level = UserLevel(name, balance, discount)
+        db_session.add(user_level)
+        db_session.commit()
 
 class UserDao(Base):
     __tablename__ = "user"
@@ -20,10 +39,11 @@ class UserDao(Base):
     email = Column(String(100), unique=True)
     role_id = Column(Integer, ForeignKey(RoleDao.role_id))
     region_id = Column(Integer, ForeignKey(RegionDao.region_id))
-
     role = relationship(RoleDao, backref=backref('user', lazy='dynamic'))
     region = relationship(RegionDao, backref=backref('user', lazy='dynamic'))
-
+    level_id = Column(Integer, ForeignKey(UserLevel.id))
+    level= relationship(UserLevel, backref=backref('user', lazy='dynamic'))
+    balance = Column(DECIMAL(7,2))
     def __init__(self,login, password, first_name, last_name, email, role_id, region_id):
         super(UserDao, self).__init__()
         self.password = password
@@ -118,3 +138,5 @@ class UserDao(Base):
         start = stop - records_per_page
         return query.order_by(UserDao.id).slice(start, stop), \
             query.count()
+
+

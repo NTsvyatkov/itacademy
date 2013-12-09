@@ -27,10 +27,12 @@ class Order(Base):
     gift = Column(Boolean, default=False, nullable=True)
     delivery_address = Column(String(50))
     comment = Column(TEXT)
+    order_number=Column(String(6), unique=True)
+    discount=Column(Integer, nullable=True)
 
 
     def __init__(self, user_id, date,status_id, delivery_id, total_price, assignee_id,
-                 preferable_delivery_date, delivery_date, gift, delivery_address, comment ):
+                 preferable_delivery_date, delivery_date, gift, delivery_address, comment,order_number,discount ):
         super(Order, self).__init__()
         self.user_id = user_id
         self.date = date
@@ -44,6 +46,8 @@ class Order(Base):
         self.gift = gift
         self.delivery_address = delivery_address
         self.comment = comment
+        self.order_number=order_number
+        self.discount=discount
 
     @staticmethod
     def get_order(id):
@@ -70,16 +74,16 @@ class Order(Base):
     @staticmethod
     def add_order(user_id, date, status_id, delivery_id = None, total_price = None, assignee_id = None,
                   preferable_delivery_date = None, delivery_date=None, gift= None,
-                   delivery_address = None, comment =None):
+                   delivery_address = None, comment =None,order_number=None, discount=None):
         order = Order(user_id, date, status_id, delivery_id, total_price, assignee_id, preferable_delivery_date,
-                      delivery_date, gift,delivery_address,comment)
+                      delivery_date, gift,delivery_address,comment,order_number,discount)
         db_session.add(order)
         db_session.commit()
 
     @staticmethod
     def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
                      new_total_price, new_preferable_delivery_date, new_delivery_date,
-                     new_gift, new_delivery_address, new_comment):
+                     new_gift, new_delivery_address, new_comment, new_order_number, new_discount):
         ord_up = Order.get_order(id)
         ord_up.user_id = new_user_id
         ord_up.date = new_date
@@ -92,6 +96,8 @@ class Order(Base):
         ord_up.gift = new_gift
         ord_up.delivery_address = new_delivery_address
         ord_up.comment = new_comment
+        ord_up.new_order_number=new_order_number
+        ord_up.new_discount=new_discount
 
         db_session.commit()
 

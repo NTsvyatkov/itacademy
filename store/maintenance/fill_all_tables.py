@@ -2,7 +2,7 @@ from models.product_dao import Product, Dimension
 from models.product_stock_dao import ProductStock
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
-from models.user_dao import UserDao
+from models.user_dao import UserDao, UserLevel
 from models.order_dao import Order, OrderProduct, OrderStatus,DeliveryType
 from models.product_stock_dao import ProductStock
 
@@ -72,9 +72,9 @@ DeliveryType.add_delivery('Himself')
 
 OrderStatus.add_status('Ordered')
 OrderStatus.add_status('Delivered')
-OrderStatus.add_status('Cart')
 OrderStatus.add_status('Created')
 OrderStatus.add_status('Pending')
+
 
 Order.add_order(1,date.today(),2,2,12,2)
 Order.add_order(3,date.today(),1,1,43,1)
@@ -85,7 +85,6 @@ Order.add_order(2,date.today(),2,3,42,2)
 
 Order.add_order(5,date.today(),1,2,40,1,13/11/2013,15/11/2013)
 Order.add_order(5,date.today(),2,2,40,2,13/11/2013,15/11/2013)
-Order.add_order(5,date.today(),5,2,40,3,13/11/2013,15/11/2013)
 Order.add_order(5,date.today(),4,2,40,4,13/11/2013,15/11/2013)
 
 Order.add_order(1,date.today(),2,3)
@@ -102,3 +101,7 @@ OrderProduct.add_order_product(4,6,1,4)
 OrderProduct.add_order_product(4,7,3,2)
 OrderProduct.add_order_product(4,11,1,1)
 
+UserLevel.add_user_level('Standard', 0, 0)
+UserLevel.add_user_level('Silver', 1000, 5)
+UserLevel.add_user_level('Gold', 3000, 10)
+UserLevel.add_user_level('Platinum', 10000, 15)
