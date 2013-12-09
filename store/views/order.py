@@ -1,5 +1,5 @@
 from flask import jsonify, render_template, request, make_response, session, json
-from models.order_dao import OrderProduct
+from models.user_dao import UserDao
 from business_logic.order_product import product_order_update
 from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
@@ -11,14 +11,14 @@ import time
 
 @app.route('/order_product')
 def order_grid():
-    delivery_list = DeliveryType.get_delivery_all()
-    delivery_arr = []
-    for i in delivery_list:
-        delivery_arr.append({'id': i.id, 'name': i.name})
+    assingee_list = UserDao.getUserByRole(2)
+    assingee_arr = []
+    for i in assingee_list:
+        assingee_arr.append({'id': i.id, 'name': i.login})
     if 'user_id' in session:
         order_product = order_product_grid(session['user_id'])
     if order_product:
-        return render_template('order.html',delivery_arr=delivery_arr)
+        return render_template('order.html',assingee_arr=assingee_arr)
     else:
         return render_template('order_empty.html')
 
@@ -36,10 +36,15 @@ def order():
         quantity_list = order_product_grid(4)
     total_price=0
     total_items=0
-
     order_date=str(order_list[0].Order.date)
     mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')
-    mysql_time_epoch = calendar.timegm(mysql_time_struct)
+    order_date = calendar.timegm(mysql_time_struct)
+    if order_list[0].Order.delivery_date:
+        delivery_date=str(order_list[0].Order.delivery_date)
+        mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')
+        delivery_date = calendar.timegm(mysql_time_struct)
+    else:
+        delivery_date=0
     for j in quantity_list:
         dimen = j.OrderProduct.dimension.number
         total_price=total_price + j.Product.price*j.OrderProduct.quantity*dimen
@@ -47,10 +52,11 @@ def order():
     for i in order_list:
         order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': str(i.Product.price),\
          'order_status':i.Order.status.name,'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
-         'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id,\
+         'order_number':i.Order.order_number,'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id,\
          'dimension_number':i.OrderProduct.dimension.number})
     return make_response(jsonify(order=order_arr,records_amount=count, total_items=total_items,\
-                order_date=mysql_time_epoch, records_per_page=records_per_page, total_price=str(total_price)), 200)
+                delivery_date=delivery_date,\
+                order_date=order_date, records_per_page=records_per_page, total_price=str(total_price)), 200)
 
 
 @app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])

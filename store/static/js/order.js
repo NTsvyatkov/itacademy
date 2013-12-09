@@ -199,6 +199,12 @@ $(document).ready(function() {
 
   })
  }
+
+ function date_format(unix_time){
+    var dt = new Date(unix_time);
+    var date_format=dt.getDate() +'/'+(dt.getMonth()+1)+'/'+dt.getFullYear();
+    return date_format;
+ }
  /*Function ajax_success parse Json and add values in table - grid  */
   function ajax_success(json){
            var grid_length=json.order.length;
@@ -206,14 +212,22 @@ $(document).ready(function() {
            var amount=0;
            var input;
            var tr;
+           if (json.delivery_date!=0)
+           {
+               var delivery_date=json.delivery_date*1000;
+               $('#delivery_date').val(date_format(delivery_date));
+           }
+           else {
+               $('#delivery_date').val('/ /');
+           }
+
            total_price= +json.total_price;
            order_date=json.order_date*1000;
-           var dt = new Date(order_date);
-           var order_date_format=dt.getDate() +'/'+(dt.getMonth()+1)+'/'+dt.getFullYear();
            $('#total_items').val(json.total_items);
-           $('#order_date').val(order_date_format);
+           $('#order_date').val(date_format(order_date));
            $('#order_status').val(json.order[0].order_status);
            $('#total_amount').val(total_price.toFixed(2)+'$');
+           $('#delivery_date').val();
            deleting_grid();
            create_grid(grid_length,count_td);
            /*Create table with new order_products list */

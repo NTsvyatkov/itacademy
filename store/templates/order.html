@@ -12,11 +12,11 @@
   $(document).ready(function() {
       /*Create "Delivery option's" select */
  var arr =[
- {%for i in delivery_arr %}
+ {%for i in assingee_arr %}
  {val : {{ i.id }} , text: '{{i.name}}'},
  {% endfor %}
           ];
-  var select = $('#delivery_options')
+  var select = $('#assingee')
   $(arr).each(function() {
     select.append($("<option>").attr('value',this.val).text(this.text));
   });
@@ -88,18 +88,16 @@
                <lable>Preferable De-y Date:</lable>
                <input type="text" id="preferable_date">
             </div>
+            <div class="field">
+               <lable>Delivery Date:</lable>
+               <input type="text" id="delivery_date" class='input_read' style='border:none;' readonly>
+            </div>
            <div class="field">
-               <lable>Delivery Type: </lable>
-               <select id="delivery_options" style="width:165px;">
+               <lable>Assignee: </lable>
+               <select id="assingee" style="width:165px;">
                </select>
            </div>
 
-
-
-           <div class="field">
-               <lable>Comments: </lable>
-               <textarea class="comments_area" id="input_comments"></textarea>
-           </div>
             <div class="field">
              <input type='text' hidden='true' id="hidden_preferable_date">
            </div>

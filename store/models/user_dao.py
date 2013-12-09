@@ -121,7 +121,9 @@ class UserDao(Base):
     def getUserByLogin(userLogin, userPassword):
         return UserDao.query.filter(and_(UserDao.login == userLogin,
                                          UserDao.password == hashlib.md5(userPassword).hexdigest())).first()
-
+    @staticmethod
+    def getUserByRole(role):
+        return UserDao.query.filter(UserDao.role_id == role).all()
 
     @staticmethod
     def isUserExists(userLogin, userPassword):
