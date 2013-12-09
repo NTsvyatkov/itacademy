@@ -133,9 +133,9 @@ class Order(Base):
         start = stop - records_per_page
         query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
         if filter['status_option']:
-            filterStatus={'0': Order.id != 0,
-                    '1': Order.status_id == 4,
-                    '2': Order.status_id == 5,
+            filterStatus={'0': Order.id,
+                    '1': Order.status_id == 3,
+                    '2': Order.status_id == 4,
                     '3': Order.status_id == 1,
                     '4': Order.status_id == 2}
         if filter['order_option']:
