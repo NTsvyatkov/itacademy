@@ -109,15 +109,15 @@ class Product(Base):
         count = query.filter_by(is_deleted=False).count()
         return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop).all(), count
 
-@staticmethod
-def FilterItems(name=None, description=None, filter=None):
-    query = Product.query.filter(and_(Product.name == name, Product.description == description))
-    if filter['product_option']:
-        filterProduct={'0': Product.name.like(filter['name']+'%'),
+    @staticmethod
+    def FilterItems(name=None, description=None, filter=None):
+        query = Product.query.filter(and_(Product.name == name, product_option))
+        if filter['product_option']:
+            filterProduct={'0': Product.name.like(filter['name']+'%'),
                  '1': Product.description.like(filter['name']+'%')}
-    if filter['product_option']:
-        query = query.filter(filterProduct[filter['product_option']])
-    return query.order_by(Product.id).slice
+        if filter['product_option']:
+            query = query.filter(filterProduct[filter['product_option']])
+        return query.order_by(Product.id)
 
 class Dimension(Base):
     __tablename__ = 'dimensions'
