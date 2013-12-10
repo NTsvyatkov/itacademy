@@ -4,7 +4,7 @@ from models.user_dao import UserDao, RoleDao, RegionDao
 from models import db_session
 from flask_bootstrap import app
 from maintenance.pager_user import Pagination
-from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
+from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser, delete_user
 from business_logic.validation import ValidationException, NotFoundException
 from views.authenticate import session
 
@@ -125,3 +125,9 @@ def err_han(e):
 def err_han(ex):
     error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
+
+@app.route('/api/user_/<int:id>', methods=['DELETE'])
+def users_id_delete_(id):
+    delete_user(id)
+    resp = make_response(jsonify({'message': 'success'}), 200)
+    return resp

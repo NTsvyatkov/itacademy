@@ -48,7 +48,7 @@
   {
    $.ajax({
        dataType: "json",
-        url: '/api/user/'+id,
+        url: '/api/user_/'+id,
         type: 'DELETE',
         success: function(json)
                     {
@@ -60,7 +60,7 @@
                                if (page!=1)
                                 {page=page-1;}
                            }
-                          grid_pagination();
+                          gridPagination();
                          }
                         else
                          alert (json.message);
@@ -98,31 +98,32 @@
                  tr.cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
                  tr.cells[7].abbr=k;
                  tr.cells[8].abbr=k;
-                  $('.edit_img').click(function(){
-                  var tr= $(this).closest('tr');
-                  var user_id = tr.children('td').children('.id_user').text();
-                  var user_name=tr.children('td').children('.name').text();
-                  if(confirm('Edit '+ user_name +' ?')){
-                    document.location.href = 'user/'+user_id+'';
-                  }
-                   }
-                 );
+
+                }
+
                 $('.delete_img').click(function(){
                   var tr= $(this).closest('tr');
                   var user_id = this.alt;
                   var first_name=tr.children('td').children('.name').text();
-                  var last_name=tr.children('td').children('.l_name').text();
-                  if(confirm('Are you sure you want to delete user '+ first_name + " " + last_name +' ?'))
+                  if(confirm('Are you sure you want to delete user '+ first_name +' ?'))
                   {
                     delete_id(user_id,grid_length);
                    }
                  })
-                }
-                k=0;
-            /*End creating table*/
 
+                $('.edit_img').click(function(){
+                  var tr= $(this).closest('tr');
+                  var user_id = tr.children('td').children('.user_id').text();
+                  var first_name=tr.children('td').children('.name').text();
+                  if(confirm('Edit '+ product_name +' ?')){
+                    document.location.href = 'user/'+user_id+'';
+                  }
+                   }
+                 );
 
-           }
+            /*---------------------End creating table------------------------------------*/
+
+  }
 
 
 
