@@ -132,7 +132,7 @@ class Order(Base):
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
+        query = Order.query.filter(Order.user_id == user_id)
         if filter['status_option']:
             filterStatus={'0': Order.id,
                     '1': Order.status_id == 3,
