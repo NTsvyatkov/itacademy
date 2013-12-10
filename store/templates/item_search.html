@@ -7,6 +7,7 @@
 
 
 
+
   $(document).ready(function() {
    var table_grid = document.getElementById('grid');
    function creat_grid(count){
@@ -21,17 +22,20 @@
      }
 
     creat_grid(count_tr);
-  /*End of creating table*/
 
+  create_entity()
 
-  create_entity();
+  $('#search_button').click(function(){
+                create_entity()
+            });
 
   function create_entity(){
+       var name_input = document.getElementById('name_input').value;
+       var product_options = document.getElementById('product_options').value;
        $.ajax({
         dataType: "json",
-        url: '/api/search_product',
+        url: '/api/search_product?name_input='+name_input+'&product_option='+product_options+'',
         type: 'GET',
-        //data: json_value,
         contentType: "application/json",
         success: function(json)
         {
@@ -41,7 +45,6 @@
   }
 
 function ajax_success(json){
-         deleting_grid()
          creat_grid(json.products.length)
         for (var product_k in json.products)
           {
@@ -52,15 +55,7 @@ function ajax_success(json){
 }
 
 
-  $('#add_button').click(function(){
-  add();
-    });
-  $('#edit_button').click(function(){
-  update();
-    });
-  $('#cansel').click(function(){
-  cansel();
-    });
+
 
   })
 
@@ -78,10 +73,11 @@ function ajax_success(json){
           </select>
     <input type="text" id="name_input" >
     </div>
-    <span><input type="button" value="Search" id='apply_button' style="float: right; margin-top: -33px"></span>
+    <span><input type="button" value="Search" id='search_button' style="float: right; margin-top: -33px"></span>
    </form>
    </div>
 </div>
+
 
 
 <div id="item_table">
@@ -100,10 +96,7 @@ function ajax_success(json){
 
 <form action="" id="info">
 <fieldset style="width: 600px; height: 200px">
-    <div id="name-wrap">
-    <label for="region_name">Name</label>
-    <input type="text" id="region_name" name="name" >
-    <p><input type="button" value="Remove" id="add_button"><input type="button" value="Done" id="edit_button"><input type="reset"  id="cancel"  value="Cancel"></p>
+
 </fieldset>
 </form>
 
