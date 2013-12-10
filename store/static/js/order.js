@@ -80,6 +80,7 @@ $(document).ready(function() {
     var order_date;
     var save_button=0;
     var uniq_order=false;
+    var json;
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
     $('#start_date').css('background-color','#e2e2e2');
@@ -119,10 +120,14 @@ $(document).ready(function() {
         type: type_options,
         contentType: "application/json",
         data:data,
-        success: function(json)
+        async:false,
+        success: function(json_val)
         {
           if (type_options == 'GET'){
-           ajax_success(json);
+
+           json=json_val;
+
+
            records_amount=(json.records_amount);
            records_per_page=(json.records_per_page);
            pages_amount = Math.ceil(records_amount/records_per_page);
@@ -174,6 +179,7 @@ $(document).ready(function() {
    }
 /*------------------------------------------*/
  ajax_pull('GET','data');
+ ajax_success(json);
 
  /*-------------Update quantity in row------------------*/
  function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr,dim){
