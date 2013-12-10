@@ -109,9 +109,6 @@ def getUserByID(user_id):
     validationUserID(user_id)
     return UserDao.getUserByID(user_id)
 
-def delete_user(id):
-    validate_user_id(id)
-    UserDao.del_user(id)
 
 
 
