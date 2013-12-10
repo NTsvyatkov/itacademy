@@ -117,7 +117,7 @@ def FilterItems(name=None, description=None, filter=None):
                  '1': Product.description.like(filter['name']+'%')}
     if filter['product_option']:
         query = query.filter(filterProduct[filter['product_option']])
-    return query.order_by(Product.id).slice
+    return query.order_by(Product.id).query.count()
 
 class Dimension(Base):
     __tablename__ = 'dimensions'

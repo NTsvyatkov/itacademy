@@ -7,13 +7,13 @@ from flask_bootstrap import app
 
 @app.route('/')
 
+
 @app.route('/login')
 def login():
     if 'login' in session:
         return render_template('layout.html')
     else:
-        error = 'You are not logged in'
-        return render_template('login(2).html', error=error)
+        return render_template('login(2).html')
 
 
 @app.route('/', methods=['POST'])
