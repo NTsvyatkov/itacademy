@@ -32,7 +32,7 @@ def search_user():
 def usergrid():
         return render_template('search_user.html',)
 
-@app.route('/users')
+@app.route('/users_')
 def users_list():
         return render_template('users.html',)
 
