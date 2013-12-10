@@ -1,12 +1,9 @@
 {% extends "layout.html" %}
 {% block body %}
-    <link href="{{url_for('static', filename='styles/bootstrap.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
-        <script type="text/javascript">
 
-            var tr = [];
+ <script type="text/javascript">
+
+     var tr = [];
 
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
@@ -22,7 +19,7 @@
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
                             if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=6; j++)
+                            for (var j=0; j<=8; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
@@ -42,33 +39,94 @@
 
 
 
-            function ajax_success(json){
-                deleting_grid();
-                creat_grid(json.users.length);
-                /*Create table */
-                for (var user_k in json.users)
+    $('#search_button').click(function(){
+    creat_grid();
+    });
+
+
+  function delete_id(id,grid_length)
+  {
+   $.ajax({
+       dataType: "json",
+        url: '/api/user/'+id,
+        type: 'DELETE',
+        success: function(json)
                     {
-                        k++;
-                        tr[k].cells[0].innerHTML = json.users[user_k].id;
-                        tr[k].cells[1].innerHTML = json.users[user_k].login;
-                        tr[k].cells[2].innerHTML = json.users[user_k].first_name;
-                        tr[k].cells[3].innerHTML = json.users[user_k].last_name;
-                        tr[k].cells[4].innerHTML = json.users[user_k].role_id;
-                        tr[k].cells[5].innerHTML = json.users[user_k].email;
-                        tr[k].cells[6].innerHTML = json.users[user_k].region_id;
+                        if (json.message == 'success')
+                         {
+                          alert('The user has been successfully deleted');
+                           if (grid_length==1)
+                           {
+                               if (page!=1)
+                                {page=page-1;}
+                           }
+                          grid_pagination();
+                         }
+                        else
+                         alert (json.message);
+                    },
 
+        error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
                     }
-                    k=0;
-                    /*End creating table*/
-            }
 
-              var k=0;
-            form_value = {id : $('#name_form').val(), name : $('#user_name').val()};
-            json_value = JSON.stringify(form_value);
+   })
+  }
+
+  function ajax_success(json)
+  {
+           deleting_grid();
+           var grid_length = json.users.length;
+           creat_grid(grid_length,count_td);
+           var k=0;
+
+            for (var user_k in json.users)
+                {
+                 k++;
+                 tr=table_grid.rows[k];
+                 user_id=json.users[user_k].id;
+                 tr.cells[0].innerHTML = '<span class = id_user>'+user_id+'</span>';
+                 tr.cells[1].innerHTML = json.users[user_k].login;
+                 tr.cells[2].innerHTML = '<span class=name>'+json.users[user_k].first_name+'</span>';
+                 tr.cells[3].innerHTML = '<span class=l_name>'+json.users[user_k].last_name+'</span>';
+                 tr.cells[4].innerHTML = json.users[user_k].role_id;
+                 tr.cells[5].innerHTML = json.users[user_k].email;
+                 tr.cells[6].innerHTML = json.users[user_k].region_id;
+                 tr.cells[7].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
+                 tr.cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr.cells[7].abbr=k;
+                 tr.cells[8].abbr=k;
+                  $('.edit_img').click(function(){
+                  var tr= $(this).closest('tr');
+                  var user_id = tr.children('td').children('.id_user').text();
+                  var user_name=tr.children('td').children('.name').text();
+                  if(confirm('Edit '+ user_name +' ?')){
+                    document.location.href = 'user/'+user_id+'';
+                  }
+                   }
+                 );
+                $('.delete_img').click(function(){
+                  var tr= $(this).closest('tr');
+                  var user_id = this.alt;
+                  var first_name=tr.children('td').children('.name').text();
+                  var last_name=tr.children('td').children('.l_name').text();
+                  if(confirm('Are you sure you want to delete user '+ first_name + " " + last_name +' ?'))
+                  {
+                    delete_id(user_id,grid_length);
+                   }
+                 })
+                }
+                k=0;
+            /*End creating table*/
+
+
+           }
 
 
 
-            function grid_pagination(){
+   function gridPagination(){
                 $.ajax({
                 dataType: "json",
                 url: '/api/users?page='+page+'&table_size='+count_tr+'',
@@ -81,33 +139,48 @@
                         records_per_page=(json.records_per_page);
                         pages_amount = Math.ceil(records_amount/records_per_page);
                         document.getElementById("page").innerHTML = page;
-                        document.getElementById("pages_amount").innerHTML = pages_amount
+                        document.getElementById("pages_amount").innerHTML = pages_amount;
 
-                        if (page==1){
-                            $('#prev').css({ "opacity":"0.4"});
-                            $('#first').css({ "opacity":"0.4"});
-                        } else {$('#prev').css({ "opacity": "1"});
-                            $('#first').css({ "opacity": "1"});
-                        }
+             if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
+           }
 
-                        if (page==pages_amount){
-                            $('#next').css({ "opacity": "0.4"});
-                            $('#last').css({ "opacity": "0.4"});
-                        } else {$('#next').css({ "opacity": "1"});
-                            $('#last').css({ "opacity": "1"});
-                        }
+           if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
+           }
                     }
                 })
             }
 
             if (page==1){
-                grid_pagination();
+                gridPagination();
             }
 
             $('#next').click(function(){
             if (page*records_per_page>=records_amount){page=page}
             else {page=page+1}
-            grid_pagination()
+            gridPagination()
             });
 
             $('#prev').click(function(){
@@ -115,68 +188,120 @@
             if (page<=1){
             page=1;
             }
-            grid_pagination()
+            gridPagination()
             });
 
             $('#first').click(function(){
             page=1;
-            grid_pagination()
+            gridPagination()
             });
 
             $('#last').click(function(){
             page=pages_amount;
-            grid_pagination()
+            gridPagination()
             });
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_size option:selected" ).each(grid_pagination)
-            });
+            $( "#table_siz option:selected" ).each(gridPagination())
+            })
 
             });
+   </script>
+
+  </head>
 
 
-</script>
-                <form><h2>Users table</h2></form>
+  <body>
 
-        <div class="">
+  <div id="user_block">
+This page is appointed for creating new and managing existing users
+<div>
+     <a href='create_user' style='margin-left:50px; color:black; text-decoration:none;'>
+     <input type='button' value="Create New User">
+     </a>
+ </div>
 
-            <div class="field" style="margin-left:5%;">
+      <div id="user_filter">
+
+        <div class="user_filter_in">
+         <form class='form'>
+		 <span>Search user</span>
+<table>
+   <tr>
+	<td>
+		 <div class="search">
+         <select id="SelectId_user"  style="width:100px">
+			<option value="str0"> User Name </option>
+			<option value="str1"> first name </option>
+			<option value="str2"> last name </option>
+			<option value="str3"> email </option>
+			<option value="str4"> Role </option>
+			<option value="str5"> All Columns </option>
+			 </select>
+			</div>
+	</td>
+	<td>
+		<div class="search">
+		 <select id="SelectId_key"  style="width:100px">
+			<option value="str0"> start with </option>
+			<option value="str1"> equals </option>
+			<option value="str2"> contains </option>
+			<option value="str3"> not equal to </option>
+			<option value="str4"> does not contain </option>
+		 </select>
+		</div>
+  	</td>
+  	<td>
+  		<input type="text" style="width:280px" />
+		<input type="button" value="search" id='search_button'>
+	</td>
+   </tr>
+</table>
+         </form>
+		 </div>
+          </div>
+
+              <div id="user_table">
+              <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select id="table_size" class="span1">
                     <option selected>5</option>
                     <option>25</option>
                    </select>
             </div>
-            <div style="margin-left:80%;">
-            </div>
-            <div id=" ">
-                <table id='grid' class="grid">
-                    <tr>
-                        <th>
-                            Users id
-                        </th>
-                        <th>
-                            Login
-                        </th>
-                        <th>
-                            First name
-                        </th>
-                        <th>
-                            Last name
-                        </th>
-                        <th>
-                            Role
-                        </th>
-                        <th>
-                            Email
-                        </th>
-                        <th>
-                            Region
-                        </th>
-                    </tr>
-                </table>
+       <table id='grid' class="grid">
+           <tr>
+               <th>
+                   User ID
+               </th>
+               <th>
+                   Login
+               </th>
+               <th>
+                   First Name
+               </th>
+               <th>
+                   Last Name
+               </th>
+               <th>
+                   Role
+               </th>
+			   <th>
+                   Email
+               </th>
+               <th>
+                   Region
+               </th>
+               <th>
+                   Edit
+               </th>
+               <th>
+                   Delete
+               </th>
 
+           </tr>
+       </table>
 
             <div id="pagination" style="text-align: center">
                 <input type="button" id="first" value="First">&nbsp
@@ -186,10 +311,7 @@
                 <input type="button" id="last" value="Last">
                 <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
             </div></div></div>
-<style type="text/css">
-    div { clear:both;position:relative; }
-</style>
+
+
+
 {% endblock body %}
-
-
-

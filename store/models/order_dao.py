@@ -149,6 +149,7 @@ class Order(Base):
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
+
     @staticmethod
     def deleteOrder(orderId):
         removeOrder = Order.get_order(orderId)

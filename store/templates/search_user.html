@@ -129,10 +129,10 @@
                  tr[k].cells[4].innerHTML = json.users[user_k].email;
                  tr[k].cells[5].innerHTML = json.users[user_k].region_id;
                  tr[k].cells[6].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + k + ">";
-                 tr[k].cells[7].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + k + ">";
+                 tr[k].cells[7].innerHTML = "<img src='static/images/delete.png' class='delete_img' alt=" + k + ">";
                  tr[k].cells[6].abbr=k;
                  tr[k].cells[7].abbr=k;
-                     var id=  tr[k].id= json.users[user_k].id;
+                     var id= tr[k].id= json.users[user_k].id;
                  tr[k].cells[6].onclick = function edit_tr2()
                                       {
                                        window.location.replace('edit_user?'+tr[this.abbr].id);
@@ -241,40 +241,40 @@ This page is appointed for creating new and managing existing users
           
         <div class="user_filter_in">
          <form class='form'>
-		 <span>Search user</span>
+                 <span>Search user</span>
 <table>
    <tr>
-	<td>
-		 <div class="search">
-         <select id="SelectId_user"  style="width:100px">
-			<option value="str0"> User Name </option>
-			<option value="str1"> first name </option>
-			<option value="str2"> last name </option>
-			<option value="str3"> email </option>
-			<option value="str4"> Role </option>
-			<option value="str5"> All Columns </option>
-			 </select>
-			</div>
-	</td>		
-	<td>
-		<div class="search">
-		 <select id="SelectId_key"  style="width:100px">
-			<option value="str0"> start with </option>
-			<option value="str1"> equals </option>
-			<option value="str2"> contains </option>
-			<option value="str3"> not equal to </option>
-			<option value="str4"> does not contain </option>
-		 </select>
-		</div>
-  	</td>
-  	<td>
-  		<input type="text" style="width:280px" />
-		<input type="button" value="search" id='search_button'>
-	</td>
-   </tr>	
+        <td>
+                 <div class="search">
+         <select id="SelectId_user" style="width:100px">
+                        <option value="str0"> User Name </option>
+                        <option value="str1"> first name </option>
+                        <option value="str2"> last name </option>
+                        <option value="str3"> email </option>
+                        <option value="str4"> Role </option>
+                        <option value="str5"> All Columns </option>
+                         </select>
+                        </div>
+        </td>                
+        <td>
+                <div class="search">
+                 <select id="SelectId_key" style="width:100px">
+                        <option value="str0"> start with </option>
+                        <option value="str1"> equals </option>
+                        <option value="str2"> contains </option>
+                        <option value="str3"> not equal to </option>
+                        <option value="str4"> does not contain </option>
+                 </select>
+                </div>
+          </td>
+          <td>
+                  <input type="text" style="width:280px" />
+                <input type="button" value="search" id='search_button'>
+        </td>
+   </tr>        
 </table>
          </form>
-		 </div>
+                 </div>
           </div>
           
               <div id="user_table">
@@ -295,7 +295,7 @@ This page is appointed for creating new and managing existing users
                <th>
                    Email
                </th>
-			   <th>
+                         <th>
                    Region
                </th>
                <th>

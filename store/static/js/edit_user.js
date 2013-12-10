@@ -212,7 +212,7 @@ var region =   document.form.region.value;
 
     $.ajax(
 {
-    url: '/api/edit_user',
+    url: '/api/user',
     type: 'PUT',
     contentType: "application/json",
     data:JSON.stringify(
@@ -230,7 +230,7 @@ var region =   document.form.region.value;
     success: function(data)
                     {
                        alert('User has been successfully update');
-                       parent.location = 'http://127.0.0.1:5000/search_user';
+                       parent.location = 'search_user';
                     }
 
 })

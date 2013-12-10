@@ -32,7 +32,7 @@ def search_user():
 def usergrid():
         return render_template('search_user.html',)
 
-@app.route('/users')
+@app.route('/users_')
 def users_list():
         return render_template('users.html',)
 
@@ -77,10 +77,10 @@ def user_pager():
 
 
 
-@app.route('/api/user/<int:id>', methods = ['GET'])
+@app.route('/api/users/<int:id>', methods = ['GET'])
 def users_id(id):
     i=getUserByID(id)
-    user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':i.role_id}
+    user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':RoleDao.getRoleByID(i.role_id).name}
     resp = make_response(jsonify(users=user),200)
     return resp
 
@@ -108,7 +108,7 @@ def users_post():
     resp = make_response('', 201)
     return resp
 
-@app.route('/api/edit_user', methods = ['PUT'])
+@app.route('/api/user', methods = ['PUT'])
 def users_update():
     js = request.json
     updateUser(js['user_id'],js['login'],js['password'],js['first_name'],js['last_name'],js['email'],js['role_id'],js['region_id'],)

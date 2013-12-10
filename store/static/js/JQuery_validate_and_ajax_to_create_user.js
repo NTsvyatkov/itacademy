@@ -235,7 +235,7 @@ var region =   document.form.region.value;
         success : function (resp){
 
             alert('User has been successfully added');
-            parent.location = 'http://127.0.0.1:5000/search_user'; }
+            parent.location = 'search_user'; }
 
 
                      });
