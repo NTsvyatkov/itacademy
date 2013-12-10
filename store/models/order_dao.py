@@ -167,8 +167,8 @@ class Order(Base):
                     '1': Order.status_id == 4,
                     '2': Order.status_id == 1,
                     '3': Order.status_id == 2}
-        if filter['order_option']:
-            filterOrder={'0': Order.id.like(filter['name']+'%'), }
+        filterOrder={'0': Order.id.like(filter['name']+'%'),
+                    '1': UserDao.first_name.like(filter['name']+'%')}
         if filter['order_option']:
             query = query.filter(filterOrder[filter['order_option']])
         if filter['status_option']:
