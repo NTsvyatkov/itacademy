@@ -80,7 +80,7 @@ def user_pager():
 @app.route('/api/users/<int:id>', methods = ['GET'])
 def users_id(id):
     i=getUserByID(id)
-    user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':RoleDao.getRoleByID(i.role_id).name}
+    user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'region_id':i.region_id, 'role_id':RoleDao.getRoleByID(i.role_id).name}
     resp = make_response(jsonify(users=user),200)
     return resp
 
