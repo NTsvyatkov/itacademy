@@ -7,6 +7,7 @@ from flask_bootstrap import app
 
 @app.route('/')
 
+
 @app.route('/login')
 def login():
     if 'login' in session:
