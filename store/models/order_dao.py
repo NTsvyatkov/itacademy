@@ -157,16 +157,34 @@ class Order(Base):
 
 
     @staticmethod
-    def pagerByFilterOrder(status_id=None, assignee_id=None, page=None, records_per_page=None):
-        query = Order.query
-        if status_id:
-            query = query.filter(Order.status_id == status_id)
-        if assignee_id:
-            query = query.filter(Order.assignee_id == assignee_id)
+    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
+        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 2))
+        if filter['status_option']:
+            filterStatus={'0': Order.id,
+                    '1': Order.status_id == 4,
+                    '2': Order.status_id == 1,
+                    '3': Order.status_id == 2}
+        if filter['order_option']:
+            filterOrder={'0': Order.id.like(filter['name']+'%'), }
+        if filter['order_option']:
+            query = query.filter(filterOrder[filter['order_option']])
+        if filter['status_option']:
+            query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
+
+    @staticmethod
+    def update_order_number(id,order_number):
+        order = Order.get_order(id)
+        if Order.query.filter(Order.order_number == order_number).count() == 0:
+            order.order_number = order_number
+            db_session.commit()
+            return True
+        else:
+            return False
 
     #Set new new value of level for user, using order id
     @staticmethod
@@ -188,6 +206,7 @@ class Order(Base):
             order.user.level_id = UserLevel.get_level_by_name("Platinum").id
 
         db_session.commit()
+
 
 
 class OrderStatus(Base):
@@ -347,7 +366,7 @@ class OrderProduct(Base):
 
 def order_product_grid(user_id, page=None, records_per_page=None):
     query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-            filter(and_(Order.user_id==user_id ,Order.status_id == 3 ))
+            filter(Order.user_id==user_id).filter((Order.status_id == 3)|(Order.status_id == 4))
     count = query.filter_by(is_deleted=False).count()
     if page and records_per_page:
         stop = page * records_per_page
