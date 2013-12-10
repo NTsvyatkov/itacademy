@@ -69,6 +69,10 @@ def validationUserID(user_id):
     if not UserDao.getUserByID(user_id):
         raise NotFoundException("Unable to find  user with given id")
 
+def validate_user_id(id):
+    if not UserDao.getUserByID(id):
+        raise NotFoundException("Unable to find  user with given id")
+
 
 def getListUser():
     return UserDao.getAllUsers()
@@ -104,6 +108,10 @@ def deleteUser(user_id):
 def getUserByID(user_id):
     validationUserID(user_id)
     return UserDao.getUserByID(user_id)
+
+def delete_user(id):
+    validate_user_id(id)
+    UserDao.del_user(id)
 
 
 
