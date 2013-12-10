@@ -77,7 +77,13 @@
                                     {
                                         var dimension_id = json.productStock[this.abbr-1].dimension_id;
                                         var quantity = document.getElementById('quantity'+this.abbr).value;
-                                        updateStock(product_id, dimension_id, quantity)
+                                        if(isNaN(quantity) || quantity < 0 ){
+                                            alert('Quantity should be filled.')
+                                        }
+                                        else{
+                                            updateStock(product_id, dimension_id, quantity)
+                                        }
+
                                     }
                             }
                          k=0;
@@ -113,7 +119,9 @@
                 var name = document.getElementById('name').value;
                 var description = document.getElementById('description').value;
                 var price = document.getElementById('price').value;
-                updateProduct(id, name, description, price);
+                if(name_error == null && description_error == null && price_error == null){
+                    updateProduct(id, name, description, price);
+                }
             });
 
             function updateProduct(id, name, description, price) {
@@ -139,46 +147,37 @@
 
             createProductStock();
 
+            var name_error = document.getElementById('name_error');
+            var description_error = document.getElementById('description_error');
+            var price_error = document.getElementById('price_error');
+
             $('#price').blur(function() {
                 if( isNaN($(this).val()) || ($(this).val()) <= 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
-                    $('#valid').text('Field not be empty');
-                    document.getElementById('update_product').disabled = true;
+                    price_error.innerHTML = 'Price should be filled.';
                 }else{
                     $(this).css({'border' : '2px solid #999'});
-                    document.getElementById('update_product').disabled = false;
+                    price_error.innerHTML = null;
                 }
             });
-
 
             $('#name').blur(function() {
                 if( ($(this).val()) == 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
-                    $('#valid').text('Field not be empty');
-                    document.getElementById('update_product').disabled = true;
+                    name_error.innerHTML = 'Name should be filled.';
                 }else{
                     $(this).css({'border' : '2px solid #999'});
-                    document.getElementById('update_product').disabled = false;
+                    name_error.innerHTML = null;
                 }
             });
 
             $('#description').blur(function() {
                 if( ($(this).val()) == 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
-                    $('#valid').text('Field not be empty');
-                    document.getElementById('update_product').disabled = true;
+                    description_error.innerHTML = 'Description should be filled.';
                 }else{
                     $(this).css({'border' : '2px solid #999'});
-                    document.getElementById('update_product').disabled = false;
-                }
-            });
-
-            $('#quantity').blur(function() {
-                if( ($(this).val()) == 0) {
-                    $(this).css({'border' : '2px solid #ff0000'});
-                    $('#valid').text('Field not be empty');
-                }else{
-                    $(this).css({'border' : '2px solid #999'});
+                    description_error.innerHTML = null;
                 }
             });
 
@@ -203,6 +202,9 @@
                     </div>
 
                     <div class="field">
+                        <div id="name_error"></div>
+                        <div id="description_error"></div>
+                        <div id="price_error"></div>
                         <input type="button" id="update_product" value="update">
                     </div>
                     <div class="field">
