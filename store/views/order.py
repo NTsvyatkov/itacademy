@@ -5,7 +5,7 @@ from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct, DeliveryType
 from business_logic.order_manager import update_order_details
-from json import loads
+from models.order_dao import Order
 import calendar
 import time
 
@@ -100,7 +100,8 @@ def list_orders_id():
                         'product_description': i.product.description, 'product_dimension': i.dimension.name,
                         'product_quantity': i.quantity, 'product_price': str(i.product.price)})
     order = {'customer_name': customer_name,
-             'customer_type': "Silver",
+             'customer_type': all_in_order[0].order.user.level.name if all_in_order[0].order.user.level.name
+             else "Standart",
              'order_id': all_in_order[0].order_id, 'total_price': str(all_in_order[0].order.total_price),
              'quantity_of_items': quantity_of_items,
              'assignee': str(all_in_order[0].order.assignee.first_name) + " " +
@@ -123,6 +124,7 @@ def v_update_order_details():
     gift = True if js.get('gift') else False
     status = "Delivered" if js.get('status') else "Ordered"
     delivery_date = js.get('delivery_date')
-
     update_order_details(id, gift, status, delivery_date)
+    if status == "Delivered":
+        Order.set_user_level(id)
     return make_response(jsonify({'message': 'success'}), 200)

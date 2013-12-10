@@ -28,6 +28,12 @@ class UserLevel(Base):
         db_session.add(user_level)
         db_session.commit()
 
+    # Get level by level name
+    @staticmethod
+    def get_level_by_name(name):
+        return UserLevel.query.filter(UserLevel.name == name).first()
+
+
 class UserDao(Base):
     __tablename__ = "user"
 
