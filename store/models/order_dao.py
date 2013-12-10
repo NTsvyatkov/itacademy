@@ -176,6 +176,17 @@ class Order(Base):
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
+
+    @staticmethod
+    def update_order_number(id,order_number):
+        order = Order.get_order(id)
+        if Order.query.filter(Order.order_number == order_number).count() == 0:
+            order.order_number = order_number
+            db_session.commit()
+            return True
+        else:
+            return False
+
     #Set new new value of level for user, using order id
     @staticmethod
     def set_user_level(order_id):
@@ -196,6 +207,7 @@ class Order(Base):
             order.user.level_id = UserLevel.get_level_by_name("Platinum").id
 
         db_session.commit()
+
 
 
 class OrderStatus(Base):
@@ -355,7 +367,7 @@ class OrderProduct(Base):
 
 def order_product_grid(user_id, page=None, records_per_page=None):
     query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-            filter(and_(Order.user_id==user_id ,Order.status_id == 3 ))
+            filter(Order.user_id==user_id).filter((Order.status_id == 3)|(Order.status_id == 4))
     count = query.filter_by(is_deleted=False).count()
     if page and records_per_page:
         stop = page * records_per_page

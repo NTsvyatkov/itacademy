@@ -5,7 +5,7 @@ function validate_form(){
     var regV_login = /^[0-9a-zA-Zа-яА-Я]+$/;
     var result_login = login.match(regV_login);
         if (login == ""){
-                $(".error_login").html("'User Name is required field.'").css({'color':'red'});
+                $(".error_login").html("User Name is required field.").css({'color':'red'});
                 $(".login").toggleClass("errorList");
                 $(".login").click(function(){
 
@@ -18,7 +18,7 @@ function validate_form(){
         else if  (!result_login)
 
         {
-        $(".error_login").html("'User Name should contain only alphanumerical characters'").css({'color':'red'});
+        $(".error_login").html("User Name should contain only alphanumerical characters").css({'color':'red'});
                 $(".login").toggleClass("errorList");
                 $(".login").click(function(){
 
@@ -29,7 +29,7 @@ function validate_form(){
 
     }
         else if (login.length > 50){
-            $(".error_login").html("'Field max length = 50 characters'").css({'color':'red'});
+            $(".error_login").html("Field max length = 50 characters").css({'color':'red'});
                 $(".login").toggleClass("errorList");
                 $(".login").click(function(){
 
@@ -47,7 +47,7 @@ function validate_form(){
 
  var first_name =   document.form.first_name.value;
         if (first_name == ""){
-        $(".error_first_name").html("'First Name is required field.'").css({'color':'red'});
+        $(".error_first_name").html("First Name is required field.").css({'color':'red'});
                 $(".first_name").toggleClass("errorList");
                 $(".first_name").click(function(){
 
@@ -59,7 +59,7 @@ function validate_form(){
 
     }
         else if (first_name.length > 50){
-            $(".error_first_name").html("'Field max length = 50 characters'").css({'color':'red'});
+            $(".error_first_name").html("Field max length = 50 characters").css({'color':'red'});
                 $(".first_name").toggleClass("errorList");
                 $(".first_name").click(function(){
 
@@ -71,7 +71,7 @@ function validate_form(){
         }
 var last_name =   document.form.last_name.value;
        if (last_name == ""){
-       $(".error_last_name").html("'Last Name is required field.'").css({'color':'red'});
+       $(".error_last_name").html("Last Name is required field.").css({'color':'red'});
                 $(".last_name").toggleClass("errorList");
                 $(".last_name").click(function(){
 
@@ -85,7 +85,7 @@ var last_name =   document.form.last_name.value;
       else if (last_name.length > 50)
 
        {
-       $(".error_last_name").html("'Field max length = 50 characters'").css({'color':'red'});
+       $(".error_last_name").html("Field max length = 50 characters").css({'color':'red'});
                 $(".last_name").toggleClass("errorList");
                 $(".last_name").click(function(){
 
@@ -101,7 +101,7 @@ var password =   document.form.password.value;
 
 
        if (password == ""){
-       $(".error_password").html("'Password is required field.'").css({'color':'red'});
+       $(".error_password").html("Password is required field.").css({'color':'red'});
                 $(".password").toggleClass("errorList");
                 $(".password").click(function(){
 
@@ -112,7 +112,7 @@ var password =   document.form.password.value;
             return false;
     }
        else if (password.length >10){
-       $(".error_password").html("'Password max length = 10 characters.'").css({'color':'red'});
+       $(".error_password").html("Password max length = 10 characters.").css({'color':'red'});
                 $(".password").toggleClass("errorList");
                 $(".password").click(function(){
 
@@ -124,7 +124,7 @@ var password =   document.form.password.value;
     }
 
     else if (  /\s/.test(password)  ){
-       $(".error_password").html("'Spaces are not allowed'").css({'color':'red'});
+       $(".error_password").html("Spaces are not allowed").css({'color':'red'});
                 $(".password").toggleClass("errorList");
                 $(".password").click(function(){
 
@@ -135,7 +135,7 @@ var password =   document.form.password.value;
         return false;
     }
     else if (  password.length < 4){
-       $(".error_password").html("'  Password should contain at least 4 characters'").css({'color':'red'});
+       $(".error_password").html(" Password should contain at least 4 characters").css({'color':'red'});
                 $(".password").toggleClass("errorList");
                 $(".password").click(function(){
 
@@ -147,7 +147,7 @@ var password =   document.form.password.value;
     }
 var confirm =   document.form.confirm.value;
         if (confirm != password){
-        $(".error_confirm").html("'Password and Confirmation should be equal.'").css({'color':'red'});
+        $(".error_confirm").html("Password and Confirmation should be equal.").css({'color':'red'});
                 $(".confirm").toggleClass("errorList");
                 $(".confirm").click(function(){
 
@@ -163,7 +163,7 @@ var regV_email = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,100})+$/;
 var result_email = email.match(regV_email);
 
         if (email == ""){
-        $(".error_email").html("'Email is required field.'").css({'color':'red'});
+        $(".error_email").html("Email is required field.").css({'color':'red'});
                 $(".email").toggleClass("errorList");
                 $(".email").click(function(){
 
@@ -174,7 +174,7 @@ var result_email = email.match(regV_email);
             return false;
         }
         else if (email.length >100)
-        {   $(".error_email").html("'Password max length = 100 characters.'").css({'color':'red'});
+        {   $(".error_email").html("Password max length = 100 characters.").css({'color':'red'});
                 $(".email").toggleClass("errorList");
                 $(".email").click(function(){
 
@@ -188,7 +188,7 @@ var result_email = email.match(regV_email);
         else if  (!result_email)
 
 
-        {   $(".error_email").html("'Invalid email format'").css({'color':'red'});
+        {   $(".error_email").html("Invalid email format").css({'color':'red'});
                 $(".email").toggleClass("errorList");
                 $(".email").click(function(){
 
@@ -203,7 +203,7 @@ var result_email = email.match(regV_email);
 var region =   document.form.region.value;
 
         if (region == ""){
-        $(".error_region").html("'You must select a region'").css({'color':'red'});
+        $(".error_region").html("You must select a region").css({'color':'red'});
                 $(".region").toggleClass("errorList");
                 $(".region").click(function(){
 
@@ -235,7 +235,7 @@ var region =   document.form.region.value;
         success : function (resp){
 
             alert('User has been successfully added');
-            parent.location = 'http://127.0.0.1:5000/search_user'; }
+            parent.location = 'search_user'; }
 
 
                      });

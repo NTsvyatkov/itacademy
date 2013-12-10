@@ -3,11 +3,11 @@ from models.user_dao import UserDao
 from business_logic.order_product import product_order_update
 from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
-from models.order_dao import order_product_grid, OrderProduct, DeliveryType
+from models.order_dao import order_product_grid, OrderProduct,Order
 from business_logic.order_manager import update_order_details
-from models.order_dao import Order
-import calendar
-import time
+from json import loads
+import calendar,random,time
+
 
 @app.route('/order_product')
 def order_grid():
@@ -80,6 +80,39 @@ def quantity_post():
     OrderProduct.update_order_product(js['order_id'],js['product_id'],js['dimension_id'], js['quantity'],js['price'])
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
+
+def string_data(data_string):
+    while len(data_string) < 6:
+                      data_string = '0'+ data_string
+    return data_string
+
+@app.route('/api/unique_order_number/', methods=['PUT'])
+def unique_number():
+    js = request.json
+    if not (js['unique_order_number']):
+        status=Order.update_order_number(js['order_id'],string_data(str(js['order_id'])))
+        unique_number=string_data(str(js['order_id']))
+        if not status:
+            #ls=[chr(x) for x in range(ord('a'),ord('z')+1)]+list('0123456789')
+            while not status:
+                data=int(js['order_id'])+1
+                data_string=str(data)
+                status=Order.update_order_number(js['order_id'],string_data(data_string))
+            unique_number=string_data(data_string)
+        message='success'
+
+    else:
+        data_string=str(js['unique_order_number'])
+        status=Order.update_order_number(js['order_id'],string_data(data_string))
+        if status:
+            message='success'
+            unique_number=string_data(data_string)
+        else:
+            message='not unique'
+            unique_number=''
+    resp = make_response(jsonify({'message':message,'unique_order_number':unique_number }), 200)
+    return resp
+
 
 @app.route('/order/<int:id>', methods=['GET'])
 def order_details(id):

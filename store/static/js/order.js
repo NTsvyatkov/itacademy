@@ -78,10 +78,16 @@ $(document).ready(function() {
     var table_grid = document.getElementById('grid');
     var total_price;
     var order_date;
+    var save_button=0;
+    var uniq_order=false;
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
     $('#start_date').css('background-color','#e2e2e2');
     $('#start_date').val('');
+
+    $('#add_order').prop('disabled', true);
+    $('#add_order').addClass("button_disable");
+
     /* Change table size <select> event*/
     $('#table_size').change(function () {
        page=1;
@@ -158,6 +164,37 @@ $(document).ready(function() {
             error = JSON.parse(e.responseText);
             alert(error.message);
             object_quantity.val(old_quantity);
+          }
+      })
+   }
+/*--------------------------------------------------*/
+
+ /*------------ Check Unique Order Number in DB ------------------*/
+ function unique_order_number (json_data){
+       $.ajax({
+        dataType: "json",
+        url: '/api/unique_order_number/',
+        type: 'PUT',
+        contentType: "application/json",
+        data:json_data,
+        success: function(json)
+          {
+            var unique_number_error =[];
+            if (json.message =='not unique')
+            { var error = 'Order Number is not unique. Rename it. ';
+              unique_number_error.push({id:$('#order_error'), error:error});
+              $('#order_number').val('');
+
+            }
+            else
+            {
+              $('#order_number').val(json.unique_order_number);
+              $('#order_number').attr('readonly',true);
+              $('#order_number').css('background-color','#e2e2e2');
+              $('#order_number').css('background-color','#e2e2e2');
+              uniq_order=true;
+            }
+              validation(unique_number_error);
           }
       })
    }
@@ -327,8 +364,45 @@ $(document).ready(function() {
 
   $('#add_order').click(function(){
 
+        if (validation(0)){
+             /*add all quantity and product_id in array */
+         var product_arr=[];
+         for( var i=0, total=0; i<$('.quantity').size(); i++)
+         {
+         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt'),
+                          'dimension_id':$('.dimension:eq('+i+')').val()}
+         }
+        /*------------------*/
+
+         form_value = { order_id:order_id, delivery_type:$('#delivery_options').val(),
+                        delivery_address: $('#input_address').val(), comment:$('.comments_area').val(),
+                        credit_card_options:$('#credit_card_options').val(),
+                        credit_card_number:$('#credit_card_number').val(),
+                        cvv2_number:$('#cvv2_number').val(), expire_date:$('#expire_date').val(),
+                        start_date:$('#start_date').val(), issue_number:$('#issue_number').val(),
+                        product_quantity:product_arr};
+
+         /* Json for put on server*/
+         json_value = JSON.stringify(form_value);
+         /*-----------------------*/
+         ajax_pull('PUT',json_value);
+        }
+  })
+
+   $('#save_order').click(function(){
+       var order_number=$('#order_number').val();
+       var arr_error =[];
+       if ((!uniq_order) && (order_number.length<=6))
+       {
+         json_value = JSON.stringify({'order_id' :order_id, 'unique_order_number':order_number });
+         unique_order_number(json_value);
+       }
+       validation(arr_error);
+
+  })
+
+  function validation(unique_number_error){
      var error='';
-     var no_error = true
      var clear_list;
      var object1;
      var dt;
@@ -339,6 +413,12 @@ $(document).ready(function() {
      var form_value;
      var quantity;
      var credit_number;
+     var no_error = true;
+     var order_number;
+      if (unique_number_error.length !=0 ){
+          no_error=false;
+      }
+
     /* Clear error and border-color*/
       if(error_list)
       {
@@ -350,6 +430,7 @@ $(document).ready(function() {
            }
           error_list=[];
       }
+      error_list=unique_number_error.concat()
      /*---------------------------------*
 
       /* String length validation */
@@ -366,6 +447,13 @@ $(document).ready(function() {
               error_list.push({id:$('#order_error'), error:error});
           }
         }
+
+        order_number=$('#order_number').val();
+       if (order_number.length>6){
+           error = 'Order number should be <=6 characters';
+           no_error = false;
+           error_list.push({id:$('#order_error'), error:error});
+       }
 
       /*-----------End of Strings length validation---------*/
 
@@ -466,28 +554,10 @@ $(document).ready(function() {
           /*Clear error message*/
          $('.error_div').empty();
           /*-----------------*/
-
-         /*add all quantity and product_id in array */
-         var product_arr=[];
-         for( var i=0, total=0; i<$('.quantity').size(); i++)
-         {
-         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt'),
-                          'dimension_id':$('.dimension:eq('+i+')').val()}
-         }
-        /*------------------*/
-
-         form_value = { order_id:order_id, delivery_type:$('#delivery_options').val(),
-                        delivery_address: $('#input_address').val(), comment:$('.comments_area').val(),
-                        credit_card_options:$('#credit_card_options').val(),
-                        credit_card_number:$('#credit_card_number').val(),
-                        cvv2_number:$('#cvv2_number').val(), expire_date:$('#expire_date').val(),
-                        start_date:$('#start_date').val(), issue_number:$('#issue_number').val(),
-                        product_quantity:product_arr};
-
-         /* Json for put on server*/
-         json_value = JSON.stringify(form_value);
-         /*-----------------------*/
-         ajax_pull('PUT',json_value);
+        $('#add_order').prop('disabled', false);
+        $('#add_order').removeClass("button_disable");
+        $('#add_order').removeAttr("disabled");
+        return true;
        }
         else
         {
@@ -497,13 +567,16 @@ $(document).ready(function() {
              object1=error_list[i].id;
              object1.closest('div').append('<p class=error_div>'+error_list[i].error+'');
              object1.css('border-color','#b81900');
-
+             save_button == 0;
            }
-
+           $('#add_order').prop('disabled', true);
+           $('#add_order').addClass("button_disable");
+           return false;
         }
-   })
- /* Car select-or event change*/
+   }
+    /*------------------End of Validation function -----------------------*/
 
+ /* Card select-or event change*/
   $('#credit_card_options').change(function () {
       if ($('#credit_card_options').val() != 4)
       {
