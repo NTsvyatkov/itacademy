@@ -6,6 +6,7 @@ from json import loads
 from models.user_dao import UserDao
 from models.role_dao import RoleDao
 from datetime import date
+from user_dao import UserLevel
 
 
 
@@ -173,6 +174,28 @@ class Order(Base):
             query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
+    #Set new new value of level for user, using order id
+    @staticmethod
+    def set_user_level(order_id):
+
+        order = Order.query.get(order_id)
+        if not order.user.balance:
+            order.user.balance = order.total_price
+        else:
+            order.user.balance += order.total_price
+
+        if order.user.balance < 1000:
+            order.user.level_id = UserLevel.get_level_by_name("Standart").id
+        elif 1000 <= order.user.balance < 3000:
+            order.user.level_id = UserLevel.get_level_by_name("Silver").id
+        elif 3000 <= order.user.balance < 10000:
+            order.user.level_id = UserLevel.get_level_by_name("Gold").id
+        else:
+            order.user.level_id = UserLevel.get_level_by_name("Platinum").id
+
+        db_session.commit()
+
 
 class OrderStatus(Base):
     __tablename__ = "order_status"
