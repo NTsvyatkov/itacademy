@@ -37,7 +37,7 @@
                 }
 
             $('#search_button').click(function(){
-                grid_pagination()
+                gridPagination()
             });
 
             function ajax_success(json){
@@ -102,7 +102,7 @@
             json_value = JSON.stringify(form_value);
 
 
-            function grid_pagination(){
+            function gridPagination(){
                 var name = document.getElementById('name').value
                 var start_price = document.getElementById('start_price').value
                 var end_price = document.getElementById('end_price').value
@@ -115,36 +115,51 @@
                     {
                         ajax_success(json);
                         records_amount=(json.records_amount);
-                        records_per_page=(json.records_per_page);
-                        pages_amount = Math.ceil(records_amount/records_per_page);
-                        document.getElementById("page").innerHTML = page;
-                        document.getElementById("pages_amount").innerHTML = pages_amount
+   records_per_page=(json.records_per_page);
+   pages_amount = Math.ceil(records_amount/records_per_page);
+   document.getElementById("page").innerHTML = page;
+   document.getElementById("pages_amount").innerHTML = pages_amount;
 
-                        if (page==1){
-                            $('#prev').css({ "opacity":"0.4"});
-                            $('#first').css({ "opacity":"0.4"});
-                        } else {$('#prev').css({ "opacity": "1"});
-                            $('#first').css({ "opacity": "1"});
-                        }
+   if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
+           }
 
-                        if (page==pages_amount){
-                            $('#next').css({ "opacity": "0.4"});
-                            $('#last').css({ "opacity": "0.4"});
-                        } else {$('#next').css({ "opacity": "1"});
-                            $('#last').css({ "opacity": "1"});
-                        }
+           if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
+           }
                     }
                 })
             }
 
             if (page==1){
-                grid_pagination();
+                gridPagination();
             }
 
             $('#next').click(function(){
             if (page*records_per_page>=records_amount){page=page}
             else {page=page+1}
-            grid_pagination()
+            gridPagination()
             });
 
             $('#prev').click(function(){
@@ -152,22 +167,24 @@
             if (page<=1){
             page=1;
             }
-            grid_pagination()
+            gridPagination()
             });
 
             $('#first').click(function(){
             page=1;
-            grid_pagination()
+            gridPagination()
             });
 
             $('#last').click(function(){
             page=pages_amount;
-            grid_pagination()
+            gridPagination()
             });
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_siz option:selected" ).each(grid_pagination())
+            $( "#table_siz option:selected" ).each(gridPagination())
+            })
+
             });
 
 
@@ -191,7 +208,7 @@
                     $(this).css({'border' : '2px solid #999'});
                     document.getElementById('search_button').disabled = false;
                 }
-            });
+
             });
 
         </script>

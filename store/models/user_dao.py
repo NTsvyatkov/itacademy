@@ -64,15 +64,6 @@ class UserDao(Base):
         return "CData  '%s, %s, %s, %s, %s, %s, %s, '" % (self.login, self.password,
         self.first_name, self.last_name, self.email, self.region_id, self.role_id)
 
-    @staticmethod
-    def del_user(id):
-        entry = UserDao.get_user(id)
-        entry.is_deleted = True
-        db_session.commit()
-
-    @staticmethod
-    def get_user(id):
-        return UserDao.query.get(id)
 
     @staticmethod
     def  getUserByID(user_id):
