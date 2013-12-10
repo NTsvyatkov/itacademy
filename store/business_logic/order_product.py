@@ -27,7 +27,7 @@ def product_order_update(dict):
         order_product.total_price=total_price
         validate_quantity(product_id,dimension_id,quantity,'update')
 
-    get_order.status_id = 1
+    get_order.status_id = 4
     get_order.delivery_id = delivery_type
     get_order.total_price = amount
     get_order.delivery_address = delivery_address

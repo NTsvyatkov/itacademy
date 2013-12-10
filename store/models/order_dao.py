@@ -167,6 +167,16 @@ class Order(Base):
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
+    @staticmethod
+    def update_order_number(id,order_number):
+        order = Order.get_order(id)
+        if Order.query.filter(Order.order_number == order_number).count() == 0:
+            order.order_number = order_number
+            db_session.commit()
+            return True
+        else:
+            return False
+
 class OrderStatus(Base):
     __tablename__ = "order_status"
 
@@ -324,7 +334,7 @@ class OrderProduct(Base):
 
 def order_product_grid(user_id, page=None, records_per_page=None):
     query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).\
-            filter(and_(Order.user_id==user_id ,Order.status_id == 3 ))
+            filter(Order.user_id==user_id).filter((Order.status_id == 3)|(Order.status_id == 4))
     count = query.filter_by(is_deleted=False).count()
     if page and records_per_page:
         stop = page * records_per_page
