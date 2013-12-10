@@ -113,13 +113,12 @@ def updateStock():
     return make_response(jsonify({'message':'success'}),200)
 
 
-@app.route('/api/search_product/', methods=['GET'])
+@app.route('/api/search_product', methods=['GET'])
 def search_product():
-    filter = ({'name': request.args.get('name_input'),
-    'product_option': request.args.get('product_option'),
-     })
-    prods = Product.FilterItems(filter)
-    products_list = []
+    name = request.args.get('name')
+    prods = Product.FilterItems(name)
+    products_arr = []
     for i in prods:
-      products_list.append({'id': i.id,'name': i.name,'description': i.description})
-    return make_response(jsonify(products=products_list), 200)
+        products_arr.append({'name': i.name, 'description': i.description})
+
+    return make_response(jsonify(products=products_arr), 200)
