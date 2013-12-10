@@ -1,0 +1,285 @@
+{% extends "layout.html" %}
+{% block body %}
+
+        <script type="text/javascript">
+
+
+            var tr = [];
+
+
+            $(document).ready (function() {
+            var count_tr=$('#table_size').val();
+            var count_td=6;
+            var page = 1;
+            var table_grid = document.getElementById('grid');
+            function createGrid(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            for (var j=0; j<=5; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                }
+            createGrid();
+
+            function clearingTr(i)
+                {
+                    for (var j=0; j<=5; j++)
+                        {
+                            tr[i].cells[j].innerHTML='';
+                        }
+                }
+
+
+            function clearingGrid()
+                {
+                    for (var n=1 ; n<=count_tr; n++)
+                        {
+                            clearingTr(n);
+                        }
+                }
+            function deletingGrid()
+                {
+                    for (var n=table_grid.rows.length ; n>=2; n--)
+                        {
+                            table_grid.removeChild(table_grid.childNodes[n]);
+                        }
+
+                }
+
+
+            function ajaxSuccess(json){
+                deletingGrid();
+                createGrid(json.orders.length);
+                var grid_length = json.orders.length;
+                /*Create table */
+                for (var order_k in json.orders)
+                    {
+                        k++;
+                        tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
+                        tr[k].cells[1].innerHTML = json.orders[order_k].assignee;
+                        tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
+                        tr[k].cells[3].innerHTML = "$ "+json.orders[order_k].total_price;
+                        tr[k].cells[4].innerHTML = json.orders[order_k].role;
+                        tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
+                        tr[k].cells[5].abbr=k;
+                        tr[k].cells[5].onclick= function()
+                            {
+                                window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
+                            }
+
+                    }
+                    k=0;
+                    /*End creating table*/
+            }
+
+            var k=0;
+            form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+            json_value = JSON.stringify(form_value);
+
+
+            $('#clr').click(deletingGrid);
+
+                function deleteOrder(id,grid_length)
+                {
+                    $.ajax({
+                    dataType: "json",
+                    url: '/api/orders/'+id,
+                    type: 'DELETE',
+                    success: function(json)
+                    {
+                        if (json.message == 'success')
+                         {
+                          alert('The order has been successfully deleted');
+                           if (grid_length==1)
+                           {
+                               if (page!=1)
+                                {page=page-1;}
+                           }
+                          gridPagination();
+                         }
+                        else
+                         alert (json.message);
+                    },
+
+                     error: function(e)
+                    {
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+
+            })
+             }
+
+            $('#apply_button').click(function(){
+                gridPagination()
+            });
+
+            function gridPagination(){
+                var status_options = document.getElementById('status_options').value;
+                var orders_options = document.getElementById('orders_options').value;
+                var name_input = document.getElementById('name_input').value;
+                $.ajax({
+                dataType: "json",
+                url: '/api/manage_orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+'',
+                type: 'GET',
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        ajaxSuccess(json);
+                        records_amount=(json.records_amount);
+   records_per_page=(json.records_per_page);
+   pages_amount = Math.ceil(records_amount/records_per_page);
+   document.getElementById("page").innerHTML = page;
+   document.getElementById("pages_amount").innerHTML = pages_amount;
+
+   if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
+           }
+
+           if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
+           }
+                    }
+                })
+            }
+
+            if (page==1){
+                gridPagination();
+            }
+
+            $('#next').click(function(){
+            if (page*records_per_page>=records_amount){page=page}
+            else {page=page+1}
+            gridPagination()
+            });
+
+            $('#prev').click(function(){
+            page=page-1;
+            if (page<=1){
+            page=1;
+            }
+            gridPagination()
+            });
+
+            $('#first').click(function(){
+            page=1;
+            gridPagination()
+            });
+
+            $('#last').click(function(){
+            page=pages_amount;
+            gridPagination()
+            });
+
+            $('#table_size').change(function () {
+            count_tr=$('#table_size').val();
+            $( "#table_siz option:selected" ).each(gridPagination())
+            })
+
+            });
+        </script>
+
+        <div class="">
+
+                <div class=" ">
+                    <form class='form' action="">
+                        <br>
+                        <div class="field">
+                            <lable style="float: left; line-height: 38px; padding-right:10px;">Status: </lable>
+                            <select id="status_options" style="width: 100px; float: left" >
+                                <option value="0">All</option>
+                                <option value="1">Pending</option>
+                                <option value="2">Ordered</option>
+                                <option value="3">Delivered</option>
+                            </select>
+                        </div>
+                        <div class="field" style="width: 510px;">
+                            <lable style="float: left; line-height: 35px; padding-right:10px;">Order number: </lable>
+                            <select id="orders_options" style="width: 150px;float: left; margin:0px;">
+                                <option value="0">Order Number</option>
+                            </select>
+                            <input type="text" id="name_input" >
+                        </div>
+                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -33px"></span>
+                    </form>
+                </div>
+
+
+            <div style="margin-left:80%;">
+            </div>
+            <div class="field" style="margin-left:5%;">
+                  <lable>Table size: </lable>
+                  <select id="table_size">
+                    <option selected>10</option>
+                    <option>25</option>
+
+                   </select>
+            </div>
+            <div id=" ">
+                <table id='grid' class="grid">
+                    <tr>
+                        <th>
+                            Order Number
+                        </th>
+                        <th>
+                            Customer
+                        </th>
+                        <th>
+                            Status
+                        </th>
+                        <th>
+                            Amount
+                        </th>
+                        <th>
+                            Assignee
+                        </th>
+                        <th>
+                            Edit
+                        </th>
+                    </tr>
+                </table>
+
+
+            <div id="pagination" style="text-align: center">
+                <input type="button" id="first" value="First">&nbsp
+                <input type="button" id="prev" value="Prev">&nbsp
+
+                <input type="button" id="next" value="Next">&nbsp
+                <input type="button" id="last" value="Last">
+                <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
+            </div>
+
+            </div>
+
+            </div>
+        </div>
+{% endblock body %}

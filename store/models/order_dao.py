@@ -156,14 +156,21 @@ class Order(Base):
 
 
     @staticmethod
-    def pagerByFilterOrder(status_id=None, assignee_id=None, page=None, records_per_page=None):
-        query = Order.query
-        if status_id:
-            query = query.filter(Order.status_id == status_id)
-        if assignee_id:
-            query = query.filter(Order.assignee_id == assignee_id)
+    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
+        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 2))
+        if filter['status_option']:
+            filterStatus={'0': Order.id,
+                    '1': Order.status_id == 4,
+                    '2': Order.status_id == 1,
+                    '3': Order.status_id == 2}
+        if filter['order_option']:
+            filterOrder={'0': Order.id.like(filter['name']+'%'), }
+        if filter['order_option']:
+            query = query.filter(filterOrder[filter['order_option']])
+        if filter['status_option']:
+            query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
