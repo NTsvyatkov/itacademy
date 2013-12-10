@@ -6,6 +6,7 @@ from json import loads
 from models.user_dao import UserDao
 from models.role_dao import RoleDao
 from datetime import date
+from user_dao import UserLevel
 
 
 
@@ -156,16 +157,24 @@ class Order(Base):
 
 
     @staticmethod
-    def pagerByFilterOrder(status_id=None, assignee_id=None, page=None, records_per_page=None):
-        query = Order.query
-        if status_id:
-            query = query.filter(Order.status_id == status_id)
-        if assignee_id:
-            query = query.filter(Order.assignee_id == assignee_id)
+    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
+        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 2))
+        if filter['status_option']:
+            filterStatus={'0': Order.id,
+                    '1': Order.status_id == 4,
+                    '2': Order.status_id == 1,
+                    '3': Order.status_id == 2}
+        if filter['order_option']:
+            filterOrder={'0': Order.id.like(filter['name']+'%'), }
+        if filter['order_option']:
+            query = query.filter(filterOrder[filter['order_option']])
+        if filter['status_option']:
+            query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
 
     @staticmethod
     def update_order_number(id,order_number):
@@ -176,6 +185,29 @@ class Order(Base):
             return True
         else:
             return False
+
+    #Set new new value of level for user, using order id
+    @staticmethod
+    def set_user_level(order_id):
+
+        order = Order.query.get(order_id)
+        if not order.user.balance:
+            order.user.balance = order.total_price
+        else:
+            order.user.balance += order.total_price
+
+        if order.user.balance < 1000:
+            order.user.level_id = UserLevel.get_level_by_name("Standart").id
+        elif 1000 <= order.user.balance < 3000:
+            order.user.level_id = UserLevel.get_level_by_name("Silver").id
+        elif 3000 <= order.user.balance < 10000:
+            order.user.level_id = UserLevel.get_level_by_name("Gold").id
+        else:
+            order.user.level_id = UserLevel.get_level_by_name("Platinum").id
+
+        db_session.commit()
+
+
 
 class OrderStatus(Base):
     __tablename__ = "order_status"
