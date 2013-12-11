@@ -60,7 +60,7 @@ def users_page(page):
                           'region_id': RegionDao.getRegionByID(i.region_id).name})
     return make_response(jsonify(users=users_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
-@app.route('/api/users', methods=['GET'])
+@app.route('/api/users/', methods=['GET'])
 def user_pager():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
