@@ -28,11 +28,6 @@ def search_user():
     else:
        return render_template('search_user.html',)
 
-@app.route('/usergrid')
-def usergrid():
-        return render_template('search_user.html',)
-
-
 
 
 
