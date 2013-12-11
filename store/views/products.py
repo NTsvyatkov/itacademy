@@ -115,10 +115,22 @@ def updateStock():
 
 @app.route('/api/search_product', methods=['GET'])
 def search_product():
-    name = request.args.get('name')
-    prods = Product.FilterItems(name)
+    name = request.args.get('name_input')
+    product_option = request.args.get('product_options')
+    prods = Product.FilterItems(name, product_option)
     products_arr = []
     for i in prods:
-        products_arr.append({'name': i.name, 'description': i.description})
+        products_arr.append({'id': i.id, 'name': i.name, 'description': i.description})
+
+    return make_response(jsonify(products=products_arr), 200)
+
+
+@app.route('/api/product_search', methods=['GET'])
+def product_search():
+    name = request.args.get('name')
+    prods = Product.pagerByFilterItem(name)
+    products_arr = []
+    for i in prods:
+        products_arr.append({'id': i.id, 'name': i.name,'description': i.description})
 
     return make_response(jsonify(products=products_arr), 200)
