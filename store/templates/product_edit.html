@@ -119,7 +119,7 @@
                 var name = document.getElementById('name').value;
                 var description = document.getElementById('description').value;
                 var price = document.getElementById('price').value;
-                if(name_error == null && description_error == null && price_error == null){
+                if(name_error.innerHTML == "" && description_error.innerHTML == "" && price_error.innerHTML == ""){
                     updateProduct(id, name, description, price);
                 }
             });

@@ -37,8 +37,10 @@ def order():
     total_price=0
     total_items=0
     order_date=str(order_list[0].Order.date)
+    print order_date
     mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')
     order_date = calendar.timegm(mysql_time_struct)
+    print order_date
     if order_list[0].Order.delivery_date:
         delivery_date=str(order_list[0].Order.delivery_date)
         mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')

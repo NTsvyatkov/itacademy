@@ -1,85 +1,58 @@
 {% extends "layout.html" %}
+
 {% block body %}
-<head>
+
  <script type="text/javascript">
 
-  var count_tr=25;
-   var tr = [];
-
-   
-
-  $(document).ready(function() {
-    var page = 1;
-    var table_grid = document.getElementById('grid');
-    function creat_grid(count)
-    {
-        for (var i=1; i<=count;i++ )
-        {
-            tr[i] = document.createElement('TR');
-            table_grid.appendChild(tr[i]);
-            tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
-            for (var j=0; j<=7; j++)
-             {
-              tr[i].appendChild(document.createElement('TD'));
-             }
-        }
-      $( "tr:even" ).css( "background-color", "#c0c0c0" );
-    }
-
-    creat_grid(count_tr);
-  /*End of creating table*/
+  var tr = [];
 
 
-  function clearing_tr(i)
-  {
-      for (var j=0; j<=7; j++)
-      {
-          tr[i].cells[j].innerHTML='';
-      }
-  }
+            $(document).ready (function() {
+            var count_tr=$('#table_size').val();
+            var count_td=6;
+            var page = 1;
+            var table_grid = document.getElementById('grid');
+            function createGrid(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            for (var j=0; j<=7; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                }
+            createGrid();
+
+            function clearingTr(i)
+                {
+                    for (var j=0; j<=7; j++)
+                        {
+                            tr[i].cells[j].innerHTML='';
+                        }
+                }
 
 
-  function clearing_grid()
-  {
-    for (var n=2 ; n<=count_tr; n++)
-    {
-      clearing_tr(n);
-    }
-  }
+            function deletingGrid()
+                {
+                    for (var n=table_grid.rows.length ; n>=2; n--)
+                        {
+                            table_grid.removeChild(table_grid.childNodes[n]);
+                        }
 
- function deleting_grid()
- {
-    for (var n=table_grid.rows.length ; n>=2; n--)
-      {
-       table_grid.removeChild(table_grid.childNodes[n]);
-      }
-
- }
+                }
 
 
- function create_entity(){
-       $.ajax({
-        dataType: "json",
-        url: '/api/user',
-        type: 'GET',
-        data: json_value,
-        contentType: "application/json",
-        success: function(json)
-        {
-            ajax_success(json);
-         }
-      })
- }
-
-    var k=0;
-    form_value = {id : $('#name_form').val(), name : $('#user_name').val()};
-    json_value = JSON.stringify(form_value);
 
 
 
     $('#search_button').click(function(){
-    create_entity();
+    gridPagination();
     });
 
 
@@ -96,8 +69,8 @@
                         if (json.message == 'success')
                          {
                           alert('The user has been successfully deleted');
-                          deleting_grid();
-                          create_entity();
+                          deletingGrid();
+                          gridPagination();
                          }
                         else
                          alert (json.message);
@@ -112,10 +85,10 @@
   })
  }
 
-  function ajax_success(json){
+  function ajaxSuccess(json){
 
-           deleting_grid()
-           creat_grid(json.users.length)
+           deletingGrid()
+           createGrid(json.users.length)
 
             for (var user_k in json.users)
                 {
@@ -145,7 +118,7 @@
                                         {
                                             var tr1= $(this).closest('tr');
                                            var id_h = tr1.children('td').children('.hidden_id').val();
-                                            
+
                                           delete_id(id_h,this.abbr)
                                         }
                                        }
@@ -155,73 +128,99 @@
 
 
   }
+            var k=0;
+            form_value = {id : $('#name_form').val(), name : $('#user_name').val()};
+            json_value = JSON.stringify(form_value);
 
-   $('#clr').click(deleting_grid);
+             $('#clr').click(deletingGrid);
 
-  function grid_pagination(){$.ajax({
-        dataType: "json",
-        url: '/api/user/'+page,
-        type: 'GET',
-        contentType: "application/json",
-        success: function(json)
-        {
-           ajax_success(json);
-           records_amount=(json.records_amount);
-           records_per_page=(json.records_per_page);
-           pages_amount = Math.ceil(records_amount/records_per_page);
-           document.getElementById("page").innerHTML = page;
-           document.getElementById("pages_amount").innerHTML = pages_amount
 
-           if (page==1){
-               $('#prev').css({ "opacity":"0.4"});
-               $('#first').css({ "opacity":"0.4"});
-           } else {$('#prev').css({ "opacity": "1"});
-               $('#first').css({ "opacity": "1"});
+
+            $('#apply_button').click(function(){
+                gridPagination()
+            });
+
+            function gridPagination(){
+                $.ajax({
+                dataType: "json",
+                url: '/api/users/?page='+page+'&table_size='+count_tr+'',
+                type: 'GET',
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        ajaxSuccess(json);
+                        records_amount=(json.records_amount);
+   records_per_page=(json.records_per_page);
+   pages_amount = Math.ceil(records_amount/records_per_page);
+   document.getElementById("page").innerHTML = page;
+   document.getElementById("pages_amount").innerHTML = pages_amount;
+
+   if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
            }
 
            if (page==pages_amount){
-               $('#next').css({ "opacity": "0.4"});
-               $('#last').css({ "opacity": "0.4"});
-           } else {$('#next').css({ "opacity": "1"});
-               $('#last').css({ "opacity": "1"});
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
            }
-         }
-      })
-     }
+                    }
+                })
+            }
 
-  if (page==1)
-  {grid_pagination();
-  }
+            if (page==1){
+                gridPagination();
+            }
 
-   $('#next').click(function(){
-    if (page*records_per_page>=records_amount){page=page}
-    else {page=page+1}
-    grid_pagination()
-    });
+            $('#next').click(function(){
+            if (page*records_per_page>=records_amount){page=page}
+            else {page=page+1}
+            gridPagination()
+            });
 
-    $('#prev').click(function(){
-    page=page-1;
-        if (page<=1){
-        page=1;
-    }
-    grid_pagination()
-    });
+            $('#prev').click(function(){
+            page=page-1;
+            if (page<=1){
+            page=1;
+            }
+            gridPagination()
+            });
 
-    $('#first').click(function(){
-    page=1;
-    grid_pagination()
-    });
+            $('#first').click(function(){
+            page=1;
+            gridPagination()
+            });
 
-    $('#last').click(function(){
-    page=pages_amount;
-    grid_pagination()
-    });
+            $('#last').click(function(){
+            page=pages_amount;
+            gridPagination()
+            });
 
- });
+            $('#table_size').change(function () {
+            count_tr=$('#table_size').val();
+            $( "#table_siz option:selected" ).each(gridPagination())
+            })
 
-
-
-
+            });
    </script>
 
   </head>
@@ -238,7 +237,7 @@ This page is appointed for creating new and managing existing users
  </div>
 
       <div id="user_filter">
-          
+
         <div class="user_filter_in">
          <form class='form'>
                  <span>Search user</span>
@@ -255,7 +254,7 @@ This page is appointed for creating new and managing existing users
                         <option value="str5"> All Columns </option>
                          </select>
                         </div>
-        </td>                
+        </td>
         <td>
                 <div class="search">
                  <select id="SelectId_key" style="width:100px">
@@ -268,15 +267,22 @@ This page is appointed for creating new and managing existing users
                 </div>
           </td>
           <td>
-                  <input type="text" style="width:280px" />
+                  <input type="text" style="..." />
                 <input type="button" value="search" id='search_button'>
         </td>
-   </tr>        
+   </tr>
 </table>
          </form>
                  </div>
           </div>
-          
+<div class="field" style="margin-left:5%;">
+                  <lable>Table size: </lable>
+                  <select id="table_size">
+                    <option selected>5</option>
+                    <option>25</option>
+
+                   </select>
+            </div>
               <div id="user_table">
        <table id='grid' class="grid">
            <tr>
@@ -315,8 +321,9 @@ This page is appointed for creating new and managing existing users
                 <input type="button" id="next" value="Next">&nbsp
                 <input type="button" id="last" value="Last">
                 <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
-            </div>
+            </div></div></div>
 
- 
+
 
 {% endblock body %}
+

@@ -85,6 +85,7 @@ Order.add_order(2,date.today(),2,3,42,2)
 
 Order.add_order(5,date.today(),1,2,40,1,13/11/2013,15/11/2013)
 Order.add_order(5,date.today(),2,2,40,2,13/11/2013,15/11/2013)
+Order.add_order(5,date.today(),3,2,40,2,13/11/2013,15/11/2013)
 Order.add_order(5,date.today(),4,2,40,4,13/11/2013,15/11/2013)
 
 Order.add_order(1,date.today(),2,3)

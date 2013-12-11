@@ -80,6 +80,7 @@ $(document).ready(function() {
     var order_date;
     var save_button=0;
     var uniq_order=false;
+    var json;
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
     $('#start_date').css('background-color','#e2e2e2');
@@ -119,11 +120,49 @@ $(document).ready(function() {
         type: type_options,
         contentType: "application/json",
         data:data,
-        success: function(json)
+        async:false,
+        success: function(json_val)
         {
           if (type_options == 'GET'){
-           ajax_success(json);
-           include_pagination(page,json);
+
+           json=json_val;
+
+
+           records_amount=(json.records_amount);
+           records_per_page=(json.records_per_page);
+           pages_amount = Math.ceil(records_amount/records_per_page);
+           document.getElementById("page").innerHTML = page;
+           document.getElementById("pages_amount").innerHTML = pages_amount;
+
+           if (page==1){
+               $('#prev').prop('disabled', true);
+               $('#first').prop('disabled', true);
+               $('#prev').addClass("button_disable");
+               $('#first').addClass("button_disable");
+           } else {
+               $('#prev').prop('disabled', false);
+               $('#first').prop('disabled', false);
+               $('#prev').removeClass("button_disable");
+               $('#first').removeClass("button_disable");
+               $('#prev').removeAttr("disabled");
+               $('#first').removeAttr("disabled");
+           }
+
+           if (page==pages_amount){
+               $('#next').prop('disabled', true);
+               $('#last').prop('disabled', true);
+               $('#next').addClass("button_disable");
+               $('#last').addClass("button_disable");
+
+           } else {
+               $('#next').prop('disabled', false);
+               $('#last').prop('disabled', false);
+               $('#next').removeClass("button_disable");
+               $('#last').removeClass("button_disable");
+               $('#next').removeAttr("disabled");
+               $('#last').removeAttr("disabled");
+           }
+
           }
           else {
               alert('Order successfully issued');
@@ -140,6 +179,7 @@ $(document).ready(function() {
    }
 /*------------------------------------------*/
  ajax_pull('GET','data');
+ ajax_success(json);
 
  /*-------------Update quantity in row------------------*/
  function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr,dim){
@@ -363,8 +403,8 @@ $(document).ready(function() {
 
 
   $('#add_order').click(function(){
-
-        if (validation(0)){
+        var arr=[]
+        if (validation(arr)){
              /*add all quantity and product_id in array */
          var product_arr=[];
          for( var i=0, total=0; i<$('.quantity').size(); i++)
@@ -415,9 +455,7 @@ $(document).ready(function() {
      var credit_number;
      var no_error = true;
      var order_number;
-      if (unique_number_error.length !=0 ){
-          no_error=false;
-      }
+
 
     /* Clear error and border-color*/
       if(error_list)
@@ -430,7 +468,10 @@ $(document).ready(function() {
            }
           error_list=[];
       }
-      error_list=unique_number_error.concat()
+      if (unique_number_error.length !=0 ){
+          no_error=false;
+          error_list=unique_number_error.concat()
+      }
      /*---------------------------------*
 
       /* String length validation */

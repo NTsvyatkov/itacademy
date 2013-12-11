@@ -28,13 +28,6 @@ def search_user():
     else:
        return render_template('search_user.html',)
 
-@app.route('/usergrid')
-def usergrid():
-        return render_template('search_user.html',)
-
-@app.route('/users_')
-def users_list():
-        return render_template('users.html',)
 
 
 
@@ -62,7 +55,7 @@ def users_page(page):
                           'region_id': RegionDao.getRegionByID(i.region_id).name})
     return make_response(jsonify(users=users_arr, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
-@app.route('/api/users', methods=['GET'])
+@app.route('/api/users/', methods=['GET'])
 def user_pager():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
@@ -80,7 +73,7 @@ def user_pager():
 @app.route('/api/users/<int:id>', methods = ['GET'])
 def users_id(id):
     i=getUserByID(id)
-    user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email, 'role_id':RoleDao.getRoleByID(i.role_id).name}
+    user ={'id':i.id,'login':i.login,'first_name':i.first_name, 'last_name':i.last_name,'email':i.email,'region_id':i.region_id, 'role_id':RoleDao.getRoleByID(i.role_id).name}
     resp = make_response(jsonify(users=user),200)
     return resp
 
