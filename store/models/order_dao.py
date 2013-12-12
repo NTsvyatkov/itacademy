@@ -56,6 +56,7 @@ class Order(Base):
     def get_order(id):
         return Order.query.get(id)
 
+
     @staticmethod
     def getAllOrders():
         return Order.query.order_by(Order.id).all()
@@ -381,3 +382,4 @@ def order_product_grid(user_id, page=None, records_per_page=None):
         return query.slice(start, stop).all(), count
     else:
         return query.all(),count
+
