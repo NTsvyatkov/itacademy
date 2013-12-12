@@ -9,6 +9,7 @@ from json import loads
 import calendar,random,time
 
 
+@app.route('/order/', defaults={'id': 0})
 @app.route('/order/<int:id>')
 def order_grid(id):
     get_order=Order.get_order(id)
