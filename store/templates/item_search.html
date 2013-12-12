@@ -23,7 +23,18 @@
 
     creat_grid(count_tr);
 
+   function deleting_grid()
+      {
+       for (var n=table_grid.rows.length ; n>=2; n--)
+          {
+          table_grid.removeChild(table_grid.childNodes[n]);
+          }
+
+          }
+
+
   create_entity()
+
 
   $('#search_button').click(function(){
                 create_entity()
@@ -34,7 +45,7 @@
        var product_options = document.getElementById('product_options').value;
        $.ajax({
         dataType: "json",
-        url: '/api/search_product?name_input='+name_input+'&product_option='+product_options+'',
+        url: '/api/search_product?name_input='+name_input+'&product_options='+product_options+'',
         type: 'GET',
         contentType: "application/json",
         success: function(json)
@@ -43,8 +54,9 @@
          }
       })
   }
-
+  k=0;
 function ajax_success(json){
+         deleting_grid()
          creat_grid(json.products.length)
         for (var product_k in json.products)
           {
@@ -52,6 +64,7 @@ function ajax_success(json){
       tr[k].cells[0].innerHTML = json.products[product_k].name;
       tr[k].cells[1].innerHTML = json.products[product_k].description;
           }
+    k=0;
 }
 
 
