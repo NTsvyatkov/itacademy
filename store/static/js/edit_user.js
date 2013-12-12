@@ -206,7 +206,7 @@ var region =   document.form.region.value;
  var get = location.search;
             if(get != '')
             {
-	            var id = (get.substr(1));
+	            var id = (get.substr(2));
 	            id.split();
             }
 
