@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-
+<script src="{{ url_for('static', filename='js/gs-sortable.js') }}"></script>
         <script type="text/javascript">
 
 
@@ -11,7 +11,7 @@
             var count_tr=$('#table_size').val();
             var count_td=6;
             var page = 1;
-            var table_grid = document.getElementById('grid');
+            var table_grid = document.getElementById('table-1');
             function createGrid(count)
                 {
                     for (var i=1; i<=count;i++ )
@@ -47,50 +47,50 @@
 
                 }
 function sortBy (field, rev, fn) {
-	field = field || false;
-	rev = rev ? rev === true ? -1 : 1 : 1;
-	fn = fn || false;
+        field = field || false;
+        rev = rev ? rev === true ? -1 : 1 : 1;
+        fn = fn || false;
 
-	return function (a, b) {
+        return function (a, b) {
 
-		if (field) {
-			a = a[field];
-			b = b[field];
-		}
+                if (field) {
+                        a = a[field];
+                        b = b[field];
+                }
 
-		if (fn) {
-			a = fn(a);
-			b = fn(b);
-		}
+                if (fn) {
+                        a = fn(a);
+                        b = fn(b);
+                }
 
-		if (a < b) { return rev * -1; }
-		if (a > b) { return rev; }
+                if (a < b) { return rev * -1; }
+                if (a > b) { return rev; }
 
-		return false;
-	}
+                return false;
+        }
 }
 function sortByRev (field, rev, fn) {
-	field = field || false;
-	rev = rev ? rev === true ? -1 : 1 : 1;
-	fn = fn || false;
+        field = field || false;
+        rev = rev ? rev === true ? -1 : 1 : 1;
+        fn = fn || false;
 
-	return function (a, b) {
+        return function (a, b) {
 
-		if (field) {
-			a = a[field];
-			b = b[field];
-		}
+                if (field) {
+                        a = a[field];
+                        b = b[field];
+                }
 
-		if (fn) {
-			a = fn(a);
-			b = fn(b);
-		}
+                if (fn) {
+                        a = fn(a);
+                        b = fn(b);
+                }
 
-		if (a < b) { return rev; }
-		if (a > b) { return rev * -1; }
+                if (a < b) { return rev; }
+                if (a > b) { return rev * -1; }
 
-		return false;
-	}
+                return false;
+        }
 }
 
             function ajaxSuccess(json){
@@ -101,12 +101,15 @@ function sortByRev (field, rev, fn) {
                 for (var order_k in json.orders)
                     {
                         k++;
-                        tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
-                        tr[k].cells[1].innerHTML = json.orders[order_k].assignee;
-                        tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
-                        tr[k].cells[3].innerHTML = "$ "+json.orders.sort(sortByRev("total_price"))[order_k].total_price;
-                        tr[k].cells[4].innerHTML = json.orders[order_k].role;
-                        tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
+                        var id_sort = tr[k].cells[0].innerHTML = json.orders[order_k].order_id
+                        if ($('#sort_1').click(function(){
+                        id_sort = tr[k].cells[0].innerHTML = json.orders.sort(sortByRev("order_id"))[order_k].order_id;
+                                }))
+                        var assignee_sort = tr[k].cells[1].innerHTML = json.orders[order_k].assignee;
+                        var status_sort = tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
+                        var total_price = tr[k].cells[3].innerHTML = "$ "+json.orders[order_k].total_price;
+                        var role_sort = tr[k].cells[4].innerHTML = json.orders[order_k].role;
+                        var edit = tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
                         tr[k].cells[5].abbr=k;
                         tr[k].cells[5].onclick= function()
                             {
@@ -255,28 +258,28 @@ function sortByRev (field, rev, fn) {
                    </select>
             </div>
             <div id=" ">
-                <table class="grid" id="grid" border="0" cellspacing="2" cellpadding="2" width="98%">
-                    <tr>
-                        <td id="sort" title="Click on the header to sort column">
+                <table class="grid" id="table-1" >
+                    <thead><tr>
+                        <th id="sort_1" title="Click on the header to sort column">
                             Order Number
-                        </td>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
+                        </th>
+                        <th title="Click on the header to sort column">
                             Customer
-                        </td>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
+                        </th>
+                        <th title="Click on the header to sort column">
                             Status
-                        </td >
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
+                        </th >
+                        <th  title="Click on the header to sort column">
                             Amount
-                        </td>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
+                        </th>
+                        <th  title="Click on the header to sort column">
                             Assignee
-                        </td>
-                        <td>
+                        </th>
+                        <th>
                             Edit
-                        </td>
+                        </th>
                     </tr>
-                </table>
+                </thead></table>
 
 
             <div id="pagination" style="text-align: center">
@@ -293,3 +296,4 @@ function sortByRev (field, rev, fn) {
             </div>
         </div>
 {% endblock body %}
+
