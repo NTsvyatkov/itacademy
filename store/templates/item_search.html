@@ -1,117 +1,172 @@
 {% extends "layout.html" %}
 {% block body %}
-   <script type="text/javascript">
 
-   var count_tr=9;
-   var tr = [];
+        <script type="text/javascript">
 
+            var tr = [8];
 
+            $(document).ready (function() {
+            var table_grid = document.getElementById('grid');
 
+            function creat_grid(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            for (var j=0; j<=1; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                }
+            function deleting_grid(){
+                for (var n=table_grid.rows.length ; n>=2; n--){
+                    table_grid.removeChild(table_grid.childNodes[n]);}
 
-  $(document).ready(function() {
-   var table_grid = document.getElementById('grid');
-   function creat_grid(count){
-     for (var i=1; i<=count;i++ ){
-       tr[i] = document.createElement('TR');
-       table_grid.appendChild(tr[i]);
-       tr[i].id=i;
-       if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-         for (var j=0; j<=1; j++){
-           tr[i].appendChild(document.createElement('TD'));}
-       }
-     }
-
-    creat_grid(count_tr);
-
-   function deleting_grid()
-      {
-       for (var n=table_grid.rows.length ; n>=2; n--)
-          {
-          table_grid.removeChild(table_grid.childNodes[n]);
-          }
-
-          }
-
-
-  create_entity()
-
-
-  $('#search_button').click(function(){
-                create_entity()
+            }
+            searchItem();
+            $('#search_button').click(function(){
+                searchItem()
             });
 
-  function create_entity(){
-       var name_input = document.getElementById('name_input').value;
-       var product_options = document.getElementById('product_options').value;
-       $.ajax({
-        dataType: "json",
-        url: '/api/search_product?name_input='+name_input+'&product_options='+product_options+'',
-        type: 'GET',
-        contentType: "application/json",
-        success: function(json)
-        {
-            ajax_success(json);
-         }
-      })
-  }
-  k=0;
-function ajax_success(json){
-         deleting_grid()
-         creat_grid(json.products.length)
-        for (var product_k in json.products)
-          {
-           k++;
-      tr[k].cells[0].innerHTML = json.products[product_k].name;
-      tr[k].cells[1].innerHTML = json.products[product_k].description;
-          }
-    k=0;
-}
+            function ajax_success(json){
+                deleting_grid()
+                creat_grid(json.products.length);
+                for (var product_k in json.products)
+                    {
+                        k++;
+                        tr[k].cells[0].innerHTML = json.products[product_k].name+
+                                '<input id="id" hidden="true" value ='+json.products[product_k].id+'>';
+                        tr[k].cells[1].innerHTML = json.products[product_k].description;
+                        tr[k].cells[0].abbr=k;
+                        tr[k].cells[1].abbr=k;
+                        tr[k].cells[0].onclick = function Add(){
+
+                           prod_id =$(tr[this.abbr].cells[0]).find("input[id='id']").val()
+                           alert (prod_id)
+                        }
+                    }
+                    k=0;
+            }
 
 
 
 
-  })
+
+            var k=0;
+            form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+            json_value = JSON.stringify(form_value);
 
 
-   </script>
+            function searchItem(){
+                var name = document.getElementById('name').value
 
+                $.ajax({
+                dataType: "json",
+                url: '/api/product_search?&name='+name+'',
+                type: 'GET',
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        ajax_success(json);
+                    }
 
-<div class=" ">
-   <form class='form' action="">
-    <div class="field" style="width: 510px;">
-          <lable style="float: left; line-height: 35px; padding-right:10px;">Search for item by: </lable>
-          <select id="product_options" style="width: 150px;float: left; margin:0px;">
-              <option value="0">Item Name</option>
-              <option value="1">Item Description</option>
-          </select>
-    <input type="text" id="name_input" >
+                })
+            }
+
+             $.ajax({
+              dataType: "json",
+              url: '/api/dimension',
+              type: 'GET',
+              contentType: "application/json",
+              success:function(json) {
+              $.each(json.dimensions, function(i, pr){
+              $('#dimension').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+                     })
+                     }
+                  });
+          $('#add_item').click(function(){
+            add_Item();
+              });
+
+           function add_Item(){
+
+               id=prod_id
+
+               $.ajax({
+               dataType: "json",
+               url: '/api/product/'+id,
+               type: 'GET',
+               contentType: "application/json",
+               success: function(json){
+                $.each(json.product, function(i, pr){
+                document.getElementById('item').value=json.product.name
+                document.getElementById('price').value=json.product.price
+               })
+
+               }
+
+           })
+
+           }
+        })
+        </script>
+
+        <div class="">
+            <div class=" ">
+            <form class='form' action="">
+             <div class="field" style="width: 510px;">
+                <lable style="float: left; line-height: 35px; padding-right:10px;">Search for item by: </lable>
+                <select id="product_options" style="width: 150px;float: left; margin:0px;">
+                <option value="0">Item Name</option>
+                <option value="1">Item Description</option>
+                </select>
+                <input type="text" id="name" >
     </div>
     <span><input type="button" value="Search" id='search_button' style="float: right; margin-top: -33px"></span>
    </form>
    </div>
 </div>
 
+            </div>
+            <div style="margin-left:80%;">
+            </div>
+            <div id=" ">
+                <table id='grid' class="grid">
+                    <tr>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+
+    <span><input type="button" value="Add" id='add_item'  style="float: right; margin-right: 150px; width:100px; height:30px "></span>
+
+        </div>
+<br><br>
+
+ <form action="" id="info" style="width: 400px; height: 275px"><br>
+
+    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" eadonly id="item"></span><br><br>
+    <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
+    <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
+    <span>Dimension <select id="dimension" >
 
 
-<div id="item_table">
-  <table id='grid' class="grid">
-    <tr>
-      <th>
-        Item Name
-      </th>
-      <th>
-        Item Description
-      </th>
-    </tr>
-  </table>
-</div>
+                    </select> </span>
 
 
-<form action="" id="info">
-<fieldset style="width: 600px; height: 200px">
 
-</fieldset>
-</form>
+ <p><div style="float: right" ><input type="button" value="Done" id="done"><input type="reset" value="Remove" id="remove"><input type="button"  id="cansel"  value="Cancel"></div></p>
+           </form>
 
-
-{% endblock body %}
+ {% endblock body %}

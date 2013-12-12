@@ -124,10 +124,10 @@ class Product(Base):
     @staticmethod
     def FilterItems(name=None, product_option=None):
         query = Product.query
-        if product_option == 0:
-            query = query.filter(or_(Product.name == name))
-        if product_option == 1:
-            query = query.filter(or_(Product.description == name))
+        if product_option==0:
+             query = query.filter(Product.name == name),
+        if product_option==0:
+            query = query.filter(Product.description == name)
         return query.order_by(Product.id)
 
 
