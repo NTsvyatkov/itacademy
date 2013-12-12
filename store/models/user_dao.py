@@ -132,6 +132,10 @@ class UserDao(Base):
         return UserDao.query.filter(UserDao.role_id == role).all()
 
     @staticmethod
+    def getUserByRoleName(role_name):
+        return UserDao.query.join(UserDao.role).filter(RoleDao.name == role_name).all()
+
+    @staticmethod
     def isUserExists(userLogin, userPassword):
         user = UserDao.getUserByLogin(userLogin, userPassword)
         result = False
