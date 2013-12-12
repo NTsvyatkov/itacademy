@@ -27,10 +27,10 @@ def ordersPage():
     orders_list = []
     for i in prods:
         orders_list.append({'order_id': i.id, 'delivery_date': i.date.strftime("%d/%m/%y"),
-                            'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price),
-                            'assignee':UserDao.getUserByID(i.assignee_id).first_name+' '
-                                       +UserDao.getUserByID(i.assignee_id).last_name,'maxDiscount': i.discount,
-                            'role': RoleDao.getRoleByID(UserDao.getUserByID(i.assignee_id).id).name})
+                            'orderStatus': i.status.name,'total_price': str(i.total_price),
+                            'assignee':i.assignee.first_name+' '
+                                       +i.assignee.last_name,'maxDiscount': i.discount,
+                            'role': i.assignee.role.name})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 

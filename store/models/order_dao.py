@@ -135,18 +135,17 @@ class Order(Base):
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.filter(Order.user_id == user_id)
+        query = Order.query.join(Order.assignee).filter(Order.user_id == user_id)
         if filter['status_option']:
             filterStatus={'0': Order.id,
                     '1': Order.status_id == 3,
                     '2': Order.status_id == 4,
                     '3': Order.status_id == 1,
                     '4': Order.status_id == 2}
-        if filter['order_option']:
-            filterOrder={'0': Order.id.like(filter['name']+'%'),
-                    '1': UserDao.first_name.like(filter['name']+'%')}
-        if filter['order_option']:
-            query = query.filter(filterOrder[filter['order_option']])
+        if int(filter['order_option']) == 0:
+            query = query.filter(Order.id.like(filter['name']+'%'))
+        if int(filter['order_option']) == 1:
+            query = query.filter(UserDao.first_name.like(filter['name']+'%'))
         if filter['status_option']:
             query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
