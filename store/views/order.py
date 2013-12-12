@@ -38,7 +38,6 @@ def order():
     total_items=0
     order_date=str(order_list[0].Order.date)+' 00:00'
     mysql_time_struct = time.strptime(order_date, '%Y-%m-%d %H:%M')
-    print mysql_time_struct
     order_date = calendar.timegm(mysql_time_struct)
     if order_list[0].Order.delivery_date:
         delivery_date=str(order_list[0].Order.delivery_date)
@@ -74,6 +73,8 @@ def order_id_delete(id_order,id_product,dimension_id):
 def order_post():
     js = request.json
     product_order_update(js)
+    for i in js['deleted_order_product']:
+        OrderProduct.delete_order_product(js['order_id'],i['product_id'],i['dimension_id'])
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 

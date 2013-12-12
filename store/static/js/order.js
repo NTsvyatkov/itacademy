@@ -94,7 +94,7 @@ $(document).ready(function() {
     $('#table_size').change(function () {
        page=1;
        count_tr=$('#table_size').val();
-       $( "#table_siz option:selected" ).each(ajax_pull('GET','data'))
+       $( "#table_siz option:selected" ).each(pagination_slice(page,count_tr))
      })
     /*---------------------------------*/
 
@@ -111,6 +111,7 @@ $(document).ready(function() {
           tr1.cells[j].innerHTML=th[j];
     }
    create_grid(count_tr,count_td);
+   ajax_pull('GET','data');
   /*----------------End of creating table-------------------------------*/
 
   /* Ajax function for all-  put and all - get methods*/
@@ -131,7 +132,7 @@ $(document).ready(function() {
           }
           else {
               alert('Order successfully issued');
-              window.location.replace("/my_orders");
+              /*window.location.replace("/my_orders");*/
               ajax_pull('GET','data');
               }
          },
@@ -143,7 +144,7 @@ $(document).ready(function() {
       })
    }
 /*------------------------------------------*/
- ajax_pull('GET','data');
+
 
  /* ----------Function for copy object-----------------*/
   function clone(obj)
@@ -231,30 +232,25 @@ $(document).ready(function() {
 pagination_slice(page,count_tr);
 
  /*-------------Update quantity in row------------------*/
- function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr,dim){
-       $.ajax({
-        dataType: "json",
-        url: '/api/update/',
-        type: 'PUT',
-        contentType: "application/json",
-        data:json_data,
-        success: function(json)
-          {
+ function update_quantity(product_id,dimension_id,object_quantity,old_quantity,price,quantity,tr,dim){
+
+       for (var i in json.order)
+               {
+                if ((json.order[i].product_id ==product_id) && (json.order[i].dimension_id==dimension_id ) &&
+                    (json.order_id==order_id))
+                {
+                    json.order[i].quantity=quantity;
+                }
+               }
+
              var sum = +price*+quantity*dim;
              tr.children('td').children('.amount').text(sum.toFixed(2));
              tr.children('td').children('.old_quantity').val(quantity);
              total_amount= total_price-(+old_quantity*+price*dim)+(+quantity*+price*dim);
              total_price=total_amount;
              $('#total_amount').val(total_amount.toFixed(2)+'$');
-          },
+             pagination_slice(page,count_tr);
 
-        error: function(e)
-          {
-            error = JSON.parse(e.responseText);
-            alert(error.message);
-            object_quantity.val(old_quantity);
-          }
-      })
    }
 /*--------------------------------------------------*/
 
@@ -290,13 +286,15 @@ pagination_slice(page,count_tr);
 /*--------------------------------------------------*/
 
 
-  function delete_id(product_id, dimension_id,grid_length)
+  function delete_id(product_id, dimension_id, grid_length)
   {
       var status= false;
       /* Searching order_product dictionary for keys product_id , dimension_id*/
       for (var i in json.order)
                {
-                if ((json.order[i].product_id ==product_id) && (json.order[i].dimension_id==dimension_id )){
+                if ((json.order[i].product_id ==product_id) && (json.order[i].dimension_id==dimension_id ) &&
+                    (json.order_id==order_id))
+                {
                     deleted_order_product.push(json.order[i]);
                     json.order.splice(i,1);
                     alert('The product has been successfully deleted from the cart');
@@ -313,41 +311,6 @@ pagination_slice(page,count_tr);
             }
           pagination_slice(page,count_tr);
       }
-
-      /*
-
-   $.ajax({
-       dataType: "json",
-        url: '/api/order_product/'+product_id+'/'+order_id+'/'+dimension_id,
-        type: 'DELETE',
-        contentType: "application/json",
-        success: function(json)
-                    {
-                      if (json.message == 'success')
-                        {
-                          alert('The product has been successfully deleted from the cart');
-                           /* checking that grid is not empty*/
-                      /*    if (grid_length==1)
-                           {
-                               if (page!=1)
-                                {
-                                    page=page-1;
-                                }
-                           }
-                            /*--------------------------------*/
-                          /*  ajax_pull('GET','data');
-                        }
-                        else
-                         alert (json.message);
-                    },
-
-        error: function(e)
-                    {
-                       error = JSON.parse(e.responseText);
-                       alert(error.message);
-                    }
-
-  })*/
 
  }
 
@@ -440,9 +403,6 @@ pagination_slice(page,count_tr);
                      }
                     else{
                      $(this).next('.error_div').empty();
-                       json_value = JSON.stringify({'quantity':quantity,'product_id':product_id,
-                                                   'dimension_id':dimension_id, 'price':price,
-                                                   'order_id' :order_id });
 
                     if (dimension_id ==1){
                         dim =1;
@@ -453,7 +413,7 @@ pagination_slice(page,count_tr);
                     if(dimension_id ==3){
                         dim=10;
                     }
-                       update_quantity(json_value,object_quantity,old_quantity,price,quantity,tr,dim);
+                       update_quantity(product_id,dimension_id,object_quantity,old_quantity,price,quantity,tr,dim);
                      }
                 })
 
@@ -466,21 +426,23 @@ pagination_slice(page,count_tr);
         if (validation(arr)){
              /*add all quantity and product_id in array */
          var product_arr=[];
-         for( var i=0, total=0; i<$('.quantity').size(); i++)
+         var preferable_date;
+         for( var i=0; i<json.order.length; i++)
          {
-         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt'),
-                          'dimension_id':$('.dimension:eq('+i+')').val()}
+         product_arr[i]= {'quantity':+json.order[i].quantity,'product_id':+json.order[i].product_id,
+                          'dimension_id':+json.order[i].dimension_id,
+                          'dimension_number':+json.order[i].dimension_number}
          }
         /*------------------*/
-
-         form_value = { order_id:order_id, delivery_type:$('#delivery_options').val(),
-                        delivery_address: $('#input_address').val(), comment:$('.comments_area').val(),
+         preferable_date= $('#hidden_preferable_date').val()+'T00:00';
+         preferable_date=Date.parse(preferable_date);
+         form_value = { order_id:order_id, preferable_delivery_date:preferable_date,
+                        assignee:$('#assignee').val(),
                         credit_card_options:$('#credit_card_options').val(),
                         credit_card_number:$('#credit_card_number').val(),
                         cvv2_number:$('#cvv2_number').val(), expire_date:$('#expire_date').val(),
                         start_date:$('#start_date').val(), issue_number:$('#issue_number').val(),
-                        product_quantity:product_arr};
-
+                        product_quantity:product_arr, deleted_order_product:deleted_order_product};
          /* Json for put on server*/
          json_value = JSON.stringify(form_value);
          /*-----------------------*/
