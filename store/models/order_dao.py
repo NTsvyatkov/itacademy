@@ -11,6 +11,7 @@ from user_dao import UserLevel
 
 
 
+
 class Order(Base):
     __tablename__ = "order"
     id = Column(Integer, primary_key=True, autoincrement=True)
@@ -159,8 +160,9 @@ class Order(Base):
 
 
 
+
     @staticmethod
-    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
+    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None, sort_field=None):
         stop = page * records_per_page
         start = stop - records_per_page
         query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
@@ -175,7 +177,9 @@ class Order(Base):
             query = query.filter(filterOrder[filter['order_option']])
         if filter['status_option']:
             query = query.filter(filterStatus[filter['status_option']])
-        return query.order_by(Order.id).slice(start, stop), \
+            if sort_field =='user_name':
+                query = query.order_by(UserDao.first_name)
+        return query.order_by(sort_field).slice(start, stop), \
             query.count()
 
 

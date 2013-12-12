@@ -46,52 +46,7 @@
                         }
 
                 }
-function sortBy (field, rev, fn) {
-        field = field || false;
-        rev = rev ? rev === true ? -1 : 1 : 1;
-        fn = fn || false;
 
-        return function (a, b) {
-
-                if (field) {
-                        a = a[field];
-                        b = b[field];
-                }
-
-                if (fn) {
-                        a = fn(a);
-                        b = fn(b);
-                }
-
-                if (a < b) { return rev * -1; }
-                if (a > b) { return rev; }
-
-                return false;
-        }
-}
-function sortByRev (field, rev, fn) {
-        field = field || false;
-        rev = rev ? rev === true ? -1 : 1 : 1;
-        fn = fn || false;
-
-        return function (a, b) {
-
-                if (field) {
-                        a = a[field];
-                        b = b[field];
-                }
-
-                if (fn) {
-                        a = fn(a);
-                        b = fn(b);
-                }
-
-                if (a < b) { return rev; }
-                if (a > b) { return rev * -1; }
-
-                return false;
-        }
-}
 
             function ajaxSuccess(json){
                 deletingGrid();
@@ -102,10 +57,7 @@ function sortByRev (field, rev, fn) {
                     {
                         k++;
                         var id_sort = tr[k].cells[0].innerHTML = json.orders[order_k].order_id
-                        if ($('#sort_1').click(function(){
-                        id_sort = tr[k].cells[0].innerHTML = json.orders.sort(sortByRev("order_id"))[order_k].order_id;
-                                }))
-                        var assignee_sort = tr[k].cells[1].innerHTML = json.orders[order_k].assignee;
+                        var assignee_sort = tr[k].cells[1].innerHTML = json.orders[order_k].user;
                         var status_sort = tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
                         var total_price = tr[k].cells[3].innerHTML = "$ "+json.orders[order_k].total_price;
                         var role_sort = tr[k].cells[4].innerHTML = json.orders[order_k].role;
