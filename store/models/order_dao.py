@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
 from json import loads
@@ -145,7 +145,8 @@ class Order(Base):
         if int(filter['order_option']) == 0:
             query = query.filter(Order.id.like(filter['name']+'%'))
         if int(filter['order_option']) == 1:
-            query = query.filter(UserDao.first_name.like(filter['name']+'%'))
+            query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
+                                     UserDao.last_name.like(filter['name']+'%')))
         if filter['status_option']:
             query = query.filter(filterStatus[filter['status_option']])
         return query.order_by(Order.id).slice(start, stop), \
