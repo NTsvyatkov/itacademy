@@ -34,6 +34,8 @@
             });
 
             function ajax_success(json){
+               document.getElementById('add_item').disabled=true;
+               document.getElementById('info').style.display='none'
                 deleting_grid()
                 creat_grid(json.products.length);
                 for (var product_k in json.products)
@@ -41,14 +43,24 @@
                         k++;
                         tr[k].cells[0].innerHTML = json.products[product_k].name+
                                 '<input id="id" hidden="true" value ='+json.products[product_k].id+'>';
-                        tr[k].cells[1].innerHTML = json.products[product_k].description;
+                        tr[k].cells[1].innerHTML = json.products[product_k].description+
+                                '<input id="id1" hidden="true" value ='+json.products[product_k].id+'>';
                         tr[k].cells[0].abbr=k;
                         tr[k].cells[1].abbr=k;
                         tr[k].cells[0].onclick = function Add(){
 
                            prod_id =$(tr[this.abbr].cells[0]).find("input[id='id']").val()
-                           alert (prod_id)
+
+                           document.getElementById('add_item').disabled=false;
                         }
+                        tr[k].cells[1].onclick = function Add(){
+
+                           prod_id =$(tr[this.abbr].cells[1]).find("input[id='id1']").val()
+
+                           document.getElementById('add_item').disabled=false;
+                           alert(prod_id)
+                        }
+
                     }
                     k=0;
             }
@@ -94,7 +106,7 @@
               });
 
            function add_Item(){
-
+             document.getElementById('info').style.display='block'
                id=prod_id
 
                $.ajax({
@@ -119,7 +131,7 @@
         <div class="">
             <div class=" ">
             <form class='form' action="">
-             <div class="field" style="width: 510px;">
+             <div class="field" style="width: 450px;">
                 <lable style="float: left; line-height: 35px; padding-right:10px;">Search for item by: </lable>
                 <select id="product_options" style="width: 150px;float: left; margin:0px;">
                 <option value="0">Item Name</option>
@@ -149,14 +161,14 @@
 
             </div>
 
-    <span><input type="button" value="Add" id='add_item'  style="float: right; margin-right: 150px; width:100px; height:30px "></span>
+    <span><input type="button" value="Add" id='add_item'  style="float: right; margin-right: 230px; width:100px; height:30px "></span>
 
         </div>
 <br><br>
 
  <form action="" id="info" style="width: 400px; height: 275px"><br>
 
-    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" eadonly id="item"></span><br><br>
+    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
     <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
     <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
     <span>Dimension <select id="dimension" >
@@ -166,7 +178,7 @@
 
 
 
- <p><div style="float: right" ><input type="button" value="Done" id="done"><input type="reset" value="Remove" id="remove"><input type="button"  id="cansel"  value="Cancel"></div></p>
+ <p><div style="float: right" ><input type="button" value="Done" id="done"><input type="reset" value="Remove" id="remove"><input type="button"  id="cancel"  value="Cancel"></div></p>
            </form>
 
  {% endblock body %}

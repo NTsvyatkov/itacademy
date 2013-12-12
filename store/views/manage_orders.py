@@ -3,6 +3,7 @@ from flask_bootstrap import app
 from models.order_dao import Order,  OrderStatus
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
+from operator import itemgetter
 
 
 @app.route('/manage_orders')
@@ -26,9 +27,9 @@ def page_order():
     prods, records_amount = Order.pagerByFilterByMerchandiser(user_id, page, records_per_page, filter)
     orders_list = []
     for i in prods:
-        orders_list.append({'order_id': i.id,'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price),
-                            'assignee':UserDao.getUserByID(i.assignee_id).first_name+' '
-                                       +UserDao.getUserByID(i.assignee_id).last_name,
+        orders_list.append({'order_id': i.id,'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price).sort(key=itemgetter('total_price')),
+                            'user':i.user.first_name+' '
+                                       + i.user.last_name,
                             'role': RoleDao.getRoleByID(UserDao.getUserByID(i.assignee_id).id).name})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
