@@ -9,18 +9,22 @@ from json import loads
 import calendar,random,time
 
 
-@app.route('/order_product')
-def order_grid():
-    assingee_list = UserDao.getUserByRole(2)
-    assingee_arr = []
-    for i in assingee_list:
-        assingee_arr.append({'id': i.id, 'name': i.login})
-    if 'user_id' in session:
-        order_product = order_product_grid(session['user_id'])
-    if order_product:
-        return render_template('order.html',assingee_arr=assingee_arr)
+@app.route('/order/<int:id>')
+def order_grid(id):
+    get_order=Order.get_order(id)
+    if get_order.status.id >=3 and get_order.user_id==session['user_id']:
+        assingee_list = UserDao.getUserByRoleName('Merchandiser')
+        assingee_arr = []
+        for i in assingee_list:
+            assingee_arr.append({'id': i.id, 'name': i.login})
+        if 'user_id' in session:
+            order_product = order_product_grid(session['user_id'])
+        if order_product:
+            return render_template('order.html',assingee_arr=assingee_arr)
+        else:
+            return render_template('order_empty.html')
     else:
-        return render_template('order_empty.html')
+        return render_template('order_details.html')
 
 
 @app.route('/api/order_product/', methods=['GET'])
@@ -122,9 +126,7 @@ def unique_number():
     return resp
 
 
-@app.route('/order/<int:id>', methods=['GET'])
-def order_details(id):
-    return render_template('order_details.html')
+
 
 @app.route('/api/order_details/', methods=['GET'])
 def list_orders_id():
