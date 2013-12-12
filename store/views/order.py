@@ -29,18 +29,16 @@ def order():
     page = int(request.args.get('page'))
     order_arr = []
     if 'user_id' in session:
-        order_list,count = order_product_grid(session['user_id'],page, records_per_page)
-        quantity_list = order_product_grid(session['user_id'])
+        order_list,count = order_product_grid(session['user_id'])
+        quantity_list, count_qv = order_product_grid(session['user_id'])
     else:
         order_list,count = order_product_grid(4,page, records_per_page)
-        quantity_list = order_product_grid(4)
+        quantity_list, count_qv = order_product_grid(4)
     total_price=0
     total_items=0
-    order_date=str(order_list[0].Order.date)
-    print order_date
-    mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')
+    order_date=str(order_list[0].Order.date)+' 00:00'
+    mysql_time_struct = time.strptime(order_date, '%Y-%m-%d %H:%M')
     order_date = calendar.timegm(mysql_time_struct)
-    print order_date
     if order_list[0].Order.delivery_date:
         delivery_date=str(order_list[0].Order.delivery_date)
         mysql_time_struct = time.strptime(order_date, '%Y-%m-%d')
@@ -51,13 +49,16 @@ def order():
         dimen = j.OrderProduct.dimension.number
         total_price=total_price + j.Product.price*j.OrderProduct.quantity*dimen
         total_items=total_items+j.OrderProduct.quantity*dimen
+    order_status=order_list[0].Order.status.name
+    order_number=order_list[0].Order.order_number
+    order_id=order_list[0].Order.id
     for i in order_list:
-        order_arr.append({'order_id':i.Order.id, 'id': i.Product.id, 'name': i.Product.name, 'price': str(i.Product.price),\
-         'order_status':i.Order.status.name,'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
-         'order_number':i.Order.order_number,'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id,\
-         'dimension_number':i.OrderProduct.dimension.number})
+        order_arr.append({'product_id': i.Product.id, 'name': i.Product.name, \
+         'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
+         'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id,\
+         'price': str(i.Product.price),'dimension_number':i.OrderProduct.dimension.number})
     return make_response(jsonify(order=order_arr,records_amount=count, total_items=total_items,\
-                delivery_date=delivery_date,\
+                delivery_date=delivery_date, order_status=order_status,order_number=order_number,order_id=order_id, \
                 order_date=order_date, records_per_page=records_per_page, total_price=str(total_price)), 200)
 
 
@@ -72,6 +73,8 @@ def order_id_delete(id_order,id_product,dimension_id):
 def order_post():
     js = request.json
     product_order_update(js)
+    for i in js['deleted_order_product']:
+        OrderProduct.delete_order_product(js['order_id'],i['product_id'],i['dimension_id'])
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
@@ -95,10 +98,13 @@ def unique_number():
         status=Order.update_order_number(js['order_id'],string_data(str(js['order_id'])))
         unique_number=string_data(str(js['order_id']))
         if not status:
-            #ls=[chr(x) for x in range(ord('a'),ord('z')+1)]+list('0123456789')
+            ls=range(9)
             while not status:
-                data=int(js['order_id'])+1
-                data_string=str(data)
+                data=''
+                while len(data)<=5:
+                    x=random.choice(ls)
+                    data+=str(x)
+                data_string=data
                 status=Order.update_order_number(js['order_id'],string_data(data_string))
             unique_number=string_data(data_string)
         message='success'

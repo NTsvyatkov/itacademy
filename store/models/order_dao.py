@@ -376,4 +376,4 @@ def order_product_grid(user_id, page=None, records_per_page=None):
         start = stop - records_per_page
         return query.slice(start, stop).all(), count
     else:
-        return query.all()
+        return query.all(),count

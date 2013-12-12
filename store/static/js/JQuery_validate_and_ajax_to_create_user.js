@@ -235,8 +235,16 @@ var region =   document.form.region.value;
         success : function (resp){
 
             alert('User has been successfully added');
-            parent.location = 'search_user'; }
+            parent.location = 'search_user'; },
+        error: function(resp, exception) {
 
+              if (resp.status == 404) {
+                alert('Requested page not found. [404]');
+            } else if (resp.status == 500) {
+                alert('This username or email already exists');
+            }
+
+        }
 
                      });
 

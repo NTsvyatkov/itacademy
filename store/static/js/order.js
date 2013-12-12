@@ -81,6 +81,7 @@ $(document).ready(function() {
     var save_button=0;
     var uniq_order=false;
     var json;
+    var deleted_order_product=[];
     $('#issue_number').attr('readonly',true);
     $('#issue_number').css('background-color','#e2e2e2');
     $('#start_date').css('background-color','#e2e2e2');
@@ -93,7 +94,7 @@ $(document).ready(function() {
     $('#table_size').change(function () {
        page=1;
        count_tr=$('#table_size').val();
-       $( "#table_siz option:selected" ).each(ajax_pull('GET','data'))
+       $( "#table_siz option:selected" ).each(pagination_slice(page,count_tr))
      })
     /*---------------------------------*/
 
@@ -110,6 +111,7 @@ $(document).ready(function() {
           tr1.cells[j].innerHTML=th[j];
     }
    create_grid(count_tr,count_td);
+   ajax_pull('GET','data');
   /*----------------End of creating table-------------------------------*/
 
   /* Ajax function for all-  put and all - get methods*/
@@ -127,12 +129,75 @@ $(document).ready(function() {
 
            json=json_val;
 
+          }
+          else {
+              alert('Order successfully issued');
+              /*window.location.replace("/my_orders");*/
+              ajax_pull('GET','data');
+              }
+         },
+         error: function(e)
+          {
+            error = JSON.parse(e.responseText);
+             alert(error.message);
+          }
+      })
+   }
+/*------------------------------------------*/
 
-           records_amount=(json.records_amount);
-           records_per_page=(json.records_per_page);
-           pages_amount = Math.ceil(records_amount/records_per_page);
-           document.getElementById("page").innerHTML = page;
-           document.getElementById("pages_amount").innerHTML = pages_amount;
+
+ /* ----------Function for copy object-----------------*/
+  function clone(obj)
+  {
+      if(obj == null || typeof(obj) != 'object')
+      {
+          return obj;
+      }
+      var temp = {};
+      for(var key in obj)
+      {
+          temp[key] = clone(obj[key]);
+      }
+      return temp;
+  }
+
+
+   function get_total_amount()
+  {
+    var total_sum=0;
+    var total_items=0;
+    var result=[];
+    for (var i in json.order)
+               {
+                total_sum= total_sum + +json.order[i].price * +json.order[i].dimension_number * +json.order[i].quantity;
+                total_items= total_items + +json.order[i].dimension_number * +json.order[i].quantity;
+               }
+    result.push(total_sum);
+    result.push(total_items);
+    return result;
+  }
+
+ function pagination_slice(page,count_tr)
+ {
+        var total_items;
+        var get_total=[];
+        get_total= get_total_amount();
+        total_price=get_total[0];
+        total_items=get_total[1];
+        $('#total_items').val(total_items);
+        $('#total_amount').val(total_price.toFixed(2)+'$');
+        var stop = page * count_tr
+        var start = stop - count_tr
+        var order_slice = json.order.slice(start, stop);
+        var json_slice=clone(json);
+        delete json_slice['order'];
+        json_slice['order']=order_slice;
+        ajax_success(json_slice);
+        records_per_page=count_tr;
+        records_amount = json.order.length;
+        pages_amount = Math.ceil(records_amount/records_per_page);
+        document.getElementById("page").innerHTML = page;
+        document.getElementById("pages_amount").innerHTML = pages_amount;
 
            if (page==1){
                $('#prev').prop('disabled', true);
@@ -162,50 +227,30 @@ $(document).ready(function() {
                $('#next').removeAttr("disabled");
                $('#last').removeAttr("disabled");
            }
+ }
 
-          }
-          else {
-              alert('Order successfully issued');
-              window.location.replace("/my_orders");
-              ajax_pull('GET','data');
-              }
-         },
-         error: function(e)
-          {
-            error = JSON.parse(e.responseText);
-             alert(error.message);
-          }
-      })
-   }
-/*------------------------------------------*/
- ajax_pull('GET','data');
- ajax_success(json);
+pagination_slice(page,count_tr);
 
  /*-------------Update quantity in row------------------*/
- function update_quantity(json_data,object_quantity,old_quantity,price,quantity,tr,dim){
-       $.ajax({
-        dataType: "json",
-        url: '/api/update/',
-        type: 'PUT',
-        contentType: "application/json",
-        data:json_data,
-        success: function(json)
-          {
+ function update_quantity(product_id,dimension_id,object_quantity,old_quantity,price,quantity,tr,dim){
+
+       for (var i in json.order)
+               {
+                if ((json.order[i].product_id ==product_id) && (json.order[i].dimension_id==dimension_id ) &&
+                    (json.order_id==order_id))
+                {
+                    json.order[i].quantity=quantity;
+                }
+               }
+
              var sum = +price*+quantity*dim;
              tr.children('td').children('.amount').text(sum.toFixed(2));
              tr.children('td').children('.old_quantity').val(quantity);
              total_amount= total_price-(+old_quantity*+price*dim)+(+quantity*+price*dim);
              total_price=total_amount;
              $('#total_amount').val(total_amount.toFixed(2)+'$');
-          },
+             pagination_slice(page,count_tr);
 
-        error: function(e)
-          {
-            error = JSON.parse(e.responseText);
-            alert(error.message);
-            object_quantity.val(old_quantity);
-          }
-      })
    }
 /*--------------------------------------------------*/
 
@@ -241,40 +286,32 @@ $(document).ready(function() {
 /*--------------------------------------------------*/
 
 
-  function delete_id(product_id, dimension_id,grid_length)
+  function delete_id(product_id, dimension_id, grid_length)
   {
-   $.ajax({
-       dataType: "json",
-        url: '/api/order_product/'+product_id+'/'+order_id+'/'+dimension_id,
-        type: 'DELETE',
-        contentType: "application/json",
-        success: function(json)
-                    {
-                      if (json.message == 'success')
-                        {
-                          alert('The product has been successfully deleted from the cart');
-                           /* checking that grid is not empty*/
-                          if (grid_length==1)
-                           {
-                               if (page!=1)
-                                {
-                                    page=page-1;
-                                }
-                           }
-                            /*--------------------------------*/
-                            ajax_pull('GET','data');
-                        }
-                        else
-                         alert (json.message);
-                    },
+      var status= false;
+      /* Searching order_product dictionary for keys product_id , dimension_id*/
+      for (var i in json.order)
+               {
+                if ((json.order[i].product_id ==product_id) && (json.order[i].dimension_id==dimension_id ) &&
+                    (json.order_id==order_id))
+                {
+                    deleted_order_product.push(json.order[i]);
+                    json.order.splice(i,1);
+                    alert('The product has been successfully deleted from the cart');
+                    status=true;
+                }
+               }
+      if (status){
+          if (grid_length==1)
+            {
+              if (page!=1)
+                 {
+                  page=page-1;
+                 }
+            }
+          pagination_slice(page,count_tr);
+      }
 
-        error: function(e)
-                    {
-                       error = JSON.parse(e.responseText);
-                       alert(error.message);
-                    }
-
-  })
  }
 
  function date_format(unix_time){
@@ -297,13 +334,9 @@ $(document).ready(function() {
            else {
                $('#delivery_date').val('/ /');
            }
-
-           total_price= +json.total_price;
            order_date=json.order_date*1000;
-           $('#total_items').val(json.total_items);
            $('#order_date').val(date_format(order_date));
-           $('#order_status').val(json.order[0].order_status);
-           $('#total_amount').val(total_price.toFixed(2)+'$');
+           $('#order_status').val(json.order_status);
            $('#delivery_date').val();
            deleting_grid();
            create_grid(grid_length,count_td);
@@ -312,10 +345,11 @@ $(document).ready(function() {
                {
                  k++;
                  tr=table_grid.rows[k];
-                 order_id=json.order[product_k].order_id;
+                 order_id=json.order_id;
                  product_name =json.order[product_k].name;
-                 id_product =json.order[product_k].id;
+                 id_product =json.order[product_k].product_id;
                  product_price = +json.order[product_k].price;
+                 tr.cells[0].innerHTML =id_product;
                  tr.cells[1].innerHTML =product_name;
                  tr.cells[2].innerHTML = json.order[product_k].description;
                  tr.cells[3].innerHTML = json.order[product_k].dimension +
@@ -335,7 +369,7 @@ $(document).ready(function() {
                  tr.cells[6].innerHTML = "<span class='amount'>"+amount+"</span>";
                  tr.cells[7].innerHTML ="<img src='static/images/Text Edit.png' class='edit_img'>";
                  tr.cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'\
-                 id='"+product_name+"' alt=" + json.order[product_k].id + " >";
+                 id='"+product_name+"' alt=" + id_product + " >";
                }
 
             /*--------------------------------End creating table------------------------------------*/
@@ -369,9 +403,6 @@ $(document).ready(function() {
                      }
                     else{
                      $(this).next('.error_div').empty();
-                       json_value = JSON.stringify({'quantity':quantity,'product_id':product_id,
-                                                   'dimension_id':dimension_id, 'price':price,
-                                                   'order_id' :order_id });
 
                     if (dimension_id ==1){
                         dim =1;
@@ -382,7 +413,7 @@ $(document).ready(function() {
                     if(dimension_id ==3){
                         dim=10;
                     }
-                       update_quantity(json_value,object_quantity,old_quantity,price,quantity,tr,dim);
+                       update_quantity(product_id,dimension_id,object_quantity,old_quantity,price,quantity,tr,dim);
                      }
                 })
 
@@ -390,38 +421,28 @@ $(document).ready(function() {
   }
 /*----------------------------END of ajax_success ------------------------------------*/
 
-
-  function get_total_amount()
-  {
-   var total =0;
-   for( var i=0, total=0; i<$('.amount').size(); i++)
-   {
-    total = +$('.amount:eq('+i+')').text() + +total;
-   }
-   return total;
-  }
-
-
   $('#add_order').click(function(){
         var arr=[]
         if (validation(arr)){
              /*add all quantity and product_id in array */
          var product_arr=[];
-         for( var i=0, total=0; i<$('.quantity').size(); i++)
+         var preferable_date;
+         for( var i=0; i<json.order.length; i++)
          {
-         product_arr[i]= {'quantity':+$('.quantity:eq('+i+')').val(),'product_id':+$('.quantity:eq('+i+')').attr('alt'),
-                          'dimension_id':$('.dimension:eq('+i+')').val()}
+         product_arr[i]= {'quantity':+json.order[i].quantity,'product_id':+json.order[i].product_id,
+                          'dimension_id':+json.order[i].dimension_id,
+                          'dimension_number':+json.order[i].dimension_number}
          }
         /*------------------*/
-
-         form_value = { order_id:order_id, delivery_type:$('#delivery_options').val(),
-                        delivery_address: $('#input_address').val(), comment:$('.comments_area').val(),
+         preferable_date= $('#hidden_preferable_date').val()+'T00:00';
+         preferable_date=Date.parse(preferable_date);
+         form_value = { order_id:order_id, preferable_delivery_date:preferable_date,
+                        assignee:$('#assignee').val(),
                         credit_card_options:$('#credit_card_options').val(),
                         credit_card_number:$('#credit_card_number').val(),
                         cvv2_number:$('#cvv2_number').val(), expire_date:$('#expire_date').val(),
                         start_date:$('#start_date').val(), issue_number:$('#issue_number').val(),
-                        product_quantity:product_arr};
-
+                        product_quantity:product_arr, deleted_order_product:deleted_order_product};
          /* Json for put on server*/
          json_value = JSON.stringify(form_value);
          /*-----------------------*/
@@ -578,7 +599,7 @@ $(document).ready(function() {
 
 
       /*----------------Preferable Delivery Date validation------------------*/
-      preferable_date= $('#hidden_preferable_date').val()+'T02:00';
+      preferable_date= $('#hidden_preferable_date').val()+'T00:00';
        if ($('#hidden_preferable_date').val())
          {
              preferable_date=Date.parse(preferable_date);
@@ -660,7 +681,7 @@ $(document).ready(function() {
      {
          page=page+1;
      }
-     ajax_pull('GET','data');
+     pagination_slice(page,count_tr);
     });
 
     $('#prev').click(function(){
@@ -669,19 +690,19 @@ $(document).ready(function() {
       {
        page=1;
       }
-      ajax_pull('GET','data');
+      pagination_slice(page,count_tr);
     });
 
     $('#first').click(function()
     {
      page=1;
-     ajax_pull('GET','data');
+     pagination_slice(page,count_tr);
     });
 
     $('#last').click(function()
     {
      page=pages_amount;
-     ajax_pull('GET','data');
+     pagination_slice(page,count_tr);
     });
    /*------------------------------------*/
 
