@@ -33,6 +33,12 @@ class UserLevel(Base):
     def get_level_by_name(name):
         return UserLevel.query.filter(UserLevel.name == name).first()
 
+    # Get level id by level name
+    @staticmethod
+    def get_level_id_by_name(name):
+        entry = UserLevel.query.filter(UserLevel.name == name).first()
+        return entry.id
+
 
 class UserDao(Base):
     __tablename__ = "user"
@@ -50,7 +56,7 @@ class UserDao(Base):
     level_id = Column(Integer, ForeignKey(UserLevel.id))
     level= relationship(UserLevel, backref=backref('user', lazy='dynamic'))
     balance = Column(DECIMAL(7,2))
-    def __init__(self,login, password, first_name, last_name, email, role_id, region_id, level_id):
+    def __init__(self,login, password, first_name, last_name, email, role_id, region_id, level_id=None):
         super(UserDao, self).__init__()
         self.password = password
         self.login = login
@@ -96,14 +102,15 @@ class UserDao(Base):
         return UserDao.query.order_by(UserDao.region_id)
 
     @staticmethod
-    def createNewUser(login, password, first_name, last_name, email, role_id, region_id, level_id):
-        user = UserDao(login, hashlib.md5(password).hexdigest(), first_name, last_name, email, role_id, region_id,
-                       level_id)
+    def createNewUser(login, password, first_name, last_name, email, role_id, region_id):
+        user = UserDao(login, hashlib.md5(password).hexdigest(), first_name, last_name, email, role_id, region_id)
+        if role_id == RoleDao.get_role_id_by_name("Customer"):
+            user.level_id = UserLevel.get_level_id_by_name("Standard")
         db_session.add(user)
         db_session.commit()
 
     @staticmethod
-    def updateUser(id, login, password, first_name, last_name, email, role_id, region_id, level_id):
+    def updateUser(id, login, password, first_name, last_name, email, role_id, region_id):
         entry = UserDao.getUserByID(id)
         entry.login = login
         entry.password = hashlib.md5(password).hexdigest()
@@ -112,7 +119,6 @@ class UserDao(Base):
         entry.email = email
         entry.role_id = role_id
         entry.region_id = region_id
-        entry.level_id = level_id
         db_session.commit()
 
     @staticmethod

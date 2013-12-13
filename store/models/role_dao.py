@@ -50,4 +50,10 @@ class RoleDao(Base):
     def get_assignee_all():
         return RoleDao.query.all()
 
+    @staticmethod
+    def get_role_id_by_name(name):
+        entry = RoleDao.query.filter(RoleDao.name == name).first()
+        return entry.role_id
+
+
 
