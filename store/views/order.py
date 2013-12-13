@@ -12,33 +12,33 @@ import calendar,random,time
 @app.route('/order/', defaults={'id': 0})
 @app.route('/order/<int:id>')
 def order_grid(id):
-    get_order=Order.get_order(id)
-    if get_order.status.id >=3 and get_order.user_id==session['user_id']:
-        assingee_list = UserDao.getUserByRoleName('Merchandiser')
-        assingee_arr = []
-        for i in assingee_list:
-            assingee_arr.append({'id': i.id, 'name': i.login})
-        if 'user_id' in session:
-            order_product = order_product_grid(session['user_id'])
-        if order_product:
-            return render_template('order.html',assingee_arr=assingee_arr)
-        else:
-            return render_template('order_empty.html')
+    if id==0:
+        return render_template('order.html',order_id=0)
     else:
-        return render_template('order_details.html')
+        get_order=Order.get_order(id)
+        if get_order.status.id >=3 and get_order.user_id==session['user_id']:
+            assingee_list = UserDao.getUserByRoleName('Merchandiser')
+            assingee_arr = []
+            for i in assingee_list:
+                assingee_arr.append({'id': i.id, 'name': i.login})
+            if 'user_id' in session:
+                order_product = order_product_grid(session['user_id'],id)
+            if order_product:
+                return render_template('order.html',assingee_arr=assingee_arr,order_id=id)
+            else:
+                return render_template('order_empty.html')
+        else:
+            return render_template('order_details.html')
 
 
 @app.route('/api/order_product/', methods=['GET'])
 def order():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
+    order_id = int(request.args.get('order_id'))
     order_arr = []
-    if 'user_id' in session:
-        order_list,count = order_product_grid(session['user_id'])
-        quantity_list, count_qv = order_product_grid(session['user_id'])
-    else:
-        order_list,count = order_product_grid(4,page, records_per_page)
-        quantity_list, count_qv = order_product_grid(4)
+    order_list,count = order_product_grid(session['user_id'],order_id)
+    quantity_list, count_qv = order_product_grid(session['user_id'],order_id)
     total_price=0
     total_items=0
     order_date=str(order_list[0].Order.date)+' 00:00'
@@ -172,3 +172,7 @@ def v_update_order_details():
     if status == "Delivered":
         Order.set_user_level(id)
     return make_response(jsonify({'message': 'success'}), 200)
+
+i,j = order_product_grid(5,12)
+for l in i:
+    print l.Order.id

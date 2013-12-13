@@ -5,13 +5,14 @@
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
 <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+<script type='text/javascript'>var get_order_id = {{order_id}};</script>
 <script src="{{ url_for('static', filename='js/order.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
 <script type='text/javascript'>
   $(document).ready(function() {
       /*Create "Delivery option's" select */
- var arr =[
+ var arr =[ {val:0, text:'-me-'},
  {%for i in assingee_arr %}
  {val : {{ i.id }} , text: '{{i.name}}'},
  {% endfor %}
