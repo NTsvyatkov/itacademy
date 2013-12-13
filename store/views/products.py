@@ -26,6 +26,14 @@ def product_grid():
 def item_search():
     return render_template('item_search.html',)
 
+@app.route('/api/dimensions', methods=['GET'])
+def dimension_number():
+    dimensions_list = list_dimensions()
+    dimensions_arr = []
+    for i in dimensions_list:
+        dimensions_arr.append({'number': i.number, 'name': i.name})
+    return make_response(jsonify(dimensions=dimensions_arr), 200)
+
 @app.route('/api/dimension', methods=['GET'])
 def dimensions():
     dimensions_list = list_dimensions()
@@ -33,7 +41,6 @@ def dimensions():
     for i in dimensions_list:
         dimensions_arr.append({'id': i.id, 'name': i.name})
     return make_response(jsonify(dimensions=dimensions_arr), 200)
-
 
 @app.route('/api/products/', methods=['GET'])
 def products_page():
