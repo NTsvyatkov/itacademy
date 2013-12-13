@@ -373,10 +373,8 @@ class OrderProduct(Base):
         return items
 
 def order_product_grid(user_id,order_id, page=None, records_per_page=None):
-    #query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).filter(Order.id==order_id).\
-    #        filter(Order.user_id==user_id).filter((Order.status_id == 3)|(Order.status_id == 4))
-    #UserDao.query.join(UserDao.role).filter(RoleDao.name == role_name).all()
-    query=db_session.query(OrderProduct, Order, Product).join(Order).join(Product).filter(Order.id == order_id)
+    query = db_session.query(OrderProduct, Order, Product).join(Order).join(Product).filter(Order.id==order_id).\
+            filter(Order.user_id==user_id).filter((Order.status_id == 3)|(Order.status_id == 4))
     count = query.filter_by(is_deleted=False).count()
     if page and records_per_page:
         stop = page * records_per_page

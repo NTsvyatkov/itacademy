@@ -61,7 +61,7 @@ $(function () {
     );
 });
 /*--------------------------*/
-
+var json;
 $(document).ready(function () {
     var order_id = get_order_id;
     var maestro_card = false;
@@ -77,7 +77,7 @@ $(document).ready(function () {
     var order_date;
     var save_button = 0;
     var uniq_order = false;
-    var json;
+
     var deleted_order_product = [];
      /*-----Default values---------------*/
     $('#issue_number').attr('readonly', true);
@@ -97,7 +97,11 @@ $(document).ready(function () {
         tr1.cells[j].innerHTML = th[j];
     }
     create_grid(count_tr, count_td);
-    ajax_pull('GET', 'data');
+    if (get_order_id){
+        ajax_pull('GET', 'data');
+        pagination_slice(page, count_tr);
+    }
+
     /*----------------End of creating table-------------------------------*/
 
     /* Ajax function for all-  put and all - get methods*/
@@ -155,6 +159,20 @@ $(document).ready(function () {
         return result;
     }
 
+  var fill_field={"description": "sweet apple", "dimension": "Items",
+                        "dimension_id": 1, "dimension_number": 1,
+                        "name": "apple", "price": "1.50", "product_id": 1,
+                        "quantity": 2};
+    $('#add_item').click(function(){
+       page =1;
+
+       json=[]
+       order={}
+       order.push=(fill_field);
+       json.push(order);
+       pagination_slice(page,count_tr);
+    })
+
     function pagination_slice(page, count_tr) {
         var total_items;
         var get_total = [];
@@ -206,7 +224,7 @@ $(document).ready(function () {
         }
     }
 
-    pagination_slice(page, count_tr);
+
 
     /*-------------Update quantity in row------------------*/
     function update_quantity(product_id, dimension_id, object_quantity, old_quantity, price, quantity, tr, dim) {
