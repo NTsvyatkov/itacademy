@@ -1,6 +1,6 @@
 
 function data(){
-     // global variable
+ // global variable
    var data_role;
    // Variable from url
    var get = window.location.pathname;
@@ -10,6 +10,7 @@ function data(){
             id.split('/');
 
         }
+
 $.ajax(
     {
         dataType: "json",

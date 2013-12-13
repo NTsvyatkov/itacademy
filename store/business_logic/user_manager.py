@@ -6,6 +6,9 @@ from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
 
+def validation_Create_Login(login):
+    if UserDao.query.filter(UserDao.login == login).first():
+        raise ValidationException("Login is exist")
 
 def validationLogin(login):
     if login is None:
@@ -35,6 +38,11 @@ def validationPassword(password):
         raise ValidationException("Password is required field")
     elif len(password) > 50:
         raise ValidationException("Password length should be no more than 50 characters")
+
+
+def validation_create_Email(email):
+    if UserDao.query.filter(UserDao.email == email).first():
+        raise ValidationException("Email is exist")
 
 
 def validationEmail(email):
@@ -78,10 +86,12 @@ def getListUser():
     return UserDao.getAllUsers()
 
 def createUser(login, first_name, last_name, password, email,region_id, role_id):
+    validation_Create_Login(login)
     validationLogin(login)
     validationFirstName(first_name)
     validationLastName(last_name)
     validationPassword(password)
+    validation_create_Email(email)
     validationEmail(email)
     validationRegionID(region_id)
     validationRoleID(role_id)
