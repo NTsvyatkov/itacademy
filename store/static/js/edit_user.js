@@ -203,11 +203,11 @@ var region =   document.form.region.value;
                 });
             return false;
     }
- var get = location.search;
+ var get = window.location.pathname;
             if(get != '')
             {
-	            var id = (get.substr(2));
-	            id.split();
+	            var id = (get.substr(11));
+	            id.split('/');
             }
 
     $.ajax(

@@ -3,11 +3,11 @@ function data(){
      // global variable
    var data_role;
    // Variable from url
-   var get = location.search;
+   var get = window.location.pathname;
         if(get != '')
         {
-	       var id = (get.substr(2));
-            id.split();
+	       var id = (get.substr(11));
+            id.split('/');
 
         }
 $.ajax(

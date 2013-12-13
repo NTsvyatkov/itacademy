@@ -149,7 +149,7 @@ div { clear:both;position:relative; }
                 <!--Creating ButtonsС-->
         <tr>
             <td><input type="button" value ="Update" class="button" onclick=" return validate_form_and_edit_user()"   /></td>
-            <td><input type="button" value ="Cancel" onclick="location='search_user'"    /></td>
+            <td><input type="button" value ="Cancel" onclick="location='../search_user'"    /></td>
             <td><input  type ="button" value ="Refresh"   id ="warning"  /></td>
         </tr>
 
@@ -246,9 +246,9 @@ $( document ).ready(function()
 
 $( document ).ready(function()
 {
- data();
-
-
+      // global variable
+   var data_role;
+    data();
 
 
 $.ajax(
