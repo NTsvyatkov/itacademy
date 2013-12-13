@@ -16,8 +16,8 @@ def create_user():
         return render_template('create_user.html',)
 
 
-@app.route('/edit_user', methods=('GET', 'POST'))
-def edit_user():
+@app.route('/edit_user/<int:user_id>', methods=['GET'])
+def edit_user(user_id):
         return render_template('edit_user.html',)
 
 

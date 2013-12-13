@@ -58,7 +58,7 @@
                            prod_id =$(tr[this.abbr].cells[1]).find("input[id='id1']").val()
 
                            document.getElementById('add_item').disabled=false;
-                           alert(prod_id)
+
                         }
 
                     }
@@ -92,12 +92,12 @@
 
              $.ajax({
               dataType: "json",
-              url: '/api/dimension',
+              url: '/api/dimensions',
               type: 'GET',
               contentType: "application/json",
               success:function(json) {
               $.each(json.dimensions, function(i, pr){
-              $('#dimension').append('<option value="' + pr.id + '">' + pr.name + '</option>');
+              $('#dimension').append('<option value="' + pr.number + '">' + pr.name + '</option>');
                      })
                      }
                   });
@@ -118,14 +118,39 @@
                 $.each(json.product, function(i, pr){
                 document.getElementById('item').value=json.product.name
                 document.getElementById('price').value=json.product.price
-               })
+
+                })
 
                }
 
            })
 
            }
-        })
+
+             $('#done').click(function(){
+            done();
+              });
+
+            function done(){
+            id_product=prod_id
+            quantity=document.getElementById('quantity').value
+            dimension_number= document.getElementById('dimension').value
+            dimension_name=document.getElementById('dimension').text
+
+
+            alert (id_product)
+            alert (quantity)
+            alert (dimension_number)
+            alert (dimension_name)
+            }
+
+
+
+
+
+
+
+            })
         </script>
 
         <div class="">
@@ -171,7 +196,7 @@
     <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
     <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
     <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
-    <span>Dimension <select id="dimension" >
+    <span>Dimension <select id="dimension" name="dim">
 
 
                     </select> </span>
