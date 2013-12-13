@@ -184,7 +184,3 @@ def v_update_order_details():
     if status == "Delivered":
         Order.set_user_level(id)
     return make_response(jsonify({'message': 'success'}), 200)
-
-    i,j = order_product_grid(5,12)
-    for l in i:
-        print l.Order.id
