@@ -79,6 +79,7 @@ OrderStatus.add_status('Ordered')
 OrderStatus.add_status('Delivered')
 OrderStatus.add_status('Created')
 OrderStatus.add_status('Pending')
+OrderStatus.add_status('Cart')
 
 
 Order.add_order(1,date.today(),2,2,12,2)

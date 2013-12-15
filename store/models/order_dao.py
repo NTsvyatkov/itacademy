@@ -131,7 +131,8 @@ class Order(Base):
 
     @staticmethod
     def getOrderByStatus(user_id):
-        return Order.query.filter(and_(Order.status_id == 3, Order.user_id == user_id)).first()
+        return Order.query.filter(and_(Order.status_id == OrderStatus.getNameStatus('Cart').id,
+                                       Order.user_id == user_id)).first()
 
     @staticmethod
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
@@ -140,10 +141,10 @@ class Order(Base):
         query = Order.query.join(Order.assignee).filter(Order.user_id == user_id)
         if filter['status_option']:
             filterStatus={'0': Order.id,
-                    '1': Order.status_id == 3,
-                    '2': Order.status_id == 4,
-                    '3': Order.status_id == 1,
-                    '4': Order.status_id == 2}
+                    '1': Order.status_id == OrderStatus.getNameStatus('Created').id,
+                    '2': Order.status_id == OrderStatus.getNameStatus('Pending').id,
+                    '3': Order.status_id == OrderStatus.getNameStatus('Ordered').id,
+                    '4': Order.status_id == OrderStatus.getNameStatus('Delivered').id}
         if int(filter['order_option']) == 0:
             query = query.filter(Order.id.like(filter['name']+'%'))
         if int(filter['order_option']) == 1:
@@ -221,7 +222,7 @@ class OrderStatus(Base):
     __tablename__ = "order_status"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50))
+    name = Column(String(50), unique=True)
 
     def __init__(self, name):
         super(OrderStatus, self).__init__()
@@ -233,6 +234,9 @@ class OrderStatus(Base):
         # Next method retrieve list of records
         return OrderStatus.query.order_by(id).all()
 
+    @staticmethod
+    def getNameStatus(name):
+        return OrderStatus.query.filter(OrderStatus.name == name).first()
 
     @staticmethod
     def get_status(id):
