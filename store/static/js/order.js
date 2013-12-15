@@ -61,7 +61,7 @@ $(function () {
     );
 });
 /*--------------------------*/
-
+ var fill_field;
 var json;
 $(document).ready(function () {
     var order_id = get_order_id;
@@ -166,16 +166,14 @@ $(document).ready(function () {
         return result;
     }
 
-  var fill_field={"description": "bad apple", "dimension": "Items",
-                  "dimension_id": 1, "dimension_number": 1,
-                  "name": "pineapple", "price": "2.50", "product_id": 3,
-                  "quantity": 4};
 
-    $('#add_item').click(function(){
+
+    $('#add_item_1').click(function(){
     /*--------------Modal window event-----------------------*/
-       $('#exampleModal').arcticmodal();
-    /*-------------------------------------------------------*/
-       if (json){
+       $('#exampleModal').arcticmodal(
+           {
+           afterClose:function(){
+                 if (json){
            json.order.push(fill_field)
        }else{
            var order=[]
@@ -183,6 +181,12 @@ $(document).ready(function () {
            json={order:order}
        }
        pagination_slice(page,count_tr);
+
+           }
+           }
+       );
+    /*-------------------------------------------------------*/
+
     })
     $('#close_modal').click( function(){
         $.arcticmodal('close');
@@ -752,5 +756,184 @@ $(document).ready(function () {
         pagination_slice(page, count_tr);
     });
     /*---------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+    var table_grid_ = document.getElementById('grid_1');
+
+
+
+
+            function creat_grid_(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid_.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            for (var j=0; j<=1; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                }
+
+
+            function deleting_grid_(){
+                for (var n=table_grid_.rows.length ; n>=2; n--){
+                    table_grid_.removeChild(table_grid_.childNodes[n]);}
+
+            }
+            searchItem();
+            $('#search_button').click(function(){
+                searchItem()
+            });
+
+            function ajax_success_(json){
+                var tr_css;
+               document.getElementById('add_item').disabled=true;
+               document.getElementById('info').style.display='none'
+                deleting_grid_()
+                creat_grid_(json.products.length);
+                for (var product_k in json.products)
+                    {
+                        k++;
+                        tr[k].cells[0].innerHTML = json.products[product_k].name+
+                                '<input id="id" hidden="true" value ='+json.products[product_k].id+'>';
+                        tr[k].cells[1].innerHTML = json.products[product_k].description+
+                                '<input id="id1" hidden="true" value ='+json.products[product_k].id+'>';
+                        tr[k].cells[0].abbr=k;
+                        tr[k].cells[1].abbr=k;
+                        tr[k].cells[0].onclick = function Add(){
+
+                           prod_id =$(tr[this.abbr].cells[0]).find("input[id='id']").val()
+
+                           document.getElementById('add_item').disabled=false;
+                        }
+                        tr[k].cells[1].onclick = function Add(){
+
+                           prod_id =$(tr[this.abbr].cells[1]).find("input[id='id1']").val()
+
+                           document.getElementById('add_item').disabled=false;
+
+                        }
+
+                    }
+                    k=0;
+
+                      $('tr').mouseenter(function(){
+                            tr_css=$(this).css("background-color");
+                            $(this).css( "background-color", "#66FF99" );
+                          })
+                       $('tr').mouseleave(function() {
+                            $(this).css( "background-color", tr_css);
+                       });
+
+            }
+
+
+
+
+
+            var k=0;
+            form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+            json_value = JSON.stringify(form_value);
+
+
+            function searchItem(){
+                var name = document.getElementById('name').value
+
+                $.ajax({
+                dataType: "json",
+                url: '/api/product_search?&name='+name+'',
+                type: 'GET',
+                contentType: "application/json",
+                success: function(json)
+                    {
+                        ajax_success_(json);
+                    }
+
+                })
+            }
+
+             $.ajax({
+              dataType: "json",
+              url: '/api/dimensions',
+              type: 'GET',
+              contentType: "application/json",
+              success:function(json) {
+              $.each(json.dimensions, function(i, pr){
+              $('#dimension').append('<option value="' + pr.number + '">' + pr.name + '</option>');
+                     })
+                     }
+                  });
+          $('#add_item').click(function(){
+            add_Item();
+              });
+
+           function add_Item(){
+             document.getElementById('info').style.display='block'
+               id=prod_id
+
+               $.ajax({
+               dataType: "json",
+               url: '/api/product/'+id,
+               type: 'GET',
+               contentType: "application/json",
+               success: function(json){
+                $.each(json.product, function(i, pr){
+                document.getElementById('item').value=json.product.name
+                document.getElementById('price').value=json.product.price
+                document.getElementById('description').value=json.product.description
+                })
+
+               }
+
+           })
+
+           }
+
+             $('#done').click(function(){
+            done();
+              });
+
+            function done(){
+            id_product=prod_id
+            quantity=document.getElementById('quantity').value
+            product_name=document.getElementById('item').value
+            dimension_number= document.getElementById('dimension').value
+            price= document.getElementById('price').value
+            description= document.getElementById('description').value
+            var dimension_name = $('#dimension :selected').text()
+            var dimension_id=0;
+                if (dimension_name =='Package'){
+                    dimension_id=3;
+                }
+                if (dimension_name =='Box'){
+                    dimension_id=2;
+                }
+                if (dimension_name =='Items'){
+                    dimension_id=1;
+                }
+            fill_field={"description": description, "dimension": dimension_name,
+                  "dimension_id": dimension_id, "dimension_number": dimension_number,
+                  "name": product_name, "price": price, "product_id": id_product,
+                  "quantity": quantity};
+            }
+
+
+
 
 })

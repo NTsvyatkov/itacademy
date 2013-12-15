@@ -30,7 +30,7 @@
     <div id="products_table" style='width:990px;'>
         <span class='info'>Items Selection</span><br>
         <div class="order_top_input" style="float:left;width:100px;">
-            <input type='button' value="Add Item" id="add_item">
+            <input type='button' value="Add Item" id="add_item_1">
         </div>
         <div class="order_top_input" style="float:right;width:250px;">
             <lable>Table size: </lable>
@@ -171,7 +171,48 @@
 <div style="display: none;">
     <div class="box-modal" id="exampleModal">
         <div class="box-modal_close arcticmodal-close">Close</div>
-        Modal window
+             <form class='form' action="">
+             <div class="field" style="width: 450px;">
+                <lable style="float: left; line-height: 35px; padding-right:10px;">Search for item by: </lable>
+                <select id="product_options" style="width: 150px;float: left; margin:0px;">
+                <option value="0">Item Name</option>
+                <option value="1">Item Description</option>
+                </select>
+                <input type="text" id="name" >
+    </div>
+    <span><input type="button" value="Search" id='search_button' style="float: right; margin-top: -33px"></span>
+   </form>
+
+     <div id=" ">
+                <table id='grid_1' class="grid adding">
+                    <tr>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                </table>
+
+            </div>
+        <span><input type="button" value="Add" id='add_item'  style="float: right; margin-right: 230px; width:100px; height:30px "></span>
+
+
+        <form action="" id="info" style="width: 400px; height: 275px"><br>
+
+    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
+    <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
+    <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
+    <span>Dimension <select id="dimension" name="dim">
+        <input type='hidden' id='description'>
+
+
+                    </select> </span>
+
+ <p><div style="float: right" ><input type="button" value="Done" id="done"><input type="reset" value="Remove" id="remove"><input type="button"  id="cancel"  value="Cancel"></div></p>
+           </form>
+
         <input type='button' value='Close window' id='close_modal'>
     </div>
 </div>
