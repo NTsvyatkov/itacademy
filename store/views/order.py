@@ -71,16 +71,25 @@ def order_id_delete(id_order,id_product,dimension_id):
 
 
 @app.route('/api/order_product/', methods=['PUT'])
+def order_put():
+    js = request.json
+    product_order_update(js,'PUT')
+    for i in js['deleted_order_product']:
+        OrderProduct.delete_order_product(js['order_id'],i['product_id'],i['dimension_id'])
+    resp = make_response(jsonify({'message': 'success'}), 200)
+    return resp
+
+@app.route('/api/order_product/', methods=['POST'])
 def order_post():
     js = request.json
-    product_order_update(js)
+    product_order_update(js,'POST')
     for i in js['deleted_order_product']:
         OrderProduct.delete_order_product(js['order_id'],i['product_id'],i['dimension_id'])
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
 @app.route('/api/update/', methods=['PUT'])
-def quantity_post():
+def quantity_put():
     js = request.json
     validate_quantity(js['product_id'],js['dimension_id'],js['quantity'],'check');
     OrderProduct.update_order_product(js['order_id'],js['product_id'],js['dimension_id'], js['quantity'],js['price'])
@@ -94,33 +103,32 @@ def string_data(data_string):
 
 @app.route('/api/unique_order_number/', methods=['PUT'])
 def unique_number():
+    user_id=session['user_id']
     js = request.json
+    order_id=0
     if not (js['unique_order_number']):
-        status=Order.update_order_number(js['order_id'],string_data(str(js['order_id'])))
-        unique_number=string_data(str(js['order_id']))
-        if not status:
-            ls=range(9)
-            while not status:
-                data=''
-                while len(data)<=5:
-                    x=random.choice(ls)
-                    data+=str(x)
-                data_string=data
-                status=Order.update_order_number(js['order_id'],string_data(data_string))
-            unique_number=string_data(data_string)
+        ls=range(9)
+        while not order_id:
+            data=''
+            while len(data)<=5:
+                x=random.choice(ls)
+                data+=str(x)
+            data_string=data
+            order_id=Order.add_order_number(user_id,string_data(data_string))
+        unique_number=string_data(data_string)
         message='success'
 
     else:
         data_string=str(js['unique_order_number'])
-        status=Order.update_order_number(js['order_id'],string_data(data_string))
-        if status:
+        order_id=Order.add_order_number(user_id,string_data(data_string))
+        if order_id:
             message='success'
             unique_number=string_data(data_string)
         else:
             message='not unique'
             unique_number=''
-    resp = make_response(jsonify({'message':message,'unique_order_number':unique_number }), 200)
-    return resp
+    response = make_response(jsonify({'message':message,'unique_order_number':unique_number,'order_id':order_id}), 200)
+    return response
 
 
 

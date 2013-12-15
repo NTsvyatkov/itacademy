@@ -61,6 +61,7 @@ $(function () {
     );
 });
 /*--------------------------*/
+
 var json;
 $(document).ready(function () {
     var order_id = get_order_id;
@@ -98,14 +99,14 @@ $(document).ready(function () {
     }
     create_grid(count_tr, count_td);
     if (get_order_id){
-        ajax_pull('GET', 'data');
+        ajax_pull('GET', 'data','');
         pagination_slice(page, count_tr);
     }
 
     /*----------------End of creating table-------------------------------*/
 
-    /* Ajax function for all-  put and all - get methods*/
-    function ajax_pull(type_options, data) {
+    /* Ajax function for put,get,post methods*/
+    function ajax_pull(type_options, data ,button) {
         $.ajax({
             dataType: "json",
             url: '/api/order_product/?order_id='+get_order_id +'+&page=' + page + '&table_size=' + count_tr,
@@ -116,11 +117,17 @@ $(document).ready(function () {
             success: function (json_val) {
                 if (type_options == 'GET') {
                     json = json_val;
+                    $('#order_status').val(json.order_status);
+                    pagination_slice(page, count_tr);
                 }
-                else {
-                    alert('Order successfully issued');
-                    /*window.location.replace("/orders");*/
-                    ajax_pull('GET', 'data');
+                if (type_options == 'PUT'){
+                    if (button=='Order'){
+                      alert('Order successfully issued');
+                      /*window.location.replace("/orders");*/
+                    }
+                    if (button=='Save'){
+                      alert('Order saved and update');
+                    }
                 }
             },
             error: function (e) {
@@ -159,19 +166,29 @@ $(document).ready(function () {
         return result;
     }
 
-  var fill_field={"description": "sweet apple", "dimension": "Items",
-                        "dimension_id": 1, "dimension_number": 1,
-                        "name": "apple", "price": "1.50", "product_id": 1,
-                        "quantity": 2};
-    $('#add_item').click(function(){
-       page =1;
+  var fill_field={"description": "bad apple", "dimension": "Items",
+                  "dimension_id": 1, "dimension_number": 1,
+                  "name": "pineapple", "price": "2.50", "product_id": 3,
+                  "quantity": 4};
 
-       json=[]
-       order={}
-       order.push=(fill_field);
-       json.push(order);
+    $('#add_item').click(function(){
+    /*--------------Modal window event-----------------------*/
+       $('#exampleModal').arcticmodal();
+    /*-------------------------------------------------------*/
+       if (json){
+           json.order.push(fill_field)
+       }else{
+           var order=[]
+           order.push(fill_field);
+           json={order:order}
+       }
        pagination_slice(page,count_tr);
     })
+    $('#close_modal').click( function(){
+        $.arcticmodal('close');
+       }
+    )
+
 
     function pagination_slice(page, count_tr) {
         var total_items;
@@ -264,10 +281,13 @@ $(document).ready(function () {
                 }
                 else {
                     $('#order_number').val(json.unique_order_number);
+                    order_id=json.order_id
                     $('#order_number').attr('readonly', true);
                     $('#order_number').css('background-color', '#e2e2e2');
                     $('#order_number').css('background-color', '#e2e2e2');
                     uniq_order = true;
+                    ajax_pull('POST',creat_json(),'Save')
+                    $('#order_status').val('Created');
                 }
                 validation(unique_number_error);
             }
@@ -312,17 +332,21 @@ $(document).ready(function () {
         var amount = 0;
         var input;
         var tr;
-        if (json.delivery_date != 0) {
+        if (json.delivery_date) {
             var delivery_date = json.delivery_date * 1000;
             $('#delivery_date').val(date_format(delivery_date));
         }
         else {
             $('#delivery_date').val('/ /');
         }
-        order_date = json.order_date * 1000;
-        $('#order_date').val(date_format(order_date));
-        $('#order_status').val(json.order_status);
-        $('#delivery_date').val();
+        if (json.order_date) {
+            var order_date = json.order_date* 1000;
+            $('#order_date').val(date_format(order_date));
+        }
+        else {
+            $('#order_date').val('/ /');
+        }
+
         deleting_grid();
         create_grid(grid_length, count_td);
         /*Create table with new order_products list */
@@ -532,8 +556,24 @@ $(document).ready(function () {
                 error_list.push({id: $('#preferable_date'), error: error});
             }
         }
-
         /*--------------------end of Preferable Delivery Date validation-------*/
+
+        /* ------------------------Table length validation. It should be not 0------*/
+        if (json){
+            if (json.order.length!=0){
+            }
+            else {
+            no_error = false;
+            error = 'For saving order ypu should add one or more product to grid.';
+            error_list.push({id: $('#order_error'), error: error});
+            }
+        }
+        else{
+            no_error = false;
+            error = 'For saving order you should add one or more product to grid.';
+            error_list.push({id: $('#order_error'), error: error});
+        }
+        /*------------------------End of Table length validation---------------------*/
 
         if (no_error) {
             /*Clear error message*/
@@ -560,6 +600,39 @@ $(document).ready(function () {
 
     /*-------------------------------End of Validation function ----------------------------------------*/
 
+    function creat_json(){
+        /*add all quantity and product_id in array */
+        var product_arr = [];
+        var preferable_date;
+        var assignee;
+        for (var i = 0; i < json.order.length; i++) {
+            product_arr[i] = {'quantity': +json.order[i].quantity, 'product_id': +json.order[i].product_id,
+                'dimension_id': +json.order[i].dimension_id,
+                'dimension_number': +json.order[i].dimension_number}
+        }
+        /*------------------*/
+        if ($('#assignee').val() == 0 ){
+            assignee=1;
+        }
+        else {
+            assignee=$('#assignee').val();
+        }
+        preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
+        preferable_date = Date.parse(preferable_date);
+        form_value = { order_id: order_id, preferable_delivery_date: preferable_date,
+            assignee: assignee,
+            credit_card_options: $('#credit_card_options').val(),
+            credit_card_number: $('#credit_card_number').val(),
+            cvv2_number: $('#cvv2_number').val(), expire_date: $('#expire_date').val(),
+            start_date: $('#start_date').val(), issue_number: $('#issue_number').val(),
+            product_quantity: product_arr, deleted_order_product: deleted_order_product};
+        /* Json for put on server*/
+        json_value = JSON.stringify(form_value);
+        /*-----------------------*/
+        return json_value
+    }
+
+
     /*----------------------------Event Click on buttons Cancel, Order, Save -------------------------*/
     $('#cancel_order').click(function () {
         if (confirm('Order was not saved. Do you want cancel order?')) {
@@ -569,47 +642,25 @@ $(document).ready(function () {
 
     $('#add_order').click(function () {
         var arr = [];
-        var assignee;
         if (validation(arr)) {
-            /*add all quantity and product_id in array */
-            var product_arr = [];
-            var preferable_date;
-            for (var i = 0; i < json.order.length; i++) {
-                product_arr[i] = {'quantity': +json.order[i].quantity, 'product_id': +json.order[i].product_id,
-                                  'dimension_id': +json.order[i].dimension_id,
-                                  'dimension_number': +json.order[i].dimension_number}
-            }
-            /*------------------*/
-            if ($('#assignee').val() == 0 ){
-                assignee=1;
-            }
-            else {
-                assignee=$('#assignee').val();
-            }
-            preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
-            preferable_date = Date.parse(preferable_date);
-            form_value = { order_id: order_id, preferable_delivery_date: preferable_date,
-                assignee: assignee,
-                credit_card_options: $('#credit_card_options').val(),
-                credit_card_number: $('#credit_card_number').val(),
-                cvv2_number: $('#cvv2_number').val(), expire_date: $('#expire_date').val(),
-                start_date: $('#start_date').val(), issue_number: $('#issue_number').val(),
-                product_quantity: product_arr, deleted_order_product: deleted_order_product};
-            /* Json for put on server*/
-            json_value = JSON.stringify(form_value);
-            /*-----------------------*/
-            ajax_pull('PUT', json_value);
+            var json_value = creat_json()
+            ajax_pull('PUT', json_value,'Order');
         }
     })
 
     $('#save_order').click(function () {
         var order_number = $('#order_number').val();
         var arr_error = [];
-        if ((!uniq_order) && (order_number.length <= 6)) {
-            json_value = JSON.stringify({'order_id': order_id, 'unique_order_number': order_number });
-            unique_order_number(json_value);
+        if (validation(arr_error)){
+           if ((!uniq_order) && (order_number.length <= 6)) {
+              json_value = JSON.stringify({'unique_order_number': order_number });
+              unique_order_number(json_value);
+           }
+            else{
+               ajax_pull('PUT',creat_json(),'Save');
+           }
         }
-        validation(arr_error);
+
     })
  /*----------------------------------------------------------------------------------------------------*/
 

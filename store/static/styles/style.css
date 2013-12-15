@@ -354,10 +354,9 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
 
 .error_div{
  color:#b81900;
- text-align:justify;
+ text-align:center;
  font-size:13px;
  margin:15px;
-
  background-color: rgba(168,0,0,0.1);
 
 }
