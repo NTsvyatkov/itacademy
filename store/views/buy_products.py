@@ -1,8 +1,10 @@
 #!/usr/bin/env python
+from datetime import date
 from flask import render_template, request, make_response, jsonify, session
 from business_logic.product_manager import list_dimensions
 from flask_bootstrap import app
 from business_logic.order_manager import addOrderWithStatusCart, addProductToCartStatus
+from models.order_dao import OrderProduct, Order, OrderStatus
 from models.product_dao import Product
 from business_logic.product_manager import validate_quantity
 
@@ -38,4 +40,28 @@ def productsBuy(id):
     validate_quantity(id,json['status'],json['value'],'check')
     addOrderWithStatusCart(user_id)
     addProductToCartStatus(user_id,id,json)
+    return make_response(jsonify({'message':'success'}),200)
+
+
+@app.route('/api/modal_product', methods=['GET'])
+def modalProducts():
+    user_id = session['user_id']
+    order = Order.getOrderByStatus(user_id)
+    prods = OrderProduct.query.filter(OrderProduct.order_id == order.id)
+    products_arr = []
+    for i in prods:
+        products_arr.append({'product_id': i.product_id, 'product_name': i.product.name, 'dimension': i.dimension.name,
+                             'dimension_id': i.dimension_id, 'quantity': i.quantity, 'price': i.price})
+    return make_response(jsonify(products=products_arr), 200)
+
+@app.route('/api/order_product/', methods=['DELETE'])
+def deleteOrderProduct():
+    order = Order.getOrderByStatus(session['user_id'])
+    OrderProduct.delete_order_product(order.id, request.args.get('product_id'), request.args.get('dimension_id'))
+    return make_response(jsonify({'message': 'success'}), 200)
+
+@app.route('/api/update_product', methods = ['PUT'])
+def updateOrderProduct():
+    order = Order.getOrderByStatus(session['user_id'])
+    Order.update_current_order(order.id, OrderStatus.getNameStatus('Created').id)
     return make_response(jsonify({'message':'success'}),200)

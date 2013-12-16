@@ -154,7 +154,7 @@
             $('#price').blur(function() {
                 if( isNaN($(this).val()) || ($(this).val()) <= 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
-                    price_error.innerHTML = 'Price should be filled.';
+                    price_error.innerHTML = 'Incorrect price.';
                 }else{
                     $(this).css({'border' : '2px solid #999'});
                     price_error.innerHTML = null;
