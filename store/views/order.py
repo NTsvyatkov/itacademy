@@ -101,7 +101,7 @@ def string_data(data_string):
     while len(data_string) < 6:
                       data_string = '0'+ data_string
     return data_string
-
+#zfill
 @app.route('/api/unique_order_number/', methods=['PUT'])
 def unique_number():
     user_id=session['user_id']
@@ -115,7 +115,10 @@ def unique_number():
                 x=random.choice(ls)
                 data+=str(x)
             data_string=data
+
+            print string_data(data_string)
             order_id=Order.add_order_number(user_id,string_data(data_string))
+            print order_id
         unique_number=string_data(data_string)
         message='success'
 

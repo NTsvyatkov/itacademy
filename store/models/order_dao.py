@@ -84,6 +84,8 @@ class Order(Base):
                       delivery_date, gift,delivery_address,comment,order_number,discount)
         db_session.add(order)
         db_session.commit()
+        db_session.refresh(order)
+        return order.id
 
     @staticmethod
     def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
@@ -105,6 +107,14 @@ class Order(Base):
         ord_up.new_discount=new_discount
 
         db_session.commit()
+
+    @staticmethod
+    def add_order_number(user_id,order_number):
+        if Order.query.filter(Order.order_number == order_number).count() == 0:
+            order_id = Order.add_order(user_id,date.today(),3,None,None,None,None,None,None,None,None,order_number,None)
+            return order_id
+        else:
+            return False
 
     @staticmethod
     def update_current_order(id,new_status_id, new_delivery_id=None, new_delivery_address=None, new_comment=None):
