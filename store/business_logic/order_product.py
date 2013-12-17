@@ -6,13 +6,16 @@ from flask import session
 from models import Base, db_session
 import datetime
 
-def product_order_update(dict):
-    order_id=int(dict['order_id'])
+def product_order_update(order_dict,method):
+    order_id=int(order_dict['order_id'])
     amount=0
-    get_order = Order.get_order(order_id)
-    quantity_dict=dict['product_quantity']
-    assignee=int(dict['assignee'])
-    preferable_delivery_date=int(dict['preferable_delivery_date'])/1000
+    order = Order.get_order(order_id)
+    quantity_dict=order_dict['product_quantity']
+    if order_dict.get('assignee'):
+        assignee=int(order_dict['assignee'])
+    else:
+         assignee=None
+    preferable_delivery_date=int(order_dict['preferable_delivery_date'])/1000
     preferable_delivery_date=(datetime.datetime.fromtimestamp(preferable_delivery_date).strftime('%Y-%m-%d'))
     for i in quantity_dict:
         dimension_id=i['dimension_id']
@@ -24,13 +27,19 @@ def product_order_update(dict):
         amount= amount + price*quantity*dimension_number
         total_price = price*quantity
         order_product= OrderProduct.get_order_product(order_id,product_id,dimension_id)
-        order_product.quantity=quantity
-        order_product.total_price=total_price
-        validate_quantity(product_id,dimension_id,quantity,'update')
+        if order_product:
+            order_product.quantity=quantity
+            order_product.total_price=total_price
+        else:
+            order_product= OrderProduct.add_order_product(order_id,product_id,dimension_id,quantity,total_price)
 
-    get_order.status_id = 4
-    get_order.total_price = amount
-    get_order.assignee_id = assignee
-    get_order.preferable_delivery_date=preferable_delivery_date
+        validate_quantity(product_id,dimension_id,quantity,'update')
+    if method == 'POST':
+        order.status_id = 3
+    else:
+        order.status_id = 4
+    order.total_price = amount
+    order.assignee_id = assignee
+    order.preferable_delivery_date=preferable_delivery_date
     db_session.commit()
 

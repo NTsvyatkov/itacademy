@@ -1,68 +1,173 @@
 {% extends "layout.html" %}
 {% block body %}
 
+        <script src="{{ url_for('static', filename='js/modal_window/jquery.arcticmodal-0.3.min.js') }}"></script>
         <script type="text/javascript">
 
             var tr = [];
-
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
             var count_td=6;
             var page = 1;
+            var buyCount = 0;
             var table_grid = document.getElementById('grid');
+            var modal_table_grid = document.getElementById('modal_grid');
+            document.getElementById('cart_button').disabled = false;
 
-            function creat_grid(count)
-                {
-                    for (var i=1; i<=count;i++ )
-                        {
-                            tr[i] = document.createElement('TR');
-                            table_grid.appendChild(tr[i]);
-                            tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=5; j++)
-                                {
-                                    tr[i].appendChild(document.createElement('TD'));
-                                }
-                        }
-                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+            function createGrid(count){
+                for (var i=1; i<=count;i++ ){
+                    tr[i] = document.createElement('TR');
+                    table_grid.appendChild(tr[i]);
+                    tr[i].id=i;
+                        if (i % 2 == 0) tr[i].style.background = "#efddba";
+                            for (var j=0; j<=5; j++){
+                                tr[i].appendChild(document.createElement('TD'));
+                            }
                 }
+                $( "tr:even" ).css( "background-color", "#efddba" );
+            }
 
-            function deleting_grid()
-                {
-                    for (var n=table_grid.rows.length ; n>=2; n--)
-                        {
-                            table_grid.removeChild(table_grid.childNodes[n]);
-                        }
-
+            function deleteGrid(){
+                for (var n=table_grid.rows.length ; n>=2; n--){
+                    table_grid.removeChild(table_grid.childNodes[n]);
                 }
+            }
+
+            function createModalGrid(count){
+                for (var i=1; i<=count;i++ ){
+                    tr[i] = document.createElement('TR');
+                    modal_table_grid.appendChild(tr[i]);
+                    tr[i].id=i;
+                    if (i % 2 == 0) tr[i].style.background = "";
+                        for (var j=0; j<=4; j++){
+                            tr[i].appendChild(document.createElement('TD'));
+                        }
+                }
+                $( "tr:even" ).css( "background-color", "" );
+            }
+
+            function deleteModalGrid(){
+                for (var n=modal_table_grid.rows.length ; n>=2; n--){
+                    modal_table_grid.removeChild(modal_table_grid.childNodes[n]);
+                }
+            }
+
+            function modalListProducts(json){
+                deleteModalGrid();
+                createModalGrid(json.products.length);
+                for (var product_k in json.products){
+                    k++;
+                    tr[k].cells[0].innerHTML = json.products[product_k].product_name;
+                    tr[k].cells[1].innerHTML = json.products[product_k].dimension;
+                    tr[k].cells[2].innerHTML = json.products[product_k].quantity;
+                    tr[k].cells[3].innerHTML = '$ '+json.products[product_k].price;
+                    tr[k].cells[4].innerHTML = "<img src='/static/images/delete.png' class='delete_img' alt=" +k+ " >";
+                    tr[k].cells[4].abbr=k;
+                    tr[k].cells[4].onclick= function(){
+                        if(confirm('Delete?')){
+                            product_id = json.products[product_k].product_id;
+                            dimension_id = json.products[product_k].dimension_id;
+                            deleteOrderProduct(product_id, dimension_id);
+                        }
+                    }
+                }
+                k=0;
+            }
+
+            function createModalTableProducts(){
+                $.ajax({
+                    dataType: "json",
+                    url: '/api/modal_product',
+                    type: 'GET',
+                    contentType: "application/json",
+                    success: function(json){
+                        modalListProducts(json);
+                    }
+                })
+            }
+
+            function deleteOrderProduct(product_id, dimension_id){
+                $.ajax({
+                    dataType: "json",
+                    url: '/api/order_product/?product_id='+product_id+'&dimension_id='+dimension_id,
+                    type: 'DELETE',
+                    success: function(json){
+                        if (json.message == 'success'){
+                            createModalTableProducts();
+                        }
+                        else{
+                            alert (json.message);
+                        }
+                    },
+                    error: function(e){
+                        error = JSON.parse(e.responseText);
+                        alert(error.message);
+                    }
+                })
+             }
+
+             $('#create_button').click(function(){
+                updateOrderProduct();
+             });
+
+            function updateOrderProduct(){
+                $.ajax({
+                    dataType: "json",
+                    url: '/api/update_product',
+                    type: 'PUT',
+                    contentType: "application/json",
+                    success: function(json){
+                        if (json.message == 'success')
+                            {
+                            window.location.replace("orders");
+                            }
+                        else
+                         alert (json.message);
+                    },
+                    error: function(e){
+                       error = JSON.parse(e.responseText);
+                       alert(error.message);
+                    }
+                })
+            }
 
             $('#search_button').click(function(){
-                gridPagination()
+                createTableProducts()
             });
 
-            function ajax_success(json){
-                deleting_grid();
-                creat_grid(json.products.length);
+            $('#cart_button').click(function(){
+                $('#modal_product_table').arcticmodal(
+                        createModalTableProducts()
+                );
+            });
+
+            function listProducts(json){
+                deleteGrid();
+                createGrid(json.products.length);
                 for (var product_k in json.products)
                     {
                         k++;
                         tr[k].cells[0].innerHTML = json.products[product_k].name;
                         tr[k].cells[1].innerHTML = json.products[product_k].description;
                         tr[k].cells[2].innerHTML = "$ "+ json.products[product_k].price;
-                        tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px' value = '1' alt=" + k + ">";
+                        tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px'" +
+                            " value = '1' alt=" + k + ">";
                         tr[k].cells[4].innerHTML = "<span><select id = 'select_dimension"+k+"'></select></span>"
                         for (var status_k in json.status)
                         {
-                            $('#select_dimension'+k).append('<option value=' + json.status[status_k].id + '>' + json.status[status_k].name + '</option>');
+                            $('#select_dimension'+k).append('<option value=' + json.status[status_k].id + '>' +
+                                    json.status[status_k].name + '</option>');
                         }
                         tr[k].cells[5].innerHTML = "<input type='button' value='Add to Cart' id='button'  alt=" + k + ">";
                         tr[k].cells[4].abbr=k;
                         tr[k].cells[5].abbr=k;
                         tr[k].cells[5].onclick= function()
                             {
-                                var value = document.getElementById('output'+this.abbr).value
+                                var value = document.getElementById('output'+this.abbr).value;
                                 var id = json.products[this.abbr-1].id;
-                                var status = document.getElementById('select_dimension'+this.abbr).value
+                                var status = document.getElementById('select_dimension'+this.abbr).value;
+                                buyCount++;
+                                document.getElementById('cart_button').disabled = false;
                                 buyProduct(id, value, status)
                             }
                     }
@@ -70,8 +175,7 @@
             }
 
 
-            function buyProduct(id,value, status)
-            {
+            function buyProduct(id,value, status){
                 data = {'value': value, "status": status};
                 $.ajax({
                     dataType: "json",
@@ -79,8 +183,7 @@
                     type: 'POST',
                     data: JSON.stringify(data),
                     contentType: "application/json",
-                    success: function(json)
-                    {
+                    success: function(json){
                         if (json.message == 'success')
                             {
                             alert('The product was successfully added');
@@ -88,78 +191,74 @@
                         else
                          alert (json.message);
                     },
-                    error: function(e)
-                    {
+                    error: function(e){
                        error = JSON.parse(e.responseText);
                        alert(error.message);
                     }
-                 })
-             }
-
+                })
+            }
 
             var k=0;
             form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
             json_value = JSON.stringify(form_value);
 
-
-            function gridPagination(){
-                var name = document.getElementById('name').value
-                var start_price = document.getElementById('start_price').value
-                var end_price = document.getElementById('end_price').value
+            function createTableProducts(){
+                var name = document.getElementById('name').value;
+                var start_price = document.getElementById('start_price').value;
+                var end_price = document.getElementById('end_price').value;
                 $.ajax({
-                dataType: "json",
-                url: '/api/product?page='+page+'&table_size='+count_tr+'&name='+name+'&start_price='+start_price+'&end_price='+end_price+'',
-                type: 'GET',
-                contentType: "application/json",
-                success: function(json)
-                    {
-                        ajax_success(json);
+                    dataType: "json",
+                    url: '/api/product?page='+page+'&table_size='+count_tr+'&name='+name+'&start_price='+start_price+
+                        '&end_price='+end_price+'',
+                    type: 'GET',
+                    contentType: "application/json",
+                    success: function(json){
+                        listProducts(json);
                         records_amount=(json.records_amount);
-   records_per_page=(json.records_per_page);
-   pages_amount = Math.ceil(records_amount/records_per_page);
-   document.getElementById("page").innerHTML = page;
-   document.getElementById("pages_amount").innerHTML = pages_amount;
+                        records_per_page=(json.records_per_page);
+                        pages_amount = Math.ceil(records_amount/records_per_page);
+                        document.getElementById("page").innerHTML = page;
+                        document.getElementById("pages_amount").innerHTML = pages_amount;
 
-   if (page==1){
-               $('#prev').prop('disabled', true);
-               $('#first').prop('disabled', true);
-               $('#prev').addClass("button_disable");
-               $('#first').addClass("button_disable");
-           } else {
-               $('#prev').prop('disabled', false);
-               $('#first').prop('disabled', false);
-               $('#prev').removeClass("button_disable");
-               $('#first').removeClass("button_disable");
-               $('#prev').removeAttr("disabled");
-               $('#first').removeAttr("disabled");
-           }
+                        if (page==1){
+                            $('#prev').prop('disabled', true);
+                            $('#first').prop('disabled', true);
+                            $('#prev').addClass("button_disable");
+                            $('#first').addClass("button_disable");
+                        } else {
+                            $('#prev').prop('disabled', false);
+                            $('#first').prop('disabled', false);
+                            $('#prev').removeClass("button_disable");
+                            $('#first').removeClass("button_disable");
+                            $('#prev').removeAttr("disabled");
+                            $('#first').removeAttr("disabled");
+                        }
 
-           if (page==pages_amount){
-               $('#next').prop('disabled', true);
-               $('#last').prop('disabled', true);
-               $('#next').addClass("button_disable");
-               $('#last').addClass("button_disable");
-
-           } else {
-               $('#next').prop('disabled', false);
-               $('#last').prop('disabled', false);
-               $('#next').removeClass("button_disable");
-               $('#last').removeClass("button_disable");
-               $('#next').removeAttr("disabled");
-               $('#last').removeAttr("disabled");
-           }
+                        if (page==pages_amount){
+                            $('#next').prop('disabled', true);
+                            $('#last').prop('disabled', true);
+                            $('#next').addClass("button_disable");
+                            $('#last').addClass("button_disable");
+                        } else {
+                            $('#next').prop('disabled', false);
+                            $('#last').prop('disabled', false);
+                            $('#next').removeClass("button_disable");
+                            $('#last').removeClass("button_disable");
+                            $('#next').removeAttr("disabled");
+                            $('#last').removeAttr("disabled");
+                        }
                     }
                 })
             }
 
             if (page==1){
-                gridPagination();
+                createTableProducts();
             }
 
             $('#next').click(function(){
-            if (page*records_per_page>=records_amount){page=page}
-            else {page=page+1}
-            gridPagination()
+            if (page*records_per_page>=records_amount){page=page;}
+            else {page=page+1;}
+            createTableProducts()
             });
 
             $('#prev').click(function(){
@@ -167,25 +266,24 @@
             if (page<=1){
             page=1;
             }
-            gridPagination()
+            createTableProducts()
             });
 
             $('#first').click(function(){
             page=1;
-            gridPagination()
+            createTableProducts()
             });
 
             $('#last').click(function(){
             page=pages_amount;
-            gridPagination()
+            createTableProducts()
             });
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_siz option:selected" ).each(gridPagination())
+            $( "#table_siz option:selected" ).each(createTableProducts())
             })
 
-            });
 
 
             $('#start_price').blur(function() {
@@ -211,65 +309,97 @@
 
             });
 
+           });
+
+
         </script>
 
         <div class="">
             <div class="">
-                <div class=" ">
-                    <form class='form' action="">
-                         <div class="ProductTitle">Filter</div>
-                        <span>Keyword <input type="text"  id = 'name' style="width:150px" /></span>
-                        <span>Price <input type="text" id = 'start_price' style="width:50px" /> - </span>
-                        <span><input type="text"  id = 'end_price' style="width:50px" /> </span>
-                        <span><input type="button" value="search" id='search_button'></span>
-                    </form>
+                <div class="">
+                    <div class=" ">
+                        <form class='form' action="">
+                            <div class="ProductTitle">Filter</div>
+                            <span>Keyword <input type="text"  id = 'name' style="width:150px" /></span>
+                            <span>Price <input type="text" id = 'start_price' style="width:50px" /> - </span>
+                            <span><input type="text"  id = 'end_price' style="width:50px" /> </span>
+                            <span><input type="button" value="search" id='search_button'></span>
+                            <span style="float: right"><input type="button" value="Cart" id='cart_button'></span>
+                        </form>
+                    </div>
+                </div>
+                <div class="field" style="margin-left:5%;">
+                    <lable>Table size: </lable>
+                    <select id="table_size">
+                        <option selected value="5">Show 5 lines </option>
+                        <option value="25">Show 25 lines </option>
+                    </select>
+                </div>
+                <div style="margin-left:80%;"></div>
+                <div id=" ">
+                    <table id='grid' class="grid">
+                        <tr>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Description
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Dimension
+                            </th>
+                            <th>
+                                Add to Cart
+                            </th>
+                        </tr>
+                    </table>
+
+                    <div id="pagination" style="text-align: center">
+                        <input type="button" id="first" value="First">&nbsp
+                        <input type="button" id="prev" value="Prev">&nbsp
+                        <input type="button" id="next" value="Next">&nbsp
+                        <input type="button" id="last" value="Last">
+                        <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of
+                            <span id="pages_amount"></span>
+                        </div>
+                    </div>
                 </div>
             </div>
-            <div class="field" style="margin-left:5%;">
-                  <lable>Table size: </lable>
-                  <select id="table_size">
-                    <option selected>5</option>
-                    <option>25</option>
-                   </select>
-            </div>
-            <div style="margin-left:80%;">
-            </div>
-            <div id=" ">
-                <table id='grid' class="grid">
-                    <tr>
-                        <th>
-                            Product
-                        </th>
-                        <th>
-                            Description
-                        </th>
-                        <th>
-                            Price
-                        </th>
-                        <th>
-                            Quantity
-                        </th>
-                        <th>
-                            Dimension
-                        </th>
-                        <th>
-                            Add to Cart
-                        </th>
-                    </tr>
-                </table>
+        </div>
 
-
-            <div id="pagination" style="text-align: center">
-                <input type="button" id="first" value="First">&nbsp
-                <input type="button" id="prev" value="Prev">&nbsp
-
-                <input type="button" id="next" value="Next">&nbsp
-                <input type="button" id="last" value="Last">
-                <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
-            </div>
-
-            </div>
-
+        <div style="display: none;">
+            <div class="box-modal" id="modal_product_table">
+                <div class="box-modal_close arcticmodal-close">Close</div>
+                <br>
+                <div id="">
+                    <table id="modal_grid" class="grid">
+                        <tr>
+                            <th>
+                                Product
+                            </th>
+                            <th>
+                                Dimension
+                            </th>
+                            <th>
+                                Quantity
+                            </th>
+                            <th>
+                                Price
+                            </th>
+                            <th>
+                                Delete
+                            </th>
+                        </tr>
+                    </table>
+                </div>
+                <input type='button' value='Create' id='create_button'>
             </div>
         </div>
+
 {% endblock body %}

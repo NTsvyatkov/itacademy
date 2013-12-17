@@ -11,6 +11,8 @@
     <script src="{{ url_for('static', filename='js/jquery-1.7.2.min.js') }}"></script>
     <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/modal_window/jquery.arcticmodal-0.3.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='js/modal_window/themes/simple.css') }}">
 
 
 <script src="{{ url_for('static', filename='js/current_orders.js') }}"></script>
@@ -142,8 +144,8 @@
      <ul id="menu">
 
       <li>
-     <a href="/product_grid" title="product_grid"
-        {% if request.environ.PATH_INFO.strip('/') =='product_grid'%}class="active"{% endif %} >
+     <a href="/products" title="products"
+        {% if request.environ.PATH_INFO.strip('/') =='products'%}class="active"{% endif %} >
      Products
      </a>
      </li>

@@ -5,13 +5,13 @@
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.widget.js') }}"></script>
 <script src="{{ url_for('static', filename='js/datepicker/jquery.ui.datepicker.js') }}"></script>
 <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
+<script src="{{ url_for('static', filename='js/modal_window/jquery.arcticmodal-0.3.min.js') }}"></script>
 <script type='text/javascript'>var get_order_id = {{order_id}};</script>
-<script src="{{ url_for('static', filename='js/order.js') }}"></script>
-<script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
+
 
 <script type='text/javascript'>
   $(document).ready(function() {
-      /*Create "Delivery option's" select */
+      /*Create Assignee select */
  var arr =[ {val:0, text:'-me-'},
  {%for i in assingee_arr %}
  {val : {{ i.id }} , text: '{{i.name}}'},
@@ -24,138 +24,146 @@
  /*  --------------------------End select------------------------------*/
 })
 </script>
+<script src="{{ url_for('static', filename='js/order.js') }}"></script>
+<script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
- <div id="order_block">
-      <div id="products_table" style='width:990px;'>
+<div id="order_block">
+    <div id="products_table" style='width:990px;'>
         <span class='info'>Items Selection</span><br>
         <div class="order_top_input" style="float:left;width:100px;">
-         <input type='button' value="Add Item" id="add_item">
+            <input type='button' value="Add Item" id="add_product">
         </div>
         <div class="order_top_input" style="float:right;width:250px;">
-          <lable>Table size: </lable>
-              <select id="table_size" style='width:130px;'>
-              <option selected value="3">Show 3 lines</option>
-              <option value="25">Show 25 lines</option>
-          </select>
+            <lable>Table size: </lable>
+            <select id="table_size" style='width:130px;'>
+                <option selected value="3">Show 3 lines</option>
+                <option value="25">Show 25 lines</option>
+            </select>
         </div>
-       <div style="clear:both;"></div>
-       <table id='grid' class="grid">
-       </table>
-          <div id="pagination" style="text-align: center">
+        <div style="clear:both;"></div>
+        <table id='grid' class="grid">
+        </table>
+        <div id="pagination" style="text-align: center">
               <span id="first_span">
               <input type="button" id="first" value="First">&nbsp
               <input type="button" id="prev" value="Prev">&nbsp
               </span>
 
-              <input type="button" id="next" value="Next">&nbsp
-              <input type="button" id="last" value="Last">
-              <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
-
-          </div>
-      </div>
-          <div style="clear:both;"></div>
-
-      <div class="product_filter_in" style=" margin:0px auto; ">
-
-       <div style="width:980px; margin:0 auto;">
-        <div class="order_block">
-           <span class='info'>Totals</span>
-
-           <div class="field">
-               <lable>Order Number:</lable>
-               <input type="text" id="order_number">
-           </div>
-
-            <div class="field">
-               <lable>Status:</lable>
-               <input type="text" id="order_status" class='input_read' style='border:none;' readonly >
-           </div>
-
-           <div class="field">
-               <lable>Total Price:</lable>
-               <input type="text" id="total_amount" class='input_read' style='border:none;' readonly >
-           </div>
-           <div class="field">
-               <lable>Total Number of Items:</lable>
-               <input type="text" id="total_items" class='input_read' style='border:none;' readonly >
-           </div>
-           <div class="field">
-               <lable>Date of Ordering:</lable>
-               <input type="text" id="order_date" class='input_read' style='border:none;' readonly>
-            </div>
-           <div class="field">
-               <lable>Preferable Delivery Date:</lable>
-               <input type="text" id="preferable_date">
-            </div>
-            <div class="field">
-               <lable>Delivery Date:</lable>
-               <input type="text" id="delivery_date" class='input_read' style='border:none;' readonly>
-            </div>
-           <div class="field">
-               <lable>Assignee: </lable>
-               <select id="assignee" style="width:150px;">
-               </select>
-           </div>
-
-            <div class="field">
-             <input type='text' hidden='true' id="hidden_preferable_date">
-           </div>
-
-           <div class="field">
-             <div id="order_error"> </div>
-           </div>
+            <input type="button" id="next" value="Next">&nbsp
+            <input type="button" id="last" value="Last">
+            <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
 
         </div>
+    </div>
+    <div style="clear:both;"></div>
 
-        <div class="order_block">
-            <span class='info'>Card Info</span>
-           <div class="field">
-            <lable>Credit Card Type:<span class='red_star'>*</span> </lable>
-               <select id="credit_card_options" style="width:150px; padding:5px;">
-                 <option value=1 selected="selected">Visa</option>
-                 <option value=2>MasterCard</option>
-                 <option value=3>American Express</option>
-                 <option value=4>Maestro</option>
-               </select>
-            </div>
-            <div class="field">
-               <lable>Credit Card Number:<span class='red_star'>*</span> </lable>
-               <input type="text" id="credit_card_number">
-            </div>
-            <div class="field">
-               <lable>CVV2 Code <span class='red_star'>*</span>: <span id='cvv2_info' style='text-decoration: underline; font-size: 10px;'>
-                   What is this? </span>
-               </lable>
-               <input type="text" id="cvv2_number">
+    <div class="product_filter_in" style=" margin:0px auto; ">
+
+        <div style="width:980px; margin:0 auto;">
+            <div class="order_block">
+                <span class='info'>Totals</span>
+
+                <div class="field">
+                    <lable>Order Number:</lable>
+                    <input type="text" id="order_number">
+                </div>
+
+                <div class="field">
+                    <lable>Status:</lable>
+                    <input type="text" id="order_status" class='input_read' style='border:none;' readonly >
+                </div>
+
+                <div class="field">
+                    <lable>Total Price:</lable>
+                    <input type="text" id="total_amount" class='input_read' style='border:none;' readonly >
+                </div>
+                <div class="field">
+                    <lable>Total Number of Items:</lable>
+                    <input type="text" id="total_items" class='input_read' style='border:none;' readonly >
+                </div>
+                <div class="field">
+                    <lable>Date of Ordering:</lable>
+                    <input type="text" id="order_date" class='input_read' style='border:none;' readonly>
+                </div>
+                <div class="field">
+                    <lable>Preferable Delivery Date:</lable>
+                    <input type="text" id="preferable_date">
+                </div>
+                <div class="field">
+                    <lable>Delivery Date:</lable>
+                    <input type="text" id="delivery_date" class='input_read' style='border:none;' readonly>
+                </div>
+                <div class="field">
+                    <lable>Assignee: </lable>
+                    <select id="assignee" style="width:150px;">
+                    </select>
+                </div>
+
+                <div class="field">
+                    <input type='text' hidden='true' id="hidden_preferable_date">
+                </div>
+
+                <div class="field">
+                    <div id="order_error"> </div>
+                </div>
+
             </div>
 
-            <div class="field">
-               <lable>Expiry Date <span class='red_star'>*</span>:</lable>
-               <input type="text" id="expire_date">
+            <div class="order_block">
+                <span class='info'>Card Info</span>
+                <div class="field">
+                    <lable>Credit Card Type:<span class='red_star'>*</span> </lable>
+                    <select id="credit_card_options" style="width:150px; padding:5px;">
+                        <option value=1 selected="selected">Visa</option>
+                        <option value=2>MasterCard</option>
+                        <option value=3>American Express</option>
+                        <option value=4>Maestro</option>
+                    </select>
+                </div>
+                <div class="field">
+                    <lable>Credit Card Number:<span class='red_star'>*</span>
+                    </lable>
+                    <input type="text" id="credit_card_number">
+                </div>
+                <div class="field">
+                    <lable>CVV2 Code <span class='red_star'>*</span>:
+                    <span id='cvv2_info' style='text-decoration: underline; font-size: 10px;'>
+                     What is this?
+                    </span>
+                    </lable>
+                    <input type="text" id="cvv2_number">
+                </div>
+
+                <div class="field">
+                    <lable>Expiry Date <span class='red_star'>*</span>:</lable>
+                    <input type="text" id="expire_date">
+                </div>
+
+                <div class="field">
+                    <lable>Start Date<span class='red_star'>*</span>:
+                    <span style="font-size:9px;">
+                        For Maestro
+                    </span></lable>
+                    <input type="text" id="start_date">
+                </div>
+
+                <div class="field">
+                    <lable>Issue Number: <span style="font-size:9px;">For Maestro</span></lable>
+                    <input type="text" id="issue_number">
+                </div>
+                <div class="field">
+
+                </div>
+                <div class="field">
+                    <lable> <span class='red_star'>*</span> field are mandatory</lable>
+                </div>
+
+                <div class="field">
+                    <input type='text' class='input_read' style='border:none;' readonly id="hidden">
+                </div>
+
             </div>
-
-            <div class="field">
-               <lable>Start Date<span class='red_star'>*</span>: <span style="font-size:9px;">For Maestro</span></lable>
-               <input type="text" id="start_date">
-            </div>
-
-            <div class="field">
-               <lable>Issue Number: <span style="font-size:9px;">For Maestro</span></lable>
-               <input type="text" id="issue_number">
-            </div>
-             <div class="field">
-
-            </div>
-            <div class="field">
-            <lable> <span class='red_star'>*</span> field are mandatory</lable>
-           </div>
-
-            <div class="field">
-             <input type='text' class='input_read' style='border:none;' readonly id="hidden">
-           </div>
-
-        </div>
-              <div style="clear:both;"></div>
+            <div style="clear:both;"></div>
         </div>
 
         <div  id='button_block' style="width:980px; margin:0px auto;">
@@ -164,6 +172,65 @@
             <input type="button" id="save_order" value="Save" style="float:right;margin:5px;">
         </div>
 
-      </div>
+    </div>
 </div>
+
+
+
+<!-- -----------------------------------Selecting item html code------------------------------------------------ -->
+
+<div style="display: none;">
+    <div class="box-modal" id="exampleModal">
+        <div class="box-modal_close arcticmodal-close">Close</div>
+             <form class='form' action="">
+             <div class="field" style="width: 450px;">
+                <lable style="float: left; line-height: 35px; padding-right:10px;">Search for item by: </lable>
+                <select id="product_options" style="width: 150px;float: left; margin:0px;">
+                <option value="0">Item Name</option>
+                <option value="1">Item Description</option>
+                </select>
+                <input type="text" id="name" >
+    </div>
+    <span><input type="button" value="Search" id='search_button' style="float: right; margin-top: -33px"></span>
+   </form>
+
+     <div id=" ">
+                <table id='grid_1' class="grid">
+                    <tr>
+                        <th>
+                            Product
+                        </th>
+                        <th>
+                            Description
+                        </th>
+                    </tr>
+                </table>
+            <div style="margin:20px; height:30px;">
+                <input type="button" value="Add" id='add_item'  style="float: right; margin-right: 230px;">
+            </div>
+            </div>
+
+
+       <div>
+        <form action="" id="info" style="width: 400px; height: 275px"><br>
+
+    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
+    <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
+    <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
+    <span>Dimension <select id="dimension" name="dim">
+        <input type='hidden' id='description'>
+
+
+                    </select> </span>
+
+    <div style="margin:10px;">
+                <input type="button" value="Done" id="done">
+                <input type="reset" value="Remove" id="remove">
+                <input type="button"  id="cancel"  value="Cancel">
+     </div>
+           </form>
+        </div>
+    </div>
+</div>
+
 {% endblock body %}

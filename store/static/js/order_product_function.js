@@ -1,11 +1,11 @@
- function create_grid(count_tr, count_td)
+ function create_grid(count_tr, count_td,table_id)
  {
-     var table_grid = document.getElementById('grid');
+     var table_grid = document.getElementById(table_id);
      for (var i=1; i<=count_tr;i++ )
         {
             tr1 = document.createElement('TR');
             table_grid.appendChild(tr1);
-            if (i % 2 == 0) tr1.style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            if (i % 2 == 0) tr1.style.background = "#efddba"; /* .className = 'tr_style' */
             for (var j=0; j<=count_td; j++)
              {
               tr1.appendChild(document.createElement('TD'));
@@ -13,9 +13,9 @@
         }
  }
 
- function deleting_grid()
+ function deleting_grid(table_id)
  {
-    var table_grid = document.getElementById('grid');
+    var table_grid = document.getElementById(table_id);
     for (var n=table_grid.rows.length ; n>=2; n--)
       {
        table_grid.removeChild(table_grid.childNodes[n]);

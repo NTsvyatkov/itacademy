@@ -39,13 +39,13 @@ $(document).ready(function() {
             tr[i] = document.createElement('TR');
             table_grid.appendChild(tr[i]);
             tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background = "#c0c0c0"; /* .className = 'tr_style' */
+            if (i % 2 == 0) tr[i].style.background =  "#efddba"; /* .className = 'tr_style' */
             for (var j=0; j<=count_td; j++)
              {
               tr[i].appendChild(document.createElement('TD'));
              }
         }
-      $( "tr:even" ).css( "background-color", "#c0c0c0" );
+          $( "tr:even" ).css( "background-color", "#efddba" );
     }
 
    create_grid(count_tr,count_td);

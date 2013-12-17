@@ -6,26 +6,31 @@
             var tr = [8];
 
             $(document).ready (function() {
-            var table_grid = document.getElementById('grid');
+            var table_grid_ = document.getElementById('grid_1');
 
-            function creat_grid(count)
+
+
+
+            function creat_grid_(count)
                 {
                     for (var i=1; i<=count;i++ )
                         {
                             tr[i] = document.createElement('TR');
-                            table_grid.appendChild(tr[i]);
+                            table_grid_.appendChild(tr[i]);
                             tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            if (i % 2 == 0) tr[i].style.background = "#efddba";
                             for (var j=0; j<=1; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
                         }
-                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                    $( "tr:even" ).css( "background-color", "#efddba" );
                 }
-            function deleting_grid(){
-                for (var n=table_grid.rows.length ; n>=2; n--){
-                    table_grid.removeChild(table_grid.childNodes[n]);}
+
+
+            function deleting_grid_(){
+                for (var n=table_grid_.rows.length ; n>=2; n--){
+                    table_grid_.removeChild(table_grid_.childNodes[n]);}
 
             }
             searchItem();
@@ -33,11 +38,12 @@
                 searchItem()
             });
 
-            function ajax_success(json){
+            function ajax_success_(json){
+                var tr_css;
                document.getElementById('add_item').disabled=true;
                document.getElementById('info').style.display='none'
-                deleting_grid()
-                creat_grid(json.products.length);
+                deleting_grid_()
+                creat_grid_(json.products.length);
                 for (var product_k in json.products)
                     {
                         k++;
@@ -63,6 +69,15 @@
 
                     }
                     k=0;
+
+                      $('tr').mouseenter(function(){
+                            tr_css=$(this).css("background-color");
+                            $(this).css( "background-color", "#66FF99" );
+                          })
+                       $('tr').mouseleave(function() {
+                            $(this).css( "background-color", tr_css);
+                       });
+
             }
 
 
@@ -84,7 +99,7 @@
                 contentType: "application/json",
                 success: function(json)
                     {
-                        ajax_success(json);
+                        ajax_success_(json);
                     }
 
                 })
@@ -118,7 +133,7 @@
                 $.each(json.product, function(i, pr){
                 document.getElementById('item').value=json.product.name
                 document.getElementById('price').value=json.product.price
-
+                document.getElementById('description').value=json.product.description
                 })
 
                }
@@ -134,18 +149,27 @@
             function done(){
             id_product=prod_id
             quantity=document.getElementById('quantity').value
+            product_name=document.getElementById('item').value
             dimension_number= document.getElementById('dimension').value
-            dimension_name=document.getElementById('dimension').text
-
-
-            alert (id_product)
-            alert (quantity)
-            alert (dimension_number)
-            alert (dimension_name)
+            price= document.getElementById('price').value
+            description= document.getElementById('description').value
+            var dimension_name = $('#dimension :selected').text()
+            var dimension_id=0;
+                alert (dimension_name)
+                if (dimension_name =='Package'){
+                    dimension_id=3;
+                }
+                if (dimension_name =='Box'){
+                    dimension_id=2;
+                }
+                if (dimension_name =='Items'){
+                    dimension_id=1;
+                }
+            fill_field={"description": description, "dimension": dimension_name,
+                  "dimension_id": dimension_id, "dimension_number": dimension_number,
+                  "name": product_name, "price": price, "product_id": id_product,
+                  "quantity": quantity};
             }
-
-
-
 
 
 
@@ -173,7 +197,7 @@
             <div style="margin-left:80%;">
             </div>
             <div id=" ">
-                <table id='grid' class="grid">
+                <table id='grid_1' class="grid adding">
                     <tr>
                         <th>
                             Product
@@ -197,11 +221,10 @@
     <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
     <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
     <span>Dimension <select id="dimension" name="dim">
+        <input type='hidden' id='description'>
 
 
                     </select> </span>
-
-
 
  <p><div style="float: right" ><input type="button" value="Done" id="done"><input type="reset" value="Remove" id="remove"><input type="button"  id="cancel"  value="Cancel"></div></p>
            </form>

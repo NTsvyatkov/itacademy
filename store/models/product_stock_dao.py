@@ -5,7 +5,6 @@ from sqlalchemy import Column, Integer,and_
 
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
-from models.order_dao import OrderProduct
 from models.product_dao import Dimension, Product
 
 
@@ -48,6 +47,9 @@ class ProductStock(Base):
     def getProductStock(product_id, dimension_id):
         return ProductStock.query.filter(and_(ProductStock.product_id == product_id,
                                               ProductStock.dimension_id == dimension_id)).first()
+    @staticmethod
+    def get_product_stock(product_id, dimension_id):
+         return ProductStock.query.get((product_id, dimension_id))
 
     @staticmethod
     def updateProductStock(product_id,dimension_id, new_quantity):
