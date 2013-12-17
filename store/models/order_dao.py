@@ -205,11 +205,13 @@ class Order(Base):
         else:
             order.user.balance += order.total_price
 
-        if order.user.balance < 1000:
+        if order.user.balance < UserLevel.get_level_by_name("Silver").balance:
             order.user.level_id = UserLevel.get_level_by_name("Standart").id
-        elif 1000 <= order.user.balance < 3000:
+        elif UserLevel.get_level_by_name("Silver").balance <= order.user.balance < \
+                UserLevel.get_level_by_name("Gold").balance:
             order.user.level_id = UserLevel.get_level_by_name("Silver").id
-        elif 3000 <= order.user.balance < 10000:
+        elif UserLevel.get_level_by_name("Gold").balance <= order.user.balance < \
+                UserLevel.get_level_by_name("Platinum").balance:
             order.user.level_id = UserLevel.get_level_by_name("Gold").id
         else:
             order.user.level_id = UserLevel.get_level_by_name("Platinum").id
