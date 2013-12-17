@@ -11,6 +11,10 @@ $(document).ready(function() {
     var th = ['Item Number','Item Name','Item Description','Dimension','Price','Quantity','Price per Line'];
     var count_td= th.length-1;
     var page = 1;
+    var detector;
+    var counter;
+    var sort_by = "product_name";
+    var order_sort_by = "asc";
     var table_grid = document.getElementById('grid');
 
   /* Creating table of products (size = count_tr Х count_td)  */
@@ -61,7 +65,8 @@ $(document).ready(function() {
    {
     $.ajax({
         dataType: "json",
-        url: '/api/order_details/?page='+page+'&table_size='+count_tr+'&order_id='+order_id,
+        url: '/api/order_details/?page='+page+'&table_size='+count_tr+'&order_id='+order_id+'&sort_by='+sort_by+
+                '&order_sort_by='+order_sort_by,
         type: 'GET',
         success: function(json)
         {
@@ -122,8 +127,7 @@ if (page==1){
                  tr[k].cells[3].innerHTML = json.orders.products[product_k].product_dimension;
                  tr[k].cells[4].innerHTML = "$" + json.orders.products[product_k].product_price;
                  tr[k].cells[5].innerHTML = json.orders.products[product_k].product_quantity;
-                 tr[k].cells[6].innerHTML = "$" + (json.orders.products[product_k].product_quantity*
-                                            json.orders.products[product_k].product_price).toFixed(2,0);
+                 tr[k].cells[6].innerHTML = "$" + (json.orders.products[product_k].product_price_per_line);
                 }
           $('#customer_name').text(json.orders.customer_name);
           $('#customer_type').text(json.orders.customer_type);
@@ -252,6 +256,57 @@ if (page==1){
   grid_pagination();
   }
 
+  /*Sorting in columns */
+  $("th").click(function(){
+      $("th").removeClass("asc")
+      $("th").removeClass("desc")
+      var entry = this.innerHTML;
+
+      switch (entry)
+          {
+          case "Item Number":
+            sort_by="product_id";
+            break;
+          case "Item Name":
+            sort_by="product_name";
+            break;
+          case "Item Description":
+            sort_by="product_description";
+            break;
+          case "Dimension":
+            sort_by="product_dimension";
+            break;
+          case "Price":
+            sort_by="price";
+            break;
+          case "Quantity":
+            sort_by="quantity";
+            break;
+          case "Price per Line":
+            sort_by="product_price_per_line";
+            break;
+          }
+      if (detector===entry){
+          counter+=1;
+      }
+      else {
+          detector=entry;
+          counter=0;
+      }
+      if (counter%2==0){
+          order_sort_by = "asc";
+          $(this).addClass("asc")
+      }
+      else {
+          order_sort_by = "desc";
+          $(this).addClass("desc")
+      }
+
+        grid_pagination();
+    }
+    );
+
+
   /*Pagination buttons events*/
 
    $('#next').click(function(){
@@ -321,6 +376,9 @@ div #button {
     clear: both;
     margin-left: 80%;
 }
+th{
+    cursor:pointer;
+}
 
 </style>
 
@@ -348,7 +406,7 @@ div #button {
                 </div>
             </div>
         </div>
-    <div class="order_wrapper">
+    <div id="test" class="order_wrapper">
         <div class="first_details_block">
             <p>Customer Name (Login): </p>
             <p>Customer Type: </p>
