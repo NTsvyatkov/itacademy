@@ -674,18 +674,26 @@ $(document).ready(function () {
 
     $('#add_product').click(function(){
         /*--------------Modal window event-----------------------*/
+        fill_field={};
         $('#exampleModal').arcticmodal(
             {
                 afterClose:function(){
-                    if (global_order_arr){
+                    if (global_order_arr && fill_field.name){
                         global_order_arr.order.push(fill_field)
+                        pagination_slice(page,count_tr);
+                        alert(fill_field);
                     }
                     else{
+                        if (fill_field.name){
                         var order=[]
                         order.push(fill_field);
-                        global_order_arr={order:order}
+                        global_order_arr={order:order};
+                         alert(fill_field);
+                        pagination_slice(page,count_tr);
+
+                        }
                     }
-                    pagination_slice(page,count_tr);
+
 
                 }
             }
