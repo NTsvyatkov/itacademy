@@ -130,7 +130,9 @@ def list_orders_id():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
     order_id = int(request.args.get('order_id'))
-    all_in_order, count = OrderProduct.get_by_order_product(order_id, page, records_per_page)
+    sort_by = request.args.get('sort_by')
+    order_sort_by = request.args.get('order_sort_by')
+    all_in_order, count = OrderProduct.get_by_order_product(order_id, page, records_per_page, sort_by, order_sort_by)
     quantity_of_items = OrderProduct.get_items_quantity(order_id)
     customer_name = str(all_in_order[0].order.user.first_name) + " " + \
         str(all_in_order[0].order.user.last_name + " " + "(" + str(all_in_order[0].order.user.login) + ")")
@@ -138,7 +140,9 @@ def list_orders_id():
     for i in all_in_order:
         products.append({'product_id': i.product_id, 'product_name': i.product.name,
                         'product_description': i.product.description, 'product_dimension': i.dimension.name,
-                        'product_quantity': i.quantity, 'product_price': str(i.product.price)})
+                        'product_quantity': i.quantity, 'product_price_per_line': str(i.product_price_per_line),
+                        'product_price': str(i.product.price)})
+
     order = {'customer_name': customer_name,
              'customer_type': all_in_order[0].order.user.level.name if all_in_order[0].order.user.level.name
              else "Standart",

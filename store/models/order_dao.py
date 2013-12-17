@@ -1,7 +1,7 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_, asc, desc
 from sqlalchemy.orm import relationship, backref
-from models.product_dao import Product
+from models.product_dao import Product, Dimension
 from json import loads
 from models.user_dao import UserDao
 from models.role_dao import RoleDao
@@ -310,7 +310,8 @@ class OrderProduct(Base):
     dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
-    price = Column(DECIMAL, nullable=True)
+    price = Column(DECIMAL(5, 2), nullable=True)
+    product_price_per_line = Column(DECIMAL(5, 2), nullable=True)
 
 
     def __init__(self, order_id, product_id, dimension_id, quantity, price):
@@ -320,7 +321,7 @@ class OrderProduct(Base):
         self.product_id = product_id
         self.dimension_id = dimension_id
         self.price = price
-
+        self.product_price_per_line = float(quantity) * price
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
@@ -332,11 +333,27 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
 
     @staticmethod
-    def get_by_order_product(order_id, page=None, records_per_page=None):
+    def get_by_order_product(order_id, page=None, records_per_page=None, sort_by=None, order_sort_by="asc"):
         stop = page * records_per_page
         start = stop - records_per_page
         count = OrderProduct.query.filter(OrderProduct.order_id == order_id).count()
-        return OrderProduct.query.filter(OrderProduct.order_id == order_id).slice(start, stop).all(), count
+        query = OrderProduct.query.join(OrderProduct.product).join(OrderProduct.dimension).\
+            filter(OrderProduct.order_id == order_id)
+        if sort_by == "product_id":
+            query = query.order_by(OrderProduct.product_id)
+        elif sort_by == "product_name":
+            query = query.order_by(asc(Product.name))
+        elif sort_by == "product_description":
+            query = query.order_by(asc(Product.description))
+        elif sort_by == "product_dimension":
+            query = query.order_by(asc(Dimension.name))
+        elif sort_by == "price":
+            query = query.order_by(OrderProduct.price)
+        elif sort_by == "quantity":
+            query = query.order_by(OrderProduct.quantity)
+        elif sort_by == "product_price_per_line":
+            query = query.order_by(OrderProduct.product_price_per_line)
+        return query.slice(start, stop).all(), count
 
     @staticmethod
     def add_order_product(order_id, product_id, dimension_id, quantity, price = None):
