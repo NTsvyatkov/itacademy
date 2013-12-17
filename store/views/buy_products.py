@@ -49,7 +49,7 @@ def modalProducts():
     products_arr = []
     for i in prods:
         products_arr.append({'product_id': i.product_id, 'product_name': i.product.name, 'dimension': i.dimension.name,
-                             'dimension_id': i.dimension_id, 'quantity': i.quantity, 'price': i.price})
+                             'dimension_id': i.dimension_id, 'quantity': i.quantity, 'price': str(i.price)})
     return make_response(jsonify(products=products_arr), 200)
 
 @app.route('/api/order_product/', methods=['DELETE'])
