@@ -15,7 +15,7 @@ def CreateProduct():
 
 
 
-@app.route('/product_grid', methods=('GET', 'POST'))
+@app.route('/products', methods=('GET', 'POST'))
 def product_grid():
     if session['role'] not in 'Supervisor':
        return "You've got permission to access this page."
