@@ -5,6 +5,7 @@
 <link rel="stylesheet" href="../static/styles/form.css" />
 
 
+
 <!--JavaScript-->
 <script type="text/javascript" src="http://www.google.com/jsapi"></script>
 <script type="text/javascript">google.load("jquery", "1");</script>
@@ -23,19 +24,18 @@
 
 </div>
 </br></br></br></br>
-    <form id="info"  name="form"  class = "form" method ="POST"  >
+    <form id="info"  name="form"  class = "form" method ="POST" style="width: 330px; height: 250px" >
         </br><div class="ProductTitle">Order Management System</div></br>
 <div class ="name"> <div id="name-wrap">
-	           <label for="name">Login</label>
-               <input id="name" name="name" type="text" value="">
+
+               <span>Login:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="name" name="name" type="text" value=""></span>
                <div style = "height: 10px; width: 30px;"></div>
                <div class = "error_name"></div>
          </div>
          </div>
 
 <div class ="password"> <div id="password-wrap">
-	           <label for="password">Password</label>
-               <input id="password" name="password" type="password" value="">
+	         <span>Password: <input id="password" name="password" type="password" value=""></span>
                <div style = "height: 10px; width: 30px;"></div>
                <div class = "error_password"></div>
 
@@ -45,7 +45,7 @@
           <span style="color: red;">{{error }}</span>
  {% endif %}
         <br>
-    <input type="submit" value ="Log in" class="button" onclick="return validate_login()" id ="post_form">
+    <input type="submit" value ="Log in" class="button" style="float:right;  margin-right: 100px;" onclick="return validate_login()" id ="post_form">
 </form>
 </br></br></br></br>        </br></br></br></br>        </br></br></br></br>        </br></br></br></br>        </br></br></br></br>        </br></br></br></br>        </br></br></br></br>
 <script type="text/javascript">

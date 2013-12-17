@@ -238,10 +238,10 @@ var region =   document.form.region.value;
             parent.location = 'search_user'; },
         error: function(resp, exception) {
 
-              if (resp.status == 404) {
-                alert('Requested page not found. [404]');
+             if (resp.status == 400) {
+                alert(resp.responseJSON.message);
             } else if (resp.status == 500) {
-                alert('This username or email already exists');
+                alert(resp.responseJSON.message);
             }
 
         }
