@@ -408,7 +408,9 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
 
 th.asc{
     background:url(../images/0.gif) 7px  center no-repeat; cursor:pointer; padding-left:1px;
+    background-color: darkgray;
 }
 th.desc{
     background:url(../images/1.gif) 7px  center no-repeat; cursor:pointer; padding-left:1px;
+    background-color: darkgray;
 }
