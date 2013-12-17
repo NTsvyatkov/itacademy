@@ -2,6 +2,7 @@ from models import Base, db_session
 from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product
+from models.product_stock_dao import ProductStock
 from json import loads
 from models.user_dao import UserDao
 from models.role_dao import RoleDao
@@ -108,8 +109,8 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def update_current_order(id,new_status_id, new_delivery_id=None,
-                     new_delivery_address=None, new_comment=None):
+    def update_current_order(id,new_status_id, new_delivery_id,
+                     new_delivery_address, new_comment):
         entry = Order.get_order(id)
         entry.status_id = new_status_id
         entry.delivery_id = new_delivery_id
@@ -358,8 +359,12 @@ class OrderProduct(Base):
     @staticmethod
     def delete_order_product(order_id, product_id, dimension_id):
         del_order_product = OrderProduct.get_order_product(order_id, product_id, dimension_id)
-        db_session.delete(del_order_product)
-        db_session.commit()
+        if del_order_product:
+            db_session.delete(del_order_product)
+            db_session.commit()
+            product_stock=ProductStock.get_product_stock(product_id, dimension_id)
+            quantity=del_order_product.quantity+product_stock.quantity
+            ProductStock.updateProductStock(product_id,dimension_id,quantity)
 
     @staticmethod
     def updateSumQuantity(order_id, product_id, dimension_id, new_quantity):

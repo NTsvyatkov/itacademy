@@ -72,4 +72,3 @@ var result_price = price.match(regV_price);
 }
 
 
-

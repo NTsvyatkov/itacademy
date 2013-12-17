@@ -7,12 +7,11 @@
 <script src="{{ url_for('static', filename='js/jquery-ui.js') }}"></script>
 <script src="{{ url_for('static', filename='js/modal_window/jquery.arcticmodal-0.3.min.js') }}"></script>
 <script type='text/javascript'>var get_order_id = {{order_id}};</script>
-<script src="{{ url_for('static', filename='js/order.js') }}"></script>
-<script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
+
 
 <script type='text/javascript'>
   $(document).ready(function() {
-      /*Create "Delivery option's" select */
+      /*Create Assignee select */
  var arr =[ {val:0, text:'-me-'},
  {%for i in assingee_arr %}
  {val : {{ i.id }} , text: '{{i.name}}'},
@@ -25,12 +24,14 @@
  /*  --------------------------End select------------------------------*/
 })
 </script>
+<script src="{{ url_for('static', filename='js/order.js') }}"></script>
+<script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
 <div id="order_block">
     <div id="products_table" style='width:990px;'>
         <span class='info'>Items Selection</span><br>
         <div class="order_top_input" style="float:left;width:100px;">
-            <input type='button' value="Add Item" id="add_item_1">
+            <input type='button' value="Add Item" id="add_product">
         </div>
         <div class="order_top_input" style="float:right;width:250px;">
             <lable>Table size: </lable>
@@ -120,12 +121,15 @@
                     </select>
                 </div>
                 <div class="field">
-                    <lable>Credit Card Number:<span class='red_star'>*</span> </lable>
+                    <lable>Credit Card Number:<span class='red_star'>*</span>
+                    </lable>
                     <input type="text" id="credit_card_number">
                 </div>
                 <div class="field">
-                    <lable>CVV2 Code <span class='red_star'>*</span>: <span id='cvv2_info' style='text-decoration: underline; font-size: 10px;'>
-                   What is this? </span>
+                    <lable>CVV2 Code <span class='red_star'>*</span>:
+                    <span id='cvv2_info' style='text-decoration: underline; font-size: 10px;'>
+                     What is this?
+                    </span>
                     </lable>
                     <input type="text" id="cvv2_number">
                 </div>
@@ -136,7 +140,10 @@
                 </div>
 
                 <div class="field">
-                    <lable>Start Date<span class='red_star'>*</span>: <span style="font-size:9px;">For Maestro</span></lable>
+                    <lable>Start Date<span class='red_star'>*</span>:
+                    <span style="font-size:9px;">
+                        For Maestro
+                    </span></lable>
                     <input type="text" id="start_date">
                 </div>
 
@@ -168,6 +175,10 @@
     </div>
 </div>
 
+
+
+<!-- -----------------------------------Selecting item html code------------------------------------------------ -->
+
 <div style="display: none;">
     <div class="box-modal" id="exampleModal">
         <div class="box-modal_close arcticmodal-close">Close</div>
@@ -184,7 +195,7 @@
    </form>
 
      <div id=" ">
-                <table id='grid_1' class="grid adding">
+                <table id='grid_1' class="grid">
                     <tr>
                         <th>
                             Product
@@ -194,11 +205,13 @@
                         </th>
                     </tr>
                 </table>
-
+            <div style="margin:20px; height:30px;">
+                <input type="button" value="Add" id='add_item'  style="float: right; margin-right: 230px;">
             </div>
-        <span><input type="button" value="Add" id='add_item'  style="float: right; margin-right: 230px; width:100px; height:30px "></span>
+            </div>
 
 
+       <div>
         <form action="" id="info" style="width: 400px; height: 275px"><br>
 
     <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
@@ -210,10 +223,13 @@
 
                     </select> </span>
 
- <p><div style="float: right" ><input type="button" value="Done" id="done"><input type="reset" value="Remove" id="remove"><input type="button"  id="cancel"  value="Cancel"></div></p>
+    <div style="margin:10px;">
+                <input type="button" value="Done" id="done">
+                <input type="reset" value="Remove" id="remove">
+                <input type="button"  id="cancel"  value="Cancel">
+     </div>
            </form>
-
-        <input type='button' value='Close window' id='close_modal'>
+        </div>
     </div>
 </div>
 

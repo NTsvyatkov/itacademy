@@ -61,14 +61,6 @@ def products_page():
                                  records_per_page=records_per_page), 200)
 
 
-#@app.route('/api/product/<int:id>', methods=['GET'])
-#def products_id(id):
-#    i = get_product_by_id(request.get['id'])
-#    product = {'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description, 'dimension': i.dimension}
-#    resp = make_response(jsonify(products=product), 200)
-#    return resp
-
-
 @app.route('/api/product/<int:id>', methods=['DELETE'])
 def products_id_delete(id):
     delete_product(id)

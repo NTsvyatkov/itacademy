@@ -52,13 +52,14 @@ def order():
         total_items=total_items+j.OrderProduct.quantity*dimen
     order_status=order_list[0].Order.status.name
     order_number=order_list[0].Order.order_number
+    assignee=order_list[0].Order.assignee_id
     order_id=order_list[0].Order.id
     for i in order_list:
         order_arr.append({'product_id': i.Product.id, 'name': i.Product.name, \
          'description': i.Product.description,'quantity':i.OrderProduct.quantity,\
          'dimension':i.OrderProduct.dimension.name,'dimension_id':i.OrderProduct.dimension.id,\
          'price': str(i.Product.price),'dimension_number':i.OrderProduct.dimension.number})
-    return make_response(jsonify(order=order_arr,records_amount=count, total_items=total_items,\
+    return make_response(jsonify(order=order_arr,records_amount=count, total_items=total_items, assignee_id=assignee,\
                 delivery_date=delivery_date, order_status=order_status,order_number=order_number,order_id=order_id, \
                 order_date=order_date, records_per_page=records_per_page, total_price=str(total_price)), 200)
 

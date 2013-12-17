@@ -17,13 +17,13 @@
                             tr[i] = document.createElement('TR');
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
+                            if (i % 2 == 0) tr[i].style.background = "#efddba";
                             for (var j=0; j<=2; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
                         }
-                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
+                    $( "tr:even" ).css( "background-color", "#efddba" );
                 }
             createGrid();
 
@@ -154,7 +154,7 @@
             $('#price').blur(function() {
                 if( isNaN($(this).val()) || ($(this).val()) <= 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
-                    price_error.innerHTML = 'Incorrect price.';
+                    price_error.innerHTML = 'Price should be filled.';
                 }else{
                     $(this).css({'border' : '2px solid #999'});
                     price_error.innerHTML = null;

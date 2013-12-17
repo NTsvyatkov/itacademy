@@ -1,6 +1,6 @@
 
 body {
- font: 18px Arial, Helvetica, sans-serif;
+ font: 14px Arial, Helvetica, sans-serif;
  background-image:url(../images/body-background.png);
  padding:0px;
  margin:0px;
@@ -117,7 +117,7 @@ body {
   text-align:right;
   width:400px;
   padding:5px;
-  font-size:80%
+  font-size:100%
   }
 
 .field label{
@@ -239,8 +239,7 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
  border-top:1px solid #c6d5e1;
  border-bottom:none;
  margin:0 auto 15px;
- background:#E8E8E8;
- font-size:80%;
+ background:#f7f3ea;
  }
 
 .grid th {
@@ -398,7 +397,7 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
 .info{
  margin-left:10px;
  font-weight: bolder;
- font-size:80%;
+ font-size:100%;
 }
 
 .input_read   {

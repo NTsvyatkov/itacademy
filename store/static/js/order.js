@@ -62,7 +62,7 @@ $(function () {
 });
 /*--------------------------*/
  var fill_field;
-var json;
+var global_order_arr;
 $(document).ready(function () {
     var order_id = get_order_id;
     var maestro_card = false;
@@ -97,7 +97,7 @@ $(document).ready(function () {
         tr1.appendChild(document.createElement('TH'));
         tr1.cells[j].innerHTML = th[j];
     }
-    create_grid(count_tr, count_td);
+    create_grid(count_tr, count_td,'grid');
     if (get_order_id){
         ajax_pull('GET', 'data','');
         pagination_slice(page, count_tr);
@@ -116,18 +116,21 @@ $(document).ready(function () {
             async: false,
             success: function (json_val) {
                 if (type_options == 'GET') {
-                    json = json_val;
-                    $('#order_status').val(json.order_status);
-                    pagination_slice(page, count_tr);
+                    global_order_arr= json_val;
+                    $('#order_status').val(global_order_arr.order_status);
                 }
                 if (type_options == 'PUT'){
                     if (button=='Order'){
                       alert('Order successfully issued');
                       /*window.location.replace("/orders");*/
+                        $('#order_status').val('Pending');
                     }
                     if (button=='Save'){
                       alert('Order saved and update');
                     }
+                }
+                if(type_options == 'POST'){
+                    alert('Order saved and update');
                 }
             },
             error: function (e) {
@@ -157,42 +160,14 @@ $(document).ready(function () {
         var total_sum = 0;
         var total_items = 0;
         var result = [];
-        for (var i in json.order) {
-            total_sum = total_sum + +json.order[i].price * +json.order[i].dimension_number * +json.order[i].quantity;
-            total_items = total_items + +json.order[i].dimension_number * +json.order[i].quantity;
+        for (var i in global_order_arr.order) {
+            total_sum = total_sum + +global_order_arr.order[i].price * +global_order_arr.order[i].dimension_number * +global_order_arr.order[i].quantity;
+            total_items = total_items + +global_order_arr.order[i].dimension_number * +global_order_arr.order[i].quantity;
         }
         result.push(total_sum);
         result.push(total_items);
         return result;
     }
-
-
-
-    $('#add_item_1').click(function(){
-    /*--------------Modal window event-----------------------*/
-       $('#exampleModal').arcticmodal(
-           {
-           afterClose:function(){
-                 if (json){
-           json.order.push(fill_field)
-       }else{
-           var order=[]
-           order.push(fill_field);
-           json={order:order}
-       }
-       pagination_slice(page,count_tr);
-
-           }
-           }
-       );
-    /*-------------------------------------------------------*/
-
-    })
-    $('#close_modal').click( function(){
-        $.arcticmodal('close');
-       }
-    )
-
 
     function pagination_slice(page, count_tr) {
         var total_items;
@@ -204,17 +179,56 @@ $(document).ready(function () {
         $('#total_amount').val(total_price.toFixed(2) + '$');
         var stop = page * count_tr
         var start = stop - count_tr
-        var order_slice = json.order.slice(start, stop);
-        var json_slice = clone(json);
+        var order_slice = global_order_arr.order.slice(start, stop);
+        var json_slice = clone(global_order_arr);
         delete json_slice['order'];
         json_slice['order'] = order_slice;
         fill_grid(json_slice);
+
+        /*-----------if json get by ajax, update default values-----------------*/
+        if (global_order_arr.assignee_id) {
+            $("#assignee [value='"+global_order_arr.assignee_id+"']").attr("selected", "selected");
+        }
+        if (global_order_arr.delivery_date) {
+            var delivery_date = global_order_arr.delivery_date * 1000;
+            $('#delivery_date').val(date_format(delivery_date));
+        }
+        else {
+            $('#delivery_date').val('/ /');
+        }
+        if (global_order_arr.order_date) {
+            var order_date = global_order_arr.order_date* 1000;
+            $('#order_date').val(date_format(order_date));
+        }
+        else {
+            $('#order_date').val('/ /');
+        }
+        if (global_order_arr.order_number) {
+            $('#order_number').val(global_order_arr.order_number);
+            $('#order_number').attr('readonly', true);
+            $('#order_number').css('background-color', '#e2e2e2');
+             uniq_order=true;
+        }
+        if (global_order_arr.order_status) {
+            $('#order_status').val(global_order_arr.order_status);
+             uniq_order=true;
+        }
+        /*--------------If order_status not undefined => was ajax get (status = Pending) ----------------*/
+        if(global_order_arr.order_status) {
+            $('#credit_card_number').val('1234567887654321');
+            $('#cvv2_number').val('432');
+            var dt = new Date();
+            var month = dt.getMonth();
+            var year = dt.getFullYear()+1;
+            var now_date = year+ '/' + month ;
+            $('#expire_date').val(now_date);
+        }
+        /*----------------------------------------------------*/
         records_per_page = count_tr;
-        records_amount = json.order.length;
+        records_amount = global_order_arr.order.length;
         pages_amount = Math.ceil(records_amount / records_per_page);
         document.getElementById("page").innerHTML = page;
-        document.getElementById("pages_amount").innerHTML = pages_amount;
-
+        document.getElementById("pages_amount").innerHTML = pages_amount
         if (page == 1) {
             $('#prev').prop('disabled', true);
             $('#first').prop('disabled', true);
@@ -250,10 +264,10 @@ $(document).ready(function () {
     /*-------------Update quantity in row------------------*/
     function update_quantity(product_id, dimension_id, object_quantity, old_quantity, price, quantity, tr, dim) {
 
-        for (var i in json.order) {
-            if ((json.order[i].product_id == product_id) && (json.order[i].dimension_id == dimension_id ) &&
-                (json.order_id == order_id)) {
-                json.order[i].quantity = quantity;
+        for (var i in global_order_arr.order) {
+            if ((global_order_arr.order[i].product_id == product_id) && (global_order_arr.order[i].dimension_id == dimension_id ) &&
+                (global_order_arr.order_id == order_id)) {
+                global_order_arr.order[i].quantity = quantity;
             }
         }
         var sum = +price * +quantity * dim;
@@ -285,13 +299,19 @@ $(document).ready(function () {
                 }
                 else {
                     $('#order_number').val(json.unique_order_number);
-                    order_id=json.order_id
+                    order_id=json.order_id;
+                    global_order_arr.order_id=order_id;
                     $('#order_number').attr('readonly', true);
-                    $('#order_number').css('background-color', '#e2e2e2');
                     $('#order_number').css('background-color', '#e2e2e2');
                     uniq_order = true;
                     ajax_pull('POST',creat_json(),'Save')
                     $('#order_status').val('Created');
+                    var dt = new Date();
+                    var month = dt.getMonth() + 1;
+                    var year = dt.getFullYear();
+                    var day = dt.getDate();
+                    var now_date = day + '/' + month + '/' +year;
+                    $('#order_date').val(now_date)
                 }
                 validation(unique_number_error);
             }
@@ -304,11 +324,11 @@ $(document).ready(function () {
     function delete_id(product_id, dimension_id, grid_length) {
         var status = false;
         /* Searching order_product dictionary for keys product_id , dimension_id*/
-        for (var i in json.order) {
-            if ((json.order[i].product_id == product_id) && (json.order[i].dimension_id == dimension_id ) &&
-                (json.order_id == order_id)) {
-                deleted_order_product.push(json.order[i]);
-                json.order.splice(i, 1);
+        for (var i in global_order_arr.order) {
+            if ((global_order_arr.order[i].product_id == product_id) && (global_order_arr.order[i].dimension_id == dimension_id ) &&
+                (global_order_arr.order_id == order_id)) {
+                deleted_order_product.push(global_order_arr.order[i]);
+                global_order_arr.order.splice(i, 1);
                 alert('The product has been successfully deleted from the cart');
                 status = true;
             }
@@ -336,23 +356,8 @@ $(document).ready(function () {
         var amount = 0;
         var input;
         var tr;
-        if (json.delivery_date) {
-            var delivery_date = json.delivery_date * 1000;
-            $('#delivery_date').val(date_format(delivery_date));
-        }
-        else {
-            $('#delivery_date').val('/ /');
-        }
-        if (json.order_date) {
-            var order_date = json.order_date* 1000;
-            $('#order_date').val(date_format(order_date));
-        }
-        else {
-            $('#order_date').val('/ /');
-        }
-
-        deleting_grid();
-        create_grid(grid_length, count_td);
+        deleting_grid('grid');
+        create_grid(grid_length, count_td,'grid');
         /*Create table with new order_products list */
         for (var product_k in json.order) {
             k++;
@@ -563,8 +568,8 @@ $(document).ready(function () {
         /*--------------------end of Preferable Delivery Date validation-------*/
 
         /* ------------------------Table length validation. It should be not 0------*/
-        if (json){
-            if (json.order.length!=0){
+        if (global_order_arr){
+            if (global_order_arr.order.length!=0){
             }
             else {
             no_error = false;
@@ -609,14 +614,14 @@ $(document).ready(function () {
         var product_arr = [];
         var preferable_date;
         var assignee;
-        for (var i = 0; i < json.order.length; i++) {
-            product_arr[i] = {'quantity': +json.order[i].quantity, 'product_id': +json.order[i].product_id,
-                'dimension_id': +json.order[i].dimension_id,
-                'dimension_number': +json.order[i].dimension_number}
+        for (var i = 0; i < global_order_arr.order.length; i++) {
+            product_arr[i] = {'quantity': +global_order_arr.order[i].quantity, 'product_id': +global_order_arr.order[i].product_id,
+                'dimension_id': +global_order_arr.order[i].dimension_id,
+                'dimension_number': +global_order_arr.order[i].dimension_number}
         }
         /*------------------*/
         if ($('#assignee').val() == 0 ){
-            assignee=1;
+            assignee=$("#assignee[value='1']").val();
         }
         else {
             assignee=$('#assignee').val();
@@ -637,7 +642,7 @@ $(document).ready(function () {
     }
 
 
-    /*----------------------------Event Click on buttons Cancel, Order, Save -------------------------*/
+    /*----------------------------Event Click on buttons Cancel, Order, Save, Add Item -------------------------*/
     $('#cancel_order').click(function () {
         if (confirm('Order was not saved. Do you want cancel order?')) {
                 window.location.replace("/orders");
@@ -666,6 +671,32 @@ $(document).ready(function () {
         }
 
     })
+
+    $('#add_product').click(function(){
+        /*--------------Modal window event-----------------------*/
+        $('#exampleModal').arcticmodal(
+            {
+                afterClose:function(){
+                    if (global_order_arr){
+                        global_order_arr.order.push(fill_field)
+                    }
+                    else{
+                        var order=[]
+                        order.push(fill_field);
+                        global_order_arr={order:order}
+                    }
+                    pagination_slice(page,count_tr);
+
+                }
+            }
+        );
+        /*-------------------------------------------------------*/
+
+    })
+    $('#close_modal').click( function(){
+        $.arcticmodal('close');
+       }
+    )
  /*----------------------------------------------------------------------------------------------------*/
 
 
@@ -760,180 +791,191 @@ $(document).ready(function () {
 
 
 
-
-
-
-
-
-
-
-
-
-    var table_grid_ = document.getElementById('grid_1');
-
-
-
-
-            function creat_grid_(count)
-                {
-                    for (var i=1; i<=count;i++ )
-                        {
-                            tr[i] = document.createElement('TR');
-                            table_grid_.appendChild(tr[i]);
-                            tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
-                            for (var j=0; j<=1; j++)
-                                {
-                                    tr[i].appendChild(document.createElement('TD'));
-                                }
-                        }
-                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
-                }
-
-
-            function deleting_grid_(){
-                for (var n=table_grid_.rows.length ; n>=2; n--){
-                    table_grid_.removeChild(table_grid_.childNodes[n]);}
-
+/*--------------------------------------------Selecting item script--------------------------------------------------*/
+    var table_grid_ = document.getElementById('grid_1')
+    var current_add;
+    function creat_grid_(count)
+    {
+        for (var i=1; i<=count;i++ )
+        {
+            tr[i] = document.createElement('TR');
+            table_grid_.appendChild(tr[i]);
+            tr[i].id=i;
+            if (i % 2 == 0) tr[i].style.background = "#efddba";
+            for (var j=0; j<=1; j++)
+            {
+                tr[i].appendChild(document.createElement('TD'));
             }
-            searchItem();
-            $('#search_button').click(function(){
-                searchItem()
-            });
+        }
+    }
 
-            function ajax_success_(json){
-                var tr_css;
-               document.getElementById('add_item').disabled=true;
-               document.getElementById('info').style.display='none'
-                deleting_grid_()
-                creat_grid_(json.products.length);
-                for (var product_k in json.products)
-                    {
-                        k++;
-                        tr[k].cells[0].innerHTML = json.products[product_k].name+
-                                '<input id="id" hidden="true" value ='+json.products[product_k].id+'>';
-                        tr[k].cells[1].innerHTML = json.products[product_k].description+
-                                '<input id="id1" hidden="true" value ='+json.products[product_k].id+'>';
-                        tr[k].cells[0].abbr=k;
-                        tr[k].cells[1].abbr=k;
-                        tr[k].cells[0].onclick = function Add(){
 
-                           prod_id =$(tr[this.abbr].cells[0]).find("input[id='id']").val()
+    function deleting_grid_(){
+        for (var n=table_grid_.rows.length ; n>=2; n--){
+            table_grid_.removeChild(table_grid_.childNodes[n]);}
 
-                           document.getElementById('add_item').disabled=false;
-                        }
-                        tr[k].cells[1].onclick = function Add(){
+    }
+    searchItem();
+    $('#search_button').click(function(){
+        searchItem()
+    });
 
-                           prod_id =$(tr[this.abbr].cells[1]).find("input[id='id1']").val()
+    function ajax_success_(json){
+        var tr_css;
+        var tr_added_color;
+        var tr_added;
+        var current_add=0;
+        document.getElementById('add_item').disabled=true;
+        document.getElementById('info').style.display='none'
+        deleting_grid_()
+        creat_grid_(json.products.length);
+        for (var product_k in json.products)
+        {
+            k++;
+            tr[k].cells[0].innerHTML = json.products[product_k].name+
+                '<input id="id" hidden="true" value ='+json.products[product_k].id+'>';
+            tr[k].cells[1].innerHTML = json.products[product_k].description+
+                '<input id="id1" hidden="true" value ='+json.products[product_k].id+'>';
+            tr[k].cells[0].abbr=k;
+            tr[k].cells[1].abbr=k;
+            tr[k].cells[0].onclick = function Add(){
 
-                           document.getElementById('add_item').disabled=false;
+                prod_id =$(tr[this.abbr].cells[0]).find("input[id='id']").val()
 
-                        }
+                document.getElementById('add_item').disabled=false;
+            }
+            tr[k].cells[1].onclick = function Add(){
 
-                    }
-                    k=0;
+                prod_id =$(tr[this.abbr].cells[1]).find("input[id='id1']").val()
 
-                      $('tr').mouseenter(function(){
-                            tr_css=$(this).css("background-color");
-                            $(this).css( "background-color", "#66FF99" );
-                          })
-                       $('tr').mouseleave(function() {
-                            $(this).css( "background-color", tr_css);
-                       });
+                document.getElementById('add_item').disabled=false;
 
             }
 
+        }
+        k=0;
 
-
-
-
-            var k=0;
-            form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
-            json_value = JSON.stringify(form_value);
-
-
-            function searchItem(){
-                var name = document.getElementById('name').value
-
-                $.ajax({
-                dataType: "json",
-                url: '/api/product_search?&name='+name+'',
-                type: 'GET',
-                contentType: "application/json",
-                success: function(json)
-                    {
-                        ajax_success_(json);
-                    }
-
-                })
+        $('#grid_1 tr').mouseenter(function(){
+            tr_css=$(this).css("background-color");
+            if(current_add && (current_add.is(this))){
             }
-
-             $.ajax({
-              dataType: "json",
-              url: '/api/dimensions',
-              type: 'GET',
-              contentType: "application/json",
-              success:function(json) {
-              $.each(json.dimensions, function(i, pr){
-              $('#dimension').append('<option value="' + pr.number + '">' + pr.name + '</option>');
-                     })
-                     }
-                  });
-          $('#add_item').click(function(){
-            add_Item();
-              });
-
-           function add_Item(){
-             document.getElementById('info').style.display='block'
-               id=prod_id
-
-               $.ajax({
-               dataType: "json",
-               url: '/api/product/'+id,
-               type: 'GET',
-               contentType: "application/json",
-               success: function(json){
-                $.each(json.product, function(i, pr){
-                document.getElementById('item').value=json.product.name
-                document.getElementById('price').value=json.product.price
-                document.getElementById('description').value=json.product.description
-                })
-
-               }
-
-           })
-
+            else{
+                 $(this).css( "background-color", "#66FFCC" );
+            }
+        })
+        $('#grid_1 tr').mouseleave(function() {
+            if(current_add && (current_add.is(this))){
+            }
+            else{
+            $(this).css( "background-color", tr_css);
+            }
+        });
+        $('#grid_1 tr').click(function(){
+           if (tr_added_color){
+               current_add.css( "background-color", tr_added_color);
            }
+           current_add=$(this);
+           tr_added_color=tr_css;
+           $(this).css( "background-color", "#66FF66" );
+        })
 
-             $('#done').click(function(){
-            done();
-              });
+    }
 
-            function done(){
-            id_product=prod_id
-            quantity=document.getElementById('quantity').value
-            product_name=document.getElementById('item').value
-            dimension_number= document.getElementById('dimension').value
-            price= document.getElementById('price').value
-            description= document.getElementById('description').value
-            var dimension_name = $('#dimension :selected').text()
-            var dimension_id=0;
-                if (dimension_name =='Package'){
-                    dimension_id=3;
-                }
-                if (dimension_name =='Box'){
-                    dimension_id=2;
-                }
-                if (dimension_name =='Items'){
-                    dimension_id=1;
-                }
-            fill_field={"description": description, "dimension": dimension_name,
-                  "dimension_id": dimension_id, "dimension_number": dimension_number,
-                  "name": product_name, "price": price, "product_id": id_product,
-                  "quantity": quantity};
+
+
+
+
+    var k=0;
+    form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
+    json_value = JSON.stringify(form_value);
+
+
+    function searchItem(){
+        var name = document.getElementById('name').value
+
+        $.ajax({
+            dataType: "json",
+            url: '/api/product_search?&name='+name+'',
+            type: 'GET',
+            contentType: "application/json",
+            success: function(json)
+            {
+                ajax_success_(json);
             }
 
+        })
+    }
+
+    $.ajax({
+        dataType: "json",
+        url: '/api/dimensions',
+        type: 'GET',
+        contentType: "application/json",
+        success:function(json) {
+            $.each(json.dimensions, function(i, pr){
+                $('#dimension').append('<option value="' + pr.number + '">' + pr.name + '</option>');
+            })
+        }
+    });
+    $('#add_item').click(function(){
+        add_Item();
+    });
+
+    function add_Item(){
+        document.getElementById('info').style.display='block'
+        id=prod_id
+
+        $.ajax({
+            dataType: "json",
+            url: '/api/product/'+id,
+            type: 'GET',
+            contentType: "application/json",
+            success: function(json){
+                $.each(json.product, function(i, pr){
+                    document.getElementById('item').value=json.product.name
+                    document.getElementById('price').value=json.product.price
+                    document.getElementById('description').value=json.product.description
+                })
+
+            }
+
+        })
+
+    }
+
+    $('#done').click(function(){
+        done();
+    });
+
+    function done(){
+        id_product=prod_id
+        quantity=document.getElementById('quantity').value
+        product_name=document.getElementById('item').value
+        dimension_number= document.getElementById('dimension').value
+        price= document.getElementById('price').value
+        description= document.getElementById('description').value
+        var dimension_name = $('#dimension :selected').text()
+        if (!quantity){
+            quantity=1;
+        }
+        var dimension_id=0;
+        if (dimension_name =='Package'){
+            dimension_id=3;
+        }
+        if (dimension_name =='Box'){
+            dimension_id=2;
+        }
+        if (dimension_name =='Items'){
+            dimension_id=1;
+        }
+        fill_field={"description": description, "dimension": dimension_name,
+            "dimension_id": dimension_id, "dimension_number": dimension_number,
+            "name": product_name, "price": price, "product_id": id_product,
+            "quantity": quantity};
+         $.arcticmodal('close');
+    }
 
 
+/*-----------------------------------------End of selecting item script-----------------------------------------------*/
 
 })
