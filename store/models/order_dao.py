@@ -316,8 +316,8 @@ class DeliveryType(Base):
 
 class OrderProduct(Base):
     __tablename__ = "order_product"
-    order_id = Column(Integer, ForeignKey('order.id'), primary_key=True, autoincrement=True)
-    order = relationship('Order', backref=backref('order_product', lazy='dynamic'))
+    order_id = Column(Integer, ForeignKey('order.id', ondelete='CASCADE'), primary_key=True, autoincrement=True)
+    order = relationship('Order', backref=backref('order_product', lazy='dynamic', passive_deletes=True))
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('order_product', lazy='dynamic'))
     dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
