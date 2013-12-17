@@ -81,7 +81,12 @@
                     type: 'GET',
                     contentType: "application/json",
                     success: function(json){
-                        modalListProducts(json);
+                        if (json.message != 'NoneType' && json.products.length != 0){
+                            modalListProducts(json);
+                        }
+                        else{
+                            $.arcticmodal('close');
+                        }
                     }
                 })
             }
@@ -166,17 +171,18 @@
                                 var value = document.getElementById('output'+this.abbr).value;
                                 var id = json.products[this.abbr-1].id;
                                 var status = document.getElementById('select_dimension'+this.abbr).value;
+                                var price = json.products[this.abbr-1].price;
                                 buyCount++;
                                 document.getElementById('cart_button').disabled = false;
-                                buyProduct(id, value, status)
+                                buyProduct(id, value, status, price)
                             }
                     }
                     k=0;
             }
 
 
-            function buyProduct(id,value, status){
-                data = {'value': value, "status": status};
+            function buyProduct(id,value, status, price){
+                data = {'value': value, "status": status, "price":price};
                 $.ajax({
                     dataType: "json",
                     url: '/api/order/product/'+id,

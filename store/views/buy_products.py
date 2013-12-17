@@ -45,11 +45,14 @@ def productsBuy(id):
 def modalProducts():
     user_id = session['user_id']
     order = Order.getOrderByStatus(user_id)
-    prods = OrderProduct.query.filter(OrderProduct.order_id == order.id)
+    try:
+        prods = OrderProduct.query.filter(OrderProduct.order_id == order.id)
+    except AttributeError as e:
+        return make_response(jsonify({'message': 'NoneType'}), 200)
     products_arr = []
     for i in prods:
         products_arr.append({'product_id': i.product_id, 'product_name': i.product.name, 'dimension': i.dimension.name,
-                             'dimension_id': i.dimension_id, 'quantity': i.quantity, 'price': i.price})
+                             'dimension_id': i.dimension_id, 'quantity': i.quantity, 'price': str(i.price)})
     return make_response(jsonify(products=products_arr), 200)
 
 @app.route('/api/order_product/', methods=['DELETE'])
