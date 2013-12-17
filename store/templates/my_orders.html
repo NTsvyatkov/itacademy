@@ -17,13 +17,13 @@
                             tr[i] = document.createElement('TR');
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#efddba";
+                            if (i % 2 == 0) tr[i].style.background = "#c0c0c0";
                             for (var j=0; j<=8; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
                         }
-                    $( "tr:even" ).css( "background-color", "#efddba" );
+                    $( "tr:even" ).css( "background-color", "#c0c0c0" );
                 }
 
             createGrid();
@@ -206,7 +206,7 @@
                     <form class='form' action="">
                         <br>
                         <div style="margin: -10px 0 0 -200px;">
-                            <a href='/order/' style='margin-left:50px; color:black; text-decoration:none;'><input type='button' value="Create New Order"></a>
+                            <a href='create_order' style='margin-left:50px; color:black; text-decoration:none;'><input type='button' value="Create New Order"></a>
                         </div>
                         <div class="field">
                             <lable style="float: left; line-height: 45px; padding-right:95px;">Status: </lable>

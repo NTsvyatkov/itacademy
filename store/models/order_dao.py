@@ -109,8 +109,7 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def update_current_order(id,new_status_id, new_delivery_id,
-                     new_delivery_address, new_comment):
+    def update_current_order(id,new_status_id, new_delivery_id=None, new_delivery_address=None, new_comment=None):
         entry = Order.get_order(id)
         entry.status_id = new_status_id
         entry.delivery_id = new_delivery_id
@@ -134,6 +133,7 @@ class Order(Base):
     def getOrderByStatus(user_id):
         return Order.query.filter(and_(Order.status_id == OrderStatus.getNameStatus('Cart').id,
                                        Order.user_id == user_id)).first()
+
 
     @staticmethod
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
