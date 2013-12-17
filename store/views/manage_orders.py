@@ -30,7 +30,7 @@ def page_order():
         orders_list.append({'order_id': i.id,'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price),
                             'user':i.user.first_name+' '
                                        + i.user.last_name,
-                            'role': RoleDao.getRoleByID(UserDao.getUserByID(i.assignee_id).id).name})
+                            'role': i.assignee.role.name})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 

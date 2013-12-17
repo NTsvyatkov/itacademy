@@ -621,7 +621,7 @@ $(document).ready(function () {
         }
         /*------------------*/
         if ($('#assignee').val() == 0 ){
-            assignee=$("#assignee[value='1']").val();
+            assignee=$("#assignee :last").val();
         }
         else {
             assignee=$('#assignee').val();
@@ -681,14 +681,12 @@ $(document).ready(function () {
                     if (global_order_arr && fill_field.name){
                         global_order_arr.order.push(fill_field)
                         pagination_slice(page,count_tr);
-                        alert(fill_field);
                     }
                     else{
                         if (fill_field.name){
                         var order=[]
                         order.push(fill_field);
                         global_order_arr={order:order};
-                         alert(fill_field);
                         pagination_slice(page,count_tr);
 
                         }

@@ -177,7 +177,7 @@ class Order(Base):
     def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.join(Order.user).filter(Order.user_id == user_id)
+        query = Order.query.join(Order.user).filter(Order.assignee_id == user_id)
         if filter['status_option']:
             filterStatus={'0': Order.id,
                     '1': Order.status_id == 4,
@@ -218,7 +218,7 @@ class Order(Base):
             order.user.balance += order.total_price
 
         if order.user.balance < UserLevel.get_level_by_name("Silver").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Standart").id
+            order.user.level_id = UserLevel.get_level_by_name("Standard").id
         elif UserLevel.get_level_by_name("Silver").balance <= order.user.balance < \
                 UserLevel.get_level_by_name("Gold").balance:
             order.user.level_id = UserLevel.get_level_by_name("Silver").id
