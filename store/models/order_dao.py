@@ -167,25 +167,27 @@ class Order(Base):
 
 
     @staticmethod
-    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None, sort_field=None):
+    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.filter(and_(Order.user_id == user_id, Order.status_id != 3))
+        query = Order.query.join(Order.user).filter(Order.user_id == user_id)
         if filter['status_option']:
             filterStatus={'0': Order.id,
                     '1': Order.status_id == 4,
                     '2': Order.status_id == 1,
                     '3': Order.status_id == 2}
-        filterOrder={'0': Order.id.like(filter['name']+'%'),
-                    '1': UserDao.first_name.like(filter['name']+'%')}
-        if filter['order_option']:
-            query = query.filter(filterOrder[filter['order_option']])
+        if int(filter['order_option']) == 0:
+            query = query.filter(Order.id.like(filter['name']+'%'))
+        if int(filter['order_option']) == 1:
+            query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
+                                     UserDao.last_name.like(filter['name']+'%')))
         if filter['status_option']:
             query = query.filter(filterStatus[filter['status_option']])
-            if sort_field =='user_name':
-                query = query.order_by(UserDao.first_name)
-        return query.order_by(sort_field).slice(start, stop), \
+        return query.order_by(Order.id).slice(start, stop), \
             query.count()
+
+#            if sort_field =='user_name':
+#                query = query.order_by(UserDao.first_name)
 
 
     @staticmethod

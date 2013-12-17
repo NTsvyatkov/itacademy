@@ -48,7 +48,7 @@
                 }
 
 
-            function ajaxSuccess(json){
+            function listOrders(json){
                 deletingGrid();
                 createGrid(json.orders.length);
                 var grid_length = json.orders.length;
@@ -82,11 +82,12 @@
 
 
 
-            $('#apply_button').click(function(){
-                gridPagination()
+              $('#apply_button').click(function(){
+                createTableOrders()
             });
 
-            function gridPagination(){
+
+            function createTableOrders(){
                 var status_options = document.getElementById('status_options').value;
                 var orders_options = document.getElementById('orders_options').value;
                 var name_input = document.getElementById('name_input').value;
@@ -97,53 +98,52 @@
                 contentType: "application/json",
                 success: function(json)
                     {
-                        ajaxSuccess(json);
+                        listOrders(json);
                         records_amount=(json.records_amount);
-   records_per_page=(json.records_per_page);
-   pages_amount = Math.ceil(records_amount/records_per_page);
-   document.getElementById("page").innerHTML = page;
-   document.getElementById("pages_amount").innerHTML = pages_amount;
+                        records_per_page=(json.records_per_page);
+                        pages_amount = Math.ceil(records_amount/records_per_page);
+                        document.getElementById("page").innerHTML = page;
+                        document.getElementById("pages_amount").innerHTML = pages_amount
 
-   if (page==1){
-               $('#prev').prop('disabled', true);
-               $('#first').prop('disabled', true);
-               $('#prev').addClass("button_disable");
-               $('#first').addClass("button_disable");
-           } else {
-               $('#prev').prop('disabled', false);
-               $('#first').prop('disabled', false);
-               $('#prev').removeClass("button_disable");
-               $('#first').removeClass("button_disable");
-               $('#prev').removeAttr("disabled");
-               $('#first').removeAttr("disabled");
-           }
+                        if (page==1){
+                            $('#prev').prop('disabled', true);
+                            $('#first').prop('disabled', true);
+                            $('#prev').addClass("button_disable");
+                            $('#first').addClass("button_disable");
+                        } else {
+                            $('#prev').prop('disabled', false);
+                            $('#first').prop('disabled', false);
+                            $('#prev').removeClass("button_disable");
+                            $('#first').removeClass("button_disable");
+                            $('#prev').removeAttr("disabled");
+                            $('#first').removeAttr("disabled");
+                        }
 
-           if (page==pages_amount){
-               $('#next').prop('disabled', true);
-               $('#last').prop('disabled', true);
-               $('#next').addClass("button_disable");
-               $('#last').addClass("button_disable");
-
-           } else {
-               $('#next').prop('disabled', false);
-               $('#last').prop('disabled', false);
-               $('#next').removeClass("button_disable");
-               $('#last').removeClass("button_disable");
-               $('#next').removeAttr("disabled");
-               $('#last').removeAttr("disabled");
-           }
+                        if (page==pages_amount){
+                            $('#next').prop('disabled', true);
+                            $('#last').prop('disabled', true);
+                            $('#next').addClass("button_disable");
+                            $('#last').addClass("button_disable");
+                        } else {
+                            $('#next').prop('disabled', false);
+                            $('#last').prop('disabled', false);
+                            $('#next').removeClass("button_disable");
+                            $('#last').removeClass("button_disable");
+                            $('#next').removeAttr("disabled");
+                            $('#last').removeAttr("disabled");
+                        }
                     }
                 })
             }
 
             if (page==1){
-                gridPagination();
+                createTableOrders();
             }
 
             $('#next').click(function(){
             if (page*records_per_page>=records_amount){page=page}
             else {page=page+1}
-            gridPagination()
+            createTableOrders()
             });
 
             $('#prev').click(function(){
@@ -151,32 +151,39 @@
             if (page<=1){
             page=1;
             }
-            gridPagination()
+            createTableOrders()
             });
 
             $('#first').click(function(){
             page=1;
-            gridPagination()
+            createTableOrders()
             });
 
             $('#last').click(function(){
             page=pages_amount;
-            gridPagination()
+            createTableOrders()
             });
 
             $('#table_size').change(function () {
             count_tr=$('#table_size').val();
-            $( "#table_siz option:selected" ).each(gridPagination())
+            $( "#table_siz option:selected" ).each(createTableOrders())
             })
+
+
 
             });
         </script>
 
         <div class="">
+<div class="">
 
+            <div class="">
                 <div class=" ">
                     <form class='form' action="">
                         <br>
+                        <div style="margin: -10px 0 0 -200px;">
+                            <a href='/order/' style='margin-left:50px; color:black; text-decoration:none;'><input type='button' value="Create New Order"></a>
+                        </div>
                         <div class="field">
                             <lable style="float: left; line-height: 38px; padding-right:10px;">Status: </lable>
                             <select id="status_options" style="width: 100px; float: left" >
@@ -186,7 +193,7 @@
                                 <option value="3">Delivered</option>
                             </select>
                         </div>
-                        <div class="field" style="width: 510px;">
+                        <div class="field" style="width: 500px;">
                             <lable style="float: left; line-height: 35px; padding-right:10px;">Search for orders by: </lable>
                             <select id="orders_options" style="width: 150px;float: left; margin:0px;">
                                 <option value="0">Order Number</option>
@@ -194,19 +201,19 @@
                             </select>
                             <input type="text" id="name_input" >
                         </div>
-                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -33px"></span>
+                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -37px"></span>
                     </form>
                 </div>
 
 
-            <div style="margin-left:80%;">
-            </div>
-            <div class="field" style="margin-left:5%;">
-                  <lable>Table size: </lable>
-                  <select id="table_size">
-                    <option selected>10</option>
-                    <option>25</option>
-
+            <div style="margin-left:80%;"></div>
+                <div class="field" style="margin-left:5%;">
+                    <lable>Table size: </lable>
+                    <select id="table_size">
+                        <option selected value="10"> Show 10 lines </option>
+                        <option value="25">Show 25 lines </option>
+                    </select>
+                </div>
                    </select>
             </div>
             <div id=" ">
