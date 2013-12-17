@@ -135,7 +135,8 @@ class Order(Base):
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.join(Order.assignee).filter(Order.user_id == user_id)
+        query = Order.query.join(Order.assignee).filter(and_(Order.user_id == user_id,
+                                                             Order.status_id != OrderStatus.getNameStatus('Cart').id))
         if filter['status_option']:
             filterStatus={'0': Order.id,
                     '1': Order.status_id == OrderStatus.getNameStatus('Created').id,
@@ -328,7 +329,7 @@ class OrderProduct(Base):
         self.product_id = product_id
         self.dimension_id = dimension_id
         self.price = price
-        self.product_price_per_line = float(quantity) * price
+        self.product_price_per_line = float(quantity) * float(price)
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
