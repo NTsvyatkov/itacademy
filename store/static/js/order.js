@@ -573,7 +573,7 @@ $(document).ready(function () {
             }
             else {
             no_error = false;
-            error = 'For saving order ypu should add one or more product to grid.';
+            error = 'For saving order you should add one or more product to grid.';
             error_list.push({id: $('#order_error'), error: error});
             }
         }

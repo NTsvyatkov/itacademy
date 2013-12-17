@@ -1,7 +1,7 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_, asc, desc
 from sqlalchemy.orm import relationship, backref
-from models.product_dao import Product
+from models.product_dao import Product, Dimension
 from models.product_stock_dao import ProductStock
 from json import loads
 from models.user_dao import UserDao
@@ -84,8 +84,6 @@ class Order(Base):
                       delivery_date, gift,delivery_address,comment,order_number,discount)
         db_session.add(order)
         db_session.commit()
-        db_session.refresh(order)
-        return order.id
 
     @staticmethod
     def update_order(id, new_user_id, new_date, new_status_id, new_delivery_id,
@@ -109,7 +107,8 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def update_current_order(id,new_status_id, new_delivery_id=None, new_delivery_address=None, new_comment=None):
+    def update_current_order(id,new_status_id, new_delivery_id,
+                     new_delivery_address, new_comment):
         entry = Order.get_order(id)
         entry.status_id = new_status_id
         entry.delivery_id = new_delivery_id
@@ -131,9 +130,7 @@ class Order(Base):
 
     @staticmethod
     def getOrderByStatus(user_id):
-        return Order.query.filter(and_(Order.status_id == OrderStatus.getNameStatus('Cart').id,
-                                       Order.user_id == user_id)).first()
-
+        return Order.query.filter(and_(Order.status_id == 3, Order.user_id == user_id)).first()
 
     @staticmethod
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
@@ -142,10 +139,10 @@ class Order(Base):
         query = Order.query.join(Order.assignee).filter(Order.user_id == user_id)
         if filter['status_option']:
             filterStatus={'0': Order.id,
-                    '1': Order.status_id == OrderStatus.getNameStatus('Created').id,
-                    '2': Order.status_id == OrderStatus.getNameStatus('Pending').id,
-                    '3': Order.status_id == OrderStatus.getNameStatus('Ordered').id,
-                    '4': Order.status_id == OrderStatus.getNameStatus('Delivered').id}
+                    '1': Order.status_id == 3,
+                    '2': Order.status_id == 4,
+                    '3': Order.status_id == 1,
+                    '4': Order.status_id == 2}
         if int(filter['order_option']) == 0:
             query = query.filter(Order.id.like(filter['name']+'%'))
         if int(filter['order_option']) == 1:
@@ -191,10 +188,12 @@ class Order(Base):
 
 
     @staticmethod
-    def add_order_number(user_id,order_number):
+    def update_order_number(id,order_number):
+        order = Order.get_order(id)
         if Order.query.filter(Order.order_number == order_number).count() == 0:
-            order_id = Order.add_order(user_id,date.today(),3,None,None,None,None,None,None,None,None,order_number,None)
-            return order_id
+            order.order_number = order_number
+            db_session.commit()
+            return True
         else:
             return False
 
@@ -208,11 +207,13 @@ class Order(Base):
         else:
             order.user.balance += order.total_price
 
-        if order.user.balance < 1000:
+        if order.user.balance < UserLevel.get_level_by_name("Silver").balance:
             order.user.level_id = UserLevel.get_level_by_name("Standart").id
-        elif 1000 <= order.user.balance < 3000:
+        elif UserLevel.get_level_by_name("Silver").balance <= order.user.balance < \
+                UserLevel.get_level_by_name("Gold").balance:
             order.user.level_id = UserLevel.get_level_by_name("Silver").id
-        elif 3000 <= order.user.balance < 10000:
+        elif UserLevel.get_level_by_name("Gold").balance <= order.user.balance < \
+                UserLevel.get_level_by_name("Platinum").balance:
             order.user.level_id = UserLevel.get_level_by_name("Gold").id
         else:
             order.user.level_id = UserLevel.get_level_by_name("Platinum").id
@@ -225,7 +226,7 @@ class OrderStatus(Base):
     __tablename__ = "order_status"
 
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(50), unique=True)
+    name = Column(String(50))
 
     def __init__(self, name):
         super(OrderStatus, self).__init__()
@@ -237,9 +238,6 @@ class OrderStatus(Base):
         # Next method retrieve list of records
         return OrderStatus.query.order_by(id).all()
 
-    @staticmethod
-    def getNameStatus(name):
-        return OrderStatus.query.filter(OrderStatus.name == name).first()
 
     @staticmethod
     def get_status(id):
@@ -317,7 +315,8 @@ class OrderProduct(Base):
     dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
-    price = Column(DECIMAL, nullable=True)
+    price = Column(DECIMAL(5, 2), nullable=True)
+    product_price_per_line = Column(DECIMAL(5, 2), nullable=True)
 
 
     def __init__(self, order_id, product_id, dimension_id, quantity, price):
@@ -327,7 +326,7 @@ class OrderProduct(Base):
         self.product_id = product_id
         self.dimension_id = dimension_id
         self.price = price
-
+        self.product_price_per_line = float(quantity) * price
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
@@ -339,11 +338,27 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
 
     @staticmethod
-    def get_by_order_product(order_id, page=None, records_per_page=None):
+    def get_by_order_product(order_id, page=None, records_per_page=None, sort_by=None, order_sort_by="asc"):
         stop = page * records_per_page
         start = stop - records_per_page
         count = OrderProduct.query.filter(OrderProduct.order_id == order_id).count()
-        return OrderProduct.query.filter(OrderProduct.order_id == order_id).slice(start, stop).all(), count
+        query = OrderProduct.query.join(OrderProduct.product).join(OrderProduct.dimension).\
+            filter(OrderProduct.order_id == order_id)
+        if sort_by == "product_id":
+            query = query.order_by(OrderProduct.product_id)
+        elif sort_by == "product_name":
+            query = query.order_by(asc(Product.name))
+        elif sort_by == "product_description":
+            query = query.order_by(asc(Product.description))
+        elif sort_by == "product_dimension":
+            query = query.order_by(asc(Dimension.name))
+        elif sort_by == "price":
+            query = query.order_by(OrderProduct.price)
+        elif sort_by == "quantity":
+            query = query.order_by(OrderProduct.quantity)
+        elif sort_by == "product_price_per_line":
+            query = query.order_by(OrderProduct.product_price_per_line)
+        return query.slice(start, stop).all(), count
 
     @staticmethod
     def add_order_product(order_id, product_id, dimension_id, quantity, price = None):

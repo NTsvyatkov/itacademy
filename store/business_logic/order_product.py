@@ -6,13 +6,16 @@ from flask import session
 from models import Base, db_session
 import datetime
 
-def product_order_update(dict,method):
-    order_id=int(dict['order_id'])
+def product_order_update(order_dict,method):
+    order_id=int(order_dict['order_id'])
     amount=0
     order = Order.get_order(order_id)
-    quantity_dict=dict['product_quantity']
-    assignee=int(dict['assignee'])
-    preferable_delivery_date=int(dict['preferable_delivery_date'])/1000
+    quantity_dict=order_dict['product_quantity']
+    if order_dict.get('assignee'):
+        assignee=int(order_dict['assignee'])
+    else:
+         assignee=None
+    preferable_delivery_date=int(order_dict['preferable_delivery_date'])/1000
     preferable_delivery_date=(datetime.datetime.fromtimestamp(preferable_delivery_date).strftime('%Y-%m-%d'))
     for i in quantity_dict:
         dimension_id=i['dimension_id']

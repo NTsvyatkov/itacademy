@@ -15,7 +15,7 @@ def CreateProduct():
 
 
 
-@app.route('/product_grid', methods=('GET', 'POST'))
+@app.route('/products', methods=('GET', 'POST'))
 def product_grid():
     if session['role'] not in 'Supervisor':
        return "You've got permission to access this page."
@@ -76,14 +76,14 @@ def productByid(id):
 
 @app.route('/api/product', methods=['POST'])
 def products_post():
-    js = request.get_json()
+    js = request.json
     create_product(js['name'], js['description'], js['price'])
     resp = make_response('', 201)
     return resp
 
 @app.route('/api/product_', methods=['POST'])
 def products_post_():
-    js = request.get_json()
+    js = request.json
     create_product(js['name'], js['description'], js['price'])
     resp = make_response('', 201)
     return resp
@@ -91,7 +91,7 @@ def products_post_():
 
 @app.route('/api/product', methods=['PUT'])
 def products_update():
-    js = request.get_json()
+    js = request.json
     update_product(js['id'], js['name'], js['description'], js['price'])
     return make_response(jsonify({'message':'success'}),200)
 
@@ -113,7 +113,7 @@ def stockList(id):
 
 @app.route('/api/stock', methods=['PUT'])
 def updateStock():
-    js = request.get_json()
+    js = request.json
     ProductStock.updateProductStock(js['product_id'], js['dimension_id'], js['quantity'])
     return make_response(jsonify({'message':'success'}),200)
 

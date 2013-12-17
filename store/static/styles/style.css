@@ -280,11 +280,11 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
  text-align:center;
  }
 
-.grid .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
-.grid .desc, .sortable .asc {background:url(../images/header-selected-bg.gif)}
-.grid .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}
-.grid .asc h3 {background:url(../images/asc.gif) 7px  center no-repeat; cursor:pointer; padding-left:18px}
-.grid .head:hover, .sortable .desc:hover, .sortable .asc:hover {color:#fff}
+/*.grid .head h3 {background:url(../images/sort.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}*/
+/*.grid .desc, .sortable .asc {background:url(../images/header-selected-bg.gif)}*/
+/*.grid .desc h3 {background:url(../images/desc.gif) 7px center no-repeat; cursor:pointer; padding-left:18px}*/
+/*.grid .asc h3 {background:url(../images/asc.gif) 7px  center no-repeat; cursor:pointer; padding-left:18px}*/
+/*.grid .head:hover, .sortable .desc:hover, .sortable .asc:hover {color:#fff}*/
 .grid .evenrow td {background:#fff}
 .grid .oddrow td {background:#ecf2f6}
 .grid td.evenselected {background:#ecf2f6}
@@ -406,3 +406,9 @@ input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:act
     background-color: rgba(255, 0, 0, 0);
 }
 
+th.asc{
+    background:url(../images/0.gif) 7px  center no-repeat; cursor:pointer; padding-left:1px;
+}
+th.desc{
+    background:url(../images/1.gif) 7px  center no-repeat; cursor:pointer; padding-left:1px;
+}

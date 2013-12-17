@@ -20,7 +20,7 @@ $(document).ready(function() {
 
 
   /*----------------End of creating table-------------------------------*/
-  create_grid(count_tr,count_td);
+  create_grid(count_tr,count_td,'grid');
 
 
 
@@ -70,9 +70,9 @@ $(document).ready(function() {
 
  function ajax_success(json)
   {
-           deleting_grid();
+           deleting_grid('grid');
            var grid_length = json.products.length;
-           create_grid(grid_length,count_td);
+           create_grid(grid_length,count_td,'grid');
            /*-------------Create table with new products list-------------------- */
            var k=0;
 
