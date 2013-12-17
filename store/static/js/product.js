@@ -64,7 +64,7 @@ var result_price = price.match(regV_price);
         success : function (resp){
 
             alert('Product has been successfully added');
-            parent.location = 'http://127.0.0.1:5000/product_grid'; }
+            document.location.href='products'}
 
 
                      });
