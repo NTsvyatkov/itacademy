@@ -1,6 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-<script src="{{ url_for('static', filename='js/gs-sortable.js') }}"></script>
+<script src="{{ url_for('static', filename='js/sort.js') }}"></script>
         <script type="text/javascript">
 
 
@@ -217,26 +217,26 @@
                    </select>
             </div>
             <div id=" ">
-                <table class="grid" id="table-1" >
+                <table class="grid" id="table-1" border="0" cellspacing="2" cellpadding="2" width="98%">
                     <thead><tr>
-                        <th id="sort_1" title="Click on the header to sort column">
+                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
                             Order Number
-                        </th>
-                        <th title="Click on the header to sort column">
+                        </td>
+                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
                             Customer
-                        </th>
-                        <th title="Click on the header to sort column">
+                        </td>
+                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
                             Status
-                        </th >
-                        <th  title="Click on the header to sort column">
+                        </td >
+                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
                             Amount
-                        </th>
-                        <th  title="Click on the header to sort column">
+                        </td>
+                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
                             Assignee
-                        </th>
-                        <th>
+                        </td>
+                        <td>
                             Edit
-                        </th>
+                        </td>
                     </tr>
                 </thead></table>
 
