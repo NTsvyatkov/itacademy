@@ -38,8 +38,7 @@ def list_assignee():
 
 def addOrderWithStatusCart(user_id):
     if Order.getOrderByStatus(user_id) is None:
-        Order.add_order(user_id, date.today(), OrderStatus.getNameStatus('Cart').id,3,42,2)
-        #Order.add_order(user_id,date.today(), OrderStatus.getNameStatus('Cart').id)
+        Order.add_order(user_id,date.today(), OrderStatus.getNameStatus('Cart').id)
 
 def addProductToCartStatus(user_id, id, json):
     order = Order.getOrderByStatus(user_id)

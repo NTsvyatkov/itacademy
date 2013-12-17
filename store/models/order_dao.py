@@ -133,7 +133,6 @@ class Order(Base):
         order.status = order_status
         order.status_id = order_status.id
         order.delivery_date = delivery_date
-
         db_session.commit()
 
     @staticmethod
@@ -145,7 +144,7 @@ class Order(Base):
     def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.join(Order.assignee).filter(and_(Order.user_id == user_id,
+        query = Order.query.outerjoin(Order.assignee).filter(and_(Order.user_id == user_id,
                                                              Order.status_id != OrderStatus.getNameStatus('Cart').id))
         if filter['status_option']:
             filterStatus={'0': Order.id,
@@ -163,15 +162,11 @@ class Order(Base):
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
-
     @staticmethod
     def deleteOrder(orderId):
         removeOrder = Order.get_order(orderId)
         db_session.delete(removeOrder)
         db_session.commit()
-
-
-
 
     @staticmethod
     def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):

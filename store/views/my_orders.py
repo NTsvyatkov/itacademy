@@ -1,9 +1,7 @@
 #!/usr/bin/env python
 from flask import render_template, request, make_response, jsonify, session
 from flask_bootstrap import app
-from models.order_dao import Order,  OrderStatus
-from models.role_dao import RoleDao
-from models.user_dao import UserDao
+from models.order_dao import Order
 
 
 @app.route('/orders')
@@ -26,11 +24,17 @@ def ordersPage():
     prods, records_amount = Order.pagerByFilter(user_id, page, records_per_page, filter)
     orders_list = []
     for i in prods:
-        orders_list.append({'order_id': i.id, 'delivery_date': i.date.strftime("%d/%m/%y"),
-                            'orderStatus': i.status.name,'total_price': str(i.total_price),
-                            'assignee':i.assignee.first_name+' '
-                                       +i.assignee.last_name,'maxDiscount': i.discount,
-                            'role': i.assignee.role.name})
+        if i.assignee:
+            first_name = i.assignee.first_name
+            last_name = i.assignee.last_name
+            role_id = i.assignee.role.name
+        else:
+            last_name = ''
+            first_name = ''
+            role_id = ''
+        orders_list.append({'order_id': i.id, 'delivery_date': i.date.strftime("%d/%m/%y"),'orderStatus': i.status.name,
+                            'total_price': str(i.total_price),'assignee':first_name+' '+last_name,
+                            'maxDiscount': i.discount,'role': role_id})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 
