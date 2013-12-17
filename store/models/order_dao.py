@@ -346,26 +346,27 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
 
     @staticmethod
-    def get_by_order_product(order_id, page=None, records_per_page=None, sort_by=None, order_sort_by="asc"):
+    def get_by_order_product(order_id, page=None, records_per_page=None, sort_by=None, order_sort_by=None):
         stop = page * records_per_page
         start = stop - records_per_page
+        order = asc if order_sort_by == "asc" else desc
         count = OrderProduct.query.filter(OrderProduct.order_id == order_id).count()
         query = OrderProduct.query.join(OrderProduct.product).join(OrderProduct.dimension).\
             filter(OrderProduct.order_id == order_id)
         if sort_by == "product_id":
-            query = query.order_by(OrderProduct.product_id)
+            query = query.order_by(order(OrderProduct.product_id))
         elif sort_by == "product_name":
-            query = query.order_by(asc(Product.name))
+            query = query.order_by(order(Product.name))
         elif sort_by == "product_description":
-            query = query.order_by(asc(Product.description))
+            query = query.order_by(order(Product.description))
         elif sort_by == "product_dimension":
-            query = query.order_by(asc(Dimension.name))
+            query = query.order_by(order(Dimension.name))
         elif sort_by == "price":
-            query = query.order_by(OrderProduct.price)
+            query = query.order_by(order(OrderProduct.price))
         elif sort_by == "quantity":
-            query = query.order_by(OrderProduct.quantity)
+            query = query.order_by(order(OrderProduct.quantity))
         elif sort_by == "product_price_per_line":
-            query = query.order_by(OrderProduct.product_price_per_line)
+            query = query.order_by(order(OrderProduct.product_price_per_line))
         return query.slice(start, stop).all(), count
 
     @staticmethod

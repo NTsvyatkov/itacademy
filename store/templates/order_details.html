@@ -39,13 +39,13 @@ $(document).ready(function() {
             tr[i] = document.createElement('TR');
             table_grid.appendChild(tr[i]);
             tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background =  "#efddba"; /* .className = 'tr_style' */
+            if (i % 2 == 0) tr[i].style.background =  "#efddba";
             for (var j=0; j<=count_td; j++)
              {
               tr[i].appendChild(document.createElement('TD'));
              }
         }
-          $( "tr:even" ).css( "background-color", "#efddba" );
+
     }
 
    create_grid(count_tr,count_td);
@@ -88,8 +88,7 @@ if (page==1){
                $('#first').prop('disabled', false);
                $('#prev').removeClass("button_disable");
                $('#first').removeClass("button_disable");
-               $('#prev').removeAttr("disabled");
-               $('#first').removeAttr("disabled");
+
            }
 
            if (page==pages_amount){
@@ -103,8 +102,7 @@ if (page==1){
                $('#last').prop('disabled', false);
                $('#next').removeClass("button_disable");
                $('#last').removeClass("button_disable");
-               $('#next').removeAttr("disabled");
-               $('#last').removeAttr("disabled");
+
            }
          }
       })
@@ -336,6 +334,8 @@ if (page==1){
   /* Change table size select event*/
 
     $('#table_size').change(function() {
+        $("th").removeClass("asc")
+        $("th").removeClass("desc")
         page=1;
         count_tr=$('#table_size').val();
         pages_amount = $("#table_size option:selected").val();
