@@ -363,14 +363,18 @@ $(document).ready(function () {
             k++;
             tr = table_grid.rows[k];
             order_id = json.order_id;
-            product_name = json.order[product_k].name;
-            id_product = json.order[product_k].product_id;
-            product_price = +json.order[product_k].price;
+            var product_description =json.order[product_k].description;
+            var product_name = json.order[product_k].name;
+            var id_product = json.order[product_k].product_id;
+            var product_price = +json.order[product_k].price;
             tr.cells[0].innerHTML = id_product;
-            tr.cells[1].innerHTML = product_name;
-            tr.cells[2].innerHTML = json.order[product_k].description;
+            tr.cells[1].innerHTML = product_name +'<input type= hidden class="item_name" value="'+
+                                    product_name +'">';
+            tr.cells[2].innerHTML = product_description +'<input  type= hidden class="product_description" value="'+
+                                    product_description+'">';
             tr.cells[3].innerHTML = json.order[product_k].dimension +
                 '<input class="dimension" value="' + json.order[product_k].dimension_id + '" type="hidden">' +
+                '<input class="dimension_number" value="' + json.order[product_k].dimension_number +'" type="hidden">'+
                 '<input class="old_quantity" value="' + json.order[product_k].quantity + '" type="hidden">';
             tr.cells[4].innerHTML = "<span class='price'>" + product_price.toFixed(2) + "</span>";
             input = "<input type='text' class='quantity' value='" + json.order[product_k].quantity + "'\
@@ -381,9 +385,10 @@ $(document).ready(function () {
             if (json.order[product_k].quantity) quant = Math.round(json.order[product_k].quantity); else quant = 0;
             amount = (product_price * +quant * +json.order[product_k].dimension_number).toFixed(2);
             tr.cells[6].innerHTML = "<span class='amount'>" + amount + "</span>";
-            tr.cells[7].innerHTML = "<img src='/static/images/Text Edit.png' class='edit_img'>";
+            tr.cells[7].innerHTML = "<img src='/static/images/Text Edit.png' class='edit_img'\
+                                      alt='" + id_product + "' >";
             tr.cells[8].innerHTML = "<img src='/static/images/delete.png' class='delete_img'\
-                 id='" + product_name + "' alt=" + id_product + " >";
+                                      id='" + product_name + "' alt=" + id_product + " >";
         }
 
         /*--------------------------------End of filling table------------------------------------*/
@@ -397,6 +402,19 @@ $(document).ready(function () {
             }
         })
 
+        $('.edit_img').click(function () {
+            var tr = $(this).closest('tr');
+            var dimension_number = tr.children('td').children('.dimension_number').val();
+            var product_id = this.alt;
+            var product_name=tr.children('td').children('.item_name').val();
+            var price = tr.children('td').children('.price').text();
+            var quantity = tr.children('td').children('.quantity').val();
+            $('#item').val(product_name);
+            $('#price').val(price);
+            $('#quantity').val(quantity);
+            $('#dimension').val(dimension_number);
+            modal_window();
+        })
 
         $('.update_amount').click(function () {
             var tr = $(this).closest('tr');
@@ -609,6 +627,41 @@ $(document).ready(function () {
 
     /*-------------------------------End of Validation function ----------------------------------------*/
 
+    function modal_window(){
+        fill_field={};
+        $('#exampleModal').arcticmodal(
+            {
+                afterClose:function(){
+                    if (global_order_arr && fill_field.name){
+                        for (var i in global_order_arr.order) {
+                            if ((global_order_arr.order[i].product_id == fill_field.product_id) &&
+                                (global_order_arr.order[i].dimension_id == fill_field.dimension_id )){
+                               global_order_arr.order[i].quantity = fill_field.quantity;
+                            }
+                            else {
+                                global_order_arr.order.push(fill_field);
+                            }
+
+                        }
+                        pagination_slice(page,count_tr);
+                    }
+                    else{
+                        if (fill_field.name){
+                            var order=[]
+                            order.push(fill_field);
+                            global_order_arr={order:order};
+                            pagination_slice(page,count_tr);
+
+                        }
+                    }
+
+
+                }
+            }
+        );
+    }
+
+
     function creat_json(){
         /*add all quantity and product_id in array */
         var product_arr = [];
@@ -672,32 +725,9 @@ $(document).ready(function () {
 
     })
 
+
     $('#add_product').click(function(){
-        /*--------------Modal window event-----------------------*/
-        fill_field={};
-        $('#exampleModal').arcticmodal(
-            {
-                afterClose:function(){
-                    if (global_order_arr && fill_field.name){
-                        global_order_arr.order.push(fill_field)
-                        pagination_slice(page,count_tr);
-                    }
-                    else{
-                        if (fill_field.name){
-                        var order=[]
-                        order.push(fill_field);
-                        global_order_arr={order:order};
-                        pagination_slice(page,count_tr);
-
-                        }
-                    }
-
-
-                }
-            }
-        );
-        /*-------------------------------------------------------*/
-
+          modal_window();
     })
     $('#close_modal').click( function(){
         $.arcticmodal('close');
@@ -952,6 +982,9 @@ $(document).ready(function () {
     $('#done').click(function(){
         done();
     });
+    $('#cancel').click(function(){
+        $.arcticmodal('close');
+    })
 
     function done(){
         id_product=prod_id
