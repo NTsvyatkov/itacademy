@@ -32,7 +32,7 @@ def login_authenticate():
           return render_template('search_user.html',)
         if session['role'] == 'Merchandiser':
 
-          return render_template('current_order2.html',)
+          return render_template('manage_orders.html',)
         if session['role'] == 'Supervisor':
 
            return render_template('product_grid.html',)
