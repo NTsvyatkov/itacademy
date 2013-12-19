@@ -173,21 +173,20 @@ class Order(Base):
         stop = page * records_per_page
         start = stop - records_per_page
         order = asc if order_sort_by == "asc" else desc
-        query = Order.query.outerjoin(Order.assignee).join(OrderStatus).join(RoleDao).filter(and_(Order.user_id == user_id,
+        query = Order.query.outerjoin(Order.user).join(OrderStatus).join(RoleDao).filter(and_(Order.assignee_id == user_id,
                                                              Order.status_id != OrderStatus.getNameStatus('Cart').id))
+        if int(filter['status_option']):
+            filterStatus={'1': Order.status_id == OrderStatus.getNameStatus('Pending').id,
+                    '2': Order.status_id == OrderStatus.getNameStatus('Ordered').id,
+                    '3': Order.status_id == OrderStatus.getNameStatus('Delivered').id}
+            query = query.filter(filterStatus[filter['status_option']])
         if filter['name']:
-            if filter['status_option']:
-                filterStatus={'0': Order.id,
-                        '1': Order.status_id == OrderStatus.getNameStatus('Pending').id,
-                        '2': Order.status_id == OrderStatus.getNameStatus('Ordered').id,
-                        '3': Order.status_id == OrderStatus.getNameStatus('Delivered').id}
             if int(filter['order_option']) == 0:
                 query = query.filter(Order.order_number.like(filter['name']+'%'))
             elif int(filter['order_option']) == 1:
                 query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
                                          UserDao.last_name.like(filter['name']+'%')))
-            elif filter['status_option']:
-                query = query.filter(filterStatus[filter['status_option']])
+
         if sort_by == "order_id":
             query = query.order_by(order(Order.id))
         elif sort_by == "order_number":
