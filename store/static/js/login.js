@@ -32,17 +32,14 @@ var c = $("#check");
 
    if(c.is(":checked")){
      var u = $("#name").val();
-     var p = $("#password").val();
-     $.cookie("name", u, { expires: 3650 }); //SETS IN DAYS (10 YEARS)
-     $.cookie("password", p, { expires: 3650 }); //SETS IN DAYS (10 YEARS)
+         $.cookie("name", u, { expires: 10 });
    }
 }
 
 function load(){
    var u = $.cookie("name");
-   var p = $.cookie("password");
 
    $("#name").val(u);
-   $("#password").val(p);
+
 }
 
