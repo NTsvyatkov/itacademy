@@ -26,4 +26,23 @@ var password =   document.form.password.value;
                    });
             return false;
             }
+
+var c = $("#check");
+
+
+   if(c.is(":checked")){
+     var u = $("#name").val();
+     var p = $("#password").val();
+     $.cookie("name", u, { expires: 3650 }); //SETS IN DAYS (10 YEARS)
+     $.cookie("password", p, { expires: 3650 }); //SETS IN DAYS (10 YEARS)
+   }
 }
+
+function load(){
+   var u = $.cookie("name");
+   var p = $.cookie("password");
+
+   $("#name").val(u);
+   $("#password").val(p);
+}
+
