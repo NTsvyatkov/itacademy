@@ -19,13 +19,12 @@
                             tr[i] = document.createElement('TR');
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#efddba";
+                            if (i % 2 == 0) tr[i].style.background = "#f0f0f0";
                             for (var j=0; j<=7; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
                         }
-                    $( "tr:even" ).css( "background-color", "#f0f0f0" );
                 }
             createGrid();
 
