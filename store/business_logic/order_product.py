@@ -15,8 +15,11 @@ def product_order_update(order_dict,method):
         assignee=int(order_dict['assignee'])
     else:
          assignee=None
-    preferable_delivery_date=int(order_dict['preferable_delivery_date'])/1000
-    preferable_delivery_date=(datetime.datetime.fromtimestamp(preferable_delivery_date).strftime('%Y-%m-%d'))
+    if (order_dict['preferable_delivery_date']):
+        preferable_delivery_date=int(order_dict['preferable_delivery_date'])/1000
+        preferable_delivery_date=(datetime.datetime.fromtimestamp(preferable_delivery_date).strftime('%Y-%m-%d'))
+    else:
+        preferable_delivery_date=0
     for i in quantity_dict:
         dimension_id=i['dimension_id']
         product_id=i['product_id']

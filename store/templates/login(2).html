@@ -26,14 +26,14 @@
         </br><div class="ProductTitle">Order Management System</div></br>
 <div class ="name"> <div id="name-wrap">
 
-               <span>Login:&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input id="name" name="name" type="text" value=""></span>
+               <span>User Name:<input id="name" name="name" type="text" value=""></span>
                <div style = "height: 10px; width: 30px;"></div>
                <div class = "error_name"></div>
          </div>
          </div>
 
 <div class ="password"> <div id="password-wrap">
-	         <span>Password: <input id="password" name="password" type="password" value=""></span>
+	         <span>Password: &nbsp<input id="password" name="password" type="password" value=""></span>
                <div style = "height: 10px; width: 30px;"></div>
                <div class = "error_password"></div>
 
@@ -42,7 +42,7 @@
  {% if error in error %}
           <span style="color: red;">{{error }}</span>
  {% endif %}
-    <input id="check" type="checkbox"> Remember Me<br>
+    <input id="check" type="checkbox"> Remember User Name<br>
         <br>
     <input type="submit" value ="Log in" class="button" style="float:right;  margin-right: 100px;" onclick="return validate_login()" id ="post_form">
 </form>

@@ -28,6 +28,9 @@
    records_amount=(json.records_amount);
    records_per_page=(json.records_per_page);
    pages_amount = Math.ceil(records_amount/records_per_page);
+   if (pages_amount <1){
+       pages_amount = 1
+   }
    document.getElementById("page").innerHTML = page;
    document.getElementById("pages_amount").innerHTML = pages_amount;
 

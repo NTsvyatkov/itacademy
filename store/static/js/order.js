@@ -88,6 +88,14 @@ $(document).ready(function () {
     $('#add_order').prop('disabled', true);
     $('#add_order').addClass("button_disable");
     $('#credit_card_options').val(1);
+    $('#prev').prop('disabled', true);
+    $('#first').prop('disabled', true);
+    $('#next').prop('disabled', true);
+    $('#last').prop('disabled', true);
+    $('#prev').addClass("button_disable");
+    $('#first').addClass("button_disable");
+    $('#next').addClass("button_disable");
+    $('#last').addClass("button_disable");
     /*----------------------------------*/
 
     /* Creating table of products (size = count_tr Х count_td)  */
@@ -643,16 +651,25 @@ $(document).ready(function () {
             {
                 afterClose:function(){
                     if (global_order_arr && fill_field.name){
-                        for (var i in global_order_arr.order) {
-                            if ((global_order_arr.order[i].product_id == fill_field.product_id) &&
-                                (global_order_arr.order[i].dimension_id == fill_field.dimension_id )){
-                               global_order_arr.order[i].quantity = fill_field.quantity;
+                        if (global_order_arr.order.length!=0){
+                            var i=0;
+                            var flag=false;
+                            for ( var i in global_order_arr.order) {
+                                if ((global_order_arr.order[i].product_id == fill_field.product_id) &&
+                                    (global_order_arr.order[i].dimension_id == fill_field.dimension_id )){
+                                    global_order_arr.order[i].quantity = fill_field.quantity;
+                                    flag = true;
+                                }
+
                             }
-                            else {
+                            if (!flag){
                                 global_order_arr.order.push(fill_field);
                             }
-
                         }
+                        else {
+                            global_order_arr.order.push(fill_field);
+                        }
+
                         pagination_slice(page,count_tr);
                     }
                     else{
@@ -690,8 +707,14 @@ $(document).ready(function () {
         else {
             assignee=$('#assignee').val();
         }
-        preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
-        preferable_date = Date.parse(preferable_date);
+        if ($('#hidden_preferable_date').val()){
+            preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
+            preferable_date = Date.parse(preferable_date);
+        }
+        else{
+            preferable_date=0;
+        }
+
         form_value = { order_id: order_id, preferable_delivery_date: preferable_date,
             assignee: assignee,
             credit_card_options: $('#credit_card_options').val(),
