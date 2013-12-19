@@ -745,6 +745,7 @@ $(document).ready(function () {
             $('#start_date').css('background-color', '#e2e2e2');
             $('#start_date').val('');
             $('#start_date').datepicker("option", "disabled", true);
+            maestro_card = false;
         }
         else {
             $('#issue_number').attr('readonly', false);
