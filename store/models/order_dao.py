@@ -169,22 +169,35 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, filter=None):
+    def pagerByFilterByMerchandiser(user_id=None, page=None, records_per_page=None, sort_by=None, order_sort_by=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.join(Order.user).filter(Order.assignee_id == user_id)
-        if filter['status_option']:
-            filterStatus={'0': Order.id,
-                    '1': Order.status_id == 4,
-                    '2': Order.status_id == 1,
-                    '3': Order.status_id == 2}
-        if int(filter['order_option']) == 0:
-            query = query.filter(Order.id.like(filter['name']+'%'))
-        if int(filter['order_option']) == 1:
-            query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
-                                     UserDao.last_name.like(filter['name']+'%')))
-        if filter['status_option']:
-            query = query.filter(filterStatus[filter['status_option']])
+        order = asc if order_sort_by == "asc" else desc
+        query = Order.query.join(Order.assignee).filter(Order.user_id == user_id)
+#        if int(filter['status_option']):
+#            filterStatus={'0': Order.id,
+#                    '1': Order.status_id == 4,
+#                    '2': Order.status_id == 1,
+#                    '3': Order.status_id == 2}
+#        if int(filter['order_option']) == 0:
+#            query = query.filter(Order.order_number.like(filter['name']+'%'))
+#        if int(filter['order_option']) == 1:
+#            query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
+#                                     UserDao.last_name.like(filter['name']+'%')))
+#        if int(filter['status_option']):
+#            query = query.filter(filterStatus[filter['status_option']])
+        if sort_by == "order_id":
+            query = query.order_by(order(Order.id))
+        elif sort_by == "order_number":
+            query = query.order_by(order(Order.order_number))
+        elif sort_by == "user":
+            query = query.order_by(order(UserDao.first_name))
+        elif sort_by == "Status":
+            query = query.order_by(order(Order.status_id))
+        elif sort_by == "total_price":
+            query = query.order_by(order(Order.total_price))
+        elif sort_by == "role":
+            query = query.order_by(order(RoleDao.name))
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 

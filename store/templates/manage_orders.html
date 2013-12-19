@@ -1,69 +1,80 @@
 {% extends "layout.html" %}
 {% block body %}
-<script src="{{ url_for('static', filename='js/sort.js') }}"></script>
+
         <script type="text/javascript">
 
 
-            var tr = [];
+$(document).ready(function() {
+    var tr = [];
+    var count_tr=$('#table_size').val();
+    var th = ['Order id','Order number', 'Customer', 'Status','Amount','Assignee', 'Edit'];
+    var count_td= th.length-1;
+    var page = 1;
+    var detector;
+    var counter;
+    var sort_by = "total_price";
+    var order_sort_by = "asc";
+    var table_grid = document.getElementById('grid');
+  /* Creating table of products (size = count_tr Х count_td)  */
 
+    tr[0] = document.createElement('TR');
+    table_grid.appendChild(tr[0]);
+    for (var j=0; j<=count_td; j++)
+    {
+          tr[0].appendChild(document.createElement('TH'));
+          tr[0].cells[j].innerHTML=th[j];
+    }
 
-            $(document).ready (function() {
-            var count_tr=$('#table_size').val();
-            var count_td=6;
-            var page = 1;
-            var table_grid = document.getElementById('table-1');
-            function createGrid(count)
-                {
-                    for (var i=1; i<=count;i++ )
-                        {
-                            tr[i] = document.createElement('TR');
-                            table_grid.appendChild(tr[i]);
-                            tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#efddba";
-                            for (var j=0; j<=5; j++)
-                                {
-                                    tr[i].appendChild(document.createElement('TD'));
-                                }
-                        }
-                    $( "tr:even" ).css( "background-color", "#efddba" );
-                }
-            createGrid();
+  /* Get order id from url*/
+  var pathArray = window.location.pathname.split( '/' );
+  var order_id = pathArray[2];
+   /* End*/
 
-            function clearingTr(i)
-                {
-                    for (var j=0; j<=5; j++)
-                        {
-                            tr[i].cells[j].innerHTML='';
-                        }
-                }
+  function create_grid(count_tr, count_td)
+    {
+        for (var i=1; i<=count_tr;i++ )
+        {
+            tr[i] = document.createElement('TR');
+            table_grid.appendChild(tr[i]);
+            tr[i].id=i;
+            if (i % 2 == 0) tr[i].style.background =  "#efddba";
+            for (var j=0; j<=count_td; j++)
+             {
+              tr[i].appendChild(document.createElement('TD'));
+             }
+        }
 
+    }
 
-            function deletingGrid()
-                {
-                    for (var n=table_grid.rows.length ; n>=2; n--)
-                        {
-                            table_grid.removeChild(table_grid.childNodes[n]);
-                        }
+   create_grid(count_tr,count_td);
+  /*End of creating table*/
 
-                }
+ function deleting_grid()
+  {
+    for (var n=table_grid.rows.length ; n>=2; n--)
+      {
+       table_grid.removeChild(table_grid.childNodes[n]);
+      }
+
+  }
 
 
             function listOrders(json){
-                deletingGrid();
-                createGrid(json.orders.length);
-                var grid_length = json.orders.length;
-                /*Create table */
+                deleting_grid();
+                create_grid(json.orders.length,count_td);
+                var k=0;
                 for (var order_k in json.orders)
                     {
-                        k++;
-                        var id_sort = tr[k].cells[0].innerHTML = json.orders[order_k].order_id
-                        var assignee_sort = tr[k].cells[1].innerHTML = json.orders[order_k].user;
-                        var status_sort = tr[k].cells[2].innerHTML = json.orders[order_k].orderStatus;
-                        var total_price = tr[k].cells[3].innerHTML = "$ "+json.orders[order_k].total_price;
-                        var role_sort = tr[k].cells[4].innerHTML = json.orders[order_k].role;
-                        var edit = tr[k].cells[5].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
-                        tr[k].cells[5].abbr=k;
-                        tr[k].cells[5].onclick= function()
+                         k++;
+                        tr[k].cells[0].innerHTML = json.orders[order_k].order_id
+                        tr[k].cells[1].innerHTML = json.orders[order_k].order_number
+                        tr[k].cells[2].innerHTML = json.orders[order_k].user;
+                        tr[k].cells[3].innerHTML = json.orders[order_k].orderStatus;
+                        tr[k].cells[4].innerHTML = "$ "+json.orders[order_k].total_price;
+                        tr[k].cells[5].innerHTML = json.orders[order_k].role;
+                        tr[k].cells[6].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
+                        tr[k].cells[6].abbr=k;
+                        tr[k].cells[6].onclick= function()
                             {
                                 window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
                             }
@@ -78,8 +89,6 @@
             json_value = JSON.stringify(form_value);
 
 
-            $('#clr').click(deletingGrid);
-
 
 
               $('#apply_button').click(function(){
@@ -93,9 +102,9 @@
                 var name_input = document.getElementById('name_input').value;
                 $.ajax({
                 dataType: "json",
-                url: '/api/manage_orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+'',
+                url: '/api/manage_orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+''+'&sort_by='+sort_by+
+                '&order_sort_by='+order_sort_by,
                 type: 'GET',
-                contentType: "application/json",
                 success: function(json)
                     {
                         listOrders(json);
@@ -170,6 +179,61 @@
             })
 
 
+                 /*Sorting in columns */
+  $("th").click(function(){
+      $("th").removeClass("asc")
+      $("th").removeClass("desc")
+      var entry = this.innerHTML;
+
+      switch (entry)
+          {
+          case "Order id":
+            sort_by="order_id";
+            break;
+          case "Order number":
+            sort_by="order_number";
+            break;
+          case "Customer":
+            sort_by="user";
+            break;
+          case "Status":
+            sort_by="orderStatus";
+            break;
+          case "Amount":
+            sort_by="total_price";
+            break;
+          case "Assignee":
+            sort_by="role";
+            break;
+          }
+      if (detector===entry){
+          counter+=1;
+      }
+      else {
+          detector=entry;
+          counter=0;
+      }
+      if (counter%2==0){
+          order_sort_by = "asc";
+          $(this).addClass("asc")
+      }
+      else {
+          order_sort_by = "desc";
+          $(this).addClass("desc")
+      }
+
+        createTableOrders();
+    }
+    );
+    $('#table_size').change(function() {
+        $("th").removeClass("asc")
+        $("th").removeClass("desc")
+        page=1;
+        count_tr=$('#table_size').val();
+        pages_amount = $("#table_size option:selected").val();
+        createTableOrders();
+    });
+
 
             });
         </script>
@@ -215,28 +279,10 @@
                    </select>
             </div>
             <div id=" ">
-                <table class="grid" id="table-1" border="0" cellspacing="2" cellpadding="2" width="98%">
-                    <thead><tr>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
-                            Order Number
-                        </td>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
-                            Customer
-                        </td>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
-                            Status
-                        </td >
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
-                            Amount
-                        </td>
-                        <td class="thd" onclick="sort(this)" title="Click on the header to sort column">
-                            Assignee
-                        </td>
-                        <td>
-                            Edit
-                        </td>
-                    </tr>
-                </thead></table>
+         <div id="products">
+            <table id='grid' class="grid">
+            </table>
+        </div>
 
 
             <div id="pagination" style="text-align: center">
