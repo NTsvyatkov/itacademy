@@ -122,8 +122,8 @@ $(document).ready(function () {
                 if (type_options == 'PUT'){
                     if (button=='Order'){
                       alert('Order successfully issued');
-                      /*window.location.replace("/orders");*/
-                        $('#order_status').val('Pending');
+                      window.location.replace("/orders");
+                      $('#order_status').val('Pending');
                     }
                     if (button=='Save'){
                       alert('Order saved and update');
@@ -161,8 +161,12 @@ $(document).ready(function () {
         var total_items = 0;
         var result = [];
         for (var i in global_order_arr.order) {
-            total_sum = total_sum + +global_order_arr.order[i].price * +global_order_arr.order[i].dimension_number * +global_order_arr.order[i].quantity;
-            total_items = total_items + +global_order_arr.order[i].dimension_number * +global_order_arr.order[i].quantity;
+            total_sum = total_sum +  +global_order_arr.order[i].price *
+                                     +global_order_arr.order[i].dimension_number *
+                                     +global_order_arr.order[i].quantity;
+
+            total_items = total_items + +global_order_arr.order[i].dimension_number *
+                                         +global_order_arr.order[i].quantity;
         }
         result.push(total_sum);
         result.push(total_items);
@@ -197,7 +201,7 @@ $(document).ready(function () {
             $('#delivery_date').val('/ /');
         }
         if (global_order_arr.order_date) {
-            var order_date = global_order_arr.order_date* 1000;
+            order_date = global_order_arr.order_date* 1000;
             $('#order_date').val(date_format(order_date));
         }
         else {
@@ -265,9 +269,10 @@ $(document).ready(function () {
     function update_quantity(product_id, dimension_id, object_quantity, old_quantity, price, quantity, tr, dim) {
 
         for (var i in global_order_arr.order) {
-            if ((global_order_arr.order[i].product_id == product_id) && (global_order_arr.order[i].dimension_id == dimension_id ) &&
+            if ((global_order_arr.order[i].product_id == product_id) &&
+                (global_order_arr.order[i].dimension_id == dimension_id ) &&
                 (global_order_arr.order_id == order_id)) {
-                global_order_arr.order[i].quantity = quantity;
+                     global_order_arr.order[i].quantity = quantity;
             }
         }
         var sum = +price * +quantity * dim;
@@ -293,7 +298,7 @@ $(document).ready(function () {
             success: function (json) {
                 var unique_number_error = [];
                 if (json.message == 'not unique') {
-                    var error = 'Order Number is not unique. Rename it. ';
+                    var error = 'Order Number already exist in the system. Please re-type it or just leave it blank';
                     unique_number_error.push({id: $('#order_error'), error: error});
                     $('#order_number').val('');
                 }
@@ -312,6 +317,8 @@ $(document).ready(function () {
                     var day = dt.getDate();
                     var now_date = day + '/' + month + '/' +year;
                     $('#order_date').val(now_date)
+                    now_date = year + '-' + month + '-' +day +'T00:00';
+                    order_date=Date.parse(now_date);
                 }
                 validation(unique_number_error);
             }
@@ -325,12 +332,13 @@ $(document).ready(function () {
         var status = false;
         /* Searching order_product dictionary for keys product_id , dimension_id*/
         for (var i in global_order_arr.order) {
-            if ((global_order_arr.order[i].product_id == product_id) && (global_order_arr.order[i].dimension_id == dimension_id ) &&
+            if ((global_order_arr.order[i].product_id == product_id) &&
+                (global_order_arr.order[i].dimension_id == dimension_id ) &&
                 (global_order_arr.order_id == order_id)) {
-                deleted_order_product.push(global_order_arr.order[i]);
-                global_order_arr.order.splice(i, 1);
-                alert('The product has been successfully deleted from the cart');
-                status = true;
+                    deleted_order_product.push(global_order_arr.order[i]);
+                    global_order_arr.order.splice(i, 1);
+                    alert('The product has been successfully deleted from the cart');
+                    status = true;
             }
         }
         if (status) {
@@ -413,6 +421,7 @@ $(document).ready(function () {
             $('#price').val(price);
             $('#quantity').val(quantity);
             $('#dimension').val(dimension_number);
+            $('#info').css('display','block');
             modal_window();
         })
 
@@ -513,7 +522,7 @@ $(document).ready(function () {
         }
         else {
             no_error = false;
-            error = 'The credit card number should be a 16-digit number.';
+            error = 'Credit Card Number is incorrect. Please re-type it again.';
             error_list.push({id: $('#credit_card_number'), error: error});
         }
 
@@ -524,7 +533,7 @@ $(document).ready(function () {
         }
         else {
             no_error = false;
-            error = 'The CVV2 number should be a 3-digit number.';
+            error = 'CVV2 Code is incorrect. Please re-type it again.';
             error_list.push({id: $('#cvv2_number'), error: error});
         }
 
@@ -535,7 +544,7 @@ $(document).ready(function () {
             }
             else {
                 no_error = false;
-                error = 'Issue number format is wrong. it should be one digit or none!';
+                error = 'Issue Number for Maestro card is incorrect. Please re-type it again.';
                 error_list.push({id: $('#issue_number'), error: error});
             }
         }
@@ -544,7 +553,7 @@ $(document).ready(function () {
         date_expire = $('#expire_date').val().replace('/', '-') + '-01T00:00';
         if (!Date.parse(date_expire)) {
             no_error = false;
-            error = 'Expire date have wrong format, please use calendar';
+            error = 'Expire date is incorrect. Please use calendar';
             error_list.push({id: $('#expire_date'), error: error});
         }
         dt = new Date();
@@ -553,7 +562,7 @@ $(document).ready(function () {
         now_date = year + '-' + month + '-01T00:00';
         if (Date.parse(date_expire) < Date.parse(now_date)) {
             no_error = false;
-            error = 'Expire date less then today date!';
+            error = 'Unfortunately you are not able to pay by this Credit Card. Since Expire Date is too fast. ';
             error_list.push({id: $('#expire_date'), error: error});
         }
 
@@ -561,7 +570,7 @@ $(document).ready(function () {
             date_start = $('#start_date').val().replace('/', '-') + '-01T00:00';
             if (Date.parse(date_start) > Date.parse(date_expire)) {
                 no_error = false;
-                error = 'Start date of card can not be more then Expire date';
+                error = 'Start date of Maestro card is incorrect. Please re-type it again.';
                 error_list.push({id: $('#start_date'), error: error});
             }
             if (!Date.parse(date_start)) {
@@ -577,9 +586,10 @@ $(document).ready(function () {
         preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
         if ($('#hidden_preferable_date').val()) {
             preferable_date = Date.parse(preferable_date);
-            if (preferable_date < order_date) {
+            var check_day = (preferable_date - order_date)/(1000*60*60*24);
+            if (check_day < 3) {
                 no_error = false;
-                error = 'Preferable Delivery Date should be goes before then Date of Ordering';
+                error = 'Delivery Date is incorrect. Please re-type it to be at least 3 day after Date of Ordering';
                 error_list.push({id: $('#preferable_date'), error: error});
             }
         }
@@ -591,13 +601,13 @@ $(document).ready(function () {
             }
             else {
             no_error = false;
-            error = 'For saving order you should add one or more product to grid.';
+            error = 'Please select items and add them to the order.';
             error_list.push({id: $('#order_error'), error: error});
             }
         }
         else{
             no_error = false;
-            error = 'For saving order you should add one or more product to grid.';
+            error = 'Please select items and add them to the order.';
             error_list.push({id: $('#order_error'), error: error});
         }
         /*------------------------End of Table length validation---------------------*/
@@ -668,9 +678,10 @@ $(document).ready(function () {
         var preferable_date;
         var assignee;
         for (var i = 0; i < global_order_arr.order.length; i++) {
-            product_arr[i] = {'quantity': +global_order_arr.order[i].quantity, 'product_id': +global_order_arr.order[i].product_id,
-                'dimension_id': +global_order_arr.order[i].dimension_id,
-                'dimension_number': +global_order_arr.order[i].dimension_number}
+            product_arr[i] = {'quantity': +global_order_arr.order[i].quantity,
+                              'product_id': +global_order_arr.order[i].product_id,
+                              'dimension_id': +global_order_arr.order[i].dimension_id,
+                              'dimension_number': +global_order_arr.order[i].dimension_number}
         }
         /*------------------*/
         if ($('#assignee').val() == 0 ){
@@ -1012,6 +1023,7 @@ $(document).ready(function () {
             "dimension_id": dimension_id, "dimension_number": dimension_number,
             "name": product_name, "price": price, "product_id": id_product,
             "quantity": quantity};
+         $('#info').css('display','none');
          $.arcticmodal('close');
     }
 
