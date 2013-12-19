@@ -707,8 +707,14 @@ $(document).ready(function () {
         else {
             assignee=$('#assignee').val();
         }
-        preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
-        preferable_date = Date.parse(preferable_date);
+        if ($('#hidden_preferable_date').val()){
+            preferable_date = $('#hidden_preferable_date').val() + 'T00:00';
+            preferable_date = Date.parse(preferable_date);
+        }
+        else{
+            preferable_date=0;
+        }
+
         form_value = { order_id: order_id, preferable_delivery_date: preferable_date,
             assignee: assignee,
             credit_card_options: $('#credit_card_options').val(),
