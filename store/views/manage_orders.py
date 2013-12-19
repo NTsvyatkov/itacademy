@@ -19,24 +19,18 @@ def manage_orders():
 @app.route('/api/manage_orders/', methods=['GET'])
 def page_order():
     user_id = session['user_id']
-#    filter = ({'name': request.args.get('name_input'),
-#                   'order_option': request.args.get('order_option'),
-#                   'status_option': request.args.get('status_option')})
+    filter = ({'name': request.args.get('name_input'),
+                   'order_option': request.args.get('order_option'),
+                   'status_option': request.args.get('status_option')})
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
     sort_by = request.args.get('sort_by')
     order_sort_by = request.args.get('order_sort_by')
-    prods, records_amount = Order.pagerByFilterByMerchandiser(user_id, page, records_per_page, sort_by, order_sort_by)
+    prods, records_amount = Order.pagerByFilterByMerchandiser(user_id, page, records_per_page, sort_by, order_sort_by, filter)
     orders_list = []
     for i in prods:
-        if i.user:
-            first_name = i.assignee.first_name
-            last_name = i.assignee.last_name
-        else:
-            last_name = ''
-            first_name = ''
-        orders_list.append({'order_id': i.id, 'order_number': i.order_number, 'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price),
-                            'user':first_name+' '+last_name,
+        orders_list.append({'order_id': str(i.id), 'order_number': str(i.order_number), 'orderStatus': OrderStatus.get_status(i.status_id).name,'total_price': str(i.total_price),
+                            'user':i.user.first_name+' '+i.user.last_name,
                             'role': i.assignee.role.name})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
