@@ -225,20 +225,11 @@ class Order(Base):
             order.user.balance = order.total_price
         else:
             order.user.balance += order.total_price
-
-        if order.user.balance < UserLevel.get_level_by_name("Silver").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Standard").id
-        elif UserLevel.get_level_by_name("Silver").balance <= order.user.balance < \
-                UserLevel.get_level_by_name("Gold").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Silver").id
-        elif UserLevel.get_level_by_name("Gold").balance <= order.user.balance < \
-                UserLevel.get_level_by_name("Platinum").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Gold").id
-        else:
-            order.user.level_id = UserLevel.get_level_by_name("Platinum").id
+        user_status = UserLevel.query.filter(UserLevel.balance < order.user.balance).\
+            order_by(desc(UserLevel.balance)).first()
+        order.user.level_id = user_status.id
 
         db_session.commit()
-
 
 
 class OrderStatus(Base):

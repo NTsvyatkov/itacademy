@@ -134,9 +134,6 @@ def unique_number():
     response = make_response(jsonify({'message':message,'unique_order_number':unique_number,'order_id':order_id}), 200)
     return response
 
-
-
-
 @app.route('/api/order_details/', methods=['GET'])
 def list_orders_id():
     records_per_page = int(request.args.get('table_size'))
@@ -157,11 +154,11 @@ def list_orders_id():
 
     order = {'customer_name': customer_name,
              'customer_type': all_in_order[0].order.user.level.name if all_in_order[0].order.user.level.name
-             else "Standart",
+             else "Standard",
              'order_id': all_in_order[0].order_id, 'total_price': str(all_in_order[0].order.total_price),
              'quantity_of_items': quantity_of_items,
              'assignee': str(all_in_order[0].order.assignee.first_name) + " " +
-                         str(all_in_order[0].order.assignee.last_name) +
+                         str(all_in_order[0].order.assignee.last_name) + " " +
                          "(" + str(all_in_order[0].order.assignee.login) +
                          ")" if all_in_order[0].order.assignee else None,
              'order_date': str(all_in_order[0].order.date),
