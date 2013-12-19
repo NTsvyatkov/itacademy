@@ -395,8 +395,7 @@ $(document).ready(function () {
             tr.cells[4].innerHTML = "<span class='price'>" + product_price.toFixed(2) + "</span>";
             input = "<input type='text' class='quantity' value='" + json.order[product_k].quantity + "'\
                      alt='" + json.order[product_k].id + "' style='width:60px'>\
-                     <img  alt='refresh' class='update_amount' src='/static/images/refresh_32.png'> \
-                      <b class='error_div'></b>";
+                     <img  alt='refresh' class='update_amount' src='/static/images/refresh_32.png'> ";
             tr.cells[5].innerHTML = input;
             if (json.order[product_k].quantity) quant = Math.round(json.order[product_k].quantity); else quant = 0;
             amount = (product_price * +quant * +json.order[product_k].dimension_number).toFixed(2);
@@ -931,7 +930,7 @@ $(document).ready(function () {
             if(current_add && (current_add.is(this))){
             }
             else{
-                 $(this).css( "background-color", "#66FFCC" );
+                 $(this).css( "background-color", "#e7eefc" );
             }
         })
         $('#grid_1 tr').mouseleave(function() {
@@ -947,7 +946,7 @@ $(document).ready(function () {
            }
            current_add=$(this);
            tr_added_color=tr_css;
-           $(this).css( "background-color", "#66FF66" );
+           $(this).css( "background-color", "#b6d89c" );
         })
 
     }
