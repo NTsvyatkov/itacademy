@@ -872,12 +872,12 @@ $(document).ready(function () {
             tr[i] = document.createElement('TR');
             table_grid_.appendChild(tr[i]);
             tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background = "#efddba";
             for (var j=0; j<=1; j++)
             {
                 tr[i].appendChild(document.createElement('TD'));
             }
         }
+        $( "tr:even" ).css( "background-color", "#f0f0f0" );
     }
 
 
@@ -1049,7 +1049,6 @@ $(document).ready(function () {
          $('#info').css('display','none');
          $.arcticmodal('close');
     }
-
 
 /*-----------------------------------------End of selecting item script-----------------------------------------------*/
 
