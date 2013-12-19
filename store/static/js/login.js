@@ -3,7 +3,7 @@ var name =   document.form.name.value;
 
         if (name == ""){
                 $(".error_name").html("Enter your login ").css({'color':'red'});
-                $(".name").toggleClass("errorList2");
+               // $(".name").toggleClass("errorList2");
                 $(".name").click(function(){
 
                 $(".error_name").html("");
@@ -17,7 +17,7 @@ var password =   document.form.password.value;
 
         if (password == ""){
                 $(".error_password").html("Enter your password").css({'color':'red'});
-                $(".password").toggleClass("errorList2");
+               // $(".password").toggleClass("errorList2");
                 $(".password").click(function(){
 
                 $(".error_password").html("");
