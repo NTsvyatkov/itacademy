@@ -6,9 +6,16 @@ from models.region_dao import RegionDao
 from models.role_dao import RoleDao
 from models.user_dao import UserDao
 
+
 def validation_Create_Login(login):
     if UserDao.query.filter(UserDao.login == login).first():
         raise ValidationException("Login is exist")
+
+
+def validation_Edit_Login(login, user_id):
+    if UserDao.query.filter(user_id != UserDao.id and login == UserDao.login).first():
+        raise ValidationException("Login is exist")
+
 
 def validationLogin(login):
     if login is None:
@@ -101,6 +108,7 @@ def createUser(login, first_name, last_name, password, email,region_id, role_id)
 def updateUser(user_id, login, first_name, last_name, password, email, role_id, region_id):
     validationUserID(user_id)
     validationLogin(login)
+    validation_Edit_Login(user_id, login)
     validationFirstName(first_name)
     validationLastName(last_name)
     validationPassword(password)
