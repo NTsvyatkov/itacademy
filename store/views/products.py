@@ -67,12 +67,12 @@ def products_id_delete(id):
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
-@app.route('/api/product/<int:id>', methods=['GET'])
-def productByid(id):
-    i = get_product_by_id(id)
-    prod ={'id': i.id, 'name': i.name, 'description': i.description, 'price': str(i.price)}
-    resp = make_response(jsonify(product=prod),200)
-    return resp
+#@app.route('/api/product/<int:id>', methods=['GET'])
+#def productByid(id):
+#    i = get_product_by_id(id)
+#    prod ={'id': i.id, 'name': i.name, 'description': i.description, 'price': str(i.price)}
+#    resp = make_response(jsonify(product=prod),200)
+#    return resp
 
 @app.route('/api/product', methods=['POST'])
 def products_post():

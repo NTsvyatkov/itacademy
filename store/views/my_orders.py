@@ -20,8 +20,9 @@ def ordersPage():
                    'status_option': request.args.get('status_option')})
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-
-    prods, records_amount = Order.pagerByFilter(user_id, page, records_per_page, filter)
+    sort_by = request.args.get('sort_by')
+    index_sort = request.args.get('index_sort')
+    prods, records_amount = Order.listOrders(user_id, page, records_per_page, sort_by, index_sort, filter)
     orders_list = []
     for i in prods:
         if i.assignee:

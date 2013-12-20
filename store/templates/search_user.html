@@ -234,12 +234,15 @@ This page is appointed for creating new and managing existing users
      <input type='button' value="Create New User">
      </a>
  </div>
-Number of Found User #  <span id = "ra">0</span>
+
       <div id="user_filter">
 
         <div class="user_filter_in">
          <form class='form'>
-                 <span>Search user</span>
+         <div class="top_bottom_line">
+                  <span class='info'>Search user</span>
+         </div>
+             <div class="form_block">
 <table>
    <tr>
         <td>
@@ -271,9 +274,13 @@ Number of Found User #  <span id = "ra">0</span>
         </td>
    </tr>
 </table>
+         </div>
          </form>
                  </div>
           </div>
+<div class="field" style="margin-left:5%;">
+      Number of Found User #  <span id = "ra">0</span>
+</div>
 <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select id="table_size">
@@ -281,7 +288,9 @@ Number of Found User #  <span id = "ra">0</span>
                     <option>25</option>
 
                    </select>
+
             </div>
+
               <div id="user_table">
        <table id='grid' class="grid">
            <tr>

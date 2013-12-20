@@ -1,6 +1,6 @@
 
-form                       { width:380px;padding:0 90px 20px;margin:auto;background:#f7f7f7;border:1px solid #ddd; }
-div                        { clear:both;position:relative;margin:0 0 10px; }
+
+div                        { clear:both;position:relative;margin:0px auto; }
 label                      { cursor:pointer;display:block; }
 input[type="text"]         { width:300px;border:1px solid #999;padding:5px;-moz-border-radius:4px; }
 input[type="text"]:focus   { border-color:#777; }

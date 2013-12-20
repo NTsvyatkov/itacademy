@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_, asc, desc
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_, asc, desc, DDL, event
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product, Dimension
 from models.product_stock_dao import ProductStock
@@ -141,10 +141,11 @@ class Order(Base):
                                        Order.user_id == user_id)).first()
 
     @staticmethod
-    def pagerByFilter(user_id=None, page=None, records_per_page=None, filter=None):
+    def listOrders(user_id=None, page=None, records_per_page=None, sort_by=None, index_sort=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
-        query = Order.query.outerjoin(Order.assignee).filter(and_(Order.user_id == user_id,
+        order = asc if index_sort == "asc" else desc
+        query = Order.query.outerjoin(Order.assignee, Order.status).filter(and_(Order.user_id == user_id,
                                                              Order.status_id != OrderStatus.getNameStatus('Cart').id))
         if filter['status_option']:
             filterStatus={'0': Order.id,
@@ -152,13 +153,28 @@ class Order(Base):
                     '2': Order.status_id == OrderStatus.getNameStatus('Pending').id,
                     '3': Order.status_id == OrderStatus.getNameStatus('Ordered').id,
                     '4': Order.status_id == OrderStatus.getNameStatus('Delivered').id}
+            query = query.filter(filterStatus[filter['status_option']])
         if int(filter['order_option']) == 0:
             query = query.filter(Order.id.like(filter['name']+'%'))
         if int(filter['order_option']) == 1:
             query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
                                      UserDao.last_name.like(filter['name']+'%')))
-        if filter['status_option']:
-            query = query.filter(filterStatus[filter['status_option']])
+        if sort_by == "order_id":
+            query = query.order_by(order(Order.id))
+        elif sort_by == "order_number":
+            query = query.order_by(order(Order.order_number))
+        elif sort_by == "total_price":
+            query = query.order_by(order(Order.total_price))
+        elif sort_by == "max_discount":
+            query = query.order_by(order(Order.discount))
+        elif sort_by == "delivery_date":
+            query = query.order_by(order(Order.delivery_date))
+        elif sort_by == "status":
+            query = query.order_by(order(OrderStatus.name))
+        elif sort_by == "assignee":
+            query = query.order_by(order(UserDao.first_name))
+        elif sort_by == "role":
+            query = query.order_by(order(RoleDao.name))
         return query.order_by(Order.id).slice(start, stop), \
             query.count()
 
@@ -225,20 +241,11 @@ class Order(Base):
             order.user.balance = order.total_price
         else:
             order.user.balance += order.total_price
-
-        if order.user.balance < UserLevel.get_level_by_name("Silver").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Standard").id
-        elif UserLevel.get_level_by_name("Silver").balance <= order.user.balance < \
-                UserLevel.get_level_by_name("Gold").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Silver").id
-        elif UserLevel.get_level_by_name("Gold").balance <= order.user.balance < \
-                UserLevel.get_level_by_name("Platinum").balance:
-            order.user.level_id = UserLevel.get_level_by_name("Gold").id
-        else:
-            order.user.level_id = UserLevel.get_level_by_name("Platinum").id
+        user_status = UserLevel.query.filter(UserLevel.balance < order.user.balance).\
+            order_by(desc(UserLevel.balance)).first()
+        order.user.level_id = user_status.id
 
         db_session.commit()
-
 
 
 class OrderStatus(Base):

@@ -1,8 +1,6 @@
 {% extends "layout.html" %}
 {% block body %}
-    <link href="{{url_for('static', filename='styles/bootstrap.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.css')}}" rel="stylesheet" type="text/css" />
-    <link href="{{url_for('static', filename='styles/bootstrap.min.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/bootstrap-responsive.min.css')}}" rel="stylesheet" type="text/css" />
 <script type="text/javascript">
     function confirmDelete() {
@@ -17,9 +15,11 @@
     div { clear:both;position:relative; }
 </style>
 
-    <form id="info"  name="form"  class = "form" method ="POST"  >
-        <div style = "height: 10px;"></div>
-    <h2>Create Product</h2>
+    <form id="info"  name="form"  class = "form" method ="POST"  style="width:600px;" >
+              <div class="top_bottom_line">
+                <span class='info'>Create Product</span>
+                </div>
+        <div class="form_block" style="width:400px;">
 		 <div class ="product_name"> <div id="product_name-wrap">
 	           <label for="product_name">Name*</label>
                <input id="product_name" name="name" type="text">
@@ -44,14 +44,10 @@
         </div></br>
 
 
-
-
-            </br></br></br></br></br>
-
     <input type="reset"  onclick="return confirmDelete()"  value="Refresh">
     <input type="button" name="cancel" value="Cancel" onclick="location='/products'" />
     <input type="button" value ="Create" class="button" onclick="return validate_form2()" id ="post_form">
-
+    </div>
     </form>
 
 {% endblock body  %}

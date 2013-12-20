@@ -29,7 +29,10 @@
 
 <div id="order_block">
     <div id="products_table" style='width:990px;'>
-        <span class='info'>Items Selection</span><br>
+        <div class="top_bottom_line">
+                    <span class='info'>Items Selection</span>
+        </div>
+
         <div class="order_top_input" style="float:left;width:100px;">
             <input type='button' value="Add Item" id="add_product">
         </div>
@@ -61,8 +64,9 @@
 
         <div style="width:980px; margin:0 auto;">
             <div class="order_block" style='min-height:380px;'>
+                <div class="top_bottom_line">
                 <span class='info'>Totals</span>
-
+                </div>
                 <div class="field">
                     <lable>Order Number:</lable>
                     <input type="text" id="order_number">
@@ -110,7 +114,9 @@
             </div>
 
             <div class="order_block" style='min-height:380px;'>
+                <div class="top_bottom_line">
                 <span class='info'>Card Info</span>
+                </div>
                 <div class="field">
                     <lable>Credit Card Type:<span class='red_star'>*</span> </lable>
                     <select id="credit_card_options" style="width:150px; padding:5px;">
@@ -214,8 +220,11 @@
 
 
        <div>
-        <form action="" id="info" style="width: 400px; height: 275px"><br>
-
+        <form id="info" style="width: 400px; height: 275px">
+        <div class="top_bottom_line">
+                  <span class='info'>Added Item</span>
+         </div>
+    <div class="form_block" style="width:300px;">
     <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
     <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
     <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
@@ -229,6 +238,7 @@
                 <input type="button" value="Done" id="done">
                 <input type="reset" value="Remove" id="remove">
                 <input type="button"  id="cancel"  value="Cancel">
+     </div>
      </div>
            </form>
         </div>

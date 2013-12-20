@@ -111,7 +111,17 @@ var password =   document.form.password.value;
                 });
         return false;
     }
+        else if ( password.length !=0 && password.length < 4){
+       $(".error_password").html(" Password should contain at least 4 characters").css({'color':'red'});
+                $(".password").toggleClass("errorList");
+                $(".password").click(function(){
 
+                $(".error_password").html("");
+                $(".password").removeClass("errorList")
+
+                });
+        return false;
+    }
 var confirm =   document.form.confirm.value;
         if (confirm != password){
         $(".error_confirm").html("Password and Confirmation should be equal.").css({'color':'red'});
@@ -208,8 +218,16 @@ var region =   document.form.region.value;
                     {
                        alert('User has been successfully update');
                        parent.location = '../search_user';
-                    }
+                    },
+error: function(resp, exception) {
 
+             if (resp.status == 400) {
+                alert("This login is exist");
+            } else if (resp.status == 500) {
+                alert("This login is exist");
+            }
+
+        }
 })
 
 }
