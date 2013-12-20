@@ -305,7 +305,14 @@ input[name="zip"] {
 #pagination input[type="button"]:hover.button_disable,
 #pagination input[type="button"]:focus.button_disable{
     border-color:#999;
-    background: linear-gradient(to bottom, #E2E2E2 0%, #DBDBDB 50%, #D1D1D1 51%, #FEFEFE 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: #f5f8fb; /* Old browsers */
+    background: -moz-linear-gradient(top, #f5f8fb 0%, #d5e9f7 50%, #c5e2f5 51%, #ebf6fd 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f8fb), color-stop(50%,#d5e9f7), color-stop(51%,#c5e2f5), color-stop(100%,#ebf6fd)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f8fb', endColorstr='#ebf6fd',GradientType=0 ); /* IE6-9 */
     margin: 0;
     cursor: default;
 }
@@ -319,7 +326,14 @@ input[name="zip"] {
 #button_block input[type="button"]:hover.button_disable,
 #button_block input[type="button"]:focus.button_disable{
     border-color:#999;
-    background: linear-gradient(to bottom, #E2E2E2 0%, #DBDBDB 50%, #D1D1D1 51%, #FEFEFE 100%) repeat scroll 0 0 rgba(0, 0, 0, 0);
+    background: #f5f8fb; /* Old browsers */
+    background: -moz-linear-gradient(top, #f5f8fb 0%, #d5e9f7 50%, #c5e2f5 51%, #ebf6fd 100%); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f5f8fb), color-stop(50%,#d5e9f7), color-stop(51%,#c5e2f5), color-stop(100%,#ebf6fd)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* IE10+ */
+    background: linear-gradient(to bottom, #f5f8fb 0%,#d5e9f7 50%,#c5e2f5 51%,#ebf6fd 100%); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f8fb', endColorstr='#ebf6fd',GradientType=0 ); /* IE6-9 */
     margin: 0;
     cursor: default;
 }
@@ -340,9 +354,9 @@ input[type="button"], input[type="submit"], input[type="reset"]  {
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f8fb', endColorstr='#ebf6fd',GradientType=0 ); /* IE6-9 */
 
 }
-input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover,
-input[type="button"]:focus,input[type="submit"]:focus, input[type="reset"]:focus { border-color:#333;background:#ddd; }
-input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:active{ margin-top:1px; }
+/*input[type="button"]:hover, input[type="submit"]:hover, input[type="reset"]:hover,*/
+/*input[type="button"]:focus,input[type="submit"]:focus, input[type="reset"]:focus { border-color:#333;background:#ddd; }*/
+/*input[type="button"]:active,input[type="submit"]:active, input[type="reset"]:active{ margin-top:1px; }*/
 
 
 
