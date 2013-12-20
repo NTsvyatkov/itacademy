@@ -236,14 +236,16 @@
 
             <div class="">
                 <div class=" ">
-                    <form class='form' action="">
-                        <br>
-                        <div style="margin: -10px 0 0 -200px;">
+                    <form class='form'>
+                        <div class="top_bottom_line">
+                        </div>
+                        <div style="margin: 5px;">
                             <a href='/order/' style='margin-left:50px; color:black; text-decoration:none;'><input type='button' value="Create New Order"></a>
                         </div>
+                        <div class="form_block">
                         <div class="field">
                             <lable style="float: left; line-height: 35px; padding-right:85px;">Status: </lable>
-                            <select id="status_options" style="width: 150px; float: left" >
+                            <select id="status_options" style="width: 150px; float: left; margin-left:20px;" >
                                 <option value="0">All</option>
                                 <option value="1">Created</option>
                                 <option value="2">Pending</option>
@@ -259,16 +261,18 @@
                             </select>
                             <input style="margin-top: -3px;" type="text" id="name_input" >
                         </div>
-                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -33px"></span>
+                        </div>
+                        <input type="button" value="Apply" id='apply_button' style="float: right; margin:0px 20px auto auto;">
+
                     </form>
                 </div>
 
 
-                <div style="margin-left:80%;"></div>
-                <div class="field" style="margin-left:5%;">
+                <div style='margin-left:80%;'> </div>
+                <div class='field' style='margin-left:5%;'>
                     <lable>Table size: </lable>
-                    <select id="table_size">
-                        <option selected value="10"> Show 10 lines </option>
+                    <select id='table_size'>
+                        <option selected value='10'> Show 10 lines </option>
                         <option value="25">Show 25 lines </option>
                     </select>
                 </div>

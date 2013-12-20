@@ -3,90 +3,93 @@
 
 <script src="{{ url_for('static', filename='js/product_grid.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
- <div>
-     <a href='create_product' style='margin-left:50px; color:black; text-decoration:none;'>
-     <input type='button' value="Create Product">
-     </a>
- </div>
-  <div id="products_block">
-      <div id="products_filter">
+<div>
+    <a href='create_product' style='margin-left:50px; color:black; text-decoration:none;'>
+        <input type='button' value="Create Product">
+    </a>
+</div>
+<div id="products_block">
+    <div id="products_filter">
 
         <div class="product_filter_in">
 
-         <form class='form' style="width:70%; margin:0 auto; padding: 5px; ">
-            <div class="ProductTitle">Filter List</div>
-             <div class="field">
-                  <lable>Name: </lable>
-                  <select id="name_options">
-                    <option value="0"></option>
-                    <option value="1">start with</option>
-                    <option value="2">contains</option>
-                    <option value="3">equal to</option>
-                   </select>
+            <form class='form' style=" width:70%; margin:0 auto; ">
+                <div class="top_bottom_line">
+                <span class='info'>Filter List</span>
+                </div>
+                <div class="field">
+                    <lable>Name: </lable>
+                    <select id="name_options">
+                        <option value="0"></option>
+                        <option value="1">start with</option>
+                        <option value="2">contains</option>
+                        <option value="3">equal to</option>
+                    </select>
                     <input type="text" id="name_input">
-             </div>
+                </div>
 
-             <div class="field">
-                 <lable>Description: </lable>
-                 <select id="description_options">
-                    <option value="0"></option>
-                    <option value="1">start with</option>
-                    <option value="2">contains</option>
-                    <option value="3">equal to</option>
-                  </select>
+                <div class="field">
+                    <lable>Description: </lable>
+                    <select id="description_options">
+                        <option value="0"></option>
+                        <option value="1">start with</option>
+                        <option value="2">contains</option>
+                        <option value="3">equal to</option>
+                    </select>
                     <input type="text" id="description_input">
-             </div>
+                </div>
 
-             <div class="field">
-                 <lable>Price: </lable>
-                 <select id="price_options">
-                    <option value="0"></option>
-                    <option value="1">less than</option>
-                    <option value="2">more than</option>
-                    <option value="3">equal to</option>
-                 </select>
-                 <input type="text" id="price_input">
-             </div>
-             <div class="error_div" style='width:90%;'>
-             </div>
+                <div class="field">
+                    <lable>Price: </lable>
+                    <select id="price_options">
+                        <option value="0"></option>
+                        <option value="1">less than</option>
+                        <option value="2">more than</option>
+                        <option value="3">equal to</option>
+                    </select>
+                    <input type="text" id="price_input">
+                </div>
+                <div class="error_div" style='width:90%;'>
+                </div>
 
-         </form>
-          <div style="margin-left:70%;">
-             <input type="button" value="Apply" id='apply_button'>
-             <input type="button" value="Clear" id='clr'>
-           </div>
+            </form>
+            <div style="margin-left:70%;">
+                <input type="button" value="Apply" id='apply_button'>
+                <input type="button" value="Clear" id='clr'>
+            </div>
         </div>
 
-      </div>
-      <div id="products_table" style='width:1000px;'>
+    </div>
 
-        <div class="field" style="margin-left:5%;">
-                  <lable>Table size: </lable>
-                  <select id="table_size">
-                    <option selected>5</option>
-                    <option>25</option>
-                  </select>
-         </div>
+    <div  style='width:1000px; margin:0px auto;'>
 
-
-
-       <table id='grid' class="grid">
-       </table>
+        <div class="field" style="text-align:left;">
+            <lable>Table size: </lable>
+            <select id="table_size">
+                <option selected>5</option>
+                <option>25</option>
+            </select>
+        </div>
 
 
 
-
-          <div id="pagination" style="text-align: center">
-              <input type="button" class="first" id="first" value="First">&nbsp
-              <input type="button" class="prev" id="prev" value="Prev">&nbsp
+        <table id='grid' class="grid">
+        </table>
 
 
-              <input type="button" id="next" class="next" value="Next">&nbsp
-              <input type="button" id="last" class="last" value="Last">
-              <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
 
-          </div>
 
-      </div>
+        <div id="pagination" style="text-align: center">
+            <input type="button" class="first" id="first" value="First">&nbsp
+            <input type="button" class="prev" id="prev" value="Prev">&nbsp
+
+
+            <input type="button" id="next" class="next" value="Next">&nbsp
+            <input type="button" id="last" class="last" value="Last">
+            <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of <span id="pages_amount"></span></div>
+
+        </div>
+
+    </div>
 </div>
 {% endblock body %}
