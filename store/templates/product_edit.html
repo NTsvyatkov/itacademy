@@ -105,7 +105,7 @@
                 success:function(json){
                     if (json.message == 'success')
                         {
-                            alert('The product has been successfully added');
+                            alert('The product has been successfully updated');
                         }
                     else{
                         alert (json.message);
@@ -136,7 +136,7 @@
                     if (json.message == 'success')
                         {
                             alert('The product has been successfully updated');
-                             document.location.href = 'product_grid';
+                             document.location.href = '/products';
                         }
                     else{
                         alert (json.message);
@@ -154,7 +154,7 @@
             $('#price').blur(function() {
                 if( isNaN($(this).val()) || ($(this).val()) <= 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
-                    price_error.innerHTML = 'Price should be filled.';
+                    price_error.innerHTML = 'Incorrect value prices.';
                 }else{
                     $(this).css({'border' : '2px solid #999'});
                     price_error.innerHTML = null;

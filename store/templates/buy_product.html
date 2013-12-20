@@ -10,6 +10,9 @@
             var count_td=6;
             var page = 1;
             var buyCount = 0;
+            var sort_by = "order_id";
+            var index_sort = "asc";
+            var detector;
             var table_grid = document.getElementById('grid');
             var modal_table_grid = document.getElementById('modal_grid');
             document.getElementById('cart_button').disabled = false;
@@ -109,9 +112,9 @@
                 })
              }
 
-             $('#create_button').click(function(){
+            $('#create_button').click(function(){
                 updateOrderProduct();
-             });
+            });
 
             function updateOrderProduct(){
                 $.ajax({
@@ -209,7 +212,7 @@
                 $.ajax({
                     dataType: "json",
                     url: '/api/product?page='+page+'&table_size='+count_tr+'&name='+name+'&start_price='+start_price+
-                        '&end_price='+end_price+'',
+                        '&end_price='+end_price+''+'&sort_by='+sort_by+'&index_sort='+index_sort,
                     type: 'GET',
                     contentType: "application/json",
                     success: function(json){
@@ -285,6 +288,8 @@
             });
 
             $('#table_size').change(function () {
+                $(".index").removeClass("asc");
+                $(".index").removeClass("desc");
                 count_tr=$('#table_size').val();
                 $( "#table_siz option:selected" ).each(createTableProducts())
             })
@@ -312,6 +317,42 @@
                     document.getElementById('search_button').disabled = false;
                 }
             });
+
+
+            $(".index").click(function(){
+                $(".index").removeClass("asc");
+                $(".index").removeClass("desc");
+                var entry = this.innerHTML;
+                entry = entry.replace(/\s/g, '');
+                switch (entry){
+                    case "Product":
+                        sort_by="product_name";
+                        break;
+                    case "Description":
+                        sort_by="description";
+                        break;
+                    case "Price":
+                        sort_by="price";
+                        break;
+                }
+                if (detector===entry){
+                    counter +=1;
+                }
+                else{
+                    detector=entry;
+                    counter= 0;
+                }
+                if (counter%2==0){
+                    index_sort = "asc";
+                    $(this).addClass("asc")
+                }
+                else{
+                    index_sort = "desc";
+                    $(this).addClass("desc")
+                }
+                createTableProducts();
+            });
+
 
            });
 
@@ -347,13 +388,13 @@
                 <div id=" ">
                     <table id='grid' class="grid">
                         <tr>
-                            <th>
+                            <th class = 'index'>
                                 Product
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Description
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Price
                             </th>
                             <th>

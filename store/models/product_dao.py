@@ -1,5 +1,5 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, ForeignKey, Text, DECIMAL, Boolean, and_, or_
+from sqlalchemy import Column, Integer, String, ForeignKey, Text, DECIMAL, Boolean, and_, or_, asc, desc
 from sqlalchemy.orm import relationship, backref
 
 
@@ -55,7 +55,9 @@ class Product(Base):
         return Product.query.filter_by(is_deleted=False).all()
 
     @staticmethod
-    def listProducts(name=None, start_price=None, end_price=None, page=None, records_per_page=None):
+    def listProducts(name=None, start_price=None, end_price=None, page=None, sort_by=None, index_sort=None,
+                     records_per_page=None):
+        product_index = asc if index_sort == "asc" else desc
         query = Product.query.filter_by(is_deleted=False)
         if name:
             query = query.filter(or_(Product.name == name, Product.description == name))
@@ -65,6 +67,12 @@ class Product(Base):
             query = query.filter(Product.price <= end_price)
         stop = page * records_per_page
         start = stop - records_per_page
+        if sort_by == "product_name":
+            query = query.order_by(product_index(Product.name))
+        elif sort_by == "description":
+            query = query.order_by(product_index(Product.description))
+        elif sort_by == "price":
+            query = query.order_by(product_index(Product.price))
         return query.filter_by(is_deleted=False).order_by(Product.id).slice(start, stop), \
             query.filter_by(is_deleted=False).count()
 

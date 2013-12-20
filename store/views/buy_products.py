@@ -21,7 +21,9 @@ def productsPage():
     end_price = request.args.get('end_price')
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    prods, records_amount = Product.listProducts(name, start_price, end_price, page, records_per_page)
+    sort_by = request.args.get('sort_by')
+    index_sort = request.args.get('index_sort')
+    prods, records_amount = Product.listProducts(name, start_price, end_price, page, sort_by, index_sort, records_per_page)
     products_arr = []
     for i in prods:
         products_arr.append({'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description})

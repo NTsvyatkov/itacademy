@@ -107,8 +107,8 @@
                 var name_input = document.getElementById('name_input').value;
                 $.ajax({
                 dataType: "json",
-                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+''+'&sort_by='+sort_by+
-                '&index_sort='+index_sort,
+                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='
+                        +orders_options+'&name_input='+name_input+''+'&sort_by='+sort_by+'&index_sort='+index_sort,
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json){
