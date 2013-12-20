@@ -7,82 +7,71 @@
             $(document).ready (function() {
             var count_tr=$('#table_size').val();
             var count_td=6;
+            var sort_by = "order_id";
+            var index_sort = "asc";
             var page = 1;
+            var detector;
             var table_grid = document.getElementById('grid');
 
-            function createGrid(count)
-                {
-                    for (var i=1; i<=count;i++ )
-                        {
-                            tr[i] = document.createElement('TR');
-                            table_grid.appendChild(tr[i]);
-                            tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "";
-                            for (var j=0; j<=8; j++)
-                                {
-                                    tr[i].appendChild(document.createElement('TD'));
-                                }
-                        }
-                   $( "tr:even" ).css( "background-color", "#f0f0f0" );
+            function createGrid(count){
+                for (var i=1; i<=count;i++ ){
+                    tr[i] = document.createElement('TR');
+                    table_grid.appendChild(tr[i]);
+                    tr[i].id=i;
+                    if (i % 2 == 0) tr[i].style.background = "#f0f0f0";
+                    for (var j=0; j<=8; j++){
+                        tr[i].appendChild(document.createElement('TD'));
+                    }
                 }
+            }
 
-            createGrid();
-
-            function deleteGrid()
-                {
-                    for (var n=table_grid.rows.length ; n>=2; n--)
-                        {
-                            table_grid.removeChild(table_grid.childNodes[n]);
-                        }
-
+            function deleteGrid(){
+                for (var n=table_grid.rows.length ; n>=2; n--){
+                    table_grid.removeChild(table_grid.childNodes[n]);
                 }
+            }
 
             function listOrders(json){
                 deleteGrid();
                 createGrid(json.orders.length);
                 var grid_length = json.orders.length;
                 /*Create table */
-                for (var order_k in json.orders)
-                    {
-                        k++;
-                        tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
-                        tr[k].cells[1].innerHTML = "$ "+json.orders[order_k].total_price;
-                        tr[k].cells[2].innerHTML = json.orders[order_k].maxDiscount+' %';
-                        tr[k].cells[3].innerHTML = json.orders[order_k].delivery_date;
-                        tr[k].cells[4].innerHTML = json.orders[order_k].orderStatus;
-                        tr[k].cells[5].innerHTML = json.orders[order_k].assignee;
-                        tr[k].cells[6].innerHTML = json.orders[order_k].role;
-                        tr[k].cells[7].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
-                        tr[k].cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" +k+ ">";
-                        tr[k].cells[7].abbr=k;
-                        tr[k].cells[8].abbr=k;
-                        tr[k].cells[7].onclick= function()
-                            {
-                                window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
-                            };
-                        tr[k].cells[8].onclick= function()
-                            {
-                                if(confirm('The order will be deleted from the List of Orders. Are you sure you want' +
-                                        ' to proceed?')){
-                                    id = tr[this.abbr].cells[0].innerHTML;
-                                    if (tr[this.abbr].cells[4].innerHTML == 'Created' || tr[this.abbr].cells[4].innerHTML == 'Pending'){
-                                        deleteOrder(id,grid_length);
-                                    }else{
-                                        alert("Sorry, you can't delete order with status "+tr[this.abbr].cells[4].innerHTML)
-                                    }
-                                }
+                for (var order_k in json.orders){
+                    k++;
+                    tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
+                    tr[k].cells[1].innerHTML = "$ "+json.orders[order_k].total_price;
+                    tr[k].cells[2].innerHTML = json.orders[order_k].maxDiscount+' %';
+                    tr[k].cells[3].innerHTML = json.orders[order_k].delivery_date;
+                    tr[k].cells[4].innerHTML = json.orders[order_k].orderStatus;
+                    tr[k].cells[5].innerHTML = json.orders[order_k].assignee;
+                    tr[k].cells[6].innerHTML = json.orders[order_k].role;
+                    tr[k].cells[7].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" +k+ ">";
+                    tr[k].cells[8].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" +k+ ">";
+                    tr[k].cells[7].abbr=k;
+                    tr[k].cells[8].abbr=k;
+                    tr[k].cells[7].onclick= function(){
+                        window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
+                    };
+                    tr[k].cells[8].onclick= function(){
+                        if(confirm('The order will be deleted from the List of Orders. Are you sure you want' +
+                            ' to proceed?')){
+                            id = tr[this.abbr].cells[0].innerHTML;
+                            if (tr[this.abbr].cells[4].innerHTML == 'Created' || tr[this.abbr].cells[4].innerHTML == 'Pending'){
+                                deleteOrder(id,grid_length);
+                            }else{
+                                alert("Sorry, you can't delete order with status "+tr[this.abbr].cells[4].innerHTML)
                             }
+                        }
                     }
-                    k=0;
-                    /*End creating table*/
+                }
+                k=0;
             }
 
             var k=0;
             var form_value = {id : $('#name_form').val(), name : $('#product_name').val()};
             var json_value = JSON.stringify(form_value);
 
-            function deleteOrder(id,grid_length)
-            {
+            function deleteOrder(id,grid_length){
                 $.ajax({
                     dataType: "json",
                     url: '/api/orders/'+id,
@@ -90,12 +79,12 @@
                     success: function(json){
                         if (json.message == 'success'){
                             alert('The order has been successfully deleted');
-                            if (grid_length==1)
-                                {
-                                    if (page!=1)
-                                    {page=page-1;}
+                            if (grid_length==1){
+                                if (page!=1){
+                                    page=page-1;
                                 }
-                                createTableOrders();
+                            }
+                            createTableOrders();
                         }
                         else{
                             alert (json.message);
@@ -118,46 +107,46 @@
                 var name_input = document.getElementById('name_input').value;
                 $.ajax({
                 dataType: "json",
-                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+'',
+                url: '/api/orders/?page='+page+'&table_size='+count_tr+'&status_option='+status_options+'&order_option='+orders_options+'&name_input='+name_input+''+'&sort_by='+sort_by+
+                '&index_sort='+index_sort,
                 type: 'GET',
                 contentType: "application/json",
-                success: function(json)
-                    {
-                        listOrders(json);
-                        records_amount=(json.records_amount);
-                        records_per_page=(json.records_per_page);
-                        pages_amount = Math.ceil(records_amount/records_per_page);
-                        document.getElementById("page").innerHTML = page;
-                        document.getElementById("pages_amount").innerHTML = pages_amount
+                success: function(json){
+                    listOrders(json);
+                    records_amount=(json.records_amount);
+                    records_per_page=(json.records_per_page);
+                    pages_amount = Math.ceil(records_amount/records_per_page);
+                    document.getElementById("page").innerHTML = page;
+                    document.getElementById("pages_amount").innerHTML = pages_amount
 
-                        if (page==1){
-                            $('#prev').prop('disabled', true);
-                            $('#first').prop('disabled', true);
-                            $('#prev').addClass("button_disable");
-                            $('#first').addClass("button_disable");
-                        } else {
-                            $('#prev').prop('disabled', false);
-                            $('#first').prop('disabled', false);
-                            $('#prev').removeClass("button_disable");
-                            $('#first').removeClass("button_disable");
-                            $('#prev').removeAttr("disabled");
-                            $('#first').removeAttr("disabled");
-                        }
-
-                        if (page==pages_amount){
-                            $('#next').prop('disabled', true);
-                            $('#last').prop('disabled', true);
-                            $('#next').addClass("button_disable");
-                            $('#last').addClass("button_disable");
-                        } else {
-                            $('#next').prop('disabled', false);
-                            $('#last').prop('disabled', false);
-                            $('#next').removeClass("button_disable");
-                            $('#last').removeClass("button_disable");
-                            $('#next').removeAttr("disabled");
-                            $('#last').removeAttr("disabled");
-                        }
+                    if (page==1){
+                        $('#prev').prop('disabled', true);
+                        $('#first').prop('disabled', true);
+                        $('#prev').addClass("button_disable");
+                        $('#first').addClass("button_disable");
+                    } else {
+                        $('#prev').prop('disabled', false);
+                        $('#first').prop('disabled', false);
+                        $('#prev').removeClass("button_disable");
+                        $('#first').removeClass("button_disable");
+                        $('#prev').removeAttr("disabled");
+                        $('#first').removeAttr("disabled");
                     }
+
+                    if (page==pages_amount){
+                        $('#next').prop('disabled', true);
+                        $('#last').prop('disabled', true);
+                        $('#next').addClass("button_disable");
+                        $('#last').addClass("button_disable");
+                    } else {
+                        $('#next').prop('disabled', false);
+                        $('#last').prop('disabled', false);
+                        $('#next').removeClass("button_disable");
+                        $('#last').removeClass("button_disable");
+                        $('#next').removeAttr("disabled");
+                        $('#last').removeAttr("disabled");
+                    }
+                }
                 })
             }
 
@@ -166,35 +155,79 @@
             }
 
             $('#next').click(function(){
-            if (page*records_per_page>=records_amount){page=page}
-            else {page=page+1}
-            createTableOrders()
+                if (page*records_per_page>=records_amount){
+                    page=page;
+                }
+                else {
+                    page=page+1;
+                }
+                createTableOrders()
             });
 
             $('#prev').click(function(){
-            page=page-1;
-            if (page<=1){
-            page=1;
-            }
-            createTableOrders()
+                page=page-1;
+                if (page<=1){
+                    page=1;
+                }
+                createTableOrders()
             });
 
             $('#first').click(function(){
-            page=1;
-            createTableOrders()
+                page=1;
+                createTableOrders()
             });
 
             $('#last').click(function(){
-            page=pages_amount;
-            createTableOrders()
+                page=pages_amount;
+                createTableOrders()
             });
 
             $('#table_size').change(function () {
-            count_tr=$('#table_size').val();
-            $( "#table_siz option:selected" ).each(createTableOrders())
-            })
+                count_tr=$('#table_size').val();
+                $( "#table_siz option:selected" ).each(createTableOrders())
+            });
 
-
+            $(".index").click(function(){
+                var entry = this.innerHTML;
+                entry = entry.replace(/\s/g, '');
+                switch (entry){
+                    case "OrderNumber":
+                        sort_by="order_id";
+                        break;
+                    case "TotalPrice":
+                        sort_by="total_price";
+                        break;
+                    case "MaxDiscount":
+                        sort_by="max_discount";
+                        break;
+                    case "DeliveryDate":
+                        sort_by="delivery_date";
+                        break;
+                    case "Status":
+                        sort_by="status";
+                        break;
+                    case "Assignee":
+                        sort_by="assignee";
+                        break;
+                    case "Role":
+                        sort_by="role";
+                        break;
+                }
+                if (detector===entry){
+                    counter +=1;
+                }
+                else{
+                    detector=entry;
+                    counter= 0;
+                }
+                if (counter%2==0){
+                    index_sort = "asc";
+                }
+                else{
+                    index_sort = "desc";
+                }
+                createTableOrders();
+            });
 
             });
         </script>
@@ -209,7 +242,7 @@
                             <a href='/order/' style='margin-left:50px; color:black; text-decoration:none;'><input type='button' value="Create New Order"></a>
                         </div>
                         <div class="field">
-                            <lable style="float: left; line-height: 45px; padding-right:95px;">Status: </lable>
+                            <lable style="float: left; line-height: 35px; padding-right:85px;">Status: </lable>
                             <select id="status_options" style="width: 150px; float: left" >
                                 <option value="0">All</option>
                                 <option value="1">Created</option>
@@ -219,14 +252,14 @@
                             </select>
                         </div>
                         <div class="field" style="width: 500px;">
-                            <lable style="float: left; line-height: 35px; padding-right:10px;">Search for orders by: </lable>
+                            <lable style="float: left; line-height: 25px; padding-right:10px;">Search for orders by: </lable>
                             <select id="orders_options" style="width: 150px;float: left; margin:0px;">
                                 <option value="0">Order Number</option>
                                 <option value="1">Assignee</option>
                             </select>
-                            <input type="text" id="name_input" >
+                            <input style="margin-top: -3px;" type="text" id="name_input" >
                         </div>
-                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -37px"></span>
+                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -33px"></span>
                     </form>
                 </div>
 
@@ -242,25 +275,25 @@
                 <div id=" ">
                     <table id='grid' class="grid">
                         <tr>
-                            <th>
+                            <th class = 'index'>
                                 Order Number
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Total Price
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Max Discount
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Delivery Date
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Status
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Assignee
                             </th>
-                            <th>
+                            <th class = 'index'>
                                 Role
                             </th>
                             <th>

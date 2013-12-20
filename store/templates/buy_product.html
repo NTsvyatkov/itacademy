@@ -19,12 +19,11 @@
                     tr[i] = document.createElement('TR');
                     table_grid.appendChild(tr[i]);
                     tr[i].id=i;
-                        if (i % 2 == 0) tr[i].style.background = "#efddba";
-                            for (var j=0; j<=5; j++){
-                                tr[i].appendChild(document.createElement('TD'));
-                            }
+                    if (i % 2 == 0) tr[i].style.background = "#f0f0f0";
+                    for (var j=0; j<=5; j++){
+                        tr[i].appendChild(document.createElement('TD'));
+                    }
                 }
-               $( "tr:even" ).css( "background-color", "#f0f0f0" );
             }
 
             function deleteGrid(){
@@ -38,12 +37,10 @@
                     tr[i] = document.createElement('TR');
                     modal_table_grid.appendChild(tr[i]);
                     tr[i].id=i;
-                    if (i % 2 == 0) tr[i].style.background = "";
-                        for (var j=0; j<=4; j++){
-                            tr[i].appendChild(document.createElement('TD'));
-                        }
+                    for (var j=0; j<=4; j++){
+                        tr[i].appendChild(document.createElement('TD'));
+                    }
                 }
-                $( "tr:even" ).css( "background-color", "" );
             }
 
             function deleteModalGrid(){
@@ -85,6 +82,7 @@
                             modalListProducts(json);
                         }
                         else{
+                            $('#cart_button').prop('disabled', true);
                             $.arcticmodal('close');
                         }
                     }
@@ -149,37 +147,33 @@
             function listProducts(json){
                 deleteGrid();
                 createGrid(json.products.length);
-                for (var product_k in json.products)
-                    {
-                        k++;
-                        tr[k].cells[0].innerHTML = json.products[product_k].name;
-                        tr[k].cells[1].innerHTML = json.products[product_k].description;
-                        tr[k].cells[2].innerHTML = "$ "+ json.products[product_k].price;
-                        tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px'" +
-                            " value = '1' alt=" + k + ">";
-                        tr[k].cells[4].innerHTML = "<span><select id = 'select_dimension"+k+"'></select></span>"
-                        for (var status_k in json.status)
-                        {
-                            $('#select_dimension'+k).append('<option value=' + json.status[status_k].id + '>' +
-                                    json.status[status_k].name + '</option>');
-                        }
-                        tr[k].cells[5].innerHTML = "<input type='button' value='Add to Cart' id='button'  alt=" + k + ">";
-                        tr[k].cells[4].abbr=k;
-                        tr[k].cells[5].abbr=k;
-                        tr[k].cells[5].onclick= function()
-                            {
-                                var value = document.getElementById('output'+this.abbr).value;
-                                var id = json.products[this.abbr-1].id;
-                                var status = document.getElementById('select_dimension'+this.abbr).value;
-                                var price = json.products[this.abbr-1].price;
-                                buyCount++;
-                                document.getElementById('cart_button').disabled = false;
-                                buyProduct(id, value, status, price)
-                            }
+                for (var product_k in json.products){
+                    k++;
+                    tr[k].cells[0].innerHTML = json.products[product_k].name;
+                    tr[k].cells[1].innerHTML = json.products[product_k].description;
+                    tr[k].cells[2].innerHTML = "$ "+ json.products[product_k].price;
+                    tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px'" +
+                        " value = '1' alt=" + k + ">";
+                    tr[k].cells[4].innerHTML = "<span><select id = 'select_dimension"+k+"'></select></span>"
+                    for (var status_k in json.status){
+                        $('#select_dimension'+k).append('<option value=' + json.status[status_k].id + '>' +
+                            json.status[status_k].name + '</option>');
                     }
-                    k=0;
+                    tr[k].cells[5].innerHTML = "<input type='button' value='Add to Cart' id='button'  alt=" + k + ">";
+                    tr[k].cells[4].abbr=k;
+                    tr[k].cells[5].abbr=k;
+                    tr[k].cells[5].onclick= function(){
+                        var value = document.getElementById('output'+this.abbr).value;
+                        var id = json.products[this.abbr-1].id;
+                        var status = document.getElementById('select_dimension'+this.abbr).value;
+                        var price = json.products[this.abbr-1].price;
+                        buyCount++;
+                        document.getElementById('cart_button').disabled = false;
+                        buyProduct(id, value, status, price)
+                    }
+                }
+                k=0;
             }
-
 
             function buyProduct(id,value, status, price){
                 data = {'value': value, "status": status, "price":price};
@@ -190,12 +184,12 @@
                     data: JSON.stringify(data),
                     contentType: "application/json",
                     success: function(json){
-                        if (json.message == 'success')
-                            {
+                        if (json.message == 'success'){
                             alert('The product was successfully added');
                             }
-                        else
-                         alert (json.message);
+                        else{
+                            alert (json.message);
+                        }
                     },
                     error: function(e){
                        error = JSON.parse(e.responseText);
@@ -223,6 +217,7 @@
                         records_amount=(json.records_amount);
                         records_per_page=(json.records_per_page);
                         pages_amount = Math.ceil(records_amount/records_per_page);
+                        if (pages_amount <1){pages_amount = 1}
                         document.getElementById("page").innerHTML = page;
                         document.getElementById("pages_amount").innerHTML = pages_amount;
 
@@ -262,32 +257,36 @@
             }
 
             $('#next').click(function(){
-            if (page*records_per_page>=records_amount){page=page;}
-            else {page=page+1;}
-            createTableProducts()
+                if (page*records_per_page>=records_amount){
+                    page=page;
+                }
+                else {
+                    page=page+1;
+                }
+                createTableProducts()
             });
 
             $('#prev').click(function(){
-            page=page-1;
-            if (page<=1){
-            page=1;
-            }
-            createTableProducts()
+                page=page-1;
+                if (page<=1){
+                page=1;
+                }
+                createTableProducts()
             });
 
             $('#first').click(function(){
-            page=1;
-            createTableProducts()
+                page=1;
+                createTableProducts()
             });
 
             $('#last').click(function(){
-            page=pages_amount;
-            createTableProducts()
+                page=pages_amount;
+                createTableProducts()
             });
 
             $('#table_size').change(function () {
-            count_tr=$('#table_size').val();
-            $( "#table_siz option:selected" ).each(createTableProducts())
+                count_tr=$('#table_size').val();
+                $( "#table_siz option:selected" ).each(createTableProducts())
             })
 
 
@@ -312,11 +311,9 @@
                     $(this).css({'border' : '2px solid #999'});
                     document.getElementById('search_button').disabled = false;
                 }
-
             });
 
            });
-
 
         </script>
 

@@ -8,20 +8,20 @@ from models.product_dao import Product
 from business_logic.product_manager import validate_quantity
 
 @app.route('/product_buy', methods=('GET', 'POST'))
-def productBuy():
+def buyProducts():
      if session['role'] not in 'Customer':
-       return "You've got permission to access this page."
+        return "You've got permission to access this page."
      else:
-         return render_template('buy_product.html',)
+        return render_template('buy_product.html',)
 
 @app.route('/api/product', methods=['GET'])
-def products():
+def productsPage():
     name = request.args.get('name')
     start_price = request.args.get('start_price')
     end_price = request.args.get('end_price')
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    prods, records_amount = Product.pagerByFilter(name, start_price, end_price, page, records_per_page)
+    prods, records_amount = Product.listProducts(name, start_price, end_price, page, records_per_page)
     products_arr = []
     for i in prods:
         products_arr.append({'id': i.id, 'name': i.name, 'price': str(i.price), 'description': i.description})
@@ -33,7 +33,7 @@ def products():
                                  records_per_page=records_per_page), 200)
 
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
-def productsBuy(id):
+def buyProduct(id):
     user_id = session['user_id']
     json = request.get_json()
     validate_quantity(id,json['status'],json['value'],'check')

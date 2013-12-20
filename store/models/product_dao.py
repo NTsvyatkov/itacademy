@@ -9,8 +9,6 @@ class Product(Base):
     name = Column(String(100))
     description = Column(Text)
     price = Column(DECIMAL(5, 2))
-    #dimension_id = Column(Integer, ForeignKey('dimensions.id'))
-    #dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     is_deleted = Column(Boolean, default=False)
 
     def __init__(self, name, description, price, is_deleted=False):
@@ -57,7 +55,7 @@ class Product(Base):
         return Product.query.filter_by(is_deleted=False).all()
 
     @staticmethod
-    def pagerByFilter(name=None, start_price=None, end_price=None, page=None, records_per_page=None):
+    def listProducts(name=None, start_price=None, end_price=None, page=None, records_per_page=None):
         query = Product.query.filter_by(is_deleted=False)
         if name:
             query = query.filter(or_(Product.name == name, Product.description == name))
