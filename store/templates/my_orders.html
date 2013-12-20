@@ -183,11 +183,15 @@
             });
 
             $('#table_size').change(function () {
+                $(".index").removeClass("asc");
+                $(".index").removeClass("desc");
                 count_tr=$('#table_size').val();
                 $( "#table_siz option:selected" ).each(createTableOrders())
             });
 
             $(".index").click(function(){
+                $(".index").removeClass("asc");
+                $(".index").removeClass("desc");
                 var entry = this.innerHTML;
                 entry = entry.replace(/\s/g, '');
                 switch (entry){
@@ -222,9 +226,11 @@
                 }
                 if (counter%2==0){
                     index_sort = "asc";
+                    $(this).addClass("asc")
                 }
                 else{
                     index_sort = "desc";
+                    $(this).addClass("desc")
                 }
                 createTableOrders();
             });
@@ -245,7 +251,7 @@
                         <div class="form_block">
                         <div class="field">
                             <lable style="float: left; line-height: 35px; padding-right:85px;">Status: </lable>
-                            <select id="status_options" style="width: 150px; float: left; margin-left:20px;" >
+                            <select id="status_options" style="width: 150px; float: left; margin-left:10px;" >
                                 <option value="0">All</option>
                                 <option value="1">Created</option>
                                 <option value="2">Pending</option>
@@ -253,16 +259,17 @@
                                 <option value="4">Delivered</option>
                             </select>
                         </div>
-                        <div class="field" style="width: 500px;">
-                            <lable style="float: left; line-height: 25px; padding-right:10px;">Search for orders by: </lable>
-                            <select id="orders_options" style="width: 150px;float: left; margin:0px;">
+                        <div class="field" style="width: 550px;">
+                            <lable style="float: left; line-height: 27px; padding-right:10px;">Search for orders by: </lable>
+                            <select id="orders_options" style="width: 150px;float: left; margin-top:3px;">
                                 <option value="0">Order Number</option>
                                 <option value="1">Assignee</option>
                             </select>
-                            <input style="margin-top: -3px;" type="text" id="name_input" >
+                            <input style="" type="text" id="name_input" >
+                            <input type="button" value="Apply" id='apply_button' style="">
                         </div>
                         </div>
-                        <input type="button" value="Apply" id='apply_button' style="float: right; margin:0px 20px auto auto;">
+
 
                     </form>
                 </div>

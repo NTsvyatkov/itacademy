@@ -90,6 +90,13 @@ body {
     background:url(../images/1.gif) right no-repeat; cursor:pointer;
 }
 
+.grid .index.asc{
+    background:url(../images/0.gif) right no-repeat; cursor:pointer;
+}
+.grid .index.desc{
+    background:url(../images/1.gif) right no-repeat; cursor:pointer;
+}
+
 #menu  {font: 15px Arial, Helvetica, sans-serif;
     background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,0.61) 50%, rgba(209,209,209,0.6) 51%, rgba(254,254,254,0.22) 100%); /* FF3.6+ */
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)), color-stop(50%,rgba(219,219,219,0.61)), color-stop(51%,rgba(209,209,209,0.6)), color-stop(100%,rgba(254,254,254,0.22))); /* Chrome,Safari4+ */
