@@ -35,8 +35,8 @@ def product_order_update(order_dict,method):
             order_product.total_price=total_price
         else:
             order_product= OrderProduct.add_order_product(order_id,product_id,dimension_id,quantity,total_price)
-
         validate_quantity(product_id,dimension_id,quantity,'update')
+        OrderProduct.changeTriggerStatus(order_dict['order_id'],i['product_id'],i['dimension_id'])
     if method == 'POST':
         order.status_id = 3
     else:

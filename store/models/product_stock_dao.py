@@ -2,7 +2,6 @@
 
 from sqlalchemy import ForeignKey
 from sqlalchemy import Column, Integer,and_
-
 from models import Base, db_session
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Dimension, Product
@@ -11,7 +10,6 @@ from models.product_dao import Dimension, Product
 class ProductStock(Base):
     __tablename__ = "product_stock"
 
-    #id = Column(Integer, primary_key=True, autoincrement=True)
     product_id = Column(Integer, ForeignKey('products.id'), primary_key=True)
     product = relationship('Product', backref=backref('product_stock', lazy='dynamic'))
     dimension_id = Column(Integer, ForeignKey('dimensions.id'), primary_key=True)
@@ -67,14 +65,10 @@ class ProductStock(Base):
             db_session.commit()
 
     @staticmethod
-    def get_quantity_result(product_id,dimension_id,quantity,check):
+    def get_quantity_result(product_id,dimension_id,quantity, check):
         i=ProductStock.query.filter(and_(ProductStock.product_id == product_id,ProductStock.dimension_id==dimension_id,\
                                          ProductStock.quantity >= quantity, )).first()
-        if i and check=='check':
-            return True
-        elif i and check =='update':
-            i.quantity = i.quantity-quantity
-            db_session.commit()
+        if i and (check=='check' or check =='update'):
             return True
         else:
             False

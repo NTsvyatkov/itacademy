@@ -346,9 +346,10 @@ class OrderProduct(Base):
     quantity = Column(Integer)
     price = Column(DECIMAL(5, 2), nullable=True)
     product_price_per_line = Column(DECIMAL(5, 2), nullable=True)
+    trigger_status = Column(Boolean, default=False)
 
 
-    def __init__(self, order_id, product_id, dimension_id, quantity, price):
+    def __init__(self, order_id, product_id, dimension_id, quantity, price, trigger_status = False):
         super(OrderProduct, self).__init__()
         self.quantity = quantity
         self.order_id = order_id
@@ -356,6 +357,7 @@ class OrderProduct(Base):
         self.dimension_id = dimension_id
         self.price = price
         self.product_price_per_line = float(quantity) * float(price)
+        self.trigger_status = trigger_status
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
@@ -394,6 +396,12 @@ class OrderProduct(Base):
     def add_order_product(order_id, product_id, dimension_id, quantity, price = None):
         order_product = OrderProduct(order_id, product_id, dimension_id, quantity, price)
         db_session.add(order_product)
+        db_session.commit()
+
+    @staticmethod
+    def changeTriggerStatus(order_id, product_id, dimension_id):
+        entry = OrderProduct.get_order_product(order_id, product_id, dimension_id)
+        entry.trigger_status = True
         db_session.commit()
 
     @staticmethod
@@ -438,3 +446,14 @@ def order_product_grid(user_id,order_id, page=None, records_per_page=None):
         return query.slice(start, stop).all(), count
     else:
         return query.all(),count
+
+tbl = OrderProduct.__table__
+event.listen(tbl, 'after_create', DDL("""
+    CREATE TRIGGER order_product_trigger BEFORE UPDATE ON order_product
+    FOR EACH ROW BEGIN
+        if NEW.trigger_status = True THEN
+            UPDATE product_stock SET product_stock.quantity=product_stock.quantity - NEW.quantity WHERE
+             product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+        END IF;
+    END;
+    """).execute_if(dialect='mysql'))
