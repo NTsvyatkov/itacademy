@@ -345,7 +345,6 @@ class OrderProduct(Base):
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
     price = Column(DECIMAL(5, 2), nullable=True)
-    product_price_per_line = Column(DECIMAL(5, 2), nullable=True)
     trigger_status = Column(Boolean, default=False)
 
 
@@ -356,8 +355,12 @@ class OrderProduct(Base):
         self.product_id = product_id
         self.dimension_id = dimension_id
         self.price = price
-        self.product_price_per_line = float(quantity) * float(price)
         self.trigger_status = trigger_status
+
+    @property
+    def product_price_per_line(self):
+        dimension = Dimension.get_dimension(self.dimension_id)
+        return self.price * self.quantity * dimension.number
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
