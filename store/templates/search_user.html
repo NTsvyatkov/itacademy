@@ -19,7 +19,7 @@
                             tr[i] = document.createElement('TR');
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#f0f0f0";
+                            if (i % 2 == 0) tr[i].style.background = "#ccc";
                             for (var j=0; j<=7; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
@@ -243,11 +243,11 @@ This page is appointed for creating new and managing existing users
                   <span class='info'>Search user</span>
          </div>
              <div class="form_block">
-<table>
+<table class="grid">
    <tr>
         <td>
                  <div class="search">
-         <select id="SelectId_user" style="width:100px">
+         <select class="span1" id="SelectId_user" style="width:100px">
                         <option value="str0"> User Name </option>
                         <option value="str1"> first name </option>
                         <option value="str2"> last name </option>
@@ -269,7 +269,7 @@ This page is appointed for creating new and managing existing users
                 </div>
           </td>
           <td>
-                <input type="text" style="..." id="key_input">
+                <br><br><input type="text" style="..." id="key_input"></br>
                 <input type="button" value="search" id='search_button'>
         </td>
    </tr>
@@ -283,7 +283,7 @@ This page is appointed for creating new and managing existing users
 </div>
 <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
-                  <select id="table_size">
+                  <select class="span1" id="table_size">
                     <option selected>5</option>
                     <option>25</option>
 

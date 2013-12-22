@@ -157,9 +157,9 @@
                     tr[k].cells[2].innerHTML = "$ "+ json.products[product_k].price;
                     tr[k].cells[3].innerHTML = "<input type='text' id = 'output"+k+"' style='width:50px'" +
                         " value = '1' alt=" + k + ">";
-                    tr[k].cells[4].innerHTML = "<span><select id = 'select_dimension"+k+"'></select></span>"
+                    tr[k].cells[4].innerHTML = "<span><select class='span1' id = 'select_dimension"+k+"'></select></span>"
                     for (var status_k in json.status){
-                        $('#select_dimension'+k).append('<option value=' + json.status[status_k].id + '>' +
+                        $('#select_dimension'+k).append('<option  value=' + json.status[status_k].id + '>' +
                             json.status[status_k].name + '</option>');
                     }
                     tr[k].cells[5].innerHTML = "<input type='button' value='Add to Cart' id='button'  alt=" + k + ">";
@@ -362,15 +362,15 @@
             <div class="">
                 <div class="">
                     <div class=" ">
-                        <form class='form' action="">
+                        <form action="">
                             <div class="top_bottom_line">
                                 <div class="ProductTitle">Filter</div>
                              </div>
                             <div class="form_block">
 
-                            <span>Keyword <input type="text"  id = 'name' style="width:150px" /></span>
+                            <span>Keyword <input type="text" id = 'name' style="width:150px" /></span>
                             <span>Price <input type="text" id = 'start_price' style="width:50px" /> - </span>
-                            <span><input type="text"  id = 'end_price' style="width:50px" /> </span>
+                            <span><input type="text" id = 'end_price' style="width:50px" /> </span>
                             <span><input type="button" value="search" id='search_button'></span>
                             <span style="float: right"><input type="button" value="Cart" id='cart_button'></span>
                             </div>
@@ -379,7 +379,7 @@
                 </div>
                 <div class="field" style="margin-left:5%;">
                     <lable>Table size: </lable>
-                    <select id="table_size">
+                    <select class="span2" id="table_size">
                         <option selected value="5">Show 5 lines </option>
                         <option value="25">Show 25 lines </option>
                     </select>
@@ -409,7 +409,7 @@
                         </tr>
                     </table>
 
-                    <div id="pagination" style="text-align: center">
+                    <div id="pagination"  style="text-align: center">
                         <input type="button" id="first" value="First">&nbsp
                         <input type="button" id="prev" value="Prev">&nbsp
                         <input type="button" id="next" value="Next">&nbsp

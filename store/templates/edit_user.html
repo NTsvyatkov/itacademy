@@ -3,50 +3,38 @@
 <style type="text/css">
 div { clear:both;position:relative; }
 </style>
+
 <form id="info"  name="form"  class = "form" method ="POST"  >
+          <div class="top_bottom_line">
+                  <span class='info'>Update user</span>
+         </div>
         <div style = "height: 15px;"></div>
-    <table>
+    <div class="form_block">
 
                 <!--Login-->
-
-        <tr>
-
-	   <td>
 
 	           <label for="login">Login:</label>
         <div class ="login">
               <input id="login" name="login" type="text" value=""maxlength="50">
 
-       <td>
+
         <div class = "error_login"></div>
-       </td>
+
        </div>
            <div style = "height: 10px;"></div>
-       </td>
-
-        </tr>
 
                <!--user name-->
-        <tr>
-            <td>
-
 
                <label for="first_name"> First Name:</label>
              <div class ="first_name">
                   <input id="first_name" name="first_name" type="text" value="" maxlength="50">
-             <td>
+
             <div class = "error_first_name"></div>
-             </td>
+
              </div>
                 <div style = "height: 10px;"></div>
-            </td>
-
-        </tr>
 
                 <!--user last name-->
-        <tr>
-            <td>
-
 
                 <label for="last_name"> Last Name:</label>
                 <div class ="last_name">
@@ -54,16 +42,10 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-            <td>
+
             <div class = "error_last_name"></div>
-            </td>
-        </tr>
 
                 <!--user password -->
-        <tr>
-            <td>
-
 
                  <label for="password">Password:</label>
                 <div class ="password">
@@ -71,16 +53,10 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-        <td>
+
           <div class = "error_password"></div>
-        </td>
-        </tr>
 
                 <!--confirm-->
-        <tr>
-            <td>
-
 
                  <label for="confirm">Confirm Password:</label>
                 <div class ="confirm">
@@ -88,16 +64,10 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-                <td>
+
                 <div class = "error_confirm"></div>
-                </td>
-        </tr>
 
                 <!--email-->
-        <tr>
-            <td>
-
 
                 <label for="email">Email:</label>
                 <div class ="email">
@@ -105,15 +75,11 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-            <td>
+
             <div class = "error_email"></div>
-            </td>
-        </tr>
 
                 <!--Select Region-->
-        <tr>
-            <td>
+
                 <label for="region">Region</label>
 
                  <div class ="region">
@@ -125,13 +91,9 @@ div { clear:both;position:relative; }
                  </select>
                  </div>
                 <div style = "height: 10px;"></div>
-            </td>
-            <td>
-            <div class = "error_region"> </div>
-            </td>
-        </tr>
 
-   </table>
+            <div class = "error_region"> </div>
+
                 <!--Choice of a role-->
     <div style ="width: 500px " >
     <fieldset>
@@ -147,11 +109,11 @@ div { clear:both;position:relative; }
 
 
                 <!--Creating ButtonsС-->
-        <tr>
-            <td><input type="button" value ="Update" class="button" onclick=" return validate_form_and_edit_user()"   /></td>
-            <td><input type="button" value ="Cancel" onclick="location='../search_user'"    /></td>
-            <td><input  type ="button" value ="Refresh"   id ="warning"  /></td>
-        </tr>
+
+            <input type="button" value ="Update" class="button" onclick=" return validate_form_and_edit_user()"   />
+            <input type="button" value ="Cancel" onclick="location='../search_user'"    />
+            <input  type ="button" value ="Refresh"   id ="warning"  />
+
 
 
 

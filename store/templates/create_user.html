@@ -9,47 +9,31 @@ div { clear:both;position:relative; }
          </div>
         <div style = "height: 15px;"></div>
     <div class="form_block">
-    <table>
 
                 <!--Login-->
-
-        <tr>
-
-	   <td>
 
 	           <label for="login">Login:</label>
         <div class ="login">
               <input id="login" name="login" type="text" value=""maxlength="50">
 
-       <td>
+
         <div class = "error_login"></div>
-       </td>
+
        </div>
            <div style = "height: 10px;"></div>
-       </td>
-
-        </tr>
 
                <!--user name-->
-        <tr>
-            <td>
-
-
-               <label for="first_name"> First Name:</label>
+      <label for="first_name"> First Name:</label>
              <div class ="first_name">
                   <input id="first_name" name="first_name" type="text" value="" maxlength="50">
-             <td>
+
             <div class = "error_first_name"></div>
-             </td>
+
              </div>
                 <div style = "height: 10px;"></div>
-            </td>
 
-        </tr>
 
                 <!--user last name-->
-        <tr>
-            <td>
 
 
                 <label for="last_name"> Last Name:</label>
@@ -58,15 +42,11 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-            <td>
+
             <div class = "error_last_name"></div>
-            </td>
-        </tr>
+
 
                 <!--user password -->
-        <tr>
-            <td>
 
 
                  <label for="password">Password:</label>
@@ -75,16 +55,11 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-        <td>
+
           <div class = "error_password"></div>
-        </td>
-        </tr>
+
 
                 <!--confirm-->
-        <tr>
-            <td>
-
 
                  <label for="confirm">Confirm Password:</label>
                 <div class ="confirm">
@@ -92,16 +67,11 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-                <td>
+
+
                 <div class = "error_confirm"></div>
-                </td>
-        </tr>
 
                 <!--email-->
-        <tr>
-            <td>
-
 
                 <label for="email">Email:</label>
                 <div class ="email">
@@ -109,15 +79,11 @@ div { clear:both;position:relative; }
 
                 </div>
                 <div style = "height: 10px;"></div>
-            </td>
-            <td>
+
             <div class = "error_email"></div>
-            </td>
-        </tr>
 
                 <!--Select Region-->
-        <tr>
-            <td>
+
                 <label for="region">Region</label>
 
                  <div class ="region">
@@ -129,13 +95,10 @@ div { clear:both;position:relative; }
                  </select>
                  </div>
                 <div style = "height: 10px;"></div>
-            </td>
-            <td>
-            <div class = "error_region"> </div>
-            </td>
-        </tr>
 
-   </table>
+            <div class = "error_region"> </div>
+
+
                 <!--Choice of a role-->
     <div style ="width: 500px " >
     <fieldset>
@@ -151,13 +114,11 @@ div { clear:both;position:relative; }
 
 
                 <!--Creating ButtonsС-->
-        <tr>
-            <td><input type="button" value ="Create" class="button" onclick="return validate_form ( );" id ="post_form"   /></td>
-            <td><input type="button" value ="Cancel" onclick="location='search_user'"    /></td>
-            <td><input  type ="button" value ="Refresh"   id ="warning"  /></td>
-        </tr>
 
-   </table>
+            <input type="button" value ="Create" class="button" onclick="return validate_form ( );" id ="post_form"   />
+            <input type="button" value ="Cancel" onclick="location='search_user'"    />
+            <input  type ="button" value ="Refresh"   id ="warning"  />
+
   </div>
 
 
@@ -276,7 +237,7 @@ $.ajax({
             label.appendChild(element);
             label.innerHTML += roles_data[i].name;
 
-            label.innerHTML += '<br />';
+            label.innerHTML += '<br /> ';
             foo.appendChild(label);
         }
                                       }

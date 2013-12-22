@@ -14,7 +14,7 @@ $(document).ready(function() {
     var counter;
     var sort_by = "total_price";
     var order_sort_by = "asc";
-    var table_grid = document.getElementById('grid');
+    var table_grid = document.getElementById('travel');
   /* Creating table of products (size = count_tr Х count_td)  */
 
     tr[0] = document.createElement('TR');
@@ -37,7 +37,7 @@ $(document).ready(function() {
             tr[i] = document.createElement('TR');
             table_grid.appendChild(tr[i]);
             tr[i].id=i;
-            if (i % 2 == 0) tr[i].style.background =  "";
+            if (i % 2 == 0) tr[i].style.background =  "#000";
             for (var j=0; j<=count_td; j++)
              {
               tr[i].appendChild(document.createElement('TD'));
@@ -243,28 +243,29 @@ $(document).ready(function() {
 
             <div class="">
                 <div class=" ">
-                    <form class='form' action="">
+                    <form class='form'>
                         <div class="top_bottom_line">
                         </div>
-                         <div class="form_block">
+                      
+                        <div class="form_block">
                         <div class="field">
-                            <lable style="float: left; line-height: 38px; padding-right:10px;">Status: </lable>
-                            <select id="status_options" style="width: 100px; float: left" >
+                            <lable style="float: left; line-height: 35px; padding-right:85px;">Status:    </lable>
+                            <select id="status_options" style="width: 150px; float: left; margin-left:22px;" >
                                 <option value="0">All</option>
                                 <option value="1">Pending</option>
                                 <option value="2">Ordered</option>
                                 <option value="3">Delivered</option>
                             </select>
                         </div>
-                        <div class="field" style="width: 500px;">
-                            <lable style="float: left; line-height: 35px; padding-right:10px;">Search for orders by: </lable>
-                            <select id="orders_options" style="width: 150px;float: left; margin:0px;">
+                        <div class="field" style="width: 550px;">
+                            <lable style="float: left; line-height: 27px; padding-right:10px;">Search for orders by: </lable>
+                            <select id="orders_options" style="width: 150px;float: left; margin-top:3px;">
                                 <option value="0">Order Number</option>
                                 <option value="1">Customer</option>
                             </select>
-                            <input type="text" id="name_input" >
+                            <input style="margin-top: 4px;" type="text" id="name_input">
+                            <input type="button" value="Apply" id='apply_button' style="">
                         </div>
-                        <span><input type="button" value="Apply" id='apply_button' style="float: right; margin-top: -37px"></span>
                         </div>
 
 
@@ -275,7 +276,7 @@ $(document).ready(function() {
             <div style="margin-left:80%;"></div>
                 <div class="field" style="margin-left:5%;">
                     <lable>Table size: </lable>
-                    <select id="table_size">
+                    <select id="table_size" class="span2">
                         <option selected value="10"> Show 10 lines </option>
                         <option value="25">Show 25 lines </option>
                     </select>
@@ -284,7 +285,7 @@ $(document).ready(function() {
             </div>
             <div id=" ">
          <div id="orders">
-            <table id='grid' class="grid">
+            <table id='travel' summary="Travel times to work by main mode (Autumn 2006) - Source: London Travel Report 2007 http://www.tfl.gov.uk/assets/downloads/corporate/London-Travel-Report-2007-final.pdf" class="grid">
             </table>
         </div>
 
