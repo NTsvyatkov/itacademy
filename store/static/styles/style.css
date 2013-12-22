@@ -26,7 +26,7 @@ body {
 	color:#666;
 	font-size:15px;
 	text-shadow: 1px 1px 0px #fff;
-	background:#eaebec;
+
 	border:#ccc 1px solid;
 
 	-moz-border-radius:3px;
@@ -73,10 +73,6 @@ body {
 	border-top: 1px solid #ffffff;
 	border-bottom:1px solid #e0e0e0;
 	border-left: 1px solid #e0e0e0;
-
-	background: #fafafa;
-	background: -webkit-gradient(linear, left top, left bottom, from(#fbfbfb), to(#fafafa));
-	background: -moz-linear-gradient(top,  #fbfbfb,  #fafafa);
 }
 .grid tr.even td{
 	background: #f6f6f6;
@@ -97,9 +93,9 @@ body {
 	border-bottom-right-radius:3px;
 }
 .grid tr:hover td{
-	background: #f2f2f2;
-	background: -webkit-gradient(linear, left top, left bottom, from(#f2f2f2), to(#f0f0f0));
-	background: -moz-linear-gradient(top,  #f2f2f2,  #f0f0f0);
+	background: #2e8bcc;
+	background: -webkit-gradient(linear, left top, left bottom, from(#D3D3D3), to(#D3D3D3));
+	background: -moz-linear-gradient(top,  #D3D3D3,  #D3D3D3);
 }
 .grid th.asc{
     background:url(../images/0.gif) right no-repeat; cursor:pointer;
