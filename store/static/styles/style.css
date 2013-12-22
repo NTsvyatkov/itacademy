@@ -264,6 +264,7 @@ form{
     width:100%;
     background-color: #EBEBEB;
     margin-bottom: 10px;
+    border-bottom:1px dashed gainsboro;
 }
 .form_block{
     width:600px;
@@ -275,6 +276,10 @@ form{
     font-weight: bolder;
     font-size:100%;
     color:lightslategray;
+    display: block;
+    height: 20px;
+    width:200px;
+    padding-top:5px;
 }
 
 label{

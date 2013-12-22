@@ -368,7 +368,7 @@ margin-left: 180px
 }
 
 
-div.order_wrapper{
+div.order_wrapper, div.order_wrapper_block{
     width: 980px; margin: auto;
 }
 
@@ -379,7 +379,9 @@ div #button {
 th{
     cursor:pointer;
 }
-
+div p{
+    margin:8px auto;
+}
 </style>
 
 
@@ -406,7 +408,7 @@ th{
                 </div>
             </div>
         </div>
-    <div id="test" class="order_wrapper">
+    <div class="order_wrapper_block">
         <div class="first_details_block">
             <p>Customer Name (Login): </p>
             <p>Customer Type: </p>
@@ -429,9 +431,9 @@ th{
             <p><span id="comments"></span></p>
         </div>
         <div class="third_details_block">
-            <lable><p id="status_checkbox">Status: <span id="status"></span></p></lable>
-            <lable><p id="delivery_date_datepicker">Delivery date: <span id="delivery_date"></span></p></lable>
-            <lable><p id="gift_checkbox">Gift: <span id="gift"></span></p></lable>
+            <p id="status_checkbox">Status: <span id="status"></span></p>
+            <p id="delivery_date_datepicker">Delivery date: <span id="delivery_date"></span></p>
+            <p id="gift_checkbox">Gift: <span id="gift"></span></p>
         </div>
     </div>
 
