@@ -108,6 +108,18 @@ def users_update():
     resp = make_response('',200)
     return resp
 
+
+@app.route('/info')
+def user_info():
+    return render_template('info.html')
+
+@app.route('/api/info', methods=['GET'])
+def api_user_info():
+    user_id = session["user_id"]
+    user_details = UserDao.get_user_info_by_id(user_id)
+    user_details["user_role"] = session["role"]
+    return make_response(jsonify(user_details), 200)
+
 @app.errorhandler(ValidationException)
 def err_han(e):
     error_dict = {'message': e.message}
