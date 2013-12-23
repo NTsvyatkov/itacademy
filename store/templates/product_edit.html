@@ -9,7 +9,10 @@
             var count_tr=3;
             var count_td=6;
             var page = 1;
+            var pathArray = window.location.pathname.split( '/' );
+            var product_id = pathArray[2];
             var table_grid = document.getElementById('grid');
+
             function createGrid(count)
                 {
                     for (var i=1; i<=count;i++ )
@@ -23,12 +26,8 @@
                                     tr[i].appendChild(document.createElement('TD'));
                                 }
                         }
-                  $( "tr:even" ).css( "background-color", "#f0f0f0" );
                 }
             createGrid();
-
-            var pathArray = window.location.pathname.split( '/' );
-            var product_id = pathArray[2];
 
             function clearingTr(i)
                 {
@@ -216,7 +215,7 @@
                 </div>
 
             <div class="field" style="margin: auto">
-                <br><div class="ProductTitle">Stock</div>
+            <br><div class="ProductTitle">Stock</div>
             </div>
             <div id="">
                 <table id='grid' class="grid" style="width: 500px;">
@@ -232,7 +231,6 @@
                         </th>
                     </tr>
                 </table>
-
             </div>
         </div>
 {% endblock body %}

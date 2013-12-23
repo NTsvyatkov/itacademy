@@ -22,16 +22,9 @@
                     tr[i] = document.createElement('TR');
                     table_grid.appendChild(tr[i]);
                     tr[i].id=i;
-                    if (i % 2 == 0) tr[i].style.background = "#f0f0f0";
                     for (var j=0; j<=5; j++){
                         tr[i].appendChild(document.createElement('TD'));
                     }
-                }
-            }
-
-            function deleteGrid(){
-                for (var n=table_grid.rows.length ; n>=2; n--){
-                    table_grid.removeChild(table_grid.childNodes[n]);
                 }
             }
 
@@ -43,6 +36,12 @@
                     for (var j=0; j<=4; j++){
                         tr[i].appendChild(document.createElement('TD'));
                     }
+                }
+            }
+
+            function deleteGrid(){
+                for (var n=table_grid.rows.length ; n>=2; n--){
+                    table_grid.removeChild(table_grid.childNodes[n]);
                 }
             }
 
@@ -367,7 +366,6 @@
                                 <span class="info">Filter</span>
                              </div>
                             <div class="form_block">
-
                             <span>Keyword <input type="text" id = 'name' style="width:150px" /></span>
                             <span>Price <input type="text" id = 'start_price' style="width:50px" /> - </span>
                             <span><input type="text" id = 'end_price' style="width:50px" /> </span>
@@ -386,7 +384,7 @@
                 </div>
                 <div style="margin-left:80%;"></div>
                 <div id=" ">
-                    <table id='grid' class="grid">
+                    <table id='grid' class="grid" style="width: 80%;">
                         <tr>
                             <th class = 'index'>
                                 Product
@@ -427,7 +425,7 @@
                 <div class="box-modal_close arcticmodal-close">Close</div>
                 <br>
                 <div id="">
-                    <table id="modal_grid" class="grid">
+                    <table id="modal_grid" class="grid" style="width: 100%;">
                         <tr>
                             <th>
                                 Product

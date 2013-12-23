@@ -1,5 +1,4 @@
 #!/usr/bin/env python
-
 from sqlalchemy import Column, Integer
 from models import Base, db_session
 
@@ -16,10 +15,8 @@ class ActionPointToRoleDao(Base):
         self.role_id = role_id
         self.action_point_id = action_point_id
 
-
     def __str__(self):
         return "CData '%s, %s'" % (self.role_id, self.action_point_id)
-
 
     @staticmethod
     def getActionPointToRoleByID(apToRole_id):

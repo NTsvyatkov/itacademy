@@ -11,7 +11,6 @@ def my_orders():
   else:
     return render_template('my_orders.html',)
 
-
 @app.route('/api/orders/', methods=['GET'])
 def ordersPage():
     user_id = session['user_id']

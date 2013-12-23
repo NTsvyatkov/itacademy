@@ -390,7 +390,7 @@ class OrderProduct(Base):
     @staticmethod
     def add_order_product(order_id, product_id, dimension_id, quantity, price=0):
         number_of_items = Dimension.get_dimension(dimension_id).number
-        product_price_per_line = number_of_items*quantity*price
+        product_price_per_line = int(number_of_items)*int(quantity)*float(price)
         order_product = OrderProduct(order_id, product_id, dimension_id, quantity, price, product_price_per_line)
         db_session.add(order_product)
         db_session.commit()
