@@ -21,10 +21,12 @@ body {
 	text-decoration:underline;
 }
 .grid {
+    width:980px;
 	font-family:Arial, Helvetica, sans-serif;
+    font-weight: 600;
     margin:auto auto 10px auto;
 	color:#666;
-	font-size:15px;
+	font-size:13px;
 	text-shadow: 1px 1px 0px #fff;
 
 	border:#ccc 1px solid;
@@ -38,7 +40,7 @@ body {
 	box-shadow: 0 1px 2px #d1d1d1;
 }
 .grid th {
-	padding:21px 25px 22px 25px;
+    padding: 10px 25px;
 	border-top:1px solid #fafafa;
 	border-bottom:1px solid #e0e0e0;
 
@@ -94,8 +96,8 @@ body {
 }
 .grid tr:hover td{
 	background: #2e8bcc;
-	background: -webkit-gradient(linear, left top, left bottom, from(#D3D3D3), to(#D3D3D3));
-	background: -moz-linear-gradient(top,  #D3D3D3,  #D3D3D3);
+	background: -webkit-gradient(linear, left top, left bottom, from(#E6E6FA), to(#E6E6FA));
+	background: -moz-linear-gradient(top,  #E6E6FA,  #E6E6FA);
 }
 .grid th.asc{
     background:url(../images/0.gif) right no-repeat; cursor:pointer;
@@ -230,6 +232,7 @@ body {
 
 .field label{
     float:left;
+    margin-left:10px;
 }
 
 .order_top_input{
