@@ -2,8 +2,7 @@
 {% block body %}
 
         <script type="text/javascript">
-
-             var tr = [];
+          var tr = [];
             $(document).ready(function() {
             var count_tr=$('#table_size').val();
             var count_td=6;
@@ -198,10 +197,11 @@
                     order_sort_by = "desc";
                     $(this).addClass("desc")
                 }
-                createTableOrders();
-            });
+                    createTableOrders();
 
             });
+            });
+
         </script>
 
         <div class="">
@@ -250,25 +250,49 @@
                    </select>
             </div>
                 <div id=" ">
+<script>function sort(el) {
+   var col_sort = el.innerHTML;
+   var tr = el.parentNode;
+   var th, arrow, col_sort_num;
 
-            <table id='grid' class="grid">
+	for (var i=0; (th = tr.getElementsByTagName("th").item(i)); i++) {
+   	if (th.innerHTML == col_sort) {
+            col_sort_num = i;
+            if (th.prevsort == "y"){
+                arrow = th.firstChild;
+                el.up = Number(!el.up);
+            }else{
+                th.prevsort = "y";
+                arrow = th.insertBefore(document.createElement("span"),th.firstChild);
+                el.up = 0;
+            }
+            arrow.innerHTML = el.up?"↑ ":"↓ ";
+        }
+    }
+$('.index').click(function(){
+                sort(el)
+    createTableOrders();
+            });
+
+}</script>
+            <table id="grid" class="grid">
                         <tr>
-                            <th class = 'index'>
+                            <th  class = 'index' title="Click on the header to sort column">
                                 Order ID
                             </th>
-                            <th class = 'index'>
+                            <th  class = 'index' title="Click on the header to sort column">
                                 Order Number
                             </th>
-                            <th class = 'index'>
+                            <th  class = 'index' title="Click on the header to sort column">
                                 Customer
                             </th>
-                            <th class = 'index'>
+                            <th   class = 'index' title="Click on the header to sort column">
                                 Status
                             </th>
-                            <th class = 'index'>
+                            <th   class = 'index' title="Click on the header to sort column">
                                 Amount
                             </th>
-                            <th class = 'index'>
+                            <th  class = 'index' title="Click on the header to sort column">
                                 Assignee
                             </th>
                             <th>
