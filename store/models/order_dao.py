@@ -32,7 +32,7 @@ class Order(Base):
     delivery_address = Column(String(50))
     comment = Column(TEXT)
     order_number=Column(String(6), unique=True)
-    discount=Column(Integer, nullable=True)
+    discount=Column(Integer, default=0, nullable=True)
 
 
     def __init__(self, user_id, date,status_id, delivery_id, total_price, assignee_id,
