@@ -23,7 +23,13 @@ def order_grid(id):
     if status_id >=3 and get_order.user_id==session['user_id']:
        return render_template('order.html',assingee_arr=assingee_arr,order_id=id)
     else:
-        return render_template('order_details.html')
+        if (Order.get_order(id).user_id == session["user_id"]) or\
+                (Order.get_order(id).assignee_id == session["user_id"]):
+            if (session["role"] == "Merchandiser") and (Order.get_order(id).status.name == "Pending"):
+                update_order_details(id, gift=False, status="Ordered", delivery_date=None)
+            return render_template('order_details.html')
+        else:
+            return "You have not permission to access this page"
 
 
 @app.route('/api/order_product/', methods=['POST'])
