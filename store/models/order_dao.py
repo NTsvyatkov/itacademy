@@ -1,16 +1,13 @@
 from models import Base, db_session
-from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_, asc, desc, DDL, event
+from sqlalchemy import Column, Integer, String, DATE, ForeignKey, and_, Boolean, Float, DECIMAL, TEXT, or_, asc, \
+                       desc, DDL, event
 from sqlalchemy.orm import relationship, backref
 from models.product_dao import Product, Dimension
 from models.product_stock_dao import ProductStock
-from json import loads
 from models.user_dao import UserDao
 from models.role_dao import RoleDao
 from datetime import date
 from user_dao import UserLevel
-
-
-
 
 
 class Order(Base):
@@ -36,7 +33,7 @@ class Order(Base):
 
 
     def __init__(self, user_id, date,status_id, delivery_id, total_price, assignee_id,
-                 preferable_delivery_date, delivery_date, gift, delivery_address, comment,order_number,discount ):
+                 preferable_delivery_date, delivery_date, gift, delivery_address, comment,order_number,discount):
         super(Order, self).__init__()
         self.user_id = user_id
         self.date = date
@@ -185,12 +182,13 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def pagerByFilterByMerchandiser(user_id=None, page=None,  records_per_page=None, sort_by=None, order_sort_by=None, filter=None):
+    def pagerByFilterByMerchandiser(user_id=None, page=None,  records_per_page=None, sort_by=None,
+                                    order_sort_by=None, filter=None):
         stop = page * records_per_page
         start = stop - records_per_page
         order = asc if order_sort_by == "asc" else desc
-        query = Order.query.outerjoin(Order.user).join(OrderStatus).join(RoleDao).filter(and_(Order.assignee_id == user_id,
-                                                             Order.status_id != OrderStatus.getNameStatus('Cart').id))
+        query = Order.query.outerjoin(Order.user).join(OrderStatus).join(RoleDao).\
+                filter(and_(Order.assignee_id == user_id,Order.status_id != OrderStatus.getNameStatus('Cart').id))
         if int(filter['status_option']):
             filterStatus={'1': Order.status_id == OrderStatus.getNameStatus('Pending').id,
                     '2': Order.status_id == OrderStatus.getNameStatus('Ordered').id,
@@ -215,12 +213,7 @@ class Order(Base):
             query = query.order_by(order(Order.total_price))
         elif sort_by == "role":
             query = query.order_by(order(RoleDao.name))
-        return query.order_by(Order.id).slice(start, stop), \
-            query.count()
-
-#            if sort_field =='user_name':
-#                query = query.order_by(UserDao.first_name)
-
+        return query.order_by(Order.id).slice(start, stop), query.count()
 
     @staticmethod
     def update_order_number(id,order_number):
@@ -242,7 +235,7 @@ class Order(Base):
         else:
             order.user.balance += order.total_price
         user_status = UserLevel.query.filter(UserLevel.balance < order.user.balance).\
-            order_by(desc(UserLevel.balance)).first()
+                      order_by(desc(UserLevel.balance)).first()
         order.user.level_id = user_status.id
 
         db_session.commit()

@@ -3,19 +3,16 @@
 
 <script src="{{ url_for('static', filename='js/product_grid.js') }}"></script>
 <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
-<div>
-    <a href='create_product' style='margin-left:50px; color:black; text-decoration:none;'>
-        <input type='button' value="Create Product">
-    </a>
-</div>
 <div id="products_block">
     <div id="products_filter">
-
+        <a href='create_product' style='color:black; text-decoration:none;'>
+            <input type='button' value="Create Product">
+        </a>
         <div class="product_filter_in">
 
             <form class='form' style=" width:70%; margin:0 auto; ">
                 <div class="top_bottom_line">
-                <span class='info'>Filter List</span>
+                    <span class='info'>Filter List</span>
                 </div>
                 <div class="field">
                     <lable>Name: </lable>
