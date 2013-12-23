@@ -420,9 +420,6 @@ class OrderProduct(Base):
         if del_order_product:
             db_session.delete(del_order_product)
             db_session.commit()
-            product_stock=ProductStock.get_product_stock(product_id, dimension_id)
-            quantity=del_order_product.quantity+product_stock.quantity
-            ProductStock.updateProductStock(product_id,dimension_id,quantity)
 
     @staticmethod
     def updateSumQuantity(order_id, product_id, dimension_id, new_quantity):
@@ -452,11 +449,21 @@ def order_product_grid(user_id,order_id, page=None, records_per_page=None):
 
 tbl = OrderProduct.__table__
 event.listen(tbl, 'after_create', DDL("""
-    CREATE TRIGGER order_product_trigger BEFORE UPDATE ON order_product
+    CREATE TRIGGER order_product_trigger_update BEFORE UPDATE ON order_product
     FOR EACH ROW BEGIN
         if NEW.trigger_status = True THEN
             UPDATE product_stock SET product_stock.quantity=product_stock.quantity - NEW.quantity WHERE
              product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+        END IF;
+    END;
+    """).execute_if(dialect='mysql'))
+
+event.listen(tbl, 'after_create', DDL("""
+    CREATE TRIGGER order_product_trigger_delete AFTER DELETE ON order_product
+    FOR EACH ROW BEGIN
+        if OLD.trigger_status = True THEN
+            UPDATE product_stock SET product_stock.quantity=product_stock.quantity + OLD.quantity WHERE
+            product_stock.product_id=OLD.product_id AND product_stock.dimension_id=OLD.dimension_id;
         END IF;
     END;
     """).execute_if(dialect='mysql'))
