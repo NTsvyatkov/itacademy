@@ -17,7 +17,7 @@
                     $("#user_role").text(json.user_role);
                     $("#user_level").text(json.user_level);
                     $("#user_balance").text(json.user_balance);
-                    $("#user_must_spend").text(json.user_must_spend);
+                    $("#user_must_spend").text((json.user_must_spend).toFixed(2,0));
                     $("#user_next_level").text(json.user_next_level);
 
                 }
