@@ -1,5 +1,5 @@
 function validate_login(){
-var name =   document.form.name.value;
+var name = document.form.name.value;
 
         if (name == ""){
                 $(".error_name").html("Enter your login ").css({'color':'red'});
@@ -13,7 +13,7 @@ var name =   document.form.name.value;
             }
 
 
-var password =   document.form.password.value;
+var password = document.form.password.value;
 
         if (password == ""){
                 $(".error_password").html("Enter your password").css({'color':'red'});
