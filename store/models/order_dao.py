@@ -22,7 +22,7 @@ class Order(Base):
     delivery = relationship('DeliveryType', backref=backref('order', lazy='dynamic'))
     assignee_id = Column(Integer, ForeignKey('user.id'), nullable=True)
     assignee = relationship('UserDao', foreign_keys=[assignee_id])
-    total_price = Column(DECIMAL(5,2), nullable=True)
+    total_price = Column(DECIMAL(5,2), default=0)
     preferable_delivery_date = Column(DATE, nullable=True)
     delivery_date = Column(DATE, nullable=True)
     gift = Column(Boolean, default=False, nullable=True)

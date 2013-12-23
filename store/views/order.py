@@ -5,7 +5,6 @@ from flask_bootstrap import app
 from business_logic.product_manager import validate_quantity
 from models.order_dao import order_product_grid, OrderProduct,Order
 from business_logic.order_manager import update_order_details
-from json import loads
 import calendar,random,time
 
 
@@ -26,6 +25,15 @@ def order_grid(id):
     else:
         return render_template('order_details.html')
 
+
+@app.route('/api/order_product/', methods=['POST'])
+def order_post():
+    js = request.json
+    product_order_update(js,'POST')
+    for i in js['deleted_order_product']:
+        OrderProduct.delete_order_product(js['order_id'],i['product_id'],i['dimension_id'])
+    resp = make_response(jsonify({'message': 'success'}), 200)
+    return resp
 
 @app.route('/api/order_product/', methods=['GET'])
 def order():
@@ -80,15 +88,6 @@ def order_put():
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
-@app.route('/api/order_product/', methods=['POST'])
-def order_post():
-    js = request.json
-    product_order_update(js,'POST')
-    for i in js['deleted_order_product']:
-        OrderProduct.delete_order_product(js['order_id'],i['product_id'],i['dimension_id'])
-    resp = make_response(jsonify({'message': 'success'}), 200)
-    return resp
-
 @app.route('/api/update/', methods=['PUT'])
 def quantity_put():
     js = request.json
@@ -97,37 +96,25 @@ def quantity_put():
     resp = make_response(jsonify({'message': 'success'}), 200)
     return resp
 
-def string_data(data_string):
-    while len(data_string) < 6:
-                      data_string = '0'+ data_string
-    return data_string
-#zfill
 @app.route('/api/unique_order_number/', methods=['PUT'])
 def unique_number():
     user_id=session['user_id']
     js = request.json
     order_id=0
     if not (js['unique_order_number']):
-        ls=range(9)
         while not order_id:
-            data=''
-            while len(data)<=5:
-                x=random.choice(ls)
-                data+=str(x)
-            data_string=data
-
-            print string_data(data_string)
-            order_id=Order.add_order_number(user_id,string_data(data_string))
-            print order_id
-        unique_number=string_data(data_string)
+            data=random.randint(1,999999)
+            data_string=str(data)
+            order_id=Order.add_order_number(user_id,data_string.zfill(6))
+        unique_number=data_string.zfill(6)
         message='success'
 
     else:
         data_string=str(js['unique_order_number'])
-        order_id=Order.add_order_number(user_id,string_data(data_string))
+        order_id=Order.add_order_number(user_id,data_string.zfill(6))
         if order_id:
             message='success'
-            unique_number=string_data(data_string)
+            unique_number=data_string.zfill(6)
         else:
             message='not unique'
             unique_number=''
