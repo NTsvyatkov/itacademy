@@ -338,22 +338,21 @@ class OrderProduct(Base):
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
     price = Column(DECIMAL(5, 2), nullable=True)
+    product_price_per_line = Column(DECIMAL(5, 2), nullable=True)
     trigger_status = Column(Boolean, default=False)
 
 
-    def __init__(self, order_id, product_id, dimension_id, quantity, price, trigger_status = False):
+    def __init__(self, order_id, product_id, dimension_id, quantity, price, product_price_per_line=0,
+                 trigger_status=False):
         super(OrderProduct, self).__init__()
         self.quantity = quantity
         self.order_id = order_id
         self.product_id = product_id
         self.dimension_id = dimension_id
         self.price = price
+        self.product_price_per_line = product_price_per_line
         self.trigger_status = trigger_status
 
-    @property
-    def product_price_per_line(self):
-        dimension = Dimension.get_dimension(self.dimension_id)
-        return self.price * self.quantity * dimension.number
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
@@ -389,8 +388,10 @@ class OrderProduct(Base):
         return query.slice(start, stop).all(), count
 
     @staticmethod
-    def add_order_product(order_id, product_id, dimension_id, quantity, price = None):
-        order_product = OrderProduct(order_id, product_id, dimension_id, quantity, price)
+    def add_order_product(order_id, product_id, dimension_id, quantity, price=0):
+        number_of_items = Dimension.get_dimension(dimension_id).number
+        product_price_per_line = number_of_items*quantity*price
+        order_product = OrderProduct(order_id, product_id, dimension_id, quantity, price, product_price_per_line)
         db_session.add(order_product)
         db_session.commit()
 
@@ -402,9 +403,12 @@ class OrderProduct(Base):
 
     @staticmethod
     def update_order_product(order_id, product_id, dimension_id, new_quantity, new_price):
+        number_of_items = Dimension.get_dimension(dimension_id).number
+        product_price_per_line = number_of_items*new_quantity*new_price
         order_product_up = OrderProduct.get_order_product(order_id, product_id, dimension_id)
         order_product_up.quantity = new_quantity
         order_product_up.price = new_price
+        order_product_up.product_price_per_line = product_price_per_line
         db_session.commit()
 
     @staticmethod

@@ -29,13 +29,11 @@ def product_order_update(order_dict,method):
         get_product=get_product_by_id(product_id)
         price = get_product.price
         amount= amount + price*quantity*dimension_number
-        total_price = price*quantity
         order_product= OrderProduct.get_order_product(order_id,product_id,dimension_id)
         if order_product:
             order_product.quantity=quantity
-            order_product.total_price=total_price
         else:
-            order_product= OrderProduct.add_order_product(order_id,product_id,dimension_id,quantity,total_price)
+            order_product= OrderProduct.add_order_product(order_id,product_id,dimension_id,quantity,price)
         OrderProduct.changeTriggerStatus(order_dict['order_id'],i['product_id'],i['dimension_id'])
 
     if method == 'POST':
