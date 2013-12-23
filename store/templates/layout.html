@@ -10,6 +10,7 @@
     <script src="{{ url_for('static', filename='js/login.js') }}"></script>
     <link rel="stylesheet" href="{{ url_for('static', filename='js/modal_window/jquery.arcticmodal-0.3.css') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='js/modal_window/themes/simple.css') }}">
+    <script src="{{ url_for('static', filename='js/modal_window/jquery.arcticmodal-0.3.min.js') }}"></script>
 
     <!-- It's file is jQuery library -->
     <script type="text/javascript" src="/static/js/jquery.js"></script>
@@ -22,8 +23,9 @@
     <!--This file is used for upadate data page "edit_user_user" -->
     <link href="{{url_for('static', filename='js/datepicker/jquery.ui.all.css')}}" rel="stylesheet" type="text/css" />
     <link href="{{url_for('static', filename='styles/style.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{url_for('static', filename='styles/bootmetro.css')}}" rel="stylesheet" type="text/css" />
 
-    <title>SoftServe</title>
+    <title>Order Management System</title>
 
 
   </head>
@@ -48,6 +50,10 @@
          {% if request.environ.PATH_INFO.strip('/') =='region'%}class="active"{% endif %}>
      Regions
      </a>
+     </li>
+
+     <li style="float: right">
+         <a href="/info"><img src="{{ url_for('static', filename='images/information.png') }}" width="35" height="35" alt="Account info"></a>
      </li>
 
      <li style="float: right">
@@ -84,6 +90,10 @@
      </a>
      </li>
 
+     <li style="float: right">
+         <a href="/info"><img src="{{ url_for('static', filename='images/information.png') }}" width="35" height="35" alt="Account info"></a>
+     </li>
+
 
      <li style="float: right">
 
@@ -115,6 +125,11 @@
      Order
      </a>
      </li>
+
+     <li style="float: right">
+         <a href="/info"><img src="{{ url_for('static', filename='images/information.png') }}" width="35" height="35" alt="Account info"></a>
+     </li>
+
          <li style="float: right">
 
      <a  title="Log out" onclick="if(confirm('Are you sure you want to logout from the application?'))
@@ -144,6 +159,11 @@
      Products
      </a>
      </li>
+
+     <li style="float: right">
+         <a href="/info"><img src="{{ url_for('static', filename='images/information.png') }}" width="35" height="35" alt="Account info"></a>
+     </li>
+
      <li>
 
          <li style="float: right">

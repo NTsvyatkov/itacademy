@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 
-from sqlalchemy import ForeignKey, and_
-from sqlalchemy import Column, Integer, String,DECIMAL
+from sqlalchemy import ForeignKey, and_, asc
+from sqlalchemy import Column, Integer, String, DECIMAL
 from role_dao import RoleDao
 from region_dao import RegionDao
 from models import Base, db_session
@@ -54,9 +54,10 @@ class UserDao(Base):
     role = relationship(RoleDao, backref=backref('user', lazy='dynamic'))
     region = relationship(RegionDao, backref=backref('user', lazy='dynamic'))
     level_id = Column(Integer, ForeignKey(UserLevel.id))
-    level= relationship(UserLevel, backref=backref('user', lazy='dynamic'))
-    balance = Column(DECIMAL(7,2))
-    def __init__(self,login, password, first_name, last_name, email, role_id, region_id, level_id=None):
+    level = relationship(UserLevel, backref=backref('user', lazy='dynamic'))
+    balance = Column(DECIMAL(7, 2))
+
+    def __init__(self, login, password, first_name, last_name, email, role_id, region_id, level_id=None, balance=None):
         super(UserDao, self).__init__()
         self.password = password
         self.login = login
@@ -66,15 +67,14 @@ class UserDao(Base):
         self.role_id = role_id
         self.region_id = region_id
         self.level_id = level_id
-
+        self.balance = balance
 
     def __str__(self):
         return "CData  '%s, %s, %s, %s, %s, %s, %s, '" % (self.login, self.password,
         self.first_name, self.last_name, self.email, self.region_id, self.role_id)
 
-
     @staticmethod
-    def  getUserByID(user_id):
+    def getUserByID(user_id):
         return UserDao.query.get(user_id)
 
     @staticmethod
@@ -106,6 +106,7 @@ class UserDao(Base):
         user = UserDao(login, hashlib.md5(password).hexdigest(), first_name, last_name, email, role_id, region_id)
         if role_id == RoleDao.get_role_id_by_name("Customer"):
             user.level_id = UserLevel.get_level_id_by_name("Standard")
+            user.balance = 0
         db_session.add(user)
         db_session.commit()
 
@@ -161,4 +162,21 @@ class UserDao(Base):
         return query.order_by(UserDao.id).slice(start, stop), \
             query.count()
 
-
+    @staticmethod
+    def get_user_info_by_id(user_id):
+        entry = {}
+        query = UserDao.query.get(user_id)
+        entry["user_login"] = query.login
+        entry["user_first_name"] = query.first_name
+        entry["user_last_name"] = query.last_name
+        entry["user_role"] = query.role.name
+        if entry["user_role"] == "Customer":
+            entry["user_level"] = query.level.name
+            entry["user_balance"] = str(query.balance)
+            next_level = UserLevel.query.filter(UserLevel.balance > entry["user_balance"]).\
+                order_by(asc(UserLevel.balance)).first()
+            if next_level:
+                entry["user_next_level"] = next_level.name
+                user_next_balance = str(next_level.balance)
+                entry["user_must_spend"] = float(user_next_balance) - float(entry["user_balance"])
+        return entry

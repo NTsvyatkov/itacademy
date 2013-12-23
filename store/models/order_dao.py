@@ -29,7 +29,7 @@ class Order(Base):
     delivery_address = Column(String(50))
     comment = Column(TEXT)
     order_number=Column(String(6), unique=True)
-    discount=Column(Integer, nullable=True)
+    discount=Column(Integer, default=0, nullable=True)
 
 
     def __init__(self, user_id, date,status_id, delivery_id, total_price, assignee_id,
@@ -338,7 +338,6 @@ class OrderProduct(Base):
     dimension = relationship('Dimension', backref=backref('products', lazy='dynamic'))
     quantity = Column(Integer)
     price = Column(DECIMAL(5, 2), nullable=True)
-    product_price_per_line = Column(DECIMAL(5, 2), nullable=True)
     trigger_status = Column(Boolean, default=False)
 
 
@@ -349,8 +348,12 @@ class OrderProduct(Base):
         self.product_id = product_id
         self.dimension_id = dimension_id
         self.price = price
-        self.product_price_per_line = float(quantity) * float(price)
         self.trigger_status = trigger_status
+
+    @property
+    def product_price_per_line(self):
+        dimension = Dimension.get_dimension(self.dimension_id)
+        return self.price * self.quantity * dimension.number
 
     @staticmethod
     def get_order_product(order_id,product_id, dimension_id):
@@ -410,9 +413,6 @@ class OrderProduct(Base):
         if del_order_product:
             db_session.delete(del_order_product)
             db_session.commit()
-            product_stock=ProductStock.get_product_stock(product_id, dimension_id)
-            quantity=del_order_product.quantity+product_stock.quantity
-            ProductStock.updateProductStock(product_id,dimension_id,quantity)
 
     @staticmethod
     def updateSumQuantity(order_id, product_id, dimension_id, new_quantity):
@@ -442,11 +442,21 @@ def order_product_grid(user_id,order_id, page=None, records_per_page=None):
 
 tbl = OrderProduct.__table__
 event.listen(tbl, 'after_create', DDL("""
-    CREATE TRIGGER order_product_trigger BEFORE UPDATE ON order_product
+    CREATE TRIGGER order_product_trigger_update BEFORE UPDATE ON order_product
     FOR EACH ROW BEGIN
         if NEW.trigger_status = True THEN
             UPDATE product_stock SET product_stock.quantity=product_stock.quantity - NEW.quantity WHERE
              product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+        END IF;
+    END;
+    """).execute_if(dialect='mysql'))
+
+event.listen(tbl, 'after_create', DDL("""
+    CREATE TRIGGER order_product_trigger_delete AFTER DELETE ON order_product
+    FOR EACH ROW BEGIN
+        if OLD.trigger_status = True THEN
+            UPDATE product_stock SET product_stock.quantity=product_stock.quantity + OLD.quantity WHERE
+            product_stock.product_id=OLD.product_id AND product_stock.dimension_id=OLD.dimension_id;
         END IF;
     END;
     """).execute_if(dialect='mysql'))

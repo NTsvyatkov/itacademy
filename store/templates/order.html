@@ -28,7 +28,7 @@
 <script src="{{ url_for('static', filename='js/order_product_function.js') }}"></script>
 
 <div id="order_block">
-    <div id="products_table" style='width:990px;'>
+    <div id="products_table" style='width:1024px;'>
         <div class="top_bottom_line">
                     <span class='info'>Items Selection</span>
         </div>
@@ -38,13 +38,13 @@
         </div>
         <div class="order_top_input" style="float:right;width:250px;">
             <lable>Table size: </lable>
-            <select id="table_size" style='width:130px;'>
+            <select class="span2" id="table_size" style='width:130px;'>
                 <option selected value="3">Show 3 lines</option>
                 <option value="25">Show 25 lines</option>
             </select>
         </div>
         <div style="clear:both;"></div>
-        <table id='grid' class="grid">
+        <table id='grid' class="grid" style="width: 1024px;">
         </table>
         <div id="pagination" style="text-align: center">
               <span id="first_span">
@@ -189,9 +189,9 @@
     <div class="box-modal" id="exampleModal">
         <div class="box-modal_close arcticmodal-close">Close</div>
              <form class='form' action="">
-             <div class="field" style="width: 450px;">
+             <div class="field" style="width: 500px;">
                 <lable style="float: left; line-height: 35px; padding-right:10px;">Search for item by: </lable>
-                <select id="product_options" style="width: 150px;float: left; margin:0px;">
+                <select class="span1" id="product_options" style="width: 150px;float: left; margin:0px;">
                 <option value="0">Item Name</option>
                 <option value="1">Item Description</option>
                 </select>
@@ -202,7 +202,7 @@
 
      <div id=" ">
          <div style="overflow:auto; height:400px;">
-                <table id='grid_1' class="grid">
+                <table id='grid_1' style="width: 980px;" class="grid">
                     <tr>
                         <th>
                             Product
@@ -225,10 +225,10 @@
                   <span class='info'>Added Item</span>
          </div>
     <div class="form_block" style="width:300px;">
-    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="item"></span><br><br>
-    <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp<input type="text" readonly id="price"></span><br><br>
+    <span>Item&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp  <input type="text" readonly id="item"></span><br><br>
+    <span>Price&nbsp&nbsp&nbsp&nbsp&nbsp  <input type="text" readonly id="price"></span><br><br>
     <span>Quantity  <input type="text" id="quantity"  placeholder="1" ></span><br><br>
-    <span>Dimension <select id="dimension" name="dim">
+    <span>Dimension <select class="span1" id="dimension" name="dim">
         <input type='hidden' id='description'>
 
 

@@ -1,0 +1,46 @@
+{% extends "layout.html" %}
+{% block body %}
+<script type="text/javascript">
+    $(document).ready(function() {
+        $.ajax({
+            dataType: "json",
+            url: '/api/info',
+            type: 'GET',
+                success: function(json)
+                {
+                    if (json.user_role!=="Customer"){
+                        $(".customer").remove();
+                    }
+                    $("#user_login").text(json.user_login);
+                    $("#user_first_name").text(json.user_first_name);
+                    $("#user_last_name").text(json.user_last_name);
+                    $("#user_role").text(json.user_role);
+                    $("#user_level").text(json.user_level);
+                    $("#user_balance").text(json.user_balance);
+                    $("#user_must_spend").text(json.user_must_spend);
+                    $("#user_next_level").text(json.user_next_level);
+
+                }
+        })
+    })
+</script>
+<style>
+    p{
+        margin:8px auto;
+    }
+</style>
+<div id ="info" style="width: 70%; margin: 0 auto;">
+    <h2>User Info</h2>
+    <hr/>
+    <p>User Name: <span id="user_login"></span> (<span id="user_first_name"></span>
+        <span id = "user_last_name"></span>)</p>
+    <p>Role: <span id="user_role"></span></p>
+    <p class="customer">Customer Type: <span id ="user_level"></span></p>
+    <p class="customer">Account Balance: <span id="user_balance"></span></p>
+    <hr/>
+    <p class="customer"><span class="red_star">*</span> Need to spend <span id="user_must_spend"></span>$
+        more to become a <span id ="user_next_level"></span>
+    type of customer.</p>
+</div>
+
+{% endblock body %}

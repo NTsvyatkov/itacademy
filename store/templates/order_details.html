@@ -368,7 +368,7 @@ margin-left: 180px
 }
 
 
-div.order_wrapper{
+div.order_wrapper, div.order_wrapper_block{
     width: 980px; margin: auto;
 }
 
@@ -379,14 +379,16 @@ div #button {
 th{
     cursor:pointer;
 }
-
+div p{
+    margin:8px auto;
+}
 </style>
 
 
 <div id="order_detail">
     <div id="products_block">
         <div id="amount_of_records" class="order_wrapper">
-                   <select id="table_size" style="position: relative; left:850px">
+                   <select class="span2" id="table_size" style="position: relative; left:850px">
                         <option selected value="10">show 10 lines</option>
                         <option value="25">show 25 lines</option>
                    </select>
@@ -406,7 +408,7 @@ th{
                 </div>
             </div>
         </div>
-    <div id="test" class="order_wrapper">
+    <div class="order_wrapper_block">
         <div class="first_details_block">
             <p>Customer Name (Login): </p>
             <p>Customer Type: </p>
@@ -429,9 +431,9 @@ th{
             <p><span id="comments"></span></p>
         </div>
         <div class="third_details_block">
-            <lable><p id="status_checkbox">Status: <span id="status"></span></p></lable>
-            <lable><p id="delivery_date_datepicker">Delivery date: <span id="delivery_date"></span></p></lable>
-            <lable><p id="gift_checkbox">Gift: <span id="gift"></span></p></lable>
+            <p id="status_checkbox">Status: <span id="status"></span></p>
+            <p id="delivery_date_datepicker">Delivery date: <span id="delivery_date"></span></p>
+            <p id="gift_checkbox">Gift: <span id="gift"></span></p>
         </div>
     </div>
 
