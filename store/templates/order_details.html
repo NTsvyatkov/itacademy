@@ -125,7 +125,8 @@ if (page==1){
           $('#quantity_of_items').text(json.orders.quantity_of_items);
           $('#assignee').text(json.orders.assignee);
           $('#date_of_ordering').text(formatDate(json.orders.order_date));
-          $('#preferable_delivery_date').text(formatDate(json.orders.preferable_delivery_date));
+            if (json.orders.preferable_delivery_date == "None"){$('#preferable_delivery_date').text("Wasn't defined by customer")}
+            else {$('#preferable_delivery_date').text(formatDate(json.orders.preferable_delivery_date));}
           $('#status').text(json.orders.order_status);
           $('#delivery_date').text(formatDate(json.orders.delivery_date));
           if (!(json.orders.gift)){
