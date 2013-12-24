@@ -5,6 +5,7 @@
  <script type="text/javascript">
 
   var tr = [];
+  var filter_query='';
 
 
             $(document).ready (function() {
@@ -50,9 +51,7 @@
 
 
 
-    $('#search_button').click(function(){
-    gridPagination();
-    });
+
 
 
   function delete_id(id,tr_id)
@@ -135,14 +134,11 @@
 
 
 
-            $('#apply_button').click(function(){
-                gridPagination()
-            });
 
             function gridPagination(){
                 $.ajax({
                 dataType: "json",
-                url: '/api/users/?page='+page+'&table_size='+count_tr+'',
+                url: '/api/users/?page='+page+'&table_size='+count_tr+ filter_query,
                 type: 'GET',
                 contentType: "application/json",
                 success: function(json)
@@ -219,7 +215,33 @@
             $( "#table_siz option:selected" ).each(gridPagination())
             })
 
-            });
+
+
+ $('#search_button').click(function()
+    {
+      var check= true;
+      var error='';
+      var SelectId_user;
+      var SelectId_key;
+
+      if (check)
+       {
+        filter_query = '&field='+ $('#SelectId_user').val()+'&criteria='+$('#SelectId_key').val()+'&value='+$('#key_input').val();
+          alert(filter_query)
+        page=1;
+        gridPagination();
+        $('.error_div').empty();
+       }
+      else
+      {
+        $('.error_div').empty();
+        $('.error_div').html(error);
+        error ='';
+      }
+     });
+
+
+});
    </script>
 
   </head>
@@ -234,7 +256,9 @@ This page is appointed for creating new and managing existing users
      <input type='button' value="Create New User">
      </a>
  </div>
-
+<div class="field" style="margin-left:5%;">
+      Number of Found User #  <span id = "ra">0</span>
+</div>
       <div id="user_filter">
 
         <div class="user_filter_in">
@@ -243,33 +267,31 @@ This page is appointed for creating new and managing existing users
                   <span class='info'>Search user</span>
          </div>
              <div class="form_block">
-<table class="grid">
+<table>
    <tr>
         <td>
                  <div class="search">
-         <select class="span1" id="SelectId_user" style="width:100px">
-                        <option value="str0"> User Name </option>
-                        <option value="str1"> first name </option>
-                        <option value="str2"> last name </option>
-                        <option value="str3"> email </option>
-                        <option value="str4"> Role </option>
-                        <option value="str5"> All Columns </option>
+         <select id="SelectId_user" style="width:100px">
+                        <option value="login"> User Name </option>
+                        <option value="first_name"> first name </option>
+                        <option value="last_name"> last name </option>
+                        <option value="email"> email </option>
+
                          </select>
                         </div>
         </td>
         <td>
                 <div class="search">
                  <select id="SelectId_key" style="width:100px">
-                        <option value="str0"> start with </option>
-                        <option value="str1"> equals </option>
-                        <option value="str2"> contains </option>
-                        <option value="str3"> not equal to </option>
-                        <option value="str4"> does not contain </option>
+                        <option value="start_with"> start with </option>
+                        <option value="equals"> equals </option>
+                        <option value="contains"> contains </option>
+
                  </select>
                 </div>
           </td>
           <td>
-                <br><br><input type="text" style="..." id="key_input"></br>
+                <input type="text" style="..." id="key_input">
                 <input type="button" value="search" id='search_button'>
         </td>
    </tr>
@@ -278,12 +300,10 @@ This page is appointed for creating new and managing existing users
          </form>
                  </div>
           </div>
-<div class="field" style="margin-left:5%;">
-      Number of Found User #  <span id = "ra">0</span>
-</div>
+
 <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
-                  <select class="span1" id="table_size">
+                  <select id="table_size">
                     <option selected>5</option>
                     <option>25</option>
 
