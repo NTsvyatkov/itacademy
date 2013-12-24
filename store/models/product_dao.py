@@ -47,7 +47,6 @@ class Product(Base):
         entry.name = new_name
         entry.description = new_description
         entry.price = new_price
-        #entry.dimension = Dimension.query.get(new_dimension)
         db_session.commit()
 
     @staticmethod
@@ -180,5 +179,3 @@ class Dimension(Base):
     @staticmethod
     def get_all_dimensions():
         return Dimension.query.filter_by(is_deleted=False).all()
-
-

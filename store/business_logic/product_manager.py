@@ -3,6 +3,7 @@ from models.product_stock_dao import ProductStock
 from validation import ValidationException, NotFoundException
 import re
 
+
 def validate_name(name):
     if name is None:
         raise ValidationException("Product name is required field")
