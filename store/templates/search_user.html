@@ -238,16 +238,19 @@ This page is appointed for creating new and managing existing users
       <div id="user_filter">
 
         <div class="user_filter_in">
-         <form class='form'>
+         <div class="field" style="margin-left: 55px; margin-right: 0px;">
+      Number of Found User #  <span id = "ra">0</span>
+</div>
+         <form class="form" style="width: 898px;">
          <div class="top_bottom_line">
                   <span class='info'>Search user</span>
          </div>
              <div class="form_block">
-<table class="grid">
+<table>
    <tr>
         <td>
                  <div class="search">
-         <select class="span1" id="SelectId_user" style="width:100px">
+         <select id="SelectId_user" class="span1" style="width: 100px; margin-top: 10px; margin-right: 15px;">
                         <option value="str0"> User Name </option>
                         <option value="str1"> first name </option>
                         <option value="str2"> last name </option>
@@ -259,7 +262,7 @@ This page is appointed for creating new and managing existing users
         </td>
         <td>
                 <div class="search">
-                 <select id="SelectId_key" style="width:100px">
+                 <select id="SelectId_key" style="width: 100px; margin-top: 10px; margin-right: 15px;">
                         <option value="str0"> start with </option>
                         <option value="str1"> equals </option>
                         <option value="str2"> contains </option>
@@ -269,7 +272,7 @@ This page is appointed for creating new and managing existing users
                 </div>
           </td>
           <td>
-                <br><br><input type="text" style="..." id="key_input"></br>
+                <input id="key_input" type="text" style="margin-top: 10px;">
                 <input type="button" value="search" id='search_button'>
         </td>
    </tr>
@@ -278,9 +281,7 @@ This page is appointed for creating new and managing existing users
          </form>
                  </div>
           </div>
-<div class="field" style="margin-left:5%;">
-      Number of Found User #  <span id = "ra">0</span>
-</div>
+
 <div class="field" style="margin-left:5%;">
                   <lable>Table size: </lable>
                   <select class="span1" id="table_size">

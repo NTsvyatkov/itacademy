@@ -21,8 +21,8 @@ body {
 	text-decoration:underline;
 }
 .grid {
-    width:980px;
 	font-family:Arial, Helvetica, sans-serif;
+    width:980px;
     font-weight: 600;
     margin:auto auto 10px auto;
 	color:#666;
@@ -308,7 +308,9 @@ label{
 .errorList
 {
     color:red;
-
+    border: 2px solid red;
+    width: 205px;
+    height: 28px;
 
 }
 .errorList2
@@ -435,7 +437,7 @@ div.order_wrapper, div.order_wrapper_block{
 
 div #button {
     clear: both;
-    padding-left: 80%;
+
     margin-bottom: 30px;
 }
 
@@ -445,5 +447,8 @@ th{
 
 div p{
     margin:8px auto;
+}
+.table{
+    padding-top: 4px; padding-bottom: 4px; border-bottom-width: 2px; margin-top: 22px;
 }
 /*End of styles for order_details.html*/

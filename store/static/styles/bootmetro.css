@@ -1192,29 +1192,15 @@ textarea::-webkit-input-placeholder {
 }
 
 .radio,
-.checkbox {
-  min-height: 20px;
-  padding-left: 20px;
-}
+
 
 .radio input[type="radio"],
-.checkbox input[type="checkbox"] {
-  float: left;
-  margin-left: -20px;
-}
+
 
 .controls > .radio:first-child,
-.controls > .checkbox:first-child {
-  padding-top: 5px;
-}
 
 .radio.inline,
-.checkbox.inline {
-  display: inline-block;
-  padding-top: 5px;
-  margin-bottom: 0;
-  vertical-align: middle;
-}
+
 
 .radio.inline + .radio.inline,
 .checkbox.inline + .checkbox.inline {
@@ -1388,7 +1374,7 @@ textarea[readonly] {
 }
 
 input[type="radio"][disabled],
-input[type="checkbox"][disabled],
+
 input[type="radio"][readonly],
 input[type="checkbox"][readonly] {
   background-color: transparent;
@@ -1893,7 +1879,7 @@ input.search-query {
 }
 
 .form-search .radio input[type="radio"],
-.form-search .checkbox input[type="checkbox"],
+
 .form-inline .radio input[type="radio"],
 .form-inline .checkbox input[type="checkbox"] {
   float: left;
@@ -3871,7 +3857,7 @@ input[type="submit"].btn.btn-mini {
 }
 
 .navbar-form input[type="image"],
-.navbar-form input[type="checkbox"],
+
 .navbar-form input[type="radio"] {
   margin-top: 3px;
 }

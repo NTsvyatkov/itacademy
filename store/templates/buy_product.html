@@ -161,7 +161,7 @@
                         $('#select_dimension'+k).append('<option  value=' + json.status[status_k].id + '>' +
                             json.status[status_k].name + '</option>');
                     }
-                    tr[k].cells[5].innerHTML = "<input type='button' value='Add to Cart' id='button'  alt=" + k + ">";
+                    tr[k].cells[5].innerHTML = "<input type='button' value='Add to Cart' class='table' id='button'  alt=" + k + ">";
                     tr[k].cells[4].abbr=k;
                     tr[k].cells[5].abbr=k;
                     tr[k].cells[5].onclick= function(){
@@ -366,11 +366,11 @@
                                 <span class="info">Filter</span>
                              </div>
                             <div class="form_block">
-                            <span>Keyword <input type="text" id = 'name' style="width:150px" /></span>
-                            <span>Price <input type="text" id = 'start_price' style="width:50px" /> - </span>
-                            <span><input type="text" id = 'end_price' style="width:50px" /> </span>
+                            <span>Keyword <input type="text" id = 'name' style="width:150px; margin-top: 10px;" /></span>
+                            <span>Price <input type="text" id = 'start_price' style="width:50px; margin-top: 10px;"  /> - </span>
+                            <span><input type="text" id = 'end_price' style="width:50px;  margin-top: 10px;" /> </span>
                             <span><input type="button" value="search" id='search_button'></span>
-                            <span style="float: right"><input type="button" value="Cart" id='cart_button'></span>
+                            <span style="float: right; margin-top: 10px;"><input type="button" value="Cart" id='cart_button'></span>
                             </div>
                         </form>
                     </div>
@@ -384,7 +384,7 @@
                 </div>
                 <div style="margin-left:80%;"></div>
                 <div id=" ">
-                    <table id='grid' class="grid" style="width: 80%;">
+                    <table id='grid' class="grid" style="width: 980px;">
                         <tr>
                             <th class = 'index'>
                                 Product
