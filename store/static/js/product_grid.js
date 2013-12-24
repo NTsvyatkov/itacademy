@@ -3,7 +3,7 @@ $(document).ready(function() {
 
 
     var count_tr=$('#table_size').val();
-    var th = ['id','Product name','Description','Price $','Edit','Delete'];
+    var th = ['id','Product name','Description','Price','Edit','Delete'];
     var count_td= th.length-1;
     var page = 1;
     var table_grid = document.getElementById('grid');
@@ -85,7 +85,7 @@ $(document).ready(function() {
             tr.cells[0].innerHTML = '<span class = product_id>'+id_product+'</span>';
             tr.cells[1].innerHTML = '<span class=name>'+json.products[product_k].name+'</span>';
             tr.cells[2].innerHTML = json.products[product_k].description;
-            tr.cells[3].innerHTML = json.products[product_k].price;
+            tr.cells[3].innerHTML = '$'+json.products[product_k].price;
             tr.cells[4].innerHTML = "<img src='static/images/Text Edit.png' class='edit_img' alt=" + id_product + ">";
             tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + id_product + ">";
             tr.cells[4].abbr=k;

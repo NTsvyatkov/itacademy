@@ -43,8 +43,6 @@ def order_post():
 
 @app.route('/api/order_product/', methods=['GET'])
 def order():
-    records_per_page = int(request.args.get('table_size'))
-    page = int(request.args.get('page'))
     order_id = int(request.args.get('order_id'))
     order_arr = []
     order_list,count = order_product_grid(session['user_id'],order_id)
@@ -75,7 +73,7 @@ def order():
          'price': str(i.Product.price),'dimension_number':i.OrderProduct.dimension.number})
     return make_response(jsonify(order=order_arr,records_amount=count, total_items=total_items, assignee_id=assignee,\
                 delivery_date=delivery_date, order_status=order_status,order_number=order_number,order_id=order_id, \
-                order_date=order_date, records_per_page=records_per_page, total_price=str(total_price)), 200)
+                order_date=order_date, total_price=str(total_price)), 200)
 
 
 @app.route('/api/order_product/<int:id_product>/<int:id_order>/<int:dimension_id>', methods=['DELETE'])
