@@ -1,4 +1,3 @@
-
 from flask import Flask, jsonify, render_template, request, make_response
 from models.user_dao import UserDao, RoleDao, RegionDao
 from models import db_session
@@ -59,7 +58,10 @@ def users_page(page):
 def user_pager():
     records_per_page = int(request.args.get('table_size'))
     page = int(request.args.get('page'))
-    users, records_amount = UserDao.pagerByFilterUsers(page, records_per_page)
+    search_field = request.args.get('field')
+    search_criteria = request.args.get('criteria')
+    search_value = request.args.get('value')
+    users, records_amount = UserDao.pagerByFilterUsers(page, records_per_page, search_field, search_criteria, search_value)
     users_arr = []
     for i in users:
         users_arr.append({'id':i.id,'login': i.login, 'first_name': i.first_name, 'last_name': i.last_name,
