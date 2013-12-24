@@ -80,7 +80,7 @@
  }
 
   function ajaxSuccess(json){
-           $("#ra").text(json.records_amount)
+           $("#ra").val(json.records_amount)
            deletingGrid()
            createGrid(json.users.length)
 
@@ -240,7 +240,7 @@
   <body>
 
   <div id="user_block">
-This page is appointed for creating new and managing existing users
+
 <div>
      <a href='create_user' style='margin-left:50px; color:black; text-decoration:none;'>
      <input type='button' value="Create New User">
@@ -251,7 +251,6 @@ This page is appointed for creating new and managing existing users
 
         <div class="user_filter_in">
          <div class="field" style="margin-left: 15px;">
-      Number of Found User #  <span id = "ra">0</span>
 </div>
          <form class='form'>
          <div class="top_bottom_line">
@@ -262,7 +261,7 @@ This page is appointed for creating new and managing existing users
    <tr>
         <td>
                  <div class="search">
-         <select id="SelectId_user" class="span1" style="width: 100px; margin-right: 10px; margin-top: 10px;">
+         <select id="SelectId_user" class="span1" style="width: 100px; margin-right: 10px; ">
                          <option value="login"> User Name </option>
                          <option value="first_name"> first name </option>
                          <option value="last_name"> last name </option>
@@ -272,7 +271,7 @@ This page is appointed for creating new and managing existing users
         </td>
         <td>
                 <div class="search">
-                 <select id="SelectId_key" style="width: 100px; margin-right: 10px; margin-top: 10px;">
+                 <select id="SelectId_key" style="width: 100px; margin-right: 10px; ">
                          <option value="start_with"> start with </option>
                          <option value="equals"> equals </option>
                          <option value="contains"> contains </option>
@@ -280,17 +279,27 @@ This page is appointed for creating new and managing existing users
                 </div>
           </td>
           <td>
-                <input id="key_input" type="text" style="margin-top: 10px;">
-                <input type="button" value="search" id='search_button'>
+                <input id="key_input" type="text" >
+                <input type="button" value="search" id='search_button' >
         </td>
    </tr>
 </table>
+           <div class='information' style='margin:10px auto; width:100%;'>
+                 <div class="field" style='width:360px;'>
+                    <label style='margin:auto;text-align: center;'>Number of Found User:</label>
+                    <input type="text" id="ra" class='input_read' style='border:none;' readonly >
+                </div>
+               <span style='color: #778899;'>This page is appointed for creating new and managing existing users</sapn>
+           </div>
          </div>
          </form>
                  </div>
           </div>
 
-<div class="field" style="margin-left:5%;">
+
+
+              <div id="user_table" style='width:980px; margin: 0px auto;'>
+                  <div>
                   <lable>Table size: </lable>
                   <select class="span1" id="table_size">
                     <option selected>5</option>
@@ -299,8 +308,6 @@ This page is appointed for creating new and managing existing users
                    </select>
 
             </div>
-
-              <div id="user_table">
        <table id='grid' class="grid">
            <tr>
                <th>
