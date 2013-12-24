@@ -7,7 +7,8 @@ from models.order_dao import Order, OrderProduct
 class OrderTest(unittest.TestCase):
 
     def setUp(self):
-        self.json = {'value': 1, 'status': 3}
+        self.value = 1
+        self.status = 3
         self.userId = 4
         self.productId = 11
         self.dimension_id = 2
@@ -32,7 +33,7 @@ class OrderTest(unittest.TestCase):
     @patch('business_logic.order_manager.OrderProduct.updateSumQuantity')
     @patch('business_logic.order_manager.OrderProduct.add_order_product')
     def testAddProductToCartStatus(self, orderStatus, orderProduct, updateSum, addOrder):
-        order_manager.addProductToCartStatus(self.userId,self.productId, self.json)
+        order_manager.addProductToCartStatus(self.userId,self.productId, self.status, self.value, self.status)
         self.assertEqual(orderStatus.call_count, 0)
         self.assertEqual(orderProduct.call_count, 1)
         self.assertEqual(updateSum.call_count, 1)
