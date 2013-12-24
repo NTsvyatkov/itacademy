@@ -20,6 +20,36 @@
 <div id="header">
 
 
+ <script type="text/javascript">
+   $(document).ready(function() {
+
+     max_attempts=5;
+     failed_attempts=0;
+     id=1
+     $.ajax({
+     dataType: "json",
+     url: '/api/security',
+     type: 'PUT',
+     data : JSON.stringify({'id':id, 'max_attempts': max_attempts, 'failed_attempts':failed_attempts}),
+     contentType: "application/json",
+     success:function(json){}})
+
+
+     id=1;
+     $.ajax({
+     dataType: "json",
+     url: '/api/security',
+     type: 'GET',
+     contentType: "application/json",
+     success:function(json){
+
+       max_attempts= json.max_attempts
+       failed_attempts=json.failed_attempts
+     }})}
+    )
+
+    </script>
+
 
 </div>
 </br></br></br></br>

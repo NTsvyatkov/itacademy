@@ -4,7 +4,7 @@ from models.user_dao import UserDao, RoleDao, RegionDao
 from models import db_session
 from flask_bootstrap import app
 from maintenance.pager_user import Pagination
-from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser
+from business_logic.user_manager import getListUser, getUserByID, deleteUser, createUser, updateUser, updateSec, getSecByID, getSecurity
 from business_logic.validation import ValidationException, NotFoundException
 from views.authenticate import session
 
@@ -108,6 +108,27 @@ def users_update():
     resp = make_response('',200)
     return resp
 
+@app.route('/api/security', methods=['PUT'])
+def security_update():
+    js = request.json
+    updateSec(js['id'], js['failed_attempts'], js['max_attempts'])
+    resp = make_response('', 200)
+    return resp
+
+@app.route('/api/security/<int:id>', methods=['GET'])
+def security_id(id):
+    i = getSecByID(id)
+    sec = {'id': i.id, 'failed_attempts': i.failed_attempts, 'max_attempts': i.max_attempts}
+    resp = make_response(jsonify(security=sec), 200)
+    return resp
+
+@app.route('/api/security', methods=['GET'])
+def security():
+    sec_list = getSecurity()
+    sec_arr = []
+    for i in sec_list:
+        sec_arr.append({'id':i.id,'failed_attempts':i.failed_attempts,'max_attempts':i.max_attempts})
+    return make_response(jsonify(security=sec_arr),200)
 
 @app.route('/info')
 def user_info():
@@ -130,3 +151,4 @@ def err_han(e):
 def err_han(ex):
     error_dict = {'message': ex.message}
     return make_response(jsonify(error_dict), 404)
+

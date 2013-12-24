@@ -9,6 +9,40 @@ from sqlalchemy.orm import relationship, backref
 import hashlib
 
 
+
+class Security(Base):
+    __tablename__ = "security"
+    id = Column(Integer, primary_key=True,autoincrement=True)
+    failed_attempts = Column(Integer(20))
+    max_attempts = Column(Integer(20))
+
+    def __init__(self,failed_attempts,max_attempts):
+        super(Security, self).__init__()
+        self.failed_attempts = failed_attempts
+        self.max_attempts = max_attempts
+
+    @staticmethod
+    def add_security(failed_attempts, max_attempts):
+        security = Security(failed_attempts, max_attempts)
+        db_session.add(security)
+        db_session.commit()
+
+    @staticmethod
+    def getSecuritybyId(id):
+        return Security.query.get(id)
+
+    @staticmethod
+    def getSecyrity():
+        return Security.query.all()
+
+    @staticmethod
+    def updateSecurity(id,failed_attempts, max_attempts):
+        entry = Security.getSecuritybyId(id)
+        entry.failed_attempts = failed_attempts
+        entry.max_attempts = max_attempts
+        db_session.commit()
+
+
 class UserLevel(Base):
     __tablename__ = "user_level"
     id = Column(Integer, primary_key=True,autoincrement=True)

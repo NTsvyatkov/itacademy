@@ -2,7 +2,7 @@ from models.product_dao import Product, Dimension
 from models.product_stock_dao import ProductStock
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
-from models.user_dao import UserDao, UserLevel
+from models.user_dao import UserDao, UserLevel, Security
 from models.order_dao import Order, OrderProduct, OrderStatus,DeliveryType
 from models.product_stock_dao import ProductStock
 
@@ -30,6 +30,8 @@ Product.add_product('banana', 'brazilian banana', 12.1)
 Product.add_product('tomato', 'ukrainian tomato', 5.8)
 Product.add_product('mango', 'fresh mango', 7.5)
 Product.add_product('lemon', 'indian lemon', 4.4)
+
+Security.add_security(0, 5)
 
 UserLevel.add_user_level('Standard', 0, 0)
 UserLevel.add_user_level('Silver', 1000, 5)

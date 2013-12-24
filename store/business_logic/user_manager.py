@@ -3,7 +3,7 @@ import re
 from validation import ValidationException, NotFoundException
 from models.region_dao import RegionDao
 from models.role_dao import RoleDao
-from models.user_dao import UserDao
+from models.user_dao import UserDao, Security
 
 
 def validation_Create_Login(login):
@@ -110,3 +110,13 @@ def deleteUser(user_id):
 def getUserByID(user_id):
     validationUserID(user_id)
     return UserDao.getUserByID(user_id)
+
+
+def getSecByID(id):
+    return Security.getSecuritybyId(id)
+
+def getSecurity():
+    return Security.getSecyrity()
+
+def updateSec(id, failed_attempts, max_attempts):
+    Security.updateSecurity(id, failed_attempts, max_attempts)
