@@ -113,8 +113,8 @@
   $('#edit_button').click(function(){
   update();
     });
-  $('#cansel').click(function(){
-  cansel();
+  $('#cancel').click(function(){
+  cancel();
     });
 
  function add() {
