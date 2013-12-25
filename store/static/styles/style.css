@@ -1,7 +1,7 @@
 
 body {
     font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, Sans-Serif;
-    background: url(../images/background.jpg) repeat-x top;
+    background-color: #EBEEF4;
 }
 .grid a:link {
 
@@ -22,11 +22,12 @@ body {
 }
 .grid {
 	font-family:Arial, sans-serif;
+    background-color: #FFFFFF;
     width:980px;
     font-weight: 400;
     margin:auto auto 10px auto;
 	color:#444444;
-	font-size:13px;
+	font-size:14px;
 
 
 	border:1px solid #000;
@@ -69,8 +70,11 @@ body {
 	border-left: 0;
 }
 .grid tr td {
+    letter-spacing: 0.02em;
 	padding:10px;
 	border: 1px solid #444444;
+    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,Sans-Serif;
+
 
 }
 .grid tr.even td{
@@ -118,28 +122,18 @@ body {
 }
 
 #menu  {font-size: 15px;
-    background: -moz-linear-gradient(top, rgba(226,226,226,1) 0%, rgba(219,219,219,0.61) 50%, rgba(209,209,209,0.6) 51%,
-                 rgba(254,254,254,0.22) 100%); /* FF3.6+ */
-    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(226,226,226,1)),
-                 color-stop(50%,rgba(219,219,219,0.61)), color-stop(51%,rgba(209,209,209,0.6)), color-stop(100%,
-                rgba(254,254,254,0.22))); /* Chrome,Safari4+ */
-    background: -webkit-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,0.61) 50%,
-                 rgba(209,209,209,0.6) 51%,rgba(254,254,254,0.22) 100%); /* Chrome10+,Safari5.1+ */
-    background: -o-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,0.61) 50%,rgba(209,209,209,0.6) 51%,
-                rgba(254,254,254,0.22) 100%); /* Opera 11.10+ */
-    background: -ms-linear-gradient(top, rgba(226,226,226,1) 0%,rgba(219,219,219,0.61) 50%,rgba(209,209,209,0.6) 51%,
-                rgba(254,254,254,0.22) 100%); /* IE10+ */
-    background: linear-gradient(to bottom, rgba(226,226,226,1) 0%,rgba(219,219,219,0.61) 50%,rgba(209,209,209,0.6) 51%,
-                rgba(254,254,254,0.22) 100%); /* W3C */
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e2e2e2', endColorstr='#38fefefe',GradientType=0);
     height:50px;
     line-height:30px;
-    color:#9b9b9b;
-    border:solid 1px #cacaca;
+    font-color:#FFFFFF;
     width:100%;
     overflow:hidden;
     margin:0px 0px 40px 0px;
-    padding:0px;
+
+    background-color: #3B5998;
+    border-bottom: 1px solid #133783;
+    min-width: 981px;
+    position: relative !important;
+    z-index: 300;
 }
 
 #menu li {
@@ -157,7 +151,8 @@ body {
     background-position:right;
     padding-right: 15px;
     text-decoration: none;
-    color:#454545;
+    color:#FFFFFF;
+    font-family:Arial, sans-serif;
 }
 
 .home {border:none;
@@ -258,7 +253,7 @@ form{
     width:980px;
     margin:auto auto 10px auto;
     border:1px solid #000;
-    background: #FFFFFF;
+    background: -moz-linear-gradient(center top , #FAFAFA, #F5F5F5) repeat scroll 0 0 transparent;
 
 
 }
@@ -460,6 +455,17 @@ div p{
 .quantity{
     margin-right: 40px; width: 60px; margin-bottom: -15px;
 }
+#quantity1 {
+    width: 70px; margin-bottom: 0px; margin-right: 0px;
+}
+#quantity2 {
+    width: 70px; margin-bottom: 0px; margin-right: 0px;
+}
+
+#quantity3 {
+    width: 70px; margin-bottom: 0px; margin-right: 0px;
+}
+
 .update_amount{
     margin-right: -30px; margin-left: 30px; margin-top: -18px;
 }
