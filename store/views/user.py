@@ -110,27 +110,7 @@ def users_update():
     resp = make_response('',200)
     return resp
 
-@app.route('/api/security', methods=['PUT'])
-def security_update():
-    js = request.json
-    updateSec(js['id'], js['failed_attempts'], js['max_attempts'])
-    resp = make_response('', 200)
-    return resp
 
-@app.route('/api/security/<int:id>', methods=['GET'])
-def security_id(id):
-    i = getSecByID(id)
-    sec = {'id': i.id, 'failed_attempts': i.failed_attempts, 'max_attempts': i.max_attempts}
-    resp = make_response(jsonify(security=sec), 200)
-    return resp
-
-@app.route('/api/security', methods=['GET'])
-def security():
-    sec_list = getSecurity()
-    sec_arr = []
-    for i in sec_list:
-        sec_arr.append({'id':i.id,'failed_attempts':i.failed_attempts,'max_attempts':i.max_attempts})
-    return make_response(jsonify(security=sec_arr),200)
 
 @app.route('/info')
 def user_info():

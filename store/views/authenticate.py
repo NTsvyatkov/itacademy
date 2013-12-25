@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 from flask import render_template, request, session, escape, redirect, url_for
-from models.user_dao import UserDao
+from models.user_dao import UserDao, Security
 from models.role_dao import RoleDao
 from flask_bootstrap import app
 
@@ -36,9 +36,11 @@ def login_authenticate():
         if session['role'] == 'Supervisor':
 
            return render_template('product_grid.html',)
-        #return render_template('layout.html')
+
     else:
+
         error = 'Invalid username/password'
+
         return render_template('login(2).html', error=error)
 
 @app.route('/logout')
