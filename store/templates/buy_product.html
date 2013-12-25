@@ -17,16 +17,21 @@
             var modal_table_grid = document.getElementById('modal_grid');
             document.getElementById('cart_button').disabled = false;
 
-            function createGrid(count){
-                for (var i=1; i<=count;i++ ){
-                    tr[i] = document.createElement('TR');
-                    table_grid.appendChild(tr[i]);
-                    tr[i].id=i;
-                    for (var j=0; j<=5; j++){
-                        tr[i].appendChild(document.createElement('TD'));
-                    }
+            function createGrid(count)
+                {
+                    for (var i=1; i<=count;i++ )
+                        {
+                            tr[i] = document.createElement('TR');
+                            table_grid.appendChild(tr[i]);
+                            tr[i].id=i;
+                            if (i % 2 == 0) tr[i].style.background = "#E8E8E8";
+                            for (var j=0; j<=5; j++)
+                                {
+                                    tr[i].appendChild(document.createElement('TD'));
+                                }
+                        }
                 }
-            }
+            createGrid();
 
             function createModalGrid(count){
                 for (var i=1; i<=count;i++ ){
@@ -366,11 +371,11 @@
                                 <span class="info">Filter</span>
                              </div>
                             <div class="form_block">
-                            <span>Keyword <input type="text" id = 'name' style="width:150px; margin-top: 10px;" /></span>
-                            <span>Price <input type="text" id = 'start_price' style="width:50px; margin-top: 10px;"  /> - </span>
-                            <span><input type="text" id = 'end_price' style="width:50px;  margin-top: 10px;" /> </span>
+                            <span>Keyword <input id="name" type="text" style="width: 150px; margin-top: 0px;"></span>
+                            <span>Price <input type="text" id = 'start_price' style="width:50px; margin-top: 0px;"  /> - </span>
+                            <span><input type="text" id = 'end_price' style="width:50px;  margin-top: 0px;" /> </span>
                             <span><input type="button" value="search" id='search_button'></span>
-                            <span style="float: right; margin-top: 10px;"><input type="button" value="Cart" id='cart_button'></span>
+                            <span style="float: right; margin-top: 0px;"><input type="button" value="Cart" id='cart_button'></span>
                             </div>
                         </form>
                     </div>
@@ -407,11 +412,11 @@
                         </tr>
                     </table>
 
-                    <div id="pagination"  style="text-align: center">
-                        <input type="button" id="first" value="First">&nbsp
-                        <input type="button" id="prev" value="Prev">&nbsp
-                        <input type="button" id="next" value="Next">&nbsp
-                        <input type="button" id="last" value="Last">
+                    <div  id="pagination"  style="text-align: center">
+                        <input  type="button" id="first" value="First">&nbsp
+                        <input  type="button" id="prev" value="Prev">&nbsp
+                        <input  type="button" id="next" value="Next">&nbsp
+                        <input  type="button" id="last" value="Last">
                         <div style="font-size:14px; color:#606860;">Page <span id="page"></span> of
                             <span id="pages_amount"></span>
                         </div>

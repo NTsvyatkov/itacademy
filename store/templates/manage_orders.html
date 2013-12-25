@@ -211,6 +211,7 @@
                 <div class=" ">
                     <form class='form'>
                         <div class="top_bottom_line">
+                            <span class="info">Orders Filter</span>
                         </div>
                       
                         <div class="form_block">
@@ -229,8 +230,8 @@
                                 <option value="0">Order Number</option>
                                 <option value="1">Customer</option>
                             </select>
-                            <input style="margin-top: 4px;" type="text" id="name_input">
-                            <input type="button" value="Apply" id='apply_button' style="">
+                            <input id="name_input" type="text" style="margin-top: 4px; margin-left: 10px;">
+                            <input id="apply_button" type="button" style="margin-right: -39px; margin-bottom: 0px; " value="Apply">
                         </div>
                         </div>
 
@@ -250,31 +251,7 @@
                    </select>
             </div>
                 <div id=" ">
-<script>function sort(el) {
-   var col_sort = el.innerHTML;
-   var tr = el.parentNode;
-   var th, arrow, col_sort_num;
 
-	for (var i=0; (th = tr.getElementsByTagName("th").item(i)); i++) {
-   	if (th.innerHTML == col_sort) {
-            col_sort_num = i;
-            if (th.prevsort == "y"){
-                arrow = th.firstChild;
-                el.up = Number(!el.up);
-            }else{
-                th.prevsort = "y";
-                arrow = th.insertBefore(document.createElement("span"),th.firstChild);
-                el.up = 0;
-            }
-            arrow.innerHTML = el.up?"↑ ":"↓ ";
-        }
-    }
-$('.index').click(function(){
-                sort(el)
-    createTableOrders();
-            });
-
-}</script>
             <table id="grid" class="grid">
                         <tr>
                             <th  class = 'index' title="Click on the header to sort column">

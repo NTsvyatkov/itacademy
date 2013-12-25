@@ -6597,6 +6597,7 @@ input[type=submit] {
 
 .bg-color-blue {
   background-color: #2e8bcc !important;
+    text-color: #FFFFFF;
 }
 
 .bg-color-red {
@@ -6628,6 +6629,6 @@ input[type=submit] {
 }
 
 .bg-color-grayLight {
-  background-color: #999999 !important;
+  background-color: #4173C9 !important;
 }
 

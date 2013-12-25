@@ -20,7 +20,7 @@
                             tr[i] = document.createElement('TR');
                             table_grid.appendChild(tr[i]);
                             tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#f0f0f0";
+                            if (i % 2 == 0) tr[i].style.background = "#E8E8E8";
                             for (var j=0; j<=7; j++)
                                 {
                                     tr[i].appendChild(document.createElement('TD'));
@@ -261,7 +261,7 @@
    <tr>
         <td>
                  <div class="search">
-         <select id="SelectId_user" class="span1" style="width: 100px; margin-right: 10px; ">
+         <select id="SelectId_user" class="span1" style="width: 107px; margin-right: 10px;">
                          <option value="login"> User Name </option>
                          <option value="first_name"> first name </option>
                          <option value="last_name"> last name </option>
@@ -287,7 +287,7 @@
            <div class='information' style='margin:10px auto; width:100%;'>
                  <div class="field" style='width:360px;'>
                     <label style='margin:auto;text-align: center;'>Number of Found User:</label>
-                    <input type="text" id="ra" class='input_read' style='border:none;' readonly >
+                    <input id="ra" class="input_read" type="text" readonly="" style="border: medium none;  padding-bottom: 11px;">
                 </div>
                <span style='color: #778899;'>This page is appointed for creating new and managing existing users</sapn>
            </div>
