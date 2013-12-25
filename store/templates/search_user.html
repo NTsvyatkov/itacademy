@@ -287,9 +287,9 @@
            <div class='information' style='margin:10px auto; width:100%;'>
                  <div class="field" style='width:360px;'>
                     <label style='margin:auto;text-align: center;'>Number of Found Users:</label>
-                    <input id="ra" class="input_read" type="text" style="border-width: medium medium 0px; border-style: none; border-color: -moz-use-text-color; -moz-border-top-colors: none; -moz-border-right-colors: none; -moz-border-bottom-colors: none; -moz-border-left-colors: none; border-image: none; padding-bottom: 0px; margin-top: -45px;" readonly="">
+                    <input id="ra" class="input_read" type="text" readonly="" style="border: medium none;  padding-bottom: 11px;">
                 </div>
-               <span style='color: #778899;'>This page is appointed for creating new and managing existing users</span>
+               <span style='color: #778899;'>This page is appointed for creating new and managing existing users</sapn>
            </div>
          </div>
          </form>
@@ -298,14 +298,15 @@
 
 
 
-              <div style="margin-left:80%;"></div>
-                <div class="field" style="margin-left:5%;">
-                    <lable>Table size: </lable>
-                    <select id="table_size" class="span2">
-                        <option selected value="5"> Show 5 lines </option>
-                        <option value="25">Show 25 lines </option>
-                    </select>
-                </div>
+              <div id="user_table" style='width:980px; margin: 0px auto;'>
+                  <div>
+                  <lable>Table size: </lable>
+                  <select class="span1" id="table_size">
+                    <option selected>5</option>
+                    <option>25</option>
+
+                   </select>
+
             </div>
        <table id='grid' class="grid">
            <tr>
