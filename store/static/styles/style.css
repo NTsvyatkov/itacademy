@@ -108,7 +108,7 @@ body {
     background:url(../images/1.gif) right no-repeat; cursor:pointer;
 }
 .grid .index{
-            background: #3B5998 url(../images/75375.png) right no-repeat; cursor:pointer;
+background: #3B5998 url(../images/75375.png) right no-repeat; cursor:pointer;
 
 }
 
@@ -125,7 +125,7 @@ body {
     height:50px;
     line-height:30px;
     font-color:#FFFFFF;
-    width:100%;
+    width:101%;
     overflow:hidden;
     margin:0px 0px 40px 0px;
 
@@ -134,6 +134,8 @@ body {
     min-width: 981px;
     position: relative !important;
     z-index: 300;
+    background: url("../images/j_header_middle.png") repeat-x scroll 0 0 rgba(0, 0, 0, 0);
+    height: 54px;
 }
 
 #menu li {
@@ -166,7 +168,7 @@ body {
     cursor:pointer;
 }
 #menu .active{
-    color: black;
+    color: #FFFFFF;
     font-weight:bold;
 
     text-decoration:none;
