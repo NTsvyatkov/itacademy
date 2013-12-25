@@ -46,10 +46,9 @@ body {
     margin-left:10px;
     font-weight: 500;
     font-size:14px;
-    color:#FFFFFF;
-
-
 }
+
+
 
 .grid tr:first-child th:first-child{
 	-moz-border-radius-topleft:3px;
@@ -103,6 +102,10 @@ body {
 }
 .grid th.desc{
     background:url(../images/1.gif) right no-repeat; cursor:pointer;
+}
+.grid .index{
+            background: #3B5998 url(../images/753759.png) right no-repeat; cursor:pointer;
+
 }
 
 .grid .index.asc{
@@ -255,6 +258,7 @@ form{
     width:980px;
     margin:auto auto 10px auto;
     border:1px solid #000;
+    background: #FFFFFF;
 
 
 }
@@ -459,7 +463,7 @@ div p{
 .update_amount{
     margin-right: -30px; margin-left: 30px; margin-top: -18px;
 }
-.deteils{
+.details{
     flout:right;
 }
 /*End of styles for order_details.html*/
