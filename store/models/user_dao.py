@@ -191,8 +191,6 @@ class UserDao(Base):
     @staticmethod
     def pagerByFilterUsers(page=None, records_per_page=None, search_field=None, search_criteria=None, search_value = None):
         query = UserDao.query
-
-
         if search_value:
             if search_field =='login':
                 f = UserDao.login
@@ -202,20 +200,16 @@ class UserDao(Base):
                 f = UserDao.last_name
             elif search_field =='email':
                 f = UserDao.email
-
-
             if search_criteria == 'start_with':
                 query = query.filter(f.like(search_value + '%'))
             elif search_criteria =='equals':
                 query = query.filter(f == search_value)
             elif search_criteria =='contains':
                 query = query.filter(f.contains(search_value))
-
         stop = page * records_per_page
         start = stop - records_per_page
         return query.order_by(UserDao.id).slice(start, stop), \
             query.count()
-        
 
     @staticmethod
     def get_user_info_by_id(user_id):

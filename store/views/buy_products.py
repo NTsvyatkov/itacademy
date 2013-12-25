@@ -1,4 +1,5 @@
 #!/usr/bin/env python
+import random
 from flask import render_template, request, make_response, jsonify, session
 from business_logic.product_manager import list_dimensions
 from flask_bootstrap import app
@@ -63,8 +64,9 @@ def deleteOrderProduct():
 @app.route('/api/update_product', methods = ['PUT'])
 def updateOrderProduct():
     total_price = 0
+    order_number = random.randint(0,999999)
     order = Order.getOrderByStatus(session['user_id'])
     for i in OrderProduct.listOrderProductById(order.id):
         total_price += i.price*i.quantity
-    Order.updateOrderStatus(order.id, OrderStatus.getNameStatus('Created').id, total_price)
+    Order.updateOrderStatus(order.id, OrderStatus.getNameStatus('Created').id, total_price, order_number)
     return make_response(jsonify({'message':'success'}),200)

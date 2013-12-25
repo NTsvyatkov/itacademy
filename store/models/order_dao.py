@@ -123,10 +123,11 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
-    def updateOrderStatus(order_id,new_status_id, new_total_price):
+    def updateOrderStatus(order_id,new_status_id, new_total_price, new_order_number):
         entry = Order.get_order(order_id)
         entry.status_id = new_status_id
         entry.total_price = new_total_price
+        entry.order_number = new_order_number
         db_session.commit()
 
     @staticmethod
@@ -159,7 +160,7 @@ class Order(Base):
                     '4': Order.status_id == OrderStatus.getNameStatus('Delivered').id}
             query = query.filter(filterStatus[filter['status_option']])
         if int(filter['order_option']) == 0:
-            query = query.filter(Order.id.like(filter['name']+'%'))
+            query = query.filter(Order.order_number.like(filter['name']+'%'))
         if int(filter['order_option']) == 1:
             query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
                                      UserDao.last_name.like(filter['name']+'%')))

@@ -19,7 +19,6 @@ class RoleDao(Base):
     def __str__(self):
         return "CData '%s'" % (self.name)
 
-
     @staticmethod
     def getRoleByID(role_id):
         return RoleDao.query.get(role_id)

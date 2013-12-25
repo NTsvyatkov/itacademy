@@ -54,7 +54,7 @@
                     tr[k].cells[8].onclick= function(){
                         if(confirm('The order will be deleted from the List of Orders. Are you sure you want' +
                             ' to proceed?')){
-                            id = tr[this.abbr].cells[0].innerHTML;
+                            id = json.orders[this.abbr-1].order_id;
                             if (tr[this.abbr].cells[4].innerHTML == 'Created' || tr[this.abbr].cells[4].innerHTML == 'Pending'){
                                 deleteOrder(id,grid_length);
                             }else{
@@ -77,7 +77,6 @@
                     type: 'DELETE',
                     success: function(json){
                         if (json.message == 'success'){
-                            alert('The order has been successfully deleted');
                             if (grid_length==1){
                                 if (page!=1){
                                     page=page-1;
@@ -115,40 +114,30 @@
                     records_amount=(json.records_amount);
                     records_per_page=(json.records_per_page);
                     pages_amount = Math.ceil(records_amount/records_per_page);
+                    if (pages_amount <1){pages_amount = 1}
                     document.getElementById("page").innerHTML = page;
                     document.getElementById("pages_amount").innerHTML = pages_amount
 
                     if (page==1){
-                        $('#prev').prop('disabled', true);
-                        $('#first').prop('disabled', true);
-                        $('#prev').addClass("button_disable");
-                        $('#first').addClass("button_disable");
+                        $('#prev, #first').prop('disabled', true);
+                        $('#prev, #first').addClass("button_disable");
                     } else {
-                        $('#prev').prop('disabled', false);
-                        $('#first').prop('disabled', false);
-                        $('#prev').removeClass("button_disable");
-                        $('#first').removeClass("button_disable");
-                        $('#prev').removeAttr("disabled");
-                        $('#first').removeAttr("disabled");
+                        $('#prev, #first').prop('disabled', false);
+                        $('#prev, #first').removeClass("button_disable");
                     }
 
                     if (page==pages_amount){
-                        $('#next').prop('disabled', true);
-                        $('#last').prop('disabled', true);
-                        $('#next').addClass("button_disable");
-                        $('#last').addClass("button_disable");
+                        $('#next, #last').prop('disabled', true);
+                        $('#next, #last').addClass("button_disable");
                     } else {
-                        $('#next').prop('disabled', false);
-                        $('#last').prop('disabled', false);
-                        $('#next').removeClass("button_disable");
-                        $('#last').removeClass("button_disable");
-                        $('#next').removeAttr("disabled");
-                        $('#last').removeAttr("disabled");
+                        $('#next, #last').prop('disabled', false);
+                        $('#next, #last').removeClass("button_disable");
                     }
                 }
                 })
             }
 
+            /*Create pagination per page orders*/
             if (page==1){
                 createTableOrders();
             }
@@ -180,14 +169,18 @@
                 page=pages_amount;
                 createTableOrders()
             });
+            /*End pagination*/
 
+            /*Select table size*/
             $('#table_size').change(function () {
                 $(".index").removeClass("asc");
                 $(".index").removeClass("desc");
                 count_tr=$('#table_size').val();
                 $( "#table_siz option:selected" ).each(createTableOrders())
             });
+            /*End select*/
 
+            /*Sort orders table*/
             $(".index").click(function(){
                 $(".index").removeClass("asc");
                 $(".index").removeClass("desc");
@@ -233,6 +226,7 @@
                 }
                 createTableOrders();
             });
+            /*End sorting*/
 
             });
         </script>

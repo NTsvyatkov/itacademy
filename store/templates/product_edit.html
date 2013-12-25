@@ -13,46 +13,35 @@
             var product_id = pathArray[2];
             var table_grid = document.getElementById('grid');
 
-            function createGrid(count)
-                {
-                    for (var i=1; i<=count;i++ )
-                        {
-                            tr[i] = document.createElement('TR');
-                            table_grid.appendChild(tr[i]);
-                            tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#E8E8E8";
-                            for (var j=0; j<=2; j++)
-                                {
-                                    tr[i].appendChild(document.createElement('TD'));
-                                }
-                        }
+            function createGrid(count){
+                for (var i=1; i<=count;i++ ){
+                    tr[i] = document.createElement('TR');
+                    table_grid.appendChild(tr[i]);
+                    tr[i].id=i;
+                    if (i % 2 == 0) tr[i].style.background = "#E8E8E8";
+                    for (var j=0; j<=2; j++){
+                        tr[i].appendChild(document.createElement('TD'));
+                    }
                 }
-            createGrid();
+            }
 
-            function clearingTr(i)
-                {
-                    for (var j=0; j<=2; j++)
-                        {
-                            tr[i].cells[j].innerHTML='';
-                        }
+            function clearTr(i){
+                for (var j=0; j<=2; j++){
+                    tr[i].cells[j].innerHTML='';
                 }
+            }
 
-
-            function clearingGrid()
-                {
-                    for (var n=1 ; n<=count_tr; n++)
-                        {
-                            clearingTr(n);
-                        }
+            function clearGrid(){
+                for (var n=1 ; n<=count_tr; n++){
+                    clearTr(n);
                 }
-            function deletingGrid()
-                {
-                    for (var n=table_grid.rows.length ; n>=2; n--)
-                        {
-                            table_grid.removeChild(table_grid.childNodes[n]);
-                        }
+            }
 
+            function deleteGrid(){
+                for (var n=table_grid.rows.length ; n>=2; n--){
+                    table_grid.removeChild(table_grid.childNodes[n]);
                 }
+            }
 
             var k=0;
 
@@ -61,34 +50,30 @@
                 url: '/api/product/'+product_id,
                 type: 'GET',
                 contentType: "application/json",
-                success: function(json)
-                    {
-                        deletingGrid();
-                        createGrid(json.productStock.length);
-                        for (var product_k in json.productStock)
-                            {
-                                k++;
-                                tr[k].cells[0].innerHTML = json.productStock[product_k].dimension;
-                                tr[k].cells[1].innerHTML = "<input type='text' class = 'quantity' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
-                                tr[k].cells[2].innerHTML = "<input type='button' value='apply' id='button'  alt=" + k + ">";
-                                tr[k].cells[2].abbr=k;
-                                tr[k].cells[2].onclick= function()
-                                    {
-                                        var dimension_id = json.productStock[this.abbr-1].dimension_id;
-                                        var quantity = document.getElementById('quantity'+this.abbr).value;
-                                        if(isNaN(quantity) || quantity < 0 ){
-                                            alert('Quantity should be filled.')
-                                        }
-                                        else{
-                                            updateStock(product_id, dimension_id, quantity)
-                                        }
-
-                                    }
+                success: function(json){
+                    deleteGrid();
+                    createGrid(json.productStock.length);
+                    for (var product_k in json.productStock){
+                        k++;
+                        tr[k].cells[0].innerHTML = json.productStock[product_k].dimension;
+                        tr[k].cells[1].innerHTML = "<input type='text' class = 'quantity' id = 'quantity"+k+"' style='width:70px' value = '"+json.productStock[product_k].quantity+"' alt=" + k + ">";
+                        tr[k].cells[2].innerHTML = "<input type='button' value='apply' id='button'  alt=" + k + ">";
+                        tr[k].cells[2].abbr=k;
+                        tr[k].cells[2].onclick= function(){
+                            var dimension_id = json.productStock[this.abbr-1].dimension_id;
+                            var quantity = document.getElementById('quantity'+this.abbr).value;
+                            if(isNaN(quantity) || quantity < 0 ){
+                                alert('Incorrect quantity of product.')
                             }
-                         k=0;
-                        document.getElementById('name').value=json.product.name;
-                        document.getElementById('description').value=json.product.description;
-                        document.getElementById('price').value= json.product.price;
+                            else{
+                                updateStock(product_id, dimension_id, quantity)
+                            }
+                        }
+                    }
+                    k=0;
+                    document.getElementById('name').value=json.product.name;
+                    document.getElementById('description').value=json.product.description;
+                    document.getElementById('price').value= json.product.price;
                     }
                 });
             }
@@ -102,17 +87,17 @@
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success:function(json){
-                    if (json.message == 'success')
-                        {
-                            alert('The product has been successfully updated');
-                        }
+                    if (json.message == 'success'){
+                        alert('The product has been successfully updated');
+                    }
                     else{
                         alert (json.message);
-                        }
+                    }
                     }
                 });
             }
 
+            /*Event on click button*/
             $('#update_product').click(function(){
                 var id = product_id;
                 var name = document.getElementById('name').value;
@@ -132,11 +117,10 @@
                 data: JSON.stringify(data),
                 contentType: "application/json",
                 success:function(json){
-                    if (json.message == 'success')
-                        {
-                            alert('The product has been successfully updated');
-                             document.location.href = '/products';
-                        }
+                    if (json.message == 'success'){
+                        alert('The product has been successfully updated');
+                        document.location.href = '/products';
+                    }
                     else{
                         alert (json.message);
                         }
@@ -150,6 +134,7 @@
             var description_error = document.getElementById('description_error');
             var price_error = document.getElementById('price_error');
 
+            /*Validation input parameters*/
             $('#price').blur(function() {
                 if( isNaN($(this).val()) || ($(this).val()) <= 0) {
                     $(this).css({'border' : '2px solid #ff0000'});
@@ -179,6 +164,7 @@
                     description_error.innerHTML = null;
                 }
             });
+            /*End validation*/
 
             });
         </script>
@@ -203,9 +189,9 @@
                     </div>
 
                     <div class="field">
-                        <div id="name_error"></div>
-                        <div id="description_error"></div>
-                        <div id="price_error"></div>
+                        <div id="name_error" class="error_div"></div>
+                        <div id="description_error" class="error_div"></div>
+                        <div id="price_error" class="error_div"></div>
                         <input type="button" id="update_product" value="Update">
                     </div>
                     <div class="field">

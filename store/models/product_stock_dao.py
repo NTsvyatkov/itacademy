@@ -16,7 +16,6 @@ class ProductStock(Base):
     dimension = relationship('Dimension', backref=backref('product_stock', lazy='dynamic'))
     quantity = Column(Integer)
 
-
     def __init__(self, product_id, dimension_id, quantity):
         super(ProductStock, self).__init__()
         self.product_id = product_id

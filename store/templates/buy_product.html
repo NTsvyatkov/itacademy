@@ -31,7 +31,6 @@
                                 }
                         }
                 }
-            createGrid();
 
             function createModalGrid(count){
                 for (var i=1; i<=count;i++ ){
@@ -141,13 +140,14 @@
                 })
             }
 
+            /*Events on click button*/
             $('#search_button').click(function(){
                 createTableProducts()
             });
 
             $('#cart_button').click(function(){
                 $('#modal_product_table').arcticmodal(
-                        createModalTableProducts()
+                    createModalTableProducts()
                 );
             });
 
@@ -229,36 +229,25 @@
                         document.getElementById("pages_amount").innerHTML = pages_amount;
 
                         if (page==1){
-                            $('#prev').prop('disabled', true);
-                            $('#first').prop('disabled', true);
-                            $('#prev').addClass("button_disable");
-                            $('#first').addClass("button_disable");
+                            $('#prev, #first').prop('disabled', true);
+                            $('#prev, #first').addClass("button_disable");
                         } else {
-                            $('#prev').prop('disabled', false);
-                            $('#first').prop('disabled', false);
-                            $('#prev').removeClass("button_disable");
-                            $('#first').removeClass("button_disable");
-                            $('#prev').removeAttr("disabled");
-                            $('#first').removeAttr("disabled");
+                            $('#prev, #first').prop('disabled', false);
+                            $('#prev, #first').removeClass("button_disable");
                         }
 
                         if (page==pages_amount){
-                            $('#next').prop('disabled', true);
-                            $('#last').prop('disabled', true);
-                            $('#next').addClass("button_disable");
-                            $('#last').addClass("button_disable");
+                            $('#next, #last').prop('disabled', true);
+                            $('#next, #last').addClass("button_disable");
                         } else {
-                            $('#next').prop('disabled', false);
-                            $('#last').prop('disabled', false);
-                            $('#next').removeClass("button_disable");
-                            $('#last').removeClass("button_disable");
-                            $('#next').removeAttr("disabled");
-                            $('#last').removeAttr("disabled");
+                            $('#next, #last').prop('disabled', false);
+                            $('#next, #last').removeClass("button_disable");
                         }
                     }
                 })
             }
 
+            /*Create pagination on products page*/
             if (page==1){
                 createTableProducts();
             }
@@ -290,16 +279,18 @@
                 page=pages_amount;
                 createTableProducts()
             });
+            /*End pagination*/
 
+            /*Select table size*/
             $('#table_size').change(function () {
                 $(".index").removeClass("asc");
                 $(".index").removeClass("desc");
                 count_tr=$('#table_size').val();
                 $( "#table_siz option:selected" ).each(createTableProducts())
-            })
+            });
+            /*End select*/
 
-
-
+            /*Validation input parameters*/
             $('#start_price').blur(function() {
                 if( isNaN($(this).val())) {
                     $(this).css({'border' : '2px solid #ff0000'});
@@ -321,8 +312,9 @@
                     document.getElementById('search_button').disabled = false;
                 }
             });
+            /*End validation*/
 
-
+            /*Sort orders table*/
             $(".index").click(function(){
                 $(".index").removeClass("asc");
                 $(".index").removeClass("desc");
@@ -356,7 +348,7 @@
                 }
                 createTableProducts();
             });
-
+            /*End sorting*/
 
            });
 
