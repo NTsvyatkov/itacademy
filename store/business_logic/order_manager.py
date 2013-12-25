@@ -40,12 +40,12 @@ def addOrderWithStatusCart(user_id):
     if Order.getOrderByStatus(user_id) is None:
         Order.add_order(user_id,date.today(), OrderStatus.getNameStatus('Cart').id)
 
-def addProductToCartStatus(user_id, id, json):
+def addProductToCartStatus(user_id, product_id, status, value, price):
     order = Order.getOrderByStatus(user_id)
-    if  OrderProduct.get_order_product(order.id, id,json['status']):
-        OrderProduct.updateSumQuantity(order.id, id,json['status'], json['value'])
+    if  OrderProduct.get_order_product(order.id, product_id, status):
+        OrderProduct.updateSumQuantity(order.id, product_id, status, value)
     else:
-        OrderProduct.add_order_product(order.id, id,json['status'], json['value'], json['price'])
+        OrderProduct.add_order_product(order.id, product_id, status, value, price)
 
 def update_orders(id, status_id, delivery_id,
                   delivery_address, comment):
@@ -56,3 +56,7 @@ def update_order_details(id, gift, status, delivery_date):
     if delivery_date:
         delivery_date = datetime.strptime(delivery_date, '%m/%d/%Y')
     Order.update_order_details(id, gift, status, delivery_date)
+
+def listOrderProductByOrderId(order_id):
+    validate_order_id(order_id)
+    return OrderProduct.listOrderProductById(order_id)

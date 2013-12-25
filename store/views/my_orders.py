@@ -32,9 +32,9 @@ def ordersPage():
             last_name = ''
             first_name = ''
             role_id = ''
-        orders_list.append({'order_id': i.id, 'delivery_date': i.date.strftime("%d/%m/%y"),'orderStatus': i.status.name,
-                            'total_price': str(i.total_price),'assignee':first_name+' '+last_name,
-                            'maxDiscount': i.discount,'role': role_id})
+        orders_list.append({'order_id': i.id, 'order_number': i.order_number, 'delivery_date': i.delivery_date,
+                            'orderStatus': i.status.name, 'total_price': str(i.total_price), 'assignee': first_name+' '+
+                            last_name, 'maxDiscount': i.discount, 'role': role_id})
     return make_response(jsonify(orders=orders_list, records_amount=records_amount,
                                  records_per_page=records_per_page), 200)
 

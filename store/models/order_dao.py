@@ -123,6 +123,13 @@ class Order(Base):
         db_session.commit()
 
     @staticmethod
+    def updateOrderStatus(order_id,new_status_id, new_total_price):
+        entry = Order.get_order(order_id)
+        entry.status_id = new_status_id
+        entry.total_price = new_total_price
+        db_session.commit()
+
+    @staticmethod
     def update_order_details(id, gift, status, delivery_date):
         order = Order.get_order(id)
         order_status = OrderStatus.query.filter(OrderStatus.name == status).first()
@@ -156,9 +163,7 @@ class Order(Base):
         if int(filter['order_option']) == 1:
             query = query.filter(or_(UserDao.first_name.like(filter['name']+'%'),
                                      UserDao.last_name.like(filter['name']+'%')))
-        if sort_by == "order_id":
-            query = query.order_by(order(Order.id))
-        elif sort_by == "order_number":
+        if sort_by == "order_number":
             query = query.order_by(order(Order.order_number))
         elif sort_by == "total_price":
             query = query.order_by(order(Order.total_price))
@@ -364,6 +369,10 @@ class OrderProduct(Base):
         return OrderProduct.query.filter(OrderProduct.product_id == product_id).all()
 
     @staticmethod
+    def listOrderProductById(order_id):
+        return OrderProduct.query.filter(OrderProduct.order_id == order_id).all()
+
+    @staticmethod
     def get_by_order_product(order_id, page=None, records_per_page=None, sort_by=None, order_sort_by=None):
         stop = page * records_per_page
         start = stop - records_per_page
@@ -448,10 +457,31 @@ tbl = OrderProduct.__table__
 event.listen(tbl, 'after_create', DDL("""
     CREATE TRIGGER order_product_trigger_update BEFORE UPDATE ON order_product
     FOR EACH ROW BEGIN
-        if NEW.trigger_status = True THEN
-            UPDATE product_stock SET product_stock.quantity=product_stock.quantity - NEW.quantity WHERE
-             product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+
+        IF  OLD.trigger_status = False AND NEW.trigger_status = True THEN
+
+            IF EXISTS (SELECT * FROM product_stock WHERE product_stock.product_id=NEW.product_id AND
+            product_stock.dimension_id=NEW.dimension_id AND NEW.quantity >= product_stock.quantity) THEN
+                UPDATE `Error: update_error` SET x=1;
+            ELSE
+                UPDATE product_stock SET product_stock.quantity=product_stock.quantity - NEW.quantity WHERE
+                product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+            END IF;
+
         END IF;
+
+        IF OLD.trigger_status = True AND NEW.trigger_status = True THEN
+
+            IF EXISTS (SELECT * FROM product_stock WHERE product_stock.product_id=NEW.product_id AND
+            product_stock.dimension_id=NEW.dimension_id AND product_stock.quantity <= NEW.quantity + OLD.quantity) THEN
+                UPDATE `Error: update_error` SET x=1;
+            ELSE
+                UPDATE product_stock SET product_stock.quantity=product_stock.quantity + OLD.quantity - NEW.quantity WHERE
+                product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+            END IF;
+
+        END IF;
+
     END;
     """).execute_if(dialect='mysql'))
 

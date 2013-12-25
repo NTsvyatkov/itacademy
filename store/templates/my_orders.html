@@ -37,7 +37,7 @@
                 /*Create table */
                 for (var order_k in json.orders){
                     k++;
-                    tr[k].cells[0].innerHTML = json.orders[order_k].order_id;
+                    tr[k].cells[0].innerHTML = json.orders[order_k].order_number;
                     tr[k].cells[1].innerHTML = "$ "+json.orders[order_k].total_price;
                     tr[k].cells[2].innerHTML = json.orders[order_k].maxDiscount+' %';
                     tr[k].cells[3].innerHTML = json.orders[order_k].delivery_date;
@@ -49,7 +49,7 @@
                     tr[k].cells[7].abbr=k;
                     tr[k].cells[8].abbr=k;
                     tr[k].cells[7].onclick= function(){
-                        window.location.replace("order/"+tr[this.abbr].cells[0].innerHTML)
+                        window.location.replace("order/"+json.orders[this.abbr-1].order_id)
                     };
                     tr[k].cells[8].onclick= function(){
                         if(confirm('The order will be deleted from the List of Orders. Are you sure you want' +
@@ -195,7 +195,7 @@
                 entry = entry.replace(/\s/g, '');
                 switch (entry){
                     case "OrderNumber":
-                        sort_by="order_id";
+                        sort_by="order_number";
                         break;
                     case "TotalPrice":
                         sort_by="total_price";

@@ -25,22 +25,15 @@ def login_authenticate():
         session['user_id'] = user.id
         session['role'] = RoleDao.getRoleByID(user.role_id).name
         if session['role'] == 'Customer':
-
-          return render_template('my_orders.html',)
+            return render_template('my_orders.html',)
         if session['role'] == 'Administrator':
-
-          return render_template('search_user.html',)
+            return render_template('search_user.html',)
         if session['role'] == 'Merchandiser':
-
-          return render_template('manage_orders.html',)
+            return render_template('manage_orders.html',)
         if session['role'] == 'Supervisor':
-
-           return render_template('product_grid.html',)
-
+            return render_template('product_grid.html',)
     else:
-
         error = 'Invalid username/password'
-
         return render_template('login(2).html', error=error)
 
 @app.route('/logout')

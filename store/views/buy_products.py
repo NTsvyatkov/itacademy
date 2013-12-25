@@ -2,10 +2,11 @@
 from flask import render_template, request, make_response, jsonify, session
 from business_logic.product_manager import list_dimensions
 from flask_bootstrap import app
-from business_logic.order_manager import addOrderWithStatusCart, addProductToCartStatus
+from business_logic.order_manager import addOrderWithStatusCart, addProductToCartStatus, listOrderProductByOrderId
 from models.order_dao import Order, OrderProduct, OrderStatus
 from models.product_dao import Product
 from business_logic.product_manager import validate_quantity
+
 
 @app.route('/product_buy', methods=('GET', 'POST'))
 def buyProducts():
@@ -38,21 +39,17 @@ def productsPage():
 def buyProduct(id):
     user_id = session['user_id']
     json = request.get_json()
-    validate_quantity(id,json['status'],json['value'],'check')
+    validate_quantity(id, json['status'], json['value'], 'check')
     addOrderWithStatusCart(user_id)
-    addProductToCartStatus(user_id,id,json)
+    addProductToCartStatus(user_id, id, json['status'], json['value'], json['price'])
     return make_response(jsonify({'message':'success'}),200)
 
 @app.route('/api/modal_product', methods=['GET'])
 def modalProducts():
     user_id = session['user_id']
     order = Order.getOrderByStatus(user_id)
-    try:
-        prods = OrderProduct.query.filter(OrderProduct.order_id == order.id)
-    except AttributeError as e:
-        return make_response(jsonify({'message': 'NoneType'}), 200)
     products_arr = []
-    for i in prods:
+    for i in listOrderProductByOrderId(order.id):
         products_arr.append({'product_id': i.product_id, 'product_name': i.product.name, 'dimension': i.dimension.name,
                              'dimension_id': i.dimension_id, 'quantity': i.quantity, 'price': str(i.price)})
     return make_response(jsonify(products=products_arr), 200)
@@ -65,6 +62,9 @@ def deleteOrderProduct():
 
 @app.route('/api/update_product', methods = ['PUT'])
 def updateOrderProduct():
+    total_price = 0
     order = Order.getOrderByStatus(session['user_id'])
-    Order.update_current_order(order.id, OrderStatus.getNameStatus('Created').id)
+    for i in OrderProduct.listOrderProductById(order.id):
+        total_price += i.price*i.quantity
+    Order.updateOrderStatus(order.id, OrderStatus.getNameStatus('Created').id, total_price)
     return make_response(jsonify({'message':'success'}),200)
