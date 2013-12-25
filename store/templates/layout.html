@@ -36,7 +36,7 @@
   {% block bar %}
 
 {% if "Administrator"==session['role'] %}
- <ul id="menu">
+<ul id="menu" style="margin-top: -10px;">
 
       <li>
      <a href="/search_user" title="search_user"
@@ -76,7 +76,7 @@
 {% endif %}
 
 {% if "Customer"==session['role'] %}
- <ul id="menu">
+<ul id="menu" style="margin-top: -10px;">
      <li>
      <a href="/product_buy" title="product_buy"
          {% if request.environ.PATH_INFO.strip('/') =='product_buy'%}class="active"{% endif %}>
@@ -117,7 +117,7 @@
 
 
 {% if "Merchandiser"==session['role'] %}
- <ul id="menu">
+<ul id="menu" style="margin-top: -10px;">
 
      <li>
      <a href="/manage_orders" title="manage_orders"
@@ -151,7 +151,7 @@
 
 
 {% if "Supervisor"==session['role'] %}
-     <ul id="menu">
+<ul id="menu" style="margin-top: -10px;">
 
       <li>
      <a href="/products" title="products"
