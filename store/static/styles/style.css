@@ -26,8 +26,8 @@ body {
     width:980px;
     font-weight: 400;
     margin:auto auto 10px auto;
-	color:#444444;
-	font-size:14px;
+	color:#000;
+	font-size:13px;
 
 
 	border:1px solid #000;
@@ -70,10 +70,9 @@ body {
 	border-left: 0;
 }
 .grid tr td {
-    letter-spacing: 0.02em;
 	padding:10px;
-	border: 1px solid #444444;
-    font-family: "Open Sans","Helvetica Neue",Helvetica,Arial,Sans-Serif;
+	border: 1px solid #000;
+    font:15px Verdana,Arial;
 
 
 }
@@ -108,7 +107,7 @@ body {
     background:url(../images/1.gif) right no-repeat; cursor:pointer;
 }
 .grid .index{
-background: #3B5998 url(../images/75375.png) right no-repeat; cursor:pointer;
+background: #3B5998 url(../images/gtk-sort-descending_4674.png) right no-repeat; cursor:pointer;
 
 }
 

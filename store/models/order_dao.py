@@ -193,7 +193,7 @@ class Order(Base):
         stop = page * records_per_page
         start = stop - records_per_page
         order = asc if order_sort_by == "asc" else desc
-        query = Order.query.outerjoin(Order.user).join(OrderStatus).join(RoleDao).\
+        query = Order.query.outerjoin(Order.assignee).join(OrderStatus).join(RoleDao).\
                 filter(and_(Order.assignee_id == user_id,Order.status_id != OrderStatus.getNameStatus('Cart').id))
         if int(filter['status_option']):
             filterStatus={'1': Order.status_id == OrderStatus.getNameStatus('Pending').id,
