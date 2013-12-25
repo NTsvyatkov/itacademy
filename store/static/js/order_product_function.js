@@ -5,7 +5,7 @@
         {
             tr1 = document.createElement('TR');
             table_grid.appendChild(tr1);
-            if (i % 2 == 0) tr1.style.background = "#f0f0f0";
+            if (i % 2 == 0) tr1.style.background = "#E8E8E8";
             for (var j=0; j<=count_td; j++)
              {
               tr1.appendChild(document.createElement('TD'));

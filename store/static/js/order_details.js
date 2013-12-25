@@ -38,7 +38,7 @@ $(document).ready(function() {
               tr[i].appendChild(document.createElement('TD'));
              }
         }
-       $( "tr:even" ).css( "background-color", "#f0f0f0" );
+       $( "tr:even" ).css( "background-color", "#E8E8E8" );
     }
 
    create_grid(count_tr,count_td);
