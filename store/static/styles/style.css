@@ -101,10 +101,10 @@ body {
 	background: -moz-linear-gradient(top,  #6CA6CD,  #6CA6CD);
 }
 .grid th.asc{
-    background:url(../images/0.gif) right no-repeat; cursor:pointer;
+    background:url(../images/0.gif) right no-repeat #6CA6CD; cursor:pointer;
 }
 .grid th.desc{
-    background:url(../images/1.gif) right no-repeat; cursor:pointer;
+    background:url(../images/1.gif) right no-repeat #6CA6CD; cursor:pointer;
 }
 .grid .index{
 background: #3B5998 url(../images/gtk-sort-descending_4674.png) right no-repeat; cursor:pointer;
@@ -472,4 +472,3 @@ div p{
 .details{
     flout:right;
 }
-/*End of styles for order_details.html*/
