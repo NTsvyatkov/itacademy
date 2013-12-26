@@ -97,8 +97,8 @@ body {
 .grid tr:hover td{
 
 	background: #2e8bcc;
-	background: -webkit-gradient(linear, left top, left bottom, from(#FFA54F), to(#FFA54F));
-	background: -moz-linear-gradient(top,  #FFA54F,  #FFA54F);
+	background: -webkit-gradient(linear, left top, left bottom, from(#6CA6CD), to(#6CA6CD));
+	background: -moz-linear-gradient(top,  #6CA6CD,  #6CA6CD);
 }
 .grid th.asc{
     background:url(../images/0.gif) right no-repeat; cursor:pointer;
@@ -383,7 +383,7 @@ label{
 
 .edit_block{
     width: 500px;
-    background: #EDEDED;
+    background: -moz-linear-gradient(center top , #FAFAFA, #F5F5F5) repeat scroll 0 0 transparent;
     border:2px solid #707070 ;
     margin:auto;
 }
