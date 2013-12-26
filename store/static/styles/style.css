@@ -161,15 +161,14 @@ background: #3B5998 url(../images/gtk-sort-descending_4674.png) right no-repeat;
 }
 
 #menu a:hover, a:active {
-    color: #6CA6CD;
+    color: #2a94c8;
     font-weight:bold;
     text-decoration:none;
     cursor:pointer;
 }
 #menu .active{
-    color: #FFFFFF;
+    color: #2a94c8;
     font-weight:bold;
-
     text-decoration:none;
 }
 
