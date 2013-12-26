@@ -448,6 +448,17 @@ th{
 div p{
     margin:8px auto;
 }
+
+#pagination input[type="button"].button_disable,
+#pagination input[type="button"]:hover.button_disable,
+#pagination input[type="button"]:focus.button_disable {
+    background: #f2f2f2;
+    cursor: default;
+}
+
+/*End styles for order_details.html*/
+
+
 .table{
     margin-top: 0px; margin-bottom: 0px;
 
