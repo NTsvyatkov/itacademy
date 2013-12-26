@@ -39,7 +39,7 @@ def productsPage():
 @app.route('/api/order/product/<int:id>', methods = ['POST'])
 def buyProduct(id):
     user_id = session['user_id']
-    json = request.get_json()
+    json = request.json
     validate_quantity(id, json['status'], json['value'], 'check')
     addOrderWithStatusCart(user_id)
     addProductToCartStatus(user_id, id, json['status'], json['value'], json['price'])
