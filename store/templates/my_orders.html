@@ -40,7 +40,11 @@
                     tr[k].cells[0].innerHTML = json.orders[order_k].order_number;
                     tr[k].cells[1].innerHTML = "$ "+json.orders[order_k].total_price;
                     tr[k].cells[2].innerHTML = json.orders[order_k].maxDiscount+' %';
-                    tr[k].cells[3].innerHTML = json.orders[order_k].delivery_date;
+                    if(json.orders[order_k].delivery_date != null){
+                        tr[k].cells[3].innerHTML = json.orders[order_k].delivery_date;
+                    }else{
+                        tr[k].cells[3].innerHTML = 'undefined';
+                    }
                     tr[k].cells[4].innerHTML = json.orders[order_k].orderStatus;
                     tr[k].cells[5].innerHTML = json.orders[order_k].assignee;
                     tr[k].cells[6].innerHTML = json.orders[order_k].role;
