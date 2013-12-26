@@ -477,8 +477,8 @@ event.listen(tbl, 'after_create', DDL("""
             product_stock.dimension_id=NEW.dimension_id AND product_stock.quantity <= NEW.quantity + OLD.quantity) THEN
                 UPDATE `Error: update_error` SET x=1;
             ELSE
-                UPDATE product_stock SET product_stock.quantity=product_stock.quantity + OLD.quantity - NEW.quantity WHERE
-                product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
+                UPDATE product_stock SET product_stock.quantity=product_stock.quantity + OLD.quantity - NEW.quantity
+                WHERE product_stock.product_id=NEW.product_id AND product_stock.dimension_id=NEW.dimension_id;
             END IF;
 
         END IF;
