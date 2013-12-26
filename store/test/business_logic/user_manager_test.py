@@ -6,15 +6,14 @@ from mock import patch
 class UserManagerTest(unittest.TestCase):
 
     def setUp(self):
-        self.login = 'Alex'
-        self.firstName = 'Alexander'
-        self.lastName = 'Ivanov'
-        self.password = 'password'
-        self.email = 'alex.ivanov@gmail.ru'
-        self.roleId = 1
+        self.login = 'Max'
+        self.firstName = 'Maxim'
+        self.lastName = 'Sidorov'
+        self.password = '1111'
+        self.email = 'max.sidorov@gmail.ru'
+        self.roleId = 4
         self.regionId = 1
         self.userId = 1
-
 
     def testCorrectLogin(self):
         self.assertRaises(ValidationException,validationLogin(self.login))
@@ -47,11 +46,6 @@ class UserManagerTest(unittest.TestCase):
         user_manager.updateUser(self.userId,self.login, self.firstName, self.lastName, self.password, self.email,
                                 self.roleId, self.regionId)
         self.assertEqual(updateUser.call_count, 1)
-
-    @patch('business_logic.user_manager.UserDao.deleteRecord')
-    def testDeleteUser(self,deleteUser):
-        user_manager.deleteUser(self.userId)
-        self.assertEqual(deleteUser.call_count, 1)
 
     @patch('business_logic.user_manager.UserDao.getUserByID')
     def testGetUser(self, getUser):
