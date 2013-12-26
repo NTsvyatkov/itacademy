@@ -80,7 +80,7 @@
  }
 
   function ajaxSuccess(json){
-           $("#ra").val(json.records_amount)
+           $("#ra").text(json.records_amount)
            deletingGrid()
            createGrid(json.users.length)
 
@@ -286,8 +286,7 @@
 </table>
            <div class='information' style='margin:10px auto; width:100%;'>
                  <div class="field" style='width:360px;'>
-                    <label style='margin:auto;text-align: center;'>Number of Found Users:</label>
-                    <input id="ra" class="input_read" type="text" style="border: medium none; padding-bottom: 11px; margin-top: -35px;" readonly="">
+                    <label style='margin:auto;text-align: center;'>Number of Found Users # <span id = "ra">0</span></label><br>
                 </div>
                <span style='color: #778899;'>This page is appointed for creating new and managing existing users</span>
            </div>

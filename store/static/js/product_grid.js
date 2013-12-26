@@ -17,12 +17,8 @@ $(document).ready(function() {
         tr1.appendChild(document.createElement('TH'));
         tr1.cells[j].innerHTML=th[j];
     }
-
-
     /*----------------End of creating table-------------------------------*/
     create_grid(count_tr,count_td,'grid');
-
-
 
     function grid_pagination()
     {
@@ -58,7 +54,6 @@ $(document).ready(function() {
                 else
                     alert (json.message);
             },
-
             error: function(e)
             {
                 error = JSON.parse(e.responseText);
@@ -79,7 +74,6 @@ $(document).ready(function() {
         for (var product_k in json.products)
         {
             k++;
-
             tr=table_grid.rows[k];
             id_product=json.products[product_k].id;
             tr.cells[0].innerHTML = '<span class = product_id>'+id_product+'</span>';
@@ -90,9 +84,7 @@ $(document).ready(function() {
             tr.cells[5].innerHTML = "<img src='static/images/delete.png' class='delete_img'  alt=" + id_product + ">";
             tr.cells[4].abbr=k;
             tr.cells[5].abbr=k;
-
         }
-
         $('.delete_img').click(function(){
             var tr= $(this).closest('tr');
             var product_id = this.alt;
@@ -123,7 +115,7 @@ $(document).ready(function() {
         grid_pagination();
     }
 
-    /*Pagination buttons events*/
+    /*---------------------Pagination buttons events---------------------------------------*/
     $('#next').click(function(){
         if (page*records_per_page>=records_amount){page=page}
         else {page=page+1}
@@ -228,6 +220,5 @@ $(document).ready(function() {
 
     });
     /*----------------------------End  Update and clear table's button------------------------*/
-
 });
 

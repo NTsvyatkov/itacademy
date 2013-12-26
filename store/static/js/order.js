@@ -67,7 +67,7 @@ $(document).ready(function () {
     var order_id = get_order_id;
     var maestro_card = false;
     var th = ['Item Number', 'Item Name', 'Item Description', 'Dimension', 'Price', 'Quantity',
-        'Price per Line', 'Edit', 'Delete'];
+              'Price per Line', 'Edit', 'Delete'];
     var count_td = th.length - 1;
     var count_tr = $('#table_size').val();
     var tr = [];
@@ -78,7 +78,6 @@ $(document).ready(function () {
     var order_date;
     var save_button = 0;
     var uniq_order = false;
-
     var deleted_order_product = [];
     /*-----Default values---------------*/
     $('#issue_number').attr('readonly', true);
