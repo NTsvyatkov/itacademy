@@ -67,6 +67,6 @@ def listOrderProductByOrderId(order_id):
     validate_order_id(order_id)
     return OrderProduct.listOrderProductById(order_id)
 
-def getOrderByStatus(user_id):
+def getOrderByCartStatus(user_id):
     validateUserIdInOrder(user_id)
     return Order.getOrderByStatus(user_id)
