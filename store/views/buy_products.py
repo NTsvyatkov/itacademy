@@ -3,7 +3,8 @@ import random
 from flask import render_template, request, make_response, jsonify, session
 from business_logic.product_manager import list_dimensions
 from flask_bootstrap import app
-from business_logic.order_manager import addOrderWithStatusCart, addProductToCartStatus, listOrderProductByOrderId
+from business_logic.order_manager import addOrderWithStatusCart, addProductToCartStatus, listOrderProductByOrderId,\
+    getOrderByStatus
 from models.order_dao import Order, OrderProduct, OrderStatus
 from models.product_dao import Product
 from business_logic.product_manager import validate_quantity
@@ -47,8 +48,7 @@ def buyProduct(id):
 
 @app.route('/api/modal_product', methods=['GET'])
 def modalProducts():
-    user_id = session['user_id']
-    order = Order.getOrderByStatus(user_id)
+    order = getOrderByStatus(session['user_id'])
     products_arr = []
     for i in listOrderProductByOrderId(order.id):
         products_arr.append({'product_id': i.product_id, 'product_name': i.product.name, 'dimension': i.dimension.name,
@@ -57,7 +57,7 @@ def modalProducts():
 
 @app.route('/api/order_product/', methods=['DELETE'])
 def deleteOrderProduct():
-    order = Order.getOrderByStatus(session['user_id'])
+    order = getOrderByStatus(session['user_id'])
     OrderProduct.delete_order_product(order.id, request.args.get('product_id'), request.args.get('dimension_id'))
     return make_response(jsonify({'message': 'success'}), 200)
 
@@ -65,7 +65,7 @@ def deleteOrderProduct():
 def updateOrderProduct():
     total_price = 0
     order_number = random.randint(0,999999)
-    order = Order.getOrderByStatus(session['user_id'])
+    order = getOrderByStatus(session['user_id'])
     for i in OrderProduct.listOrderProductById(order.id):
         total_price += i.price*i.quantity
     Order.updateOrderStatus(order.id, OrderStatus.getNameStatus('Created').id, total_price, order_number)

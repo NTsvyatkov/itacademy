@@ -18,6 +18,12 @@ def validate_order_id(id):
     if not Order.get_order(id):
         raise NotFoundException("Unable to find order with given id")
 
+def validateUserIdInOrder(user_id):
+    if user_id is None:
+        raise ValidationException("Order id is required field")
+    if not Order.getOrderByStatus(user_id):
+        raise NotFoundException("Unable to find order with given id")
+
 def get_order_by_id(id):
     validate_order_id(id)
     order_by_id = Order.get_order(id)
@@ -60,3 +66,7 @@ def update_order_details(id, gift, status, delivery_date):
 def listOrderProductByOrderId(order_id):
     validate_order_id(order_id)
     return OrderProduct.listOrderProductById(order_id)
+
+def getOrderByStatus(user_id):
+    validateUserIdInOrder(user_id)
+    return Order.getOrderByStatus(user_id)

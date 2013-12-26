@@ -17,20 +17,17 @@
             var modal_table_grid = document.getElementById('modal_grid');
             document.getElementById('cart_button').disabled = false;
 
-            function createGrid(count)
-                {
-                    for (var i=1; i<=count;i++ )
-                        {
-                            tr[i] = document.createElement('TR');
-                            table_grid.appendChild(tr[i]);
-                            tr[i].id=i;
-                            if (i % 2 == 0) tr[i].style.background = "#E8E8E8";
-                            for (var j=0; j<=5; j++)
-                                {
-                                    tr[i].appendChild(document.createElement('TD'));
-                                }
-                        }
+            function createGrid(count){
+                for (var i=1; i<=count;i++ ){
+                    tr[i] = document.createElement('TR');
+                    table_grid.appendChild(tr[i]);
+                    tr[i].id=i;
+                    if (i % 2 == 0) tr[i].style.background = "#E8E8E8";
+                    for (var j=0; j<=5; j++){
+                        tr[i].appendChild(document.createElement('TD'));
+                    }
                 }
+            }
 
             function createModalGrid(count){
                 for (var i=1; i<=count;i++ ){
@@ -115,10 +112,6 @@
                 })
              }
 
-            $('#create_button').click(function(){
-                updateOrderProduct();
-            });
-
             function updateOrderProduct(){
                 $.ajax({
                     dataType: "json",
@@ -143,6 +136,10 @@
             /*Events on click button*/
             $('#search_button').click(function(){
                 createTableProducts()
+            });
+
+            $('#create_button').click(function(){
+                updateOrderProduct();
             });
 
             $('#cart_button').click(function(){
